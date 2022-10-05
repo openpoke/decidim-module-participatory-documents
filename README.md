@@ -1,12 +1,12 @@
-# OmniAuth::Decidim
+# Decidim Participatory Documents
 
 [![[CI] Lint](https://github.com/openpoke/decidim-module-participatory-documents/actions/workflows/lint.yml/badge.svg)](https://github.com/openpoke/decidim-module-participatory-documents/actions/workflows/lint.yml)
 [![[CI] Test](https://github.com/openpoke/decidim-module-participatory-documents/actions/workflows/test.yml/badge.svg)](https://github.com/openpoke/decidim-module-participatory-documents/actions/workflows/test.yml)
-[![Maintainability](https://api.codeclimate.com/v1/badges/1b469dba958dedd29046/maintainability)](https://codeclimate.com/github/openpoke/decidim-module-participatory-documents/maintainability)
-[![codecov](https://codecov.io/gh/openpoke/decidim-module-participatory-documents/branch/main/graph/badge.svg?token=X11YWWSMO4)](https://codecov.io/gh/openpoke/decidim-module-participatory-documents)
+[![Maintainability](https://api.codeclimate.com/v1/badges/b55516d46671ac78a43f/maintainability)](https://codeclimate.com/github/openpoke/decidim-module-participatory-documents/maintainability)
+[![codecov](https://codecov.io/gh/openpoke/decidim-module-participatory-documents/branch/main/graph/badge.svg?token=TMZHD2XO6U)](https://codecov.io/gh/openpoke/decidim-module-participatory-documents)
 [![Gem Version](https://badge.fury.io/rb/decidim-participatory-documents.svg)](https://badge.fury.io/rb/decidim-participatory-documents)
 
-This module creates a new component to be used in participatory spaces that allows to create proposals orientated to manage geolocated issues in a city. For instance Damages or new ideas of improving a particular street or public good.
+This module allows to upload PDF (and possibilty other formats) and define areas on top of it that will become spaces for suggestions, improvements and other participative activities.
 
 > NOTE: in development, not ready for production.
 
@@ -15,7 +15,7 @@ This module creates a new component to be used in participatory spaces that allo
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'decidim-participatory-documents', git: "https://github.com/openpoke/decidim-module-participatory-documents"
+gem 'decidim-participatory_documents', git: "https://github.com/openpoke/decidim-module-participatory-documents"
 ```
 
 And then execute:
@@ -29,7 +29,7 @@ bundle
 TODO...
 
 ```ruby
-# config/initializers/participatory-documents.rb
+# config/initializers/participatory_documents.rb
 
 Decidim::ParticipatoryDocuments.configure do |config|
 end
@@ -134,7 +134,7 @@ the code coverage report.
 If you would like to see this module in your own language, you can help with its
 translation at Crowdin:
 
-https://crowdin.com/project/decidim-module-participatory-documents
+https://crowdin.com/project/decidim-participatory-documents
 
 ## License
 
