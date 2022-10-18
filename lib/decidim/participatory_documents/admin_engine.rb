@@ -10,7 +10,9 @@ module Decidim
       paths["lib/tasks"] = nil
 
       routes do
-        # Add admin engine routes here
+        resources :participatory_documents
+
+        root to: "participatory_documents#index"
       end
 
       # initializer "decidim_reporting_proposals.admin_mount_routes" do

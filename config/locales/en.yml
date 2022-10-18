@@ -1,2 +1,6 @@
 ---
 en:
+  decidim:
+    components:
+      participatory_documents:
+        name: Participatory Documents
