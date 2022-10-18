@@ -4,6 +4,7 @@ SimpleCov.start do
   root ENV["ENGINE_ROOT"]
 
   add_filter "lib/decidim/participatory_documents/version.rb"
+  add_filter "lib/decidim/participatory_documents/component.rb"
   add_filter "/spec"
 end
 

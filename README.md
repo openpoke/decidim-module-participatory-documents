@@ -22,6 +22,7 @@ And then execute:
 
 ```
 bundle
+bundle exec rails decidim_participatory_documents:install:migrations
 ```
 
 ## Usage
