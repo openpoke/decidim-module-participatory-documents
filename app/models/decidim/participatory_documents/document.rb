@@ -6,6 +6,7 @@ module Decidim
       self.table_name = :decidim_participatory_documents_documents
 
       include Decidim::HasComponent
+      include Decidim::Authorable
       include Decidim::Traceable
       include Decidim::Loggable
       include Decidim::TranslatableResource
