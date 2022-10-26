@@ -2,6 +2,15 @@
 en:
 
   decidim:
+    participatory_documents:
+      admin:
+        documents:
+          create:
+            success: Document has been successfully created
+            invalid: There was a problem creating Document
+          new:
+            create: Create  Participatory document
+            title: New Participatory document
     components:
       participatory_documents:
         settings:

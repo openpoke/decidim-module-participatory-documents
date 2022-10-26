@@ -7,6 +7,7 @@ module Decidim
         def permissions
           return permission_action if permission_action.scope != :admin
 
+          allow!
           permission_action
         end
       end
