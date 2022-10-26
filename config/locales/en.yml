@@ -1,6 +1,10 @@
 ---
 en:
+
   decidim:
     components:
       participatory_documents:
+        settings:
+          global:
+            allowed_content_types: Allowed content types
         name: Participatory Documents

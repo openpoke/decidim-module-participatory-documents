@@ -22,6 +22,7 @@ Decidim.register_component(:participatory_documents) do |component|
   # component.permissions_class_name = "Decidim::ParticipatoryDocuments::Permissions"
 
   component.settings(:global) do |settings|
+    settings.attribute :allowed_content_types, type: :string, default: Decidim::ParticipatoryDocuments.allowed_extensions.join(", ")
   end
 
   component.settings(:step) do |settings|
