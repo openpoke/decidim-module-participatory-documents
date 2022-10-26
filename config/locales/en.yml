@@ -3,8 +3,18 @@ en:
 
   decidim:
     participatory_documents:
+      models:
+        document:
+          fields:
+            id: Id
+            title: title
       admin:
         documents:
+          index:
+            title: Title
+            actions:
+              title: Actions
+              edit: Edit
           create:
             success: Document has been successfully created
             invalid: There was a problem creating Document

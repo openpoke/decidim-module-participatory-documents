@@ -5,10 +5,15 @@ module Decidim
     module Admin
       # This controller allows admins to manage proposals in a participatory process.
       class DocumentsController < Admin::ApplicationController
-        include Decidim::ApplicationHelper
+        include Decidim::Admin::Filterable
+        helper Decidim::Meetings::Admin::FilterableHelper
 
-        def index;
+        include Decidim::ApplicationHelper
+        helper_method :documents, :document
+
+        def index
           redirect_to new_document_path and return if collection.empty?
+
         end
 
         def new
@@ -35,7 +40,31 @@ module Decidim
           end
         end
 
+        def edit
+          enforce_permission_to :update, :participatory_document, document: document
+
+        end
+
         private
+
+        def document
+          @document ||= collection.find(params[:id])
+        end
+
+        def documents
+          @documents ||= filtered_collection
+        end
+        def base_query
+          paginate(collection)
+        end
+
+        def filters
+          []
+        end
+
+        def filters_with_values
+          {}
+        end
 
         def collection
           @collection ||= Decidim::ParticipatoryDocuments::Document.where(component: current_component)
