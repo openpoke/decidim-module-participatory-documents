@@ -1,4 +1,5 @@
 ---
+
 en:
 
   decidim:
@@ -7,9 +8,15 @@ en:
         document:
           fields:
             id: Id
-            title: title
+            title: Title
       admin:
         documents:
+          update:
+            success: Document has been successfully updated
+            invalid: There was a problem updating Document
+          edit:
+            title: Edit Participatory document
+            update: Update
           index:
             title: Title
             actions:

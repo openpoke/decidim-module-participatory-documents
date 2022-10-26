@@ -42,7 +42,23 @@ module Decidim
 
         def edit
           enforce_permission_to :update, :participatory_document, document: document
+          @form = form(Admin::DocumentForm).from_model(document)
+        end
 
+        def update
+          enforce_permission_to :update, :participatory_document, document: document
+          @form = form(Admin::DocumentForm).from_params(params)
+          Admin::UpdateDocument.call(@form, document) do
+            on(:ok) do |_proposal|
+              flash[:notice] = t("documents.update.success", scope: "decidim.participatory_documents.admin")
+              redirect_to documents_path
+            end
+
+            on(:invalid) do
+              flash.now[:alert] = t("documents.update.error", scope: "decidim.participatory_documents.admin")
+              render :edit
+            end
+          end
         end
 
         private
