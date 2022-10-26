@@ -7,9 +7,9 @@ module Decidim
       isolate_namespace Decidim::ParticipatoryDocuments
 
       routes do
-        resources :participatory_documents
+        resources :documents
 
-        root to: "participatory_documents#index"
+        root to: "documents#index"
       end
 
       initializer "decidim_participatory_documents.webpacker.assets_path" do

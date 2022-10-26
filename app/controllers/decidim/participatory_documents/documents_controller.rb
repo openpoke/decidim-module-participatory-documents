@@ -2,7 +2,7 @@
 
 module Decidim
   module ParticipatoryDocuments
-    class ParticipatoryDocumentsController < Decidim::ParticipatoryDocuments::ApplicationController
+    class DocumentsController < Decidim::ParticipatoryDocuments::ApplicationController
       def index; end
     end
   end
