@@ -1,31 +1,30 @@
 ---
-
 en:
   decidim:
+    components:
+      participatory_documents:
+        name: Participatory Documents
+        settings:
+          global:
+            allowed_content_types: Allowed content types
     participatory_documents:
+      admin:
+        documents:
+          create:
+            invalid: There was a problem creating Document
+            success: Document has been successfully created
+          edit:
+            title: Edit Participatory document
+            update: Update
+          new:
+            create: Create  Participatory document
+            title: New Participatory document
+          update:
+            error: 
+            invalid: There was a problem updating Document
+            success: Document has been successfully updated
       models:
         document:
           fields:
             id: Id
             title: Title
-      admin:
-        documents:
-          update:
-            error:
-            success: Document has been successfully updated
-            invalid: There was a problem updating Document
-          edit:
-            title: Edit Participatory document
-            update: Update
-          create:
-            success: Document has been successfully created
-            invalid: There was a problem creating Document
-          new:
-            create: Create  Participatory document
-            title: New Participatory document
-    components:
-      participatory_documents:
-        settings:
-          global:
-            allowed_content_types: Allowed content types
-        name: Participatory Documents
