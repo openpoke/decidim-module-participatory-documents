@@ -10,14 +10,10 @@ module Decidim
         helper_method :document
 
         def index
-          redirect_to(new_document_path) && return unless document.present?
-          redirect_to(document_path(document)) && return if current_component.published?
-          redirect_to(edit_document_path(document)) && return
+          redirect_to(new_document_path) && return if document.blank?
+          redirect_to(edit_document_path(document)) && return unless current_component.published?
         end
 
-        def show
-
-        end
         def new
           enforce_permission_to :create, :participatory_document
           @form = form(Decidim::ParticipatoryDocuments::Admin::DocumentForm).from_params(params)
@@ -64,7 +60,7 @@ module Decidim
         private
 
         def document
-          @document ||= Decidim::ParticipatoryDocuments::Document.where(component: current_component).first
+          @document ||= Decidim::ParticipatoryDocuments::Document.find_by(component: current_component)
         end
       end
     end
