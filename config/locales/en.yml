@@ -1,7 +1,6 @@
 ---
 
 en:
-
   decidim:
     participatory_documents:
       models:
@@ -12,16 +11,12 @@ en:
       admin:
         documents:
           update:
+            error:
             success: Document has been successfully updated
             invalid: There was a problem updating Document
           edit:
             title: Edit Participatory document
             update: Update
-          index:
-            title: Title
-            actions:
-              title: Actions
-              edit: Edit
           create:
             success: Document has been successfully created
             invalid: There was a problem creating Document

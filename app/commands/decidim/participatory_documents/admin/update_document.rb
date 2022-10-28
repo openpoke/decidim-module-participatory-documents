@@ -3,7 +3,9 @@
 module Decidim
   module ParticipatoryDocuments
     module Admin
-      class UpdateDocument  < Rectify::Command
+      class UpdateDocument < Rectify::Command
+        include ::Decidim::AttachmentAttributesMethods
+
         def initialize(form, document)
           @form = form
           @document = document
@@ -12,22 +14,34 @@ module Decidim
 
         def call
           return broadcast(:invalid) if form.invalid?
-          transaction do
-            update_document
+
+          begin
+            transaction do
+              update_document
+            end
+            broadcast(:ok, document)
+          rescue ActiveRecord::RecordInvalid
+            form.errors.add(:file, document.errors[:file]) if document.errors.include? :file
+            broadcast(:invalid)
           end
-          broadcast(:ok, document)
         end
 
         private
+
         attr_reader :form, :document
 
+        def attributes
+          {
+            title: form.title,
+            description: form.description
+          }.merge(attachment_attributes(:file))
+        end
 
         def update_document
           Decidim.traceability.update!(
             document,
             form.current_user,
-            title: form.title,
-            description: form.description
+            **attributes
           )
         end
       end

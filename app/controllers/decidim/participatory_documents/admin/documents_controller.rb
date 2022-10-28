@@ -12,15 +12,14 @@ module Decidim
         helper_method :documents, :document
 
         def index
-          redirect_to new_document_path and return if collection.empty?
+          redirect_to(new_document_path) && return if collection.empty?
 
+          redirect_to(edit_document_path(collection.first)) && return
         end
 
         def new
           enforce_permission_to :create, :participatory_document
-          @form = form(Decidim::ParticipatoryDocuments::Admin::DocumentForm).from_params(
-            attachment: form(AttachmentForm).from_params({})
-          )
+          @form = form(Decidim::ParticipatoryDocuments::Admin::DocumentForm).from_params(params)
         end
 
         def create
@@ -55,7 +54,7 @@ module Decidim
             end
 
             on(:invalid) do
-              flash.now[:alert] = t("documents.update.error", scope: "decidim.participatory_documents.admin")
+              flash.now[:alert] = t("documents.update.invalid", scope: "decidim.participatory_documents.admin")
               render :edit
             end
           end
@@ -70,6 +69,7 @@ module Decidim
         def documents
           @documents ||= filtered_collection
         end
+
         def base_query
           paginate(collection)
         end

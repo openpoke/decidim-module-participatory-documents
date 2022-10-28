@@ -11,5 +11,10 @@
     <div class="row column">
       <%= form.translated :editor, :description %>
     </div>
+
+    <div class="preview">
+      <%= form.upload( :file, extension_allowlist: Decidim::ParticipatoryDocuments.content_type_allowlist ) %>
+    </div>
+
   </div>
 </div>

@@ -5,18 +5,18 @@ module Decidim
   module ParticipatoryDocuments
     include ActiveSupport::Configurable
 
-    config_accessor :allowed_extensions do
-      %w( image/*
-                application/vnd.oasis.opendocument
-                application/vnd.ms-*
-                application/msword
-                application/vnd.ms-word
-                application/vnd.openxmlformats-officedocument
-                application/vnd.oasis.opendocument
-                application/pdf
-                application/rtf
-                text/plain
-              )
+    config_accessor :content_type_allowlist do
+      %w(
+        application/vnd.oasis.opendocument
+        application/vnd.ms-*
+        application/msword
+        application/vnd.ms-word
+        application/vnd.openxmlformats-officedocument
+        application/vnd.oasis.opendocument
+        application/pdf
+        application/rtf
+        text/plain
+      )
     end
   end
 end
