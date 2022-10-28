@@ -3,7 +3,7 @@ en:
   decidim:
     components:
       participatory_documents:
-        name: Participatory Documents
+        name: Participatory Document
         settings:
           global:
             allowed_content_types: Allowed content types

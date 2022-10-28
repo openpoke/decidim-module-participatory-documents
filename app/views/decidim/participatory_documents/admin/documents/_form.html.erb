@@ -13,7 +13,8 @@
     </div>
 
     <div class="preview">
-      <%= form.upload( :file, extension_allowlist: Decidim::ParticipatoryDocuments.content_type_allowlist ) %>
+      <%= form.upload( :file, extension_allowlist: Decidim::ParticipatoryDocuments.content_type_allowlist,
+                       optional: !current_component.published?) %>
     </div>
 
   </div>
