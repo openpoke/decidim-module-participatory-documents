@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
 namespace :decidim_participatory_documents do
-
-  # Since we cannot install pdf.js as node module, nor we can use it from CDN, We are using the prebuilt version.  
+  # Since we cannot install pdf.js as node module, nor we can use it from CDN, We are using the prebuilt version.
   desc "Copies the pdf.js library from plugin root to designated application folder"
   task :install_pdf_js do
     copy_pdfjs_to_application "public"

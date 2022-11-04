@@ -15,7 +15,7 @@ module Decidim
       translatable_fields :title, :description
 
       has_one_attached :file
-      validates_upload :file, uploader: Decidim::ParticipatoryDocuments::DocumentUploader
+      validates_upload :file, uploader: Decidim::ParticipatoryDocuments::PdfDocumentUploader
 
       attr_accessor :remove_file
     end

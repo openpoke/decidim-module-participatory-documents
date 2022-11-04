@@ -5,9 +5,6 @@ en:
     components:
       participatory_documents:
         name: Participatory Document
-        settings:
-          global:
-            allowed_content_types: Allowed content types
     participatory_documents:
       admin:
         documents:

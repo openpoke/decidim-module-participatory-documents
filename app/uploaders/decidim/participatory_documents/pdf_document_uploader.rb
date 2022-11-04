@@ -2,9 +2,9 @@
 
 module Decidim
   module ParticipatoryDocuments
-    class DocumentUploader < Decidim::ApplicationUploader
+    class PdfDocumentUploader < Decidim::ApplicationUploader
       def content_type_allowlist
-        Decidim::ParticipatoryDocuments.content_type_allowlist
+        %w(application/pdf)
       end
     end
   end
