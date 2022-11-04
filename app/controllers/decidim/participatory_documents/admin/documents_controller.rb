@@ -8,12 +8,12 @@ module Decidim
         include Decidim::ApplicationHelper
 
         helper_method :document
-
-        layout false, only: :pdf_viewer
+        before_action :add_snippets, only: :index
 
         def index
           redirect_to(new_document_path) && return if document.blank?
           redirect_to(edit_document_path(document)) && return unless current_component.published?
+
         end
 
         def new
@@ -59,10 +59,18 @@ module Decidim
           end
         end
 
-        def pdf_viewer; end
+        def pdf_viewer
+          render layout: false
+        end
 
         private
 
+        def add_snippets
+          return unless respond_to?(:snippets)
+
+          snippets.add(:head, helpers.stylesheet_pack_tag("decidim_participatory_documents_admin"))
+          snippets.add(:head, helpers.javascript_pack_tag("decidim_participatory_documents_admin"))
+        end
         def document
           @document ||= Decidim::ParticipatoryDocuments::Document.find_by(component: current_component)
         end
