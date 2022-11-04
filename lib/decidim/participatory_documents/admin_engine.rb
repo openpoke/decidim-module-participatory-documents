@@ -10,7 +10,11 @@ module Decidim
       paths["lib/tasks"] = nil
 
       routes do
-        resources :documents
+        resources :documents do
+          collection do
+            get :pdf_viewer
+          end
+        end
 
         root to: "documents#index"
       end

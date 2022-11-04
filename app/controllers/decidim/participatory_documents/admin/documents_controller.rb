@@ -9,6 +9,8 @@ module Decidim
 
         helper_method :document
 
+        layout false, only: :pdf_viewer
+
         def index
           redirect_to(new_document_path) && return if document.blank?
           redirect_to(edit_document_path(document)) && return unless current_component.published?
@@ -56,6 +58,8 @@ module Decidim
             end
           end
         end
+
+        def pdf_viewer; end
 
         private
 
