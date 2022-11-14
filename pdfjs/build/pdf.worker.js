@@ -29,13 +29,13 @@
 		exports["pdfjs-dist/build/pdf.worker"] = factory();
 	else
 		root["pdfjs-dist/build/pdf.worker"] = root.pdfjsWorker = factory();
-})(globalThis, () => {
-return /******/ (() => { // webpackBootstrap
+})(globalThis, function() {
+return /******/ (function() { // webpackBootstrap
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ([
 /* 0 */,
 /* 1 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -101,7 +101,7 @@ class WorkerMessageHandler {
       docId,
       apiVersion
     } = docParams;
-    const workerVersion = '3.0.279';
+    const workerVersion = '3.1.20';
     if (apiVersion !== workerVersion) {
       throw new Error(`The API version "${apiVersion}" does not match ` + `the Worker version "${workerVersion}".`);
     }
@@ -625,7 +625,7 @@ if (typeof window === "undefined" && !_is_node.isNodeJS && typeof self !== "unde
 
 /***/ }),
 /* 2 */
-/***/ ((__unused_webpack_module, exports) => {
+/***/ (function(__unused_webpack_module, exports) {
 
 
 
@@ -690,7 +690,8 @@ const AnnotationEditorType = {
   DISABLE: -1,
   NONE: 0,
   FREETEXT: 3,
-  INK: 15
+  INK: 15,
+  POLYGON: 7
 };
 exports.AnnotationEditorType = AnnotationEditorType;
 const AnnotationEditorParamsType = {
@@ -699,7 +700,10 @@ const AnnotationEditorParamsType = {
   FREETEXT_OPACITY: 3,
   INK_COLOR: 11,
   INK_THICKNESS: 12,
-  INK_OPACITY: 13
+  INK_OPACITY: 13,
+  POLYGON_COLOR: 30,
+  POLYGON_THICKNESS: 31,
+  POLYGON_OPACITY: 32
 };
 exports.AnnotationEditorParamsType = AnnotationEditorParamsType;
 const PermissionFlag = {
@@ -1082,10 +1086,10 @@ function createValidAbsoluteUrl(url, baseUrl = null, options = null) {
   } catch (ex) {}
   return null;
 }
-function shadow(obj, prop, value) {
+function shadow(obj, prop, value, nonSerializable = false) {
   Object.defineProperty(obj, prop, {
     value,
-    enumerable: true,
+    enumerable: !nonSerializable,
     configurable: true,
     writable: false
   });
@@ -1516,7 +1520,7 @@ function createPromiseCapability() {
 
 /***/ }),
 /* 3 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -1793,7 +1797,7 @@ function clearPrimitiveCaches() {
 
 /***/ }),
 /* 4 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -2211,7 +2215,7 @@ function getNewAnnotationsMap(annotationStorage) {
 
 /***/ }),
 /* 5 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -2294,7 +2298,7 @@ exports.BaseStream = BaseStream;
 
 /***/ }),
 /* 6 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -2459,7 +2463,7 @@ exports.NetworkPdfManager = NetworkPdfManager;
 
 /***/ }),
 /* 7 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -2899,7 +2903,7 @@ exports.ChunkedStreamManager = ChunkedStreamManager;
 
 /***/ }),
 /* 8 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -2979,7 +2983,7 @@ exports.NullStream = NullStream;
 
 /***/ }),
 /* 9 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -4251,7 +4255,7 @@ exports.PDFDocument = PDFDocument;
 
 /***/ }),
 /* 10 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -4286,6 +4290,7 @@ class AnnotationFactory {
     const id = ref instanceof _primitives.Ref ? ref.toString() : `annot_${idFactory.createObjId()}`;
     let subtype = dict.get("Subtype");
     subtype = subtype instanceof _primitives.Name ? subtype.name : null;
+    const acroFormDict = acroForm instanceof _primitives.Dict ? acroForm : _primitives.Dict.empty;
     const parameters = {
       xref,
       ref,
@@ -4293,10 +4298,11 @@ class AnnotationFactory {
       subtype,
       id,
       pdfManager,
-      acroForm: acroForm instanceof _primitives.Dict ? acroForm : _primitives.Dict.empty,
+      acroForm: acroFormDict,
       attachments,
       xfaDatasets,
       collectFields,
+      needAppearances: !collectFields && acroFormDict.get("NeedAppearances") === true,
       pageIndex
     };
     switch (subtype) {
@@ -4410,6 +4416,8 @@ class AnnotationFactory {
           break;
         case _util.AnnotationEditorType.INK:
           promises.push(InkAnnotation.createNewAnnotation(xref, annotation, dependencies));
+        case _util.AnnotationEditorType.POLYGON:
+          promises.push(PolygonAnnotation.createNewAnnotation(xref, annotation, dependencies));
       }
     }
     return {
@@ -4433,6 +4441,9 @@ class AnnotationFactory {
           break;
         case _util.AnnotationEditorType.INK:
           promises.push(InkAnnotation.createNewPrintAnnotation(xref, annotation));
+          break;
+        case _util.AnnotationEditorType.POLYGON:
+          promises.push(PolygonAnnotation.createNewPrintAnnotation(xref, annotation));
           break;
       }
     }
@@ -4562,6 +4573,7 @@ class Annotation {
       this.data.pageIndex = params.pageIndex;
     }
     this._fallbackFontDict = null;
+    this._needAppearances = false;
   }
   _hasFlag(flags, flag) {
     return !!(flags & flag);
@@ -5151,6 +5163,7 @@ class WidgetAnnotation extends Annotation {
     const dict = params.dict;
     const data = this.data;
     this.ref = params.ref;
+    this._needAppearances = params.needAppearances;
     data.annotationType = _util.AnnotationType.WIDGET;
     if (data.fieldName === undefined) {
       data.fieldName = this._constructFieldName(dict);
@@ -5187,6 +5200,7 @@ class WidgetAnnotation extends Annotation {
     }) || params.acroForm.get("DA");
     this._defaultAppearance = typeof defaultAppearance === "string" ? defaultAppearance : "";
     data.defaultAppearanceData = (0, _default_appearance.parseDefaultAppearance)(this._defaultAppearance);
+    data.hasAppearance = this._needAppearances && data.fieldValue !== undefined && data.fieldValue !== null || data.hasAppearance;
     const fieldType = (0, _core_utils.getInheritableProperty)({
       dict,
       key: "FT"
@@ -5430,15 +5444,16 @@ class WidgetAnnotation extends Annotation {
       value = storageEntry.formattedValue || storageEntry.value;
       rotation = storageEntry.rotation;
     }
-    if (rotation === undefined && value === undefined) {
+    if (rotation === undefined && value === undefined && !this._needAppearances) {
       if (!this._hasValueFromXFA || this.appearance) {
         return null;
       }
     }
+    const colors = this.getBorderAndBackgroundAppearances(annotationStorage);
     if (value === undefined) {
       value = this.data.fieldValue;
       if (!value) {
-        return "";
+        return `/Tx BMC q ${colors}Q EMC`;
       }
     }
     if (Array.isArray(value) && value.length === 1) {
@@ -5447,7 +5462,7 @@ class WidgetAnnotation extends Annotation {
     (0, _util.assert)(typeof value === "string", "Expected `value` to be a string.");
     value = value.trim();
     if (value === "") {
-      return "";
+      return `/Tx BMC q ${colors}Q EMC`;
     }
     if (rotation === undefined) {
       rotation = this.rotation;
@@ -5482,7 +5497,6 @@ class WidgetAnnotation extends Annotation {
     if (this.data.comb) {
       return this._getCombAppearance(defaultAppearance, font, encodedString, totalWidth, hPadding, vPadding, annotationStorage);
     }
-    const colors = this.getBorderAndBackgroundAppearances(annotationStorage);
     if (alignment === 0 || alignment > 2) {
       return `/Tx BMC q ${colors}BT ` + defaultAppearance + ` 1 0 0 1 ${hPadding} ${vPadding} Tm (${(0, _util.escapeString)(encodedString)}) Tj` + " ET Q EMC";
     }
@@ -6172,16 +6186,13 @@ class ChoiceWidgetAnnotation extends WidgetAnnotation {
     if (this.data.combo) {
       return super._getAppearance(evaluator, task, annotationStorage);
     }
-    if (!annotationStorage) {
-      return null;
+    let exportedValue, rotation;
+    const storageEntry = annotationStorage ? annotationStorage.get(this.data.id) : undefined;
+    if (storageEntry) {
+      rotation = storageEntry.rotation;
+      exportedValue = storageEntry.value;
     }
-    const storageEntry = annotationStorage.get(this.data.id);
-    if (!storageEntry) {
-      return null;
-    }
-    const rotation = storageEntry.rotation;
-    let exportedValue = storageEntry.value;
-    if (rotation === undefined && exportedValue === undefined) {
+    if (rotation === undefined && exportedValue === undefined && !this._needAppearances) {
       return null;
     }
     if (exportedValue === undefined) {
@@ -6963,7 +6974,7 @@ class FileAttachmentAnnotation extends MarkupAnnotation {
 
 /***/ }),
 /* 11 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -7053,7 +7064,7 @@ function createDefaultAppearance({
 
 /***/ }),
 /* 12 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -7922,7 +7933,7 @@ const LabCS = function LabCSClosure() {
 
 /***/ }),
 /* 13 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -7937,7 +7948,6 @@ var _fonts = __w_pdfjs_require__(32);
 var _fonts_utils = __w_pdfjs_require__(36);
 var _encodings = __w_pdfjs_require__(35);
 var _standard_fonts = __w_pdfjs_require__(39);
-var _unicode = __w_pdfjs_require__(38);
 var _pattern = __w_pdfjs_require__(48);
 var _xfa_fonts = __w_pdfjs_require__(49);
 var _to_unicode_map = __w_pdfjs_require__(40);
@@ -7952,6 +7962,7 @@ var _decode_stream = __w_pdfjs_require__(17);
 var _glyphlist = __w_pdfjs_require__(37);
 var _core_utils = __w_pdfjs_require__(4);
 var _metrics = __w_pdfjs_require__(43);
+var _unicode = __w_pdfjs_require__(38);
 var _murmurhash = __w_pdfjs_require__(59);
 var _operator_list = __w_pdfjs_require__(60);
 var _image = __w_pdfjs_require__(61);
@@ -9540,7 +9551,6 @@ class PartialEvaluator {
         level: 0
       };
     }
-    const NormalizedUnicodes = (0, _unicode.getNormalizedUnicodes)();
     const textContent = {
       items: [],
       styles: Object.create(null)
@@ -9828,7 +9838,10 @@ class PartialEvaluator {
       const scale = textState.fontMatrix[0] * textState.fontSize;
       for (let i = 0, ii = glyphs.length; i < ii; i++) {
         const glyph = glyphs[i];
-        if (glyph.isInvisibleFormatMark) {
+        const {
+          category
+        } = glyph;
+        if (category.isInvisibleFormatMark) {
           continue;
         }
         let charSpacing = textState.charSpacing + (i + 1 === ii ? extraSpacing : 0);
@@ -9837,7 +9850,7 @@ class PartialEvaluator {
           glyphWidth = glyph.vmetric ? glyph.vmetric[0] : -glyphWidth;
         }
         let scaledDim = glyphWidth * scale;
-        if (glyph.isWhitespace) {
+        if (category.isWhitespace) {
           if (!font.vertical) {
             charSpacing += scaledDim + textState.wordSpacing;
             textState.translateTextMatrix(charSpacing * textState.textHScale, 0);
@@ -9852,7 +9865,7 @@ class PartialEvaluator {
           continue;
         }
         const textChunk = ensureTextContentItem();
-        if (glyph.isZeroWidthDiacritic) {
+        if (category.isZeroWidthDiacritic) {
           scaledDim = 0;
         }
         if (!font.vertical) {
@@ -9867,9 +9880,7 @@ class PartialEvaluator {
         if (scaledDim) {
           textChunk.prevTransform = getCurrentTextTransform();
         }
-        let glyphUnicode = glyph.unicode;
-        glyphUnicode = NormalizedUnicodes[glyphUnicode] || glyphUnicode;
-        glyphUnicode = (0, _unicode.reverseIfRtl)(glyphUnicode);
+        const glyphUnicode = glyph.normalizedUnicode;
         if (saveLastChar(glyphUnicode)) {
           textChunk.str.push(" ");
         }
@@ -11743,7 +11754,7 @@ exports.EvaluatorPreprocessor = EvaluatorPreprocessor;
 
 /***/ }),
 /* 14 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -12462,7 +12473,7 @@ exports.CMapFactory = CMapFactory;
 
 /***/ }),
 /* 15 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -13544,7 +13555,7 @@ exports.Linearization = Linearization;
 
 /***/ }),
 /* 16 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -13621,7 +13632,7 @@ exports.Ascii85Stream = Ascii85Stream;
 
 /***/ }),
 /* 17 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -13767,7 +13778,7 @@ exports.StreamsSequenceStream = StreamsSequenceStream;
 
 /***/ }),
 /* 18 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -13828,7 +13839,7 @@ exports.AsciiHexStream = AsciiHexStream;
 
 /***/ }),
 /* 19 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -13878,7 +13889,7 @@ exports.CCITTFaxStream = CCITTFaxStream;
 
 /***/ }),
 /* 20 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -14410,7 +14421,7 @@ exports.CCITTFaxDecoder = CCITTFaxDecoder;
 
 /***/ }),
 /* 21 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -14658,7 +14669,7 @@ exports.FlateStream = FlateStream;
 
 /***/ }),
 /* 22 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -14719,7 +14730,7 @@ exports.Jbig2Stream = Jbig2Stream;
 
 /***/ }),
 /* 23 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -16464,7 +16475,7 @@ exports.Jbig2Image = Jbig2Image;
 
 /***/ }),
 /* 24 */
-/***/ ((__unused_webpack_module, exports) => {
+/***/ (function(__unused_webpack_module, exports) {
 
 
 
@@ -16800,7 +16811,7 @@ exports.ArithmeticDecoder = ArithmeticDecoder;
 
 /***/ }),
 /* 25 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -16880,7 +16891,7 @@ exports.JpegStream = JpegStream;
 
 /***/ }),
 /* 26 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -17910,7 +17921,7 @@ exports.JpegImage = JpegImage;
 
 /***/ }),
 /* 27 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -17975,7 +17986,7 @@ exports.JpxStream = JpxStream;
 
 /***/ }),
 /* 28 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -19903,7 +19914,7 @@ class ReversibleTransform extends Transform {
 
 /***/ }),
 /* 29 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -20030,7 +20041,7 @@ exports.LZWStream = LZWStream;
 
 /***/ }),
 /* 30 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -20231,7 +20242,7 @@ exports.PredictorStream = PredictorStream;
 
 /***/ }),
 /* 31 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -20278,7 +20289,7 @@ exports.RunLengthStream = RunLengthStream;
 
 /***/ }),
 /* 32 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -20381,10 +20392,15 @@ class Glyph {
     this.operatorListId = operatorListId;
     this.isSpace = isSpace;
     this.isInFont = isInFont;
-    const category = (0, _unicode.getCharUnicodeCategory)(unicode);
-    this.isWhitespace = category.isWhitespace;
-    this.isZeroWidthDiacritic = category.isZeroWidthDiacritic;
-    this.isInvisibleFormatMark = category.isInvisibleFormatMark;
+  }
+  get category() {
+    return (0, _util.shadow)(this, "category", (0, _unicode.getCharUnicodeCategory)(this.unicode), true);
+  }
+  get normalizedUnicode() {
+    return (0, _util.shadow)(this, "normalizedUnicode", (0, _unicode.reverseIfRtl)(Glyph._NormalizedUnicodes[this.unicode] || this.unicode), true);
+  }
+  static get _NormalizedUnicodes() {
+    return (0, _util.shadow)(this, "_NormalizedUnicodes", (0, _unicode.getNormalizedUnicodes)());
   }
 }
 function int16(b0, b1) {
@@ -22637,7 +22653,7 @@ exports.ErrorFont = ErrorFont;
 
 /***/ }),
 /* 33 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -24118,7 +24134,7 @@ exports.CFFCompiler = CFFCompiler;
 
 /***/ }),
 /* 34 */
-/***/ ((__unused_webpack_module, exports) => {
+/***/ (function(__unused_webpack_module, exports) {
 
 
 
@@ -24135,7 +24151,7 @@ exports.ExpertSubsetCharset = ExpertSubsetCharset;
 
 /***/ }),
 /* 35 */
-/***/ ((__unused_webpack_module, exports) => {
+/***/ (function(__unused_webpack_module, exports) {
 
 
 
@@ -24180,7 +24196,7 @@ function getEncoding(encodingName) {
 
 /***/ }),
 /* 36 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -24319,12 +24335,12 @@ function normalizeFontName(name) {
 
 /***/ }),
 /* 37 */
-/***/ ((__unused_webpack_module, __webpack_exports__, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, __webpack_exports__, __w_pdfjs_require__) {
 
 __w_pdfjs_require__.r(__webpack_exports__);
 /* harmony export */ __w_pdfjs_require__.d(__webpack_exports__, {
-/* harmony export */   "getDingbatsGlyphsUnicode": () => (/* binding */ getDingbatsGlyphsUnicode),
-/* harmony export */   "getGlyphsUnicode": () => (/* binding */ getGlyphsUnicode)
+/* harmony export */   "getDingbatsGlyphsUnicode": function() { return /* binding */ getDingbatsGlyphsUnicode; },
+/* harmony export */   "getGlyphsUnicode": function() { return /* binding */ getGlyphsUnicode; }
 /* harmony export */ });
 /* harmony import */ var _core_utils_js__WEBPACK_IMPORTED_MODULE_0__ = __w_pdfjs_require__(4);
 
@@ -33398,17 +33414,17 @@ const getDingbatsGlyphsUnicode = (0,_core_utils_js__WEBPACK_IMPORTED_MODULE_0__.
 
 /***/ }),
 /* 38 */
-/***/ ((__unused_webpack_module, __webpack_exports__, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, __webpack_exports__, __w_pdfjs_require__) {
 
 __w_pdfjs_require__.r(__webpack_exports__);
 /* harmony export */ __w_pdfjs_require__.d(__webpack_exports__, {
-/* harmony export */   "clearUnicodeCaches": () => (/* binding */ clearUnicodeCaches),
-/* harmony export */   "getCharUnicodeCategory": () => (/* binding */ getCharUnicodeCategory),
-/* harmony export */   "getNormalizedUnicodes": () => (/* binding */ getNormalizedUnicodes),
-/* harmony export */   "getUnicodeForGlyph": () => (/* binding */ getUnicodeForGlyph),
-/* harmony export */   "getUnicodeRangeFor": () => (/* binding */ getUnicodeRangeFor),
-/* harmony export */   "mapSpecialUnicodeValues": () => (/* binding */ mapSpecialUnicodeValues),
-/* harmony export */   "reverseIfRtl": () => (/* binding */ reverseIfRtl)
+/* harmony export */   "clearUnicodeCaches": function() { return /* binding */ clearUnicodeCaches; },
+/* harmony export */   "getCharUnicodeCategory": function() { return /* binding */ getCharUnicodeCategory; },
+/* harmony export */   "getNormalizedUnicodes": function() { return /* binding */ getNormalizedUnicodes; },
+/* harmony export */   "getUnicodeForGlyph": function() { return /* binding */ getUnicodeForGlyph; },
+/* harmony export */   "getUnicodeRangeFor": function() { return /* binding */ getUnicodeRangeFor; },
+/* harmony export */   "mapSpecialUnicodeValues": function() { return /* binding */ mapSpecialUnicodeValues; },
+/* harmony export */   "reverseIfRtl": function() { return /* binding */ reverseIfRtl; }
 /* harmony export */ });
 /* harmony import */ var _core_utils_js__WEBPACK_IMPORTED_MODULE_0__ = __w_pdfjs_require__(4);
 
@@ -36781,7 +36797,7 @@ function clearUnicodeCaches() {
 
 /***/ }),
 /* 39 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -37641,7 +37657,7 @@ function getStandardFontName(name) {
 
 /***/ }),
 /* 40 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -37720,7 +37736,7 @@ exports.IdentityToUnicodeMap = IdentityToUnicodeMap;
 
 /***/ }),
 /* 41 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -37832,7 +37848,7 @@ exports.CFFFont = CFFFont;
 
 /***/ }),
 /* 42 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -38649,7 +38665,7 @@ exports.FontRendererFactory = FontRendererFactory;
 
 /***/ }),
 /* 43 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -41687,7 +41703,7 @@ exports.getFontBasicMetrics = getFontBasicMetrics;
 
 /***/ }),
 /* 44 */
-/***/ ((__unused_webpack_module, exports) => {
+/***/ (function(__unused_webpack_module, exports) {
 
 
 
@@ -42232,7 +42248,7 @@ class CompositeGlyph {
 
 /***/ }),
 /* 45 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -42348,7 +42364,7 @@ exports.OpenTypeFileBuilder = OpenTypeFileBuilder;
 
 /***/ }),
 /* 46 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -42634,7 +42650,7 @@ exports.Type1Font = Type1Font;
 
 /***/ }),
 /* 47 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -43207,7 +43223,7 @@ exports.Type1Parser = Type1Parser;
 
 /***/ }),
 /* 48 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -43994,7 +44010,7 @@ function getTilingPatternIR(operatorList, dict, color) {
 
 /***/ }),
 /* 49 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -44207,7 +44223,7 @@ function getXfaFontDict(name) {
 
 /***/ }),
 /* 50 */
-/***/ ((__unused_webpack_module, exports) => {
+/***/ (function(__unused_webpack_module, exports) {
 
 
 
@@ -44246,7 +44262,7 @@ exports.CalibriRegularMetrics = CalibriRegularMetrics;
 
 /***/ }),
 /* 51 */
-/***/ ((__unused_webpack_module, exports) => {
+/***/ (function(__unused_webpack_module, exports) {
 
 
 
@@ -44285,7 +44301,7 @@ exports.HelveticaRegularMetrics = HelveticaRegularMetrics;
 
 /***/ }),
 /* 52 */
-/***/ ((__unused_webpack_module, exports) => {
+/***/ (function(__unused_webpack_module, exports) {
 
 
 
@@ -44312,7 +44328,7 @@ exports.LiberationSansRegularMapping = LiberationSansRegularMapping;
 
 /***/ }),
 /* 53 */
-/***/ ((__unused_webpack_module, exports) => {
+/***/ (function(__unused_webpack_module, exports) {
 
 
 
@@ -44351,7 +44367,7 @@ exports.MyriadProRegularMetrics = MyriadProRegularMetrics;
 
 /***/ }),
 /* 54 */
-/***/ ((__unused_webpack_module, exports) => {
+/***/ (function(__unused_webpack_module, exports) {
 
 
 
@@ -44390,7 +44406,7 @@ exports.SegoeuiRegularMetrics = SegoeuiRegularMetrics;
 
 /***/ }),
 /* 55 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -45442,7 +45458,7 @@ exports.PostScriptCompiler = PostScriptCompiler;
 
 /***/ }),
 /* 56 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -45646,7 +45662,7 @@ exports.PostScriptLexer = PostScriptLexer;
 
 /***/ }),
 /* 57 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -45879,7 +45895,7 @@ exports.GlobalImageCache = GlobalImageCache;
 
 /***/ }),
 /* 58 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -46126,7 +46142,7 @@ function bidi(str, startLevel = -1, vertical = false) {
 
 /***/ }),
 /* 59 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -46232,7 +46248,7 @@ exports.MurmurHash3_64 = MurmurHash3_64;
 
 /***/ }),
 /* 60 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -46758,7 +46774,7 @@ exports.OperatorList = OperatorList;
 
 /***/ }),
 /* 61 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -47385,7 +47401,7 @@ exports.PDFImage = PDFImage;
 
 /***/ }),
 /* 62 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -47437,7 +47453,7 @@ function applyMaskImageData({
 
 /***/ }),
 /* 63 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -47732,7 +47748,7 @@ function incrementalUpdate({
 
 /***/ }),
 /* 64 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -48160,7 +48176,7 @@ exports.SimpleXMLParser = SimpleXMLParser;
 
 /***/ }),
 /* 65 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -49469,7 +49485,7 @@ exports.CipherTransformFactory = CipherTransformFactory;
 
 /***/ }),
 /* 66 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -49515,7 +49531,7 @@ exports.DecryptStream = DecryptStream;
 
 /***/ }),
 /* 67 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -50475,6 +50491,9 @@ class Catalog {
     throw new Error(`Page index ${pageIndex} not found.`);
   }
   async getAllPageDicts(recoveryMode = false) {
+    const {
+      ignoreErrors
+    } = this.pdfManager.evaluatorOptions;
     const queue = [{
       currentNode: this.toplevelPagesDict,
       posInKids: 0
@@ -50497,6 +50516,10 @@ class Catalog {
     function addPageError(error) {
       if (error instanceof _core_utils.XRefEntryException && !recoveryMode) {
         throw error;
+      }
+      if (recoveryMode && ignoreErrors && pageIndex === 0) {
+        (0, _util.warn)(`getAllPageDicts - Skipping invalid first page: "${error}".`);
+        error = _primitives.Dict.empty;
       }
       map.set(pageIndex++, [error, null]);
     }
@@ -50846,7 +50869,7 @@ exports.Catalog = Catalog;
 
 /***/ }),
 /* 68 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -50974,7 +50997,7 @@ exports.NumberTree = NumberTree;
 
 /***/ }),
 /* 69 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -50991,7 +51014,7 @@ function clearGlobalCaches() {
 
 /***/ }),
 /* 70 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -51074,7 +51097,7 @@ exports.FileSpec = FileSpec;
 
 /***/ }),
 /* 71 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -51182,7 +51205,7 @@ exports.MetadataParser = MetadataParser;
 
 /***/ }),
 /* 72 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -51470,7 +51493,7 @@ exports.StructTreePage = StructTreePage;
 
 /***/ }),
 /* 73 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -51590,7 +51613,7 @@ exports.ObjectLoader = ObjectLoader;
 
 /***/ }),
 /* 74 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -51741,7 +51764,7 @@ exports.XFAFactory = XFAFactory;
 
 /***/ }),
 /* 75 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -52677,7 +52700,7 @@ exports.Option10 = Option10;
 
 /***/ }),
 /* 76 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -52896,7 +52919,7 @@ exports.HTMLResult = HTMLResult;
 
 /***/ }),
 /* 77 */
-/***/ ((__unused_webpack_module, exports) => {
+/***/ (function(__unused_webpack_module, exports) {
 
 
 
@@ -52972,7 +52995,7 @@ exports.NamespaceIds = NamespaceIds;
 
 /***/ }),
 /* 78 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -53244,7 +53267,7 @@ function createDataNode(root, container, expr) {
 
 /***/ }),
 /* 79 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -53678,7 +53701,7 @@ exports.Binder = Binder;
 
 /***/ }),
 /* 80 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -58577,7 +58600,7 @@ exports.TemplateNamespace = TemplateNamespace;
 
 /***/ }),
 /* 81 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -58857,7 +58880,7 @@ function checkDimensions(node, space) {
 
 /***/ }),
 /* 82 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -59402,7 +59425,7 @@ function fixURL(str) {
 
 /***/ }),
 /* 83 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -59567,7 +59590,7 @@ function getMetrics(xfaFont, real = false) {
 
 /***/ }),
 /* 84 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -59787,7 +59810,7 @@ exports.TextMeasure = TextMeasure;
 
 /***/ }),
 /* 85 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -59846,7 +59869,7 @@ exports.DataHandler = DataHandler;
 
 /***/ }),
 /* 86 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -59991,7 +60014,7 @@ exports.XFAParser = XFAParser;
 
 /***/ }),
 /* 87 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -60168,7 +60191,7 @@ exports.Builder = Builder;
 
 /***/ }),
 /* 88 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -60200,7 +60223,7 @@ exports.NamespaceSetUp = NamespaceSetUp;
 
 /***/ }),
 /* 89 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -61636,7 +61659,7 @@ exports.ConfigNamespace = ConfigNamespace;
 
 /***/ }),
 /* 90 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -61807,7 +61830,7 @@ exports.ConnectionSetNamespace = ConnectionSetNamespace;
 
 /***/ }),
 /* 91 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -61858,7 +61881,7 @@ exports.DatasetsNamespace = DatasetsNamespace;
 
 /***/ }),
 /* 92 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -62116,7 +62139,7 @@ exports.LocaleSetNamespace = LocaleSetNamespace;
 
 /***/ }),
 /* 93 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -62147,7 +62170,7 @@ exports.SignatureNamespace = SignatureNamespace;
 
 /***/ }),
 /* 94 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -62178,7 +62201,7 @@ exports.StylesheetNamespace = StylesheetNamespace;
 
 /***/ }),
 /* 95 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -62221,7 +62244,7 @@ exports.XdpNamespace = XdpNamespace;
 
 /***/ }),
 /* 96 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -62637,7 +62660,7 @@ exports.XhtmlNamespace = XhtmlNamespace;
 
 /***/ }),
 /* 97 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -62659,7 +62682,7 @@ exports.UnknownNamespace = UnknownNamespace;
 
 /***/ }),
 /* 98 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -62726,7 +62749,7 @@ exports.DatasetReader = DatasetReader;
 
 /***/ }),
 /* 99 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -63091,7 +63114,7 @@ class XRef {
             uncompressed: true
           };
         }
-        while (startPos < buffer.length) {
+        while (startPos < length) {
           const endPos = startPos + skipUntil(buffer, startPos, objBytes) + 4;
           contentLength = endPos - position;
           const checkPos = Math.max(endPos - CHECK_CONTENT_LENGTH, startPos);
@@ -63117,7 +63140,19 @@ class XRef {
         position += contentLength;
       } else if (token.startsWith("trailer") && (token.length === 7 || /\s/.test(token[7]))) {
         trailers.push(position);
-        position += skipUntil(buffer, position, startxrefBytes);
+        const contentLength = skipUntil(buffer, position, startxrefBytes);
+        if (position + contentLength >= length) {
+          const endPos = position + skipUntil(buffer, position, objBytes) + 4;
+          const checkPos = Math.max(endPos - CHECK_CONTENT_LENGTH, position);
+          const tokenStr = (0, _util.bytesToString)(buffer.subarray(checkPos, endPos));
+          const objToken = nestedObjRegExp.exec(tokenStr);
+          if (objToken && objToken[1]) {
+            (0, _util.warn)('indexObjects: Found first "obj" after "trailer", ' + 'caused by missing "startxref" -- trying to recover.');
+            position = endPos - objToken[1].length;
+            continue;
+          }
+        }
+        position += contentLength;
       } else {
         position += token.length + 1;
       }
@@ -63429,7 +63464,7 @@ exports.XRef = XRef;
 
 /***/ }),
 /* 100 */
-/***/ ((__unused_webpack_module, exports) => {
+/***/ (function(__unused_webpack_module, exports) {
 
 
 
@@ -63442,7 +63477,7 @@ exports.isNodeJS = isNodeJS;
 
 /***/ }),
 /* 101 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -63855,7 +63890,7 @@ exports.MessageHandler = MessageHandler;
 
 /***/ }),
 /* 102 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+/***/ (function(__unused_webpack_module, exports, __w_pdfjs_require__) {
 
 
 
@@ -64001,37 +64036,37 @@ class PDFWorkerStreamRangeReader {
 /******/ 	
 /************************************************************************/
 /******/ 	/* webpack/runtime/define property getters */
-/******/ 	(() => {
+/******/ 	!function() {
 /******/ 		// define getter functions for harmony exports
-/******/ 		__w_pdfjs_require__.d = (exports, definition) => {
+/******/ 		__w_pdfjs_require__.d = function(exports, definition) {
 /******/ 			for(var key in definition) {
 /******/ 				if(__w_pdfjs_require__.o(definition, key) && !__w_pdfjs_require__.o(exports, key)) {
 /******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
 /******/ 				}
 /******/ 			}
 /******/ 		};
-/******/ 	})();
+/******/ 	}();
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	(() => {
-/******/ 		__w_pdfjs_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
-/******/ 	})();
+/******/ 	!function() {
+/******/ 		__w_pdfjs_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
+/******/ 	}();
 /******/ 	
 /******/ 	/* webpack/runtime/make namespace object */
-/******/ 	(() => {
+/******/ 	!function() {
 /******/ 		// define __esModule on exports
-/******/ 		__w_pdfjs_require__.r = (exports) => {
+/******/ 		__w_pdfjs_require__.r = function(exports) {
 /******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
 /******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 /******/ 			}
 /******/ 			Object.defineProperty(exports, '__esModule', { value: true });
 /******/ 		};
-/******/ 	})();
+/******/ 	}();
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
-(() => {
+!function() {
 var exports = __webpack_exports__;
 
 
@@ -64045,10 +64080,9 @@ Object.defineProperty(exports, "WorkerMessageHandler", ({
   }
 }));
 var _worker = __w_pdfjs_require__(1);
-const pdfjsVersion = '3.0.279';
-const pdfjsBuild = 'd0823066c';
-})();
-
+const pdfjsVersion = '3.1.20';
+const pdfjsBuild = '7e5008f0f';
+}();
 /******/ 	return __webpack_exports__;
 /******/ })()
 ;

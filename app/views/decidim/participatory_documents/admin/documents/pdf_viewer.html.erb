@@ -148,6 +148,23 @@ See https://github.com/adobe-type-tools/cmap-resources
         </div>
       </div>
 
+      <div class="editorParamsToolbar hidden doorHangerRight" id="editorPolygonParamsToolbar">
+        <div class="editorParamsToolbarContainer">
+          <div class="editorParamsSetter">
+            <label for="editorPolygonColor" class="editorParamsLabel" data-l10n-id="editor_polygon_color">Color</label>
+            <input type="color" id="editorPolygonColor" class="editorParamsColor" tabindex="102">
+          </div>
+          <div class="editorParamsSetter">
+            <label for="editorPolygonThickness" class="editorParamsLabel" data-l10n-id="editor_polygon_thickness">Thickness</label>
+            <input type="range" id="editorPolygonThickness" class="editorParamsSlider" value="1" min="1" max="20" step="1" tabindex="103">
+          </div>
+          <div class="editorParamsSetter">
+            <label for="editorPolygonOpacity" class="editorParamsLabel" data-l10n-id="editor_polygon_opacity">Opacity</label>
+            <input type="range" id="editorPolygonOpacity" class="editorParamsSlider" value="100" min="1" max="100" step="1" tabindex="104">
+          </div>
+        </div>
+      </div>
+
       <div id="secondaryToolbar" class="secondaryToolbar hidden doorHangerRight">
         <div id="secondaryToolbarButtonContainer">
           <button id="secondaryOpenFile" class="secondaryToolbarButton visibleLargeView" title="Open File" tabindex="51" data-l10n-id="open_file">
@@ -283,6 +300,9 @@ See https://github.com/adobe-type-tools/cmap-resources
                   <span data-l10n-id="editor_free_text2_label">Text</span>
                 </button>
                 <button id="editorInk" class="toolbarButton" disabled="disabled" title="Draw" role="radio" aria-checked="false" tabindex="35" data-l10n-id="editor_ink2">
+                  <span data-l10n-id="editor_ink2_label">Draw</span>
+                </button>
+                <button id="editorPolygon" class="toolbarButton" disabled="disabled" title="Draw" role="radio" aria-checked="false" tabindex="35" data-l10n-id="editor_ink2">
                   <span data-l10n-id="editor_ink2_label">Draw</span>
                 </button>
               </div>

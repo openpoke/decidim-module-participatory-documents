@@ -5,8 +5,8 @@
     </h2>
   </div>
   <div class="card-section">
-    <object data="<%= pdf_viewer_documents_path %>?file=<%= document.attached_uploader(:file).path %>" type="application/pdf" width="100%" height="100%">
-      <iframe src="<%= pdf_viewer_documents_path %>?file=<%= document.attached_uploader(:file).path %>" width="100%" height="100%">
+    <object data="<%= pdf_viewer_documents_path(file: document.attached_uploader(:file).path) %>" type="application/pdf" width="100%" height="100%">
+      <iframe src="<%= pdf_viewer_documents_path(file: document.attached_uploader(:file).path) %>" width="100%" height="100%">
         <p>This browser does not support PDF!</p>
       </iframe>
     </object>
