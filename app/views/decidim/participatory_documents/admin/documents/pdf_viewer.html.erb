@@ -451,5 +451,15 @@ See https://github.com/adobe-type-tools/cmap-resources
   <div id="printContainer"></div>
 
   <input type="file" id="fileInput" class="hidden">
+<script>
+
+  document.addEventListener('polygonsAdded', function(e){
+    var event = new CustomEvent('polygonAnnotations', {
+      detail: PDFViewerApplication.pdfDocument.annotationStorage._storage
+    });
+    // we know we are in the iframe so we are using window.parent
+    window.parent.document.dispatchEvent(event);
+  }, false)
+</script>
 </body>
 </html>
