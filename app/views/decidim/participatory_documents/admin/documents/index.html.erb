@@ -13,5 +13,12 @@
   </div>
 </div>
 <script>
-  document.addEventListener('polygonAnnotations', function(e) { console.log(e.detail); }, false);
+  document.addEventListener('polygonAddedAnnotations', function(e) {
+    console.log("added");
+    console.log(e.detail);
+  }, false);
+  document.addEventListener('polygonRemovedAnnotations', function(e) {
+     console.log("removed");
+      console.log(e.detail);
+ }, false);
 </script>

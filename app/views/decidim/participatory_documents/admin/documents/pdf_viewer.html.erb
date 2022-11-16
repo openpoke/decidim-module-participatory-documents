@@ -454,12 +454,19 @@ See https://github.com/adobe-type-tools/cmap-resources
 <script>
 
   document.addEventListener('polygonsAdded', function(e){
-    var event = new CustomEvent('polygonAnnotations', {
-      detail: PDFViewerApplication.pdfDocument.annotationStorage._storage
+    var event = new CustomEvent('polygonAddedAnnotations', {
+      detail: e.detail
     });
     // we know we are in the iframe so we are using window.parent
     window.parent.document.dispatchEvent(event);
-  }, false)
+  }, false);
+  document.addEventListener('polygonsRemoved', function(e){
+    var event = new CustomEvent('polygonRemovedAnnotations', {
+      detail: e.detail
+    });
+    // we know we are in the iframe so we are using window.parent
+    window.parent.document.dispatchEvent(event);
+  }, false);
 </script>
 </body>
 </html>
