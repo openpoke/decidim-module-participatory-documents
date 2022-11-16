@@ -8224,7 +8224,7 @@ class PDFViewer {
   #scrollModePageState = null;
   #onVisibilityChange = null;
   constructor(options) {
-    const viewerVersion = '3.1.20';
+    const viewerVersion = '3.1.23';
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
     }
@@ -8233,7 +8233,6 @@ class PDFViewer {
     if (!(this.container?.tagName.toUpperCase() === "DIV" && this.viewer?.tagName.toUpperCase() === "DIV")) {
       throw new Error("Invalid `container` and/or `viewer` option.");
     }
-    console.log(this.container);
     if (this.container.offsetParent && getComputedStyle(this.container).position !== "absolute") {
       throw new Error("The `container` must be absolutely positioned.");
     }
@@ -13472,8 +13471,8 @@ var _ui_utils = __webpack_require__(1);
 var _app_options = __webpack_require__(2);
 var _pdf_link_service = __webpack_require__(3);
 var _app = __webpack_require__(4);
-const pdfjsVersion = '3.1.20';
-const pdfjsBuild = '7e5008f0f';
+const pdfjsVersion = '3.1.23';
+const pdfjsBuild = 'fa84f6338';
 const AppConstants = {
   LinkTarget: _pdf_link_service.LinkTarget,
   RenderingStates: _ui_utils.RenderingStates,

@@ -1153,7 +1153,7 @@ async function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
   }
   const workerId = await worker.messageHandler.sendWithPromise("GetDocRequest", {
     docId,
-    apiVersion: '3.1.20',
+    apiVersion: '3.1.23',
     data: source.data,
     password: source.password,
     disableAutoFetch: source.disableAutoFetch,
@@ -2812,9 +2812,9 @@ class InternalRenderTask {
     }
   }
 }
-const version = '3.1.20';
+const version = '3.1.23';
 exports.version = version;
-const build = '7e5008f0f';
+const build = 'fa84f6338';
 exports.build = build;
 
 /***/ }),
@@ -10463,6 +10463,9 @@ class PolygonEditor extends _editor.AnnotationEditor {
     this.#observer.disconnect();
     this.#observer = null;
     super.remove();
+    document.dispatchEvent(new CustomEvent('polygonsRemoved', {
+      detail: this.serialize()
+    }));
   }
   enableEditMode() {
     if (this.#disableEditing || this.canvas === null) {
@@ -10617,14 +10620,12 @@ class PolygonEditor extends _editor.AnnotationEditor {
       return;
     }
     super.commit();
+    this.#fireEvents();
     this.isEditing = false;
     this.disableEditMode();
     this.setInForeground();
     this.#disableEditing = true;
     this.div.classList.add("disabled");
-    this.#fitToContent(true);
-    this.parent.addPolygonEditorIfNeeded(true);
-    this.parent.moveEditorInDOM(this);
     this.div.focus();
   }
   focusin(event) {
@@ -10771,39 +10772,7 @@ class PolygonEditor extends _editor.AnnotationEditor {
     const paths = [];
     const padding = this.thickness / 2;
     let buffer, points;
-    return paths;
-  }
-  #extractPointsOnBezier(p10, p11, p20, p21, p30, p31, p40, p41, n, points) {
-    if (this.#isAlmostFlat(p10, p11, p20, p21, p30, p31, p40, p41)) {
-      points.push(p40, p41);
-      return;
-    }
-    for (let i = 1; i < n - 1; i++) {
-      const t = i / n;
-      const mt = 1 - t;
-      let q10 = t * p10 + mt * p20;
-      let q11 = t * p11 + mt * p21;
-      let q20 = t * p20 + mt * p30;
-      let q21 = t * p21 + mt * p31;
-      const q30 = t * p30 + mt * p40;
-      const q31 = t * p31 + mt * p41;
-      q10 = t * q10 + mt * q20;
-      q11 = t * q11 + mt * q21;
-      q20 = t * q20 + mt * q30;
-      q21 = t * q21 + mt * q31;
-      q10 = t * q10 + mt * q20;
-      q11 = t * q11 + mt * q21;
-      points.push(q10, q11);
-    }
-    points.push(p40, p41);
-  }
-  #isAlmostFlat(p10, p11, p20, p21, p30, p31, p40, p41) {
-    const tol = 10;
-    const ax = (3 * p20 - 2 * p10 - p40) ** 2;
-    const ay = (3 * p21 - 2 * p11 - p41) ** 2;
-    const bx = (3 * p30 - p10 - 2 * p40) ** 2;
-    const by = (3 * p31 - p11 - 2 * p41) ** 2;
-    return Math.max(ax, bx) + Math.max(ay, by) <= tol;
+    return this.paths;
   }
   #getBbox() {
     let xMin = Infinity;
@@ -10903,6 +10872,18 @@ class PolygonEditor extends _editor.AnnotationEditor {
     editor.#setScaleFactor(width, height);
     return editor;
   }
+  #fireEvents() {
+    let serialized = this.serialize();
+    if (serialized == null) {
+      return;
+    }
+    for (const path of this.paths) {
+      serialized["paths"] = path;
+      document.dispatchEvent(new CustomEvent('polygonsAdded', {
+        detail: serialized
+      }));
+    }
+  }
   serialize() {
     if (this.isEmpty()) {
       return null;
@@ -10915,6 +10896,7 @@ class PolygonEditor extends _editor.AnnotationEditor {
       color,
       thickness: this.thickness,
       opacity: this.opacity,
+      scale: this.scaleFactor / this.parent.scaleFactor,
       paths: this.#serializePaths(this.scaleFactor / this.parent.scaleFactor, this.translationX, this.translationY, height),
       pageIndex: this.parent.pageIndex,
       rect,
@@ -16246,8 +16228,8 @@ var _is_node = __w_pdfjs_require__(12);
 var _text_layer = __w_pdfjs_require__(30);
 var _svg = __w_pdfjs_require__(31);
 var _xfa_layer = __w_pdfjs_require__(29);
-const pdfjsVersion = '3.1.20';
-const pdfjsBuild = '7e5008f0f';
+const pdfjsVersion = '3.1.23';
+const pdfjsBuild = 'fa84f6338';
 {
   if (_is_node.isNodeJS) {
     const {
