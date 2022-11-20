@@ -13,12 +13,23 @@
   </div>
 </div>
 <script>
+  function postRequest(url, action, data, csrf)
+  {
+     $.ajax({
+        url: url,
+        type: action,
+        data: data
+     })
+     .done(function() {
+     })
+     .fail(function() {
+     })
+     .always(function() {});
+  }
   document.addEventListener('polygonAddedAnnotations', function(e) {
-    console.log("added");
-    console.log(e.detail);
+    postRequest('<%= document_annotations_path(document) %>', "POST", e.detail);
   }, false);
   document.addEventListener('polygonRemovedAnnotations', function(e) {
-     console.log("removed");
-      console.log(e.detail);
+    postRequest('<%= document_annotations_path(document) %>', "DELETE", e.detail);
  }, false);
 </script>

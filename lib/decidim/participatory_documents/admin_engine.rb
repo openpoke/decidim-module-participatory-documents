@@ -14,6 +14,11 @@ module Decidim
           collection do
             get :pdf_viewer
           end
+          resources :annotations, only: [:create] do
+            collection do
+              delete :destroy
+            end
+          end
         end
 
         root to: "documents#index"

@@ -25,3 +25,7 @@ end
 Rake::Task["decidim:webpacker:upgrade"].enhance do
   Rake::Task["decidim_participatory_documents:install_pdf_js"].invoke
 end
+
+Rake::Task["decidim:upgrade"].enhance do
+  Rake::Task["decidim_participatory_documents:install:migrations"].invoke
+end

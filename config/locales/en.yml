@@ -2,6 +2,14 @@
 
 en:
   decidim:
+    admin_log:
+      annotation:
+        create: "%{user_name} created an annotation"
+        delete: "%{user_name} deleted an annotation"
+      document:
+        create: "%{user_name} created a document"
+        delete: "%{user_name} deleted a document"
+        update: "%{user_name} updated a document"
     components:
       participatory_documents:
         name: Participatory Document
