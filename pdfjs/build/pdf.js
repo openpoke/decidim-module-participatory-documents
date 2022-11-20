@@ -10463,9 +10463,12 @@ class PolygonEditor extends _editor.AnnotationEditor {
     this.#observer.disconnect();
     this.#observer = null;
     super.remove();
-    document.dispatchEvent(new CustomEvent('polygonsRemoved', {
-      detail: this.serialize()
-    }));
+    const serialized = this.serialize();
+    if (serialized !== null) {
+      document.dispatchEvent(new CustomEvent('polygonsRemoved', {
+        detail: this.serialize()
+      }));
+    }
   }
   enableEditMode() {
     if (this.#disableEditing || this.canvas === null) {
@@ -10481,16 +10484,16 @@ class PolygonEditor extends _editor.AnnotationEditor {
       return;
     }
     super.disableEditMode();
-    this.div.draggable = !this.isEmpty();
+    this.div.draggable = false;
     this.div.classList.remove("editing");
     this.canvas.removeEventListener("pointerdown", this.#boundCanvasPointerdown);
     this.canvas.removeEventListener("pointerup", this.#boundCanvasPointerup);
   }
   onceAdded() {
-    this.div.draggable = !this.isEmpty();
+    this.div.draggable = false;
   }
   isEmpty() {
-    return this.paths.length === 0 || this.paths.length === 1 && this.paths[0].length === 0;
+    return this.paths.length === 0 || this.paths.length === 1 && this.#rectangleDrawn() === false;
   }
   #getInitialBBox() {
     const {
@@ -10574,7 +10577,8 @@ class PolygonEditor extends _editor.AnnotationEditor {
     if (x !== lastX || y !== lastY) {
       this.currentPath.push(coordinates);
     }
-    this.ctx.strokeRect(...coordinates);
+    this.ctx.fillStyle = "green";
+    this.ctx.fillRect(...coordinates);
     this.currentPath.length = 0;
     const cmd = () => {
       this.paths.push(coordinates);
@@ -10612,7 +10616,8 @@ class PolygonEditor extends _editor.AnnotationEditor {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     this.#updateTransform();
     for (const path of this.paths) {
-      this.ctx.strokeRect(...path);
+      this.ctx.fillStyle = `${this.color}${(0, _tools.opacityToHex)(this.opacity)}`;
+      this.ctx.fillRect(...path);
     }
   }
   commit() {
@@ -10626,6 +10631,9 @@ class PolygonEditor extends _editor.AnnotationEditor {
     this.setInForeground();
     this.#disableEditing = true;
     this.div.classList.add("disabled");
+    this.#fitToContent(true);
+    this.parent.addPolygonEditorIfNeeded(true);
+    this.parent.moveEditorInDOM(this);
     this.div.focus();
   }
   focusin(event) {
@@ -10656,18 +10664,24 @@ class PolygonEditor extends _editor.AnnotationEditor {
     if (this.isInEditMode() && this.currentPath.length !== 0) {
       event.stopPropagation();
       this.#endDrawing(event);
-      this.setInBackground();
     }
   }
   canvasPointerleave(event) {
+    console.log("leave");
     this.#endDrawing(event);
-    this.setInBackground();
   }
   #endDrawing(event) {
     this.#stopDrawing(event.offsetX, event.offsetY);
     this.canvas.removeEventListener("pointerleave", this.#boundCanvasPointerleave);
     this.canvas.removeEventListener("pointermove", this.#boundCanvasPointermove);
     this.parent.addToAnnotationStorage(this);
+    if (this.#rectangleDrawn) {
+      this.commit();
+    }
+  }
+  #rectangleDrawn() {
+    let lastPoint = this.paths.at(-1);
+    return lastPoint[2] > 0 && lastPoint[3] > 0;
   }
   #createCanvas() {
     this.canvas = document.createElement("canvas");
@@ -10847,25 +10861,7 @@ class PolygonEditor extends _editor.AnnotationEditor {
     editor.#disableEditing = true;
     editor.#realWidth = Math.round(width);
     editor.#realHeight = Math.round(height);
-    for (const {
-      bezier
-    } of data.paths) {
-      const path = [];
-      editor.paths.push(path);
-      let p0 = scaleFactor * (bezier[0] - padding);
-      let p1 = scaleFactor * (height - bezier[1] - padding);
-      for (let i = 2, ii = bezier.length; i < ii; i += 6) {
-        const p10 = scaleFactor * (bezier[i] - padding);
-        const p11 = scaleFactor * (height - bezier[i + 1] - padding);
-        const p20 = scaleFactor * (bezier[i + 2] - padding);
-        const p21 = scaleFactor * (height - bezier[i + 3] - padding);
-        const p30 = scaleFactor * (bezier[i + 4] - padding);
-        const p31 = scaleFactor * (height - bezier[i + 5] - padding);
-        path.push([[p0, p1], [p10, p11], [p20, p21], [p30, p31]]);
-        p0 = p30;
-        p1 = p31;
-      }
-    }
+    editor.paths.push(data.paths);
     const bbox = editor.#getBbox();
     editor.#baseWidth = Math.max(RESIZER_SIZE, bbox[2] - bbox[0]);
     editor.#baseHeight = Math.max(RESIZER_SIZE, bbox[3] - bbox[1]);
