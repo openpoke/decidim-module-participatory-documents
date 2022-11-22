@@ -453,6 +453,33 @@ See https://github.com/adobe-type-tools/cmap-resources
   <input type="file" id="fileInput" class="hidden">
 
 <script>
+  var annotations = [
+    {
+  "annotationType": 7,
+  "color": [
+    0,
+    0,
+    0
+  ],
+  "thickness": 1,
+  "opacity": 1,
+  "scale": 0.6000000000000001,
+  "paths": [
+    111,
+    170,
+    794,
+    71
+  ],
+  "pageIndex": 0,
+  "rect": [
+    0,
+    0.599999999999909,
+    611.4000000000001,
+    792
+  ],
+  "rotation": 0
+}
+  ];
 
   document.addEventListener('polygonsAdded', function(e){
     var event = new CustomEvent('polygonAddedAnnotations', {
@@ -463,6 +490,7 @@ See https://github.com/adobe-type-tools/cmap-resources
     // we know we are in the iframe so we are using window.parent
     window.parent.document.dispatchEvent(event);
   }, false);
+
   document.addEventListener('polygonsRemoved', function(e){
     var event = new CustomEvent('polygonRemovedAnnotations', {
       detail: e.detail
@@ -471,6 +499,19 @@ See https://github.com/adobe-type-tools/cmap-resources
     // we know we are in the iframe so we are using window.parent
     window.parent.document.dispatchEvent(event);
   }, false);
+
+  PDFViewerApplication.initializedPromise.then(function() {
+    PDFViewerApplication.eventBus.on('annotationeditorlayerrendered', function(document) {
+      for (index in annotations){
+        let ViewerPage = PDFViewerApplication.pdfViewer._pages[annotations[index].pageIndex];
+        window.annotationEditorLayer = ViewerPage;
+        let annotationLayer = ViewerPage.annotationEditorLayer.annotationEditorLayer;
+        let editor;
+        editor = annotationLayer.deserialize(annotations[index]);
+        annotationLayer.add(editor);
+      }
+    });
+  });
 </script>
 </body>
 </html>
