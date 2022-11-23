@@ -10781,13 +10781,6 @@ class PolygonEditor extends _editor.AnnotationEditor {
     const padding = this.#getPadding() / 2;
     this.ctx.setTransform(this.scaleFactor, 0, 0, this.scaleFactor, this.translationX * this.scaleFactor + padding, this.translationY * this.scaleFactor + padding);
   }
-  #serializePaths(s, tx, ty, h) {
-    const NUMBER_OF_POINTS_ON_BEZIER_CURVE = 4;
-    const paths = [];
-    const padding = this.thickness / 2;
-    let buffer, points;
-    return this.paths;
-  }
   #getBbox() {
     let xMin = Infinity;
     let xMax = -Infinity;
@@ -10848,24 +10841,38 @@ class PolygonEditor extends _editor.AnnotationEditor {
     }
   }
   static deserialize(data, parent) {
-    const editor = super.deserialize(data, parent);
-    editor.thickness = data.thickness;
+    console.log("been here");
+    const editor = new this.prototype.constructor({
+      parent,
+      id: parent.getNextId()
+    });
+    editor.rotation = data.rotation;
+    let [pageWidth, pageHeight] = parent.pageDimensions;
+    let [x, y, width, height] = editor.getRectInCurrentCoords(data.rect, pageHeight);
+    editor.x = x / pageWidth - 1;
+    editor.y = y / pageHeight - 1;
+    editor.width = width / pageWidth;
+    editor.height = height / pageHeight;
     editor.color = _util.Util.makeHexColor(...data.color);
     editor.opacity = data.opacity;
-    const [pageWidth, pageHeight] = parent.pageDimensions;
-    const width = editor.width * pageWidth;
-    const height = editor.height * pageHeight;
-    const scaleFactor = parent.scaleFactor;
+    editor.paths.push(data.paths);
+    editor.rotation = data.rotation;
+    editor.thickness = data.thickness;
     const padding = data.thickness / 2;
+    [pageWidth, pageHeight] = parent.pageDimensions;
+    width = editor.width * pageWidth;
+    height = editor.height * pageHeight;
+    const scaleFactor = parent.scaleFactor;
     editor.#aspectRatio = width / height;
     editor.#disableEditing = true;
     editor.#realWidth = Math.round(width);
     editor.#realHeight = Math.round(height);
-    editor.paths.push(data.paths);
     const bbox = editor.#getBbox();
     editor.#baseWidth = Math.max(RESIZER_SIZE, bbox[2] - bbox[0]);
     editor.#baseHeight = Math.max(RESIZER_SIZE, bbox[3] - bbox[1]);
     editor.#setScaleFactor(width, height);
+    editor.render();
+    editor.rebuild();
     return editor;
   }
   #fireEvents() {
@@ -10887,13 +10894,14 @@ class PolygonEditor extends _editor.AnnotationEditor {
     const rect = this.getRect(0, 0);
     const height = this.rotation % 180 === 0 ? rect[3] - rect[1] : rect[2] - rect[0];
     const color = _editor.AnnotationEditor._colorManager.convert(this.ctx.strokeStyle);
+    console.log(this);
     return {
       annotationType: _util.AnnotationEditorType.POLYGON,
       color,
       thickness: this.thickness,
       opacity: this.opacity,
       scale: this.scaleFactor / this.parent.scaleFactor,
-      paths: this.#serializePaths(this.scaleFactor / this.parent.scaleFactor, this.translationX, this.translationY, height),
+      paths: this.paths,
       pageIndex: this.parent.pageIndex,
       rect,
       rotation: this.rotation
