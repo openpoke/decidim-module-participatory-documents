@@ -514,8 +514,8 @@ See https://github.com/adobe-type-tools/cmap-resources
           console.log("page",page,"div",div);
 
 
-          page.annotationLayer.div.appendChild(div);
-          page.annotationLayer.div.style.pointerEvents = "auto";
+          page.annotationEditorLayer.div.appendChild(div);
+          page.annotationEditorLayer.div.style.pointerEvents = "all";
           annotations[index]['div'] = div;
         }
       }

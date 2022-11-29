@@ -451,22 +451,82 @@ See https://github.com/adobe-type-tools/cmap-resources
   <div id="printContainer"></div>
 
   <input type="file" id="fileInput" class="hidden">
+<style type="text/css">
+  .box {
+    position: absolute;
+    background: rgba(0, 0, 0, 0.5);
+    min-width: 1px;
+    min-height: 1px;
+    border: 3px solid #333;
+  }
+  .dragging {
+    background: rgba(255, 0, 0, 0.5);
+    border-style: dashed;
+    border-color: red;
+  }
+</style>
 <script>
+  var pages = {}, box;
+  const editorMouseDown = function(e) {
+    const {left, top} = this.getBoundingClientRect();
+    let w = e.clientX - left - 3;
+    let h = e.clientY - top - 3;
+    let mousePercentLeft = (100 * w/this.clientWidth)
+    let mousePercentTop = (100 * h/this.clientHeight)
+    box = document.createElement("div");
+    box.classList.add("box", "dragging");
+    box.style.left = mousePercentLeft + "%";
+    box.style.top = mousePercentTop + "%";
+    this.appendChild(box);
+    console.log('mousedown', e, "w/h", w, h, "this", this, "box", box);
+  };
+  const editorMouseMove = function(e) {
+    const {left, top} = this.getBoundingClientRect();
+    if(box) {
+      let w = e.clientX - left - 9;
+      let h = e.clientY - top - 9;
+      let boxPercentLeft = parseInt(box.style.left);
+      let boxPercentTop = parseInt(box.style.top);
+      let mousePercentLeft = 100 * w/this.clientWidth;
+      let mousePercentTop = 100 * h/this.clientHeight;
+      box.style.width = (mousePercentLeft - boxPercentLeft) + "%";
+      box.style.height = (mousePercentTop - boxPercentTop) + "%";
+      console.log('mousemove', e,"mousePercent", mousePercentLeft,mousePercentTop, "this", this,"box",box);
+    }
+  };
+  const editorMouseUp = function(e) {
+    if(box) {
+      box.classList.remove("dragging");
+      if(box.clientWidth <= 5 && box.clientHeight <= 5) {
+        box.remove();
+      }
+      console.log('mouseup', e, "this", this, "box", box);
+      box = null;
+    }
+  };
+  PDFViewerApplication.initializedPromise.then(function() {
+    PDFViewerApplication.eventBus.on('annotationeditorlayerrendered', function (doc) {
+      if(!pages[doc.pageNumber]) {
+        const page = PDFViewerApplication.pdfViewer._pages[doc.pageNumber - 1];
+        pages[doc.pageNumber] = page;
+        const editor = page.annotationEditorLayer && page.annotationEditorLayer.div;
+        if(editor) {
+          console.log('editor layer rendered', doc, "page", doc.pageNumber, "editor",editor,editor.getBoundingClientRect());
+          editor.style.pointerEvents = "all";
+          editor.classList.add("ready");
+          editor.removeEventListener('mousedown', editorMouseDown);
+          editor.removeEventListener('mousemove', editorMouseMove);
+          editor.removeEventListener('mouseup', editorMouseUp);
+          // editor.removeEventListener('click', editorMouseUp);
+          editor.addEventListener('mousedown', editorMouseDown);
+          editor.addEventListener('mousemove', editorMouseMove);
+          editor.addEventListener('mouseup', editorMouseUp);
+          // editor.addEventListener('click', editorMouseUp);
+        }
+      }
+    });
+  });
 
-  document.addEventListener('polygonsAdded', function(e){
-    var event = new CustomEvent('polygonAddedAnnotations', {
-      detail: e.detail
-    });
-    // we know we are in the iframe so we are using window.parent
-    window.parent.document.dispatchEvent(event);
-  }, false);
-  document.addEventListener('polygonsRemoved', function(e){
-    var event = new CustomEvent('polygonRemovedAnnotations', {
-      detail: e.detail
-    });
-    // we know we are in the iframe so we are using window.parent
-    window.parent.document.dispatchEvent(event);
-  }, false);
 </script>
 </body>
 </html>
