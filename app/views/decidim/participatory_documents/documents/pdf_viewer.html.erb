@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title></title>
+<!--  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">-->
+<!--  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">-->
+<!--  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">-->
+  <%#= stylesheet_pack_tag("decidim_participatory_documents_admin_pdf") %>
+</head>
+<body>
+<div class="content">
+  <div id="pdf-container"></div>
+</div>
+
+<style type="text/css">
+  .content {
+      width: 100%;
+  }
+  #pdf-container {
+      width: 100%;
+  }
+</style>
+<script>
+  var documentUrl = '<%= document.attached_uploader(:file).path %>';
+  var zoomScale = 2;
+  var outputJson = {
+    "page_setup": {
+        "format": [
+            612,
+            792
+        ],
+        "orientation": "portrait"
+    },
+    "pages": [
+        {
+            "version": "4.3.0",
+            "objects": [
+                {
+                    "type": "rect",
+                    "version": "4.3.0",
+                    "originX": "left",
+                    "originY": "top",
+                    "left": 71,
+                    "top": 16.5,
+                    "width": 100,
+                    "height": 100,
+                    "fill": "rgba(15, 0, 230, 0.73)",
+                    "stroke": null,
+                    "strokeWidth": 1,
+                    "strokeDashArray": null,
+                    "strokeLineCap": "butt",
+                    "strokeDashOffset": 0,
+                    "strokeLineJoin": "miter",
+                    "strokeMiterLimit": 4,
+                    "scaleX": 1.17,
+                    "scaleY": 0.58,
+                    "angle": 0,
+                    "flipX": false,
+                    "flipY": false,
+                    "opacity": 1,
+                    "shadow": null,
+                    "visible": true,
+                    "backgroundColor": "",
+                    "fillRule": "nonzero",
+                    "paintFirst": "fill",
+                    "globalCompositeOperation": "source-over",
+                    "skewX": 0,
+                    "skewY": 0,
+                    "uuid": "b3788b40-d592-4919-9739-f14245c7e3b5"
+                },
+                {
+                    "type": "rect",
+                    "version": "4.3.0",
+                    "originX": "left",
+                    "originY": "top",
+                    "left": 86,
+                    "top": 109,
+                    "width": 100,
+                    "height": 100,
+                    "fill": "rgba(15, 0, 230, 0.73)",
+                    "stroke": null,
+                    "strokeWidth": 1,
+                    "strokeDashArray": null,
+                    "strokeLineCap": "butt",
+                    "strokeDashOffset": 0,
+                    "strokeLineJoin": "miter",
+                    "strokeMiterLimit": 4,
+                    "scaleX": 4.41,
+                    "scaleY": 0.31,
+                    "angle": 0,
+                    "flipX": false,
+                    "flipY": false,
+                    "opacity": 1,
+                    "shadow": null,
+                    "visible": true,
+                    "backgroundColor": "",
+                    "fillRule": "nonzero",
+                    "paintFirst": "fill",
+                    "globalCompositeOperation": "source-over",
+                    "skewX": 0,
+                    "skewY": 0,
+                    "uuid": "d531dc86-55eb-4072-841d-4e467c99823b"
+                },
+                {
+                    "type": "rect",
+                    "version": "4.3.0",
+                    "originX": "left",
+                    "originY": "top",
+                    "left": 69,
+                    "top": 369.5,
+                    "width": 100,
+                    "height": 100,
+                    "fill": "rgba(15, 0, 230, 0.73)",
+                    "stroke": null,
+                    "strokeWidth": 1,
+                    "strokeDashArray": null,
+                    "strokeLineCap": "butt",
+                    "strokeDashOffset": 0,
+                    "strokeLineJoin": "miter",
+                    "strokeMiterLimit": 4,
+                    "scaleX": 4.69,
+                    "scaleY": 0.32,
+                    "angle": 0,
+                    "flipX": false,
+                    "flipY": false,
+                    "opacity": 1,
+                    "shadow": null,
+                    "visible": true,
+                    "backgroundColor": "",
+                    "fillRule": "nonzero",
+                    "paintFirst": "fill",
+                    "globalCompositeOperation": "source-over",
+                    "skewX": 0,
+                    "skewY": 0,
+                    "uuid": "2ff58496-90f8-4612-8e75-ce1fcc031547"
+                },
+                {
+                    "type": "rect",
+                    "version": "4.3.0",
+                    "originX": "left",
+                    "originY": "top",
+                    "left": 69,
+                    "top": 243.5,
+                    "width": 100,
+                    "height": 100,
+                    "fill": "rgba(230, 0, 130, 0.34)",
+                    "stroke": null,
+                    "strokeWidth": 1,
+                    "strokeDashArray": null,
+                    "strokeLineCap": "butt",
+                    "strokeDashOffset": 0,
+                    "strokeLineJoin": "miter",
+                    "strokeMiterLimit": 4,
+                    "scaleX": 4.68,
+                    "scaleY": 0.3,
+                    "angle": 0,
+                    "flipX": false,
+                    "flipY": false,
+                    "opacity": 1,
+                    "shadow": null,
+                    "visible": true,
+                    "backgroundColor": "",
+                    "fillRule": "nonzero",
+                    "paintFirst": "fill",
+                    "globalCompositeOperation": "source-over",
+                    "skewX": 0,
+                    "skewY": 0,
+                    "uuid": "f208b4c4-0701-4720-8acc-25e6178295f9"
+                }
+            ]
+        },
+        {
+            "version": "4.3.0",
+            "objects": []
+        }
+    ]
+};
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.min.js"></script>
+<script>pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.worker.min.js';</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/4.3.0/fabric.min.js"></script>
+<%= javascript_pack_tag "decidim_participatory_documents_admin_pdf" %>
+
+</body>
+</html>

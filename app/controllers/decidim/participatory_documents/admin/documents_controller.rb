@@ -57,6 +57,10 @@ module Decidim
           end
         end
 
+        def pdf_viewer
+          render layout: false
+        end
+
         private
 
         def document
