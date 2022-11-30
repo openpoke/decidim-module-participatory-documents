@@ -4,11 +4,17 @@
   min-width: 1px;
   min-height: 1px;
   border: 3px solid #333;
+  &:hover {
+    cursor: move;
+  }
 }
-.dragging {
+.dragging,.grabbing {
   background: rgba(255, 0, 0, 0.5);
   border-style: dashed;
   border-color: red;
+}
+.blocked {
+  pointer-events: none;
 }
 .ready {
   cursor: crosshair;
