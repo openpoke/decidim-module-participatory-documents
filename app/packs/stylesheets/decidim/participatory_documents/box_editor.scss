@@ -1,0 +1,15 @@
+.box {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.5);
+  min-width: 1px;
+  min-height: 1px;
+  border: 3px solid #333;
+}
+.dragging {
+  background: rgba(255, 0, 0, 0.5);
+  border-style: dashed;
+  border-color: red;
+}
+.ready {
+  cursor: crosshair;
+}

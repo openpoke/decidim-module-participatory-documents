@@ -20,12 +20,12 @@
  * JavaScript code in this page
  */
 
-/******/ (function() { // webpackBootstrap
+/******/ (() => { // webpackBootstrap
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ([
 /* 0 */,
 /* 1 */
-/***/ (function(__unused_webpack_module, exports) {
+/***/ ((__unused_webpack_module, exports) => {
 
 
 
@@ -532,7 +532,7 @@ function apiPageModeToSidebarView(mode) {
 
 /***/ }),
 /* 2 */
-/***/ (function(__unused_webpack_module, exports) {
+/***/ ((__unused_webpack_module, exports) => {
 
 
 
@@ -675,7 +675,7 @@ const defaultOptions = {
     kind: OptionKind.API
   },
   cMapUrl: {
-    value: " /pdfjs/web/cmaps/ ",
+    value: "/pdfjs/web/cmaps/",
     kind: OptionKind.API
   },
   disableAutoFetch: {
@@ -819,7 +819,7 @@ exports.AppOptions = AppOptions;
 
 /***/ }),
 /* 3 */
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 
@@ -1280,7 +1280,7 @@ exports.SimpleLinkService = SimpleLinkService;
 
 /***/ }),
 /* 4 */
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 
@@ -1327,8 +1327,6 @@ const ViewerCssTheme = {
   LIGHT: 1,
   DARK: 2
 };
-const KNOWN_VERSIONS = ["1.0", "1.1", "1.2", "1.3", "1.4", "1.5", "1.6", "1.7", "1.8", "1.9", "2.0", "2.1", "2.2", "2.3"];
-const KNOWN_GENERATORS = ["acrobat distiller", "acrobat pdfwriter", "adobe livecycle", "adobe pdf library", "adobe photoshop", "ghostscript", "tcpdf", "cairo", "dvipdfm", "dvips", "pdftex", "pdfkit", "itext", "prince", "quarkxpress", "mac os x", "microsoft", "openoffice", "oracle", "luradocument", "pdf-xchange", "antenna house", "aspose.cells", "fpdf"];
 class DefaultExternalServices {
   constructor() {
     throw new Error("Cannot initialize DefaultExternalServices.");
@@ -1412,7 +1410,6 @@ const PDFViewerApplication = {
   _contentDispositionFilename: null,
   _contentLength: null,
   _saveInProgress: false,
-  _docStats: null,
   _wheelUnusedTicks: 0,
   _PDFBug: null,
   _hasAnnotationEditors: false,
@@ -1756,6 +1753,9 @@ const PDFViewerApplication = {
     if (downloadUrl) {
       this._downloadUrl = downloadUrl === url ? this.baseUrl : downloadUrl.split("#")[0];
     }
+    if ((0, _pdfjsLib.isDataScheme)(url)) {
+      this._hideViewBookmark();
+    }
     let title = (0, _pdfjsLib.getPdfFilenameFromUrl)(url, "");
     if (!title) {
       try {
@@ -1778,7 +1778,15 @@ const PDFViewerApplication = {
     return this._contentDispositionFilename || (0, _pdfjsLib.getPdfFilenameFromUrl)(this.url);
   },
   _hideViewBookmark() {
-    this.appConfig.secondaryToolbar.viewBookmarkButton.hidden = true;
+    const {
+      viewBookmarkButton,
+      presentationModeButton
+    } = this.appConfig.secondaryToolbar;
+    viewBookmarkButton.hidden = true;
+    if (presentationModeButton.hidden) {
+      const element = document.getElementById("viewBookmarkSeparator");
+      element.hidden = true;
+    }
   },
   async close() {
     this._unblockDocumentLoadEvent();
@@ -1813,7 +1821,6 @@ const PDFViewerApplication = {
     this._contentDispositionFilename = null;
     this._contentLength = null;
     this._saveInProgress = false;
-    this._docStats = null;
     this._hasAnnotationEditors = false;
     promises.push(this.pdfScriptingManager.destroyPromise);
     this.setTitle();
@@ -1860,6 +1867,9 @@ const PDFViewerApplication = {
     const loadingTask = (0, _pdfjsLib.getDocument)(parameters);
     this.pdfLoadingTask = loadingTask;
     loadingTask.onPassword = (updateCallback, reason) => {
+      if (this.isViewerEmbedded) {
+        this._unblockDocumentLoadEvent();
+      }
       this.pdfLinkService.externalLinkEnabled = false;
       this.passwordPrompt.setUpdateCallback(updateCallback, reason);
       this.passwordPrompt.open();
@@ -1870,7 +1880,6 @@ const PDFViewerApplication = {
     }) => {
       this.progress(loaded / total);
     };
-    loadingTask.onUnsupportedFeature = this.fallback.bind(this);
     return loadingTask.promise.then(pdfDocument => {
       this.load(pdfDocument);
     }, reason => {
@@ -1951,12 +1960,6 @@ const PDFViewerApplication = {
       this.download();
     }
   },
-  fallback(featureId) {
-    this.externalServices.reportTelemetry({
-      type: "unsupportedFeature",
-      featureId
-    });
-  },
   _documentError(message, moreInfo = null) {
     this._unblockDocumentLoadEvent();
     this._otherError(message, moreInfo);
@@ -1982,7 +1985,6 @@ const PDFViewerApplication = {
       }
     }
     console.error(`${message}\n\n${moreInfoText.join("\n")}`);
-    this.fallback();
   },
   progress(level) {
     if (this.downloadComplete) {
@@ -2028,6 +2030,9 @@ const PDFViewerApplication = {
     this.secondaryToolbar.setPagesCount(pdfDocument.numPages);
     let baseDocumentUrl;
     baseDocumentUrl = null;
+    if (baseDocumentUrl && (0, _pdfjsLib.isDataScheme)(baseDocumentUrl)) {
+      baseDocumentUrl = null;
+    }
     this.pdfLinkService.setDocument(pdfDocument, baseDocumentUrl);
     this.pdfDocumentProperties.setDocument(pdfDocument);
     const pdfViewer = this.pdfViewer;
@@ -2210,7 +2215,6 @@ const PDFViewerApplication = {
           return false;
         }
         console.warn("Warning: JavaScript support is not enabled");
-        this.fallback(_pdfjsLib.UNSUPPORTED_FEATURES.javaScript);
         return true;
       });
       if (!triggerAutoPrint) {
@@ -2259,42 +2263,12 @@ const PDFViewerApplication = {
       } else {
         console.warn("Warning: XFA support is not enabled");
       }
-      this.fallback(_pdfjsLib.UNSUPPORTED_FEATURES.forms);
     } else if ((info.IsAcroFormPresent || info.IsXFAPresent) && !this.pdfViewer.renderForms) {
       console.warn("Warning: Interactive form support is not enabled");
-      this.fallback(_pdfjsLib.UNSUPPORTED_FEATURES.forms);
     }
     if (info.IsSignaturesPresent) {
       console.warn("Warning: Digital signatures validation is not supported");
-      this.fallback(_pdfjsLib.UNSUPPORTED_FEATURES.signatures);
     }
-    let versionId = "other";
-    if (KNOWN_VERSIONS.includes(info.PDFFormatVersion)) {
-      versionId = `v${info.PDFFormatVersion.replace(".", "_")}`;
-    }
-    let generatorId = "other";
-    if (info.Producer) {
-      const producer = info.Producer.toLowerCase();
-      KNOWN_GENERATORS.some(function (generator) {
-        if (!producer.includes(generator)) {
-          return false;
-        }
-        generatorId = generator.replace(/[ .-]/g, "_");
-        return true;
-      });
-    }
-    let formType = null;
-    if (info.IsXFAPresent) {
-      formType = "xfa";
-    } else if (info.IsAcroFormPresent) {
-      formType = "acroform";
-    }
-    this.externalServices.reportTelemetry({
-      type: "documentInfo",
-      version: versionId,
-      generator: generatorId,
-      formType
-    });
     this.eventBus.dispatch("metadataloaded", {
       source: this
     });
@@ -2464,9 +2438,6 @@ const PDFViewerApplication = {
     this.forceRendering();
     this.setTitle();
     printService.layout();
-    this.externalServices.reportTelemetry({
-      type: "print"
-    });
     if (this._hasAnnotationEditors) {
       this.externalServices.reportTelemetry({
         type: "editing",
@@ -2706,18 +2677,6 @@ const PDFViewerApplication = {
     document.blockUnblockOnload?.(false);
     this._unblockDocumentLoadEvent = () => {};
   },
-  _reportDocumentStatsTelemetry() {
-    const {
-      stats
-    } = this.pdfDocument;
-    if (stats !== this._docStats) {
-      this._docStats = stats;
-      this.externalServices.reportTelemetry({
-        type: "documentStats",
-        stats
-      });
-    }
-  },
   get scriptingReady() {
     return this.pdfScriptingManager.ready;
   }
@@ -2822,7 +2781,7 @@ function webViewerInitialized() {
     appConfig.secondaryToolbar.printButton.classList.add("hidden");
   }
   if (!PDFViewerApplication.supportsFullscreen) {
-    appConfig.secondaryToolbar.presentationModeButton.classList.add("hidden");
+    appConfig.secondaryToolbar.presentationModeButton.hidden = true;
   }
   if (PDFViewerApplication.supportsIntegratedFind) {
     appConfig.toolbar.viewFind.classList.add("hidden");
@@ -2865,7 +2824,6 @@ function webViewerPageRendered({
       PDFViewerApplication._otherError(msg, error);
     });
   }
-  PDFViewerApplication._reportDocumentStatsTelemetry();
 }
 function webViewerPageMode({
   mode
@@ -3473,7 +3431,7 @@ exports.PDFPrintServiceFactory = PDFPrintServiceFactory;
 
 /***/ }),
 /* 5 */
-/***/ (function(module) {
+/***/ ((module) => {
 
 
 
@@ -3487,7 +3445,7 @@ module.exports = pdfjsLib;
 
 /***/ }),
 /* 6 */
-/***/ (function(__unused_webpack_module, exports) {
+/***/ ((__unused_webpack_module, exports) => {
 
 
 
@@ -3603,7 +3561,7 @@ exports.AutomationEventBus = AutomationEventBus;
 
 /***/ }),
 /* 7 */
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 
@@ -3731,7 +3689,7 @@ exports.PDFCursorTools = PDFCursorTools;
 
 /***/ }),
 /* 8 */
-/***/ (function(__unused_webpack_module, exports) {
+/***/ ((__unused_webpack_module, exports) => {
 
 
 
@@ -3844,7 +3802,7 @@ exports.GrabToPan = GrabToPan;
 
 /***/ }),
 /* 9 */
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 
@@ -3863,10 +3821,7 @@ class AnnotationEditorParams {
     editorFreeTextColor,
     editorInkColor,
     editorInkThickness,
-    editorInkOpacity,
-    editorPolygonColor,
-    editorPolygonThickness,
-    editorPolygonOpacity
+    editorInkOpacity
   }) {
     editorFreeTextFontSize.addEventListener("input", evt => {
       this.eventBus.dispatch("switchannotationeditorparams", {
@@ -3903,27 +3858,6 @@ class AnnotationEditorParams {
         value: editorInkOpacity.valueAsNumber
       });
     });
-    editorPolygonColor.addEventListener("input", evt => {
-      this.eventBus.dispatch("switchannotationeditorparams", {
-        source: this,
-        type: _pdfjsLib.AnnotationEditorParamsType.POLYGON_COLOR,
-        value: editorPolygonColor.value
-      });
-    });
-    editorPolygonThickness.addEventListener("input", evt => {
-      this.eventBus.dispatch("switchannotationeditorparams", {
-        source: this,
-        type: _pdfjsLib.AnnotationEditorParamsType.POLYGON_THICKNESS,
-        value: editorPolygonThickness.valueAsNumber
-      });
-    });
-    editorPolygonOpacity.addEventListener("input", evt => {
-      this.eventBus.dispatch("switchannotationeditorparams", {
-        source: this,
-        type: _pdfjsLib.AnnotationEditorParamsType.POLYGON_OPACITY,
-        value: editorPolygonOpacity.valueAsNumber
-      });
-    });
     this.eventBus._on("annotationeditorparamschanged", evt => {
       for (const [type, value] of evt.details) {
         switch (type) {
@@ -3942,15 +3876,6 @@ class AnnotationEditorParams {
           case _pdfjsLib.AnnotationEditorParamsType.INK_OPACITY:
             editorInkOpacity.value = value;
             break;
-          case _pdfjsLib.AnnotationEditorParamsType.POLYGON_COLOR:
-            editorPolygonColor.value = value;
-            break;
-          case _pdfjsLib.AnnotationEditorParamsType.POLYGON_THICKNESS:
-            editorPolygonThickness.value = value;
-            break;
-          case _pdfjsLib.AnnotationEditorParamsType.POLYGON_OPACITY:
-            editorPolygonOpacity.value = value;
-            break;
         }
       }
     });
@@ -3960,7 +3885,7 @@ exports.AnnotationEditorParams = AnnotationEditorParams;
 
 /***/ }),
 /* 10 */
-/***/ (function(__unused_webpack_module, exports) {
+/***/ ((__unused_webpack_module, exports) => {
 
 
 
@@ -4026,7 +3951,7 @@ exports.OverlayManager = OverlayManager;
 
 /***/ }),
 /* 11 */
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 
@@ -4111,7 +4036,7 @@ exports.PasswordPrompt = PasswordPrompt;
 
 /***/ }),
 /* 12 */
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 
@@ -4184,7 +4109,7 @@ class PDFAttachmentViewer extends _base_tree_viewer.BaseTreeViewer {
     for (const name of names) {
       const item = attachments[name];
       const content = item.content,
-        filename = (0, _pdfjsLib.getFilenameFromUrl)(item.filename);
+        filename = (0, _pdfjsLib.getFilenameFromUrl)(item.filename, true);
       const div = document.createElement("div");
       div.className = "treeItem";
       const element = document.createElement("a");
@@ -4229,7 +4154,7 @@ exports.PDFAttachmentViewer = PDFAttachmentViewer;
 
 /***/ }),
 /* 13 */
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 
@@ -4331,7 +4256,7 @@ exports.BaseTreeViewer = BaseTreeViewer;
 
 /***/ }),
 /* 14 */
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 
@@ -4545,7 +4470,7 @@ exports.PDFDocumentProperties = PDFDocumentProperties;
 
 /***/ }),
 /* 15 */
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 
@@ -4721,7 +4646,7 @@ exports.PDFFindBar = PDFFindBar;
 
 /***/ }),
 /* 16 */
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 
@@ -4757,7 +4682,7 @@ const CHARACTERS_TO_NORMALIZE = {
   "\u00BE": "3/4"
 };
 const DIACRITICS_EXCEPTION = new Set([0x3099, 0x309a, 0x094d, 0x09cd, 0x0a4d, 0x0acd, 0x0b4d, 0x0bcd, 0x0c4d, 0x0ccd, 0x0d3b, 0x0d3c, 0x0d4d, 0x0dca, 0x0e3a, 0x0eba, 0x0f84, 0x1039, 0x103a, 0x1714, 0x1734, 0x17d2, 0x1a60, 0x1b44, 0x1baa, 0x1bab, 0x1bf2, 0x1bf3, 0x2d7f, 0xa806, 0xa82c, 0xa8c4, 0xa953, 0xa9c0, 0xaaf6, 0xabed, 0x0c56, 0x0f71, 0x0f72, 0x0f7a, 0x0f7b, 0x0f7c, 0x0f7d, 0x0f80, 0x0f74]);
-const DIACRITICS_EXCEPTION_STR = [...DIACRITICS_EXCEPTION.values()].map(x => String.fromCharCode(x)).join("");
+let DIACRITICS_EXCEPTION_STR;
 const DIACRITICS_REG_EXP = /\p{M}+/gu;
 const SPECIAL_CHARS_REG_EXP = /([.*+?^${}()|[\]\\])|(\p{P})|(\s+)|(\p{M})|(\p{L})/gu;
 const NOT_DIACRITIC_FROM_END_REG_EXP = /([^\p{M}])\p{M}*$/u;
@@ -4765,6 +4690,7 @@ const NOT_DIACRITIC_FROM_START_REG_EXP = /^\p{M}*([^\p{M}])/u;
 const SYLLABLES_REG_EXP = /[\uAC00-\uD7AF\uFA6C\uFACF-\uFAD1\uFAD5-\uFAD7]+/g;
 const SYLLABLES_LENGTHS = new Map();
 const FIRST_CHAR_SYLLABLES_REG_EXP = "[\\u1100-\\u1112\\ud7a4-\\ud7af\\ud84a\\ud84c\\ud850\\ud854\\ud857\\ud85f]";
+const NFKC_CHARS_TO_NORMALIZE = new Map();
 let noSyllablesRegExp = null;
 let withSyllablesRegExp = null;
 function normalize(text) {
@@ -4790,7 +4716,9 @@ function normalize(text) {
     normalizationRegex = withSyllablesRegExp;
   } else {
     const replace = Object.keys(CHARACTERS_TO_NORMALIZE).join("");
-    const regexp = `([${replace}])|(\\p{M}+(?:-\\n)?)|(\\S-\\n)|(\\p{Ideographic}\\n)|(\\n)`;
+    const toNormalizeWithNFKC = "\u2460-\u2473" + "\u24b6-\u24ff" + "\u3244-\u32bf" + "\u32d0-\u32fe" + "\uff00-\uffef";
+    const CJK = "(?:\\p{Ideographic}|[\u3040-\u30FF])";
+    const regexp = `([${replace}])|([${toNormalizeWithNFKC}])|(\\p{M}+(?:-\\n)?)|(\\S-\\n)|(${CJK}\\n)|(\\n)`;
     if (syllablePositions.length === 0) {
       normalizationRegex = noSyllablesRegExp = new RegExp(regexp + "|(\\u0000)", "gum");
     } else {
@@ -4809,10 +4737,10 @@ function normalize(text) {
   let shiftOrigin = 0;
   let eol = 0;
   let hasDiacritics = false;
-  normalized = normalized.replace(normalizationRegex, (match, p1, p2, p3, p4, p5, p6, i) => {
+  normalized = normalized.replace(normalizationRegex, (match, p1, p2, p3, p4, p5, p6, p7, i) => {
     i -= shiftOrigin;
     if (p1) {
-      const replacement = CHARACTERS_TO_NORMALIZE[match];
+      const replacement = CHARACTERS_TO_NORMALIZE[p1];
       const jj = replacement.length;
       for (let j = 1; j < jj; j++) {
         positions.push([i - shift + j, shift - j]);
@@ -4821,8 +4749,21 @@ function normalize(text) {
       return replacement;
     }
     if (p2) {
-      const hasTrailingDashEOL = p2.endsWith("\n");
-      const len = hasTrailingDashEOL ? p2.length - 2 : p2.length;
+      let replacement = NFKC_CHARS_TO_NORMALIZE.get(p2);
+      if (!replacement) {
+        replacement = p2.normalize("NFKC");
+        NFKC_CHARS_TO_NORMALIZE.set(p2, replacement);
+      }
+      const jj = replacement.length;
+      for (let j = 1; j < jj; j++) {
+        positions.push([i - shift + j, shift - j]);
+      }
+      shift -= jj - 1;
+      return replacement;
+    }
+    if (p3) {
+      const hasTrailingDashEOL = p3.endsWith("\n");
+      const len = hasTrailingDashEOL ? p3.length - 2 : p3.length;
       hasDiacritics = true;
       let jj = len;
       if (i + eol === rawDiacriticsPositions[rawDiacriticsIndex]?.[1]) {
@@ -4840,24 +4781,24 @@ function normalize(text) {
         shift += 1;
         shiftOrigin += 1;
         eol += 1;
-        return p2.slice(0, len);
+        return p3.slice(0, len);
       }
-      return p2;
-    }
-    if (p3) {
-      positions.push([i - shift + 1, 1 + shift]);
-      shift += 1;
-      shiftOrigin += 1;
-      eol += 1;
-      return p3.charAt(0);
+      return p3;
     }
     if (p4) {
-      positions.push([i - shift + 1, shift]);
+      positions.push([i - shift + 1, 1 + shift]);
+      shift += 1;
       shiftOrigin += 1;
       eol += 1;
       return p4.charAt(0);
     }
     if (p5) {
+      positions.push([i - shift + 1, shift]);
+      shiftOrigin += 1;
+      eol += 1;
+      return p5.charAt(0);
+    }
+    if (p6) {
       positions.push([i - shift + 1, shift - 1]);
       shift -= 1;
       shiftOrigin += 1;
@@ -4873,7 +4814,7 @@ function normalize(text) {
       shift -= newCharLen;
       shiftOrigin += newCharLen;
     }
-    return p6;
+    return p7;
   });
   positions.push([normalized.length, shift]);
   return [normalized, positions, hasDiacritics];
@@ -5123,6 +5064,7 @@ class PDFFindController {
     }
     if (matchDiacritics) {
       if (hasDiacritics) {
+        DIACRITICS_EXCEPTION_STR ||= String.fromCharCode(...DIACRITICS_EXCEPTION);
         isUnicode = true;
         query = `${query}(?=[${DIACRITICS_EXCEPTION_STR}]|[^\\p{M}]|$)`;
       }
@@ -5386,7 +5328,7 @@ exports.PDFFindController = PDFFindController;
 
 /***/ }),
 /* 17 */
-/***/ (function(__unused_webpack_module, exports) {
+/***/ ((__unused_webpack_module, exports) => {
 
 
 
@@ -5466,7 +5408,7 @@ function getCharacterType(charCode) {
 
 /***/ }),
 /* 18 */
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 
@@ -5945,7 +5887,7 @@ function isDestArraysEqual(firstDest, secondDest) {
 
 /***/ }),
 /* 19 */
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 
@@ -6111,7 +6053,7 @@ exports.PDFLayerViewer = PDFLayerViewer;
 
 /***/ }),
 /* 20 */
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 
@@ -6397,7 +6339,7 @@ exports.PDFOutlineViewer = PDFOutlineViewer;
 
 /***/ }),
 /* 21 */
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 
@@ -6687,7 +6629,7 @@ exports.PDFPresentationMode = PDFPresentationMode;
 
 /***/ }),
 /* 22 */
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 
@@ -6812,7 +6754,7 @@ exports.PDFRenderingQueue = PDFRenderingQueue;
 
 /***/ }),
 /* 23 */
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 
@@ -7197,7 +7139,7 @@ exports.PDFScriptingManager = PDFScriptingManager;
 
 /***/ }),
 /* 24 */
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 
@@ -7481,7 +7423,7 @@ exports.PDFSidebar = PDFSidebar;
 
 /***/ }),
 /* 25 */
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 
@@ -7586,7 +7528,7 @@ exports.PDFSidebarResizer = PDFSidebarResizer;
 
 /***/ }),
 /* 26 */
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 
@@ -7809,7 +7751,7 @@ exports.PDFThumbnailViewer = PDFThumbnailViewer;
 
 /***/ }),
 /* 27 */
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 
@@ -8134,7 +8076,7 @@ exports.PDFThumbnailView = PDFThumbnailView;
 
 /***/ }),
 /* 28 */
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 
@@ -8224,7 +8166,7 @@ class PDFViewer {
   #scrollModePageState = null;
   #onVisibilityChange = null;
   constructor(options) {
-    const viewerVersion = '3.1.23';
+    const viewerVersion = '3.2.27';
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
     }
@@ -8753,8 +8695,10 @@ class PDFViewer {
       div,
       id
     } = pageView;
-    if (this._scrollMode === _ui_utils.ScrollMode.PAGE) {
+    if (this._currentPageNumber !== id) {
       this._setCurrentPageNumber(id);
+    }
+    if (this._scrollMode === _ui_utils.ScrollMode.PAGE) {
       this.#ensurePageViewVisible();
       this.update();
     }
@@ -8773,6 +8717,9 @@ class PDFViewer {
       }
     }
     (0, _ui_utils.scrollIntoView)(div, pageSpot);
+    if (!this._currentScaleValue && this._location) {
+      this._location = null;
+    }
   }
   #isSameScale(newScale) {
     return newScale === this._currentScale || Math.abs(newScale - this._currentScale) < 1e-15;
@@ -9606,7 +9553,7 @@ exports.PDFViewer = PDFViewer;
 
 /***/ }),
 /* 29 */
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 
@@ -9696,7 +9643,7 @@ exports.AnnotationEditorLayerBuilder = AnnotationEditorLayerBuilder;
 
 /***/ }),
 /* 30 */
-/***/ (function(__unused_webpack_module, exports) {
+/***/ ((__unused_webpack_module, exports) => {
 
 
 
@@ -9811,7 +9758,7 @@ exports.NullL10n = NullL10n;
 
 /***/ }),
 /* 31 */
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 
@@ -9943,7 +9890,7 @@ exports.AnnotationLayerBuilder = AnnotationLayerBuilder;
 
 /***/ }),
 /* 32 */
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 
@@ -10696,7 +10643,7 @@ exports.PDFPageView = PDFPageView;
 
 /***/ }),
 /* 33 */
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 
@@ -10854,7 +10801,7 @@ exports.TextAccessibilityManager = TextAccessibilityManager;
 
 /***/ }),
 /* 34 */
-/***/ (function(__unused_webpack_module, exports) {
+/***/ ((__unused_webpack_module, exports) => {
 
 
 
@@ -10959,7 +10906,7 @@ exports.StructTreeLayerBuilder = StructTreeLayerBuilder;
 
 /***/ }),
 /* 35 */
-/***/ (function(__unused_webpack_module, exports) {
+/***/ ((__unused_webpack_module, exports) => {
 
 
 
@@ -11181,7 +11128,7 @@ exports.TextHighlighter = TextHighlighter;
 
 /***/ }),
 /* 36 */
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 
@@ -11224,7 +11171,7 @@ class TextLayerBuilder {
       numTextDivs: this.textDivs.length
     });
   }
-  render(timeout = 0) {
+  render() {
     if (!(this.textContent || this.textContentStream) || this.renderingDone) {
       return;
     }
@@ -11239,8 +11186,7 @@ class TextLayerBuilder {
       container: textLayerFrag,
       viewport: this.viewport,
       textDivs: this.textDivs,
-      textContentItemsStr: this.textContentItemsStr,
-      timeout
+      textContentItemsStr: this.textContentItemsStr
     });
     this.textLayerRenderTask.promise.then(() => {
       this.textLayerDiv.append(textLayerFrag);
@@ -11295,7 +11241,7 @@ exports.TextLayerBuilder = TextLayerBuilder;
 
 /***/ }),
 /* 37 */
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 
@@ -11379,7 +11325,7 @@ exports.XfaLayerBuilder = XfaLayerBuilder;
 
 /***/ }),
 /* 38 */
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 
@@ -11683,7 +11629,7 @@ exports.SecondaryToolbar = SecondaryToolbar;
 
 /***/ }),
 /* 39 */
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 
@@ -11738,17 +11684,6 @@ class Toolbar {
             classList
           } = options.editorInkButton;
           return classList.contains("toggled") ? _pdfjsLib.AnnotationEditorType.NONE : _pdfjsLib.AnnotationEditorType.INK;
-        }
-      }
-    }, {
-      element: options.editorPolygonButton,
-      eventName: "switchannotationeditormode",
-      eventDetails: {
-        get mode() {
-          const {
-            classList
-          } = options.editorPolygonButton;
-          return classList.contains("toggled") ? _pdfjsLib.AnnotationEditorType.NONE : _pdfjsLib.AnnotationEditorType.POLYGON;
         }
       }
     }];
@@ -11858,9 +11793,7 @@ class Toolbar {
     editorFreeTextButton,
     editorFreeTextParamsToolbar,
     editorInkButton,
-    editorInkParamsToolbar,
-    editorPolygonButton,
-    editorPolygonParamsToolbar
+    editorInkParamsToolbar
   }) {
     const editorModeChanged = (evt, disableButtons = false) => {
       const editorButtons = [{
@@ -11871,10 +11804,6 @@ class Toolbar {
         mode: _pdfjsLib.AnnotationEditorType.INK,
         button: editorInkButton,
         toolbar: editorInkParamsToolbar
-      }, {
-        mode: _pdfjsLib.AnnotationEditorType.POLYGON,
-        button: editorPolygonButton,
-        toolbar: editorPolygonParamsToolbar
       }];
       for (const {
         mode,
@@ -11995,7 +11924,7 @@ exports.Toolbar = Toolbar;
 
 /***/ }),
 /* 40 */
-/***/ (function(__unused_webpack_module, exports) {
+/***/ ((__unused_webpack_module, exports) => {
 
 
 
@@ -12072,7 +12001,7 @@ exports.ViewHistory = ViewHistory;
 
 /***/ }),
 /* 41 */
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 
@@ -12118,7 +12047,7 @@ _app.PDFViewerApplication.externalServices = GenericExternalServices;
 
 /***/ }),
 /* 42 */
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 
@@ -12237,7 +12166,7 @@ exports.BasePreferences = BasePreferences;
 
 /***/ }),
 /* 43 */
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 
@@ -12310,7 +12239,7 @@ exports.DownloadManager = DownloadManager;
 
 /***/ }),
 /* 44 */
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 
@@ -12351,7 +12280,7 @@ exports.GenericL10n = GenericL10n;
 
 /***/ }),
 /* 45 */
-/***/ (function() {
+/***/ (() => {
 
 
 
@@ -13076,7 +13005,7 @@ document.webL10n = function (window, document, undefined) {
 
 /***/ }),
 /* 46 */
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 
@@ -13135,7 +13064,7 @@ exports.GenericScripting = GenericScripting;
 
 /***/ }),
 /* 47 */
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 
@@ -13384,7 +13313,7 @@ _app.PDFPrintServiceFactory.instance = {
 
 /***/ }),
 /* 48 */
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 
@@ -13447,7 +13376,7 @@ function getXfaHtmlForPrinting(printContainer, pdfDocument) {
 /************************************************************************/
 var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
-!function() {
+(() => {
 var exports = __webpack_exports__;
 
 
@@ -13471,8 +13400,8 @@ var _ui_utils = __webpack_require__(1);
 var _app_options = __webpack_require__(2);
 var _pdf_link_service = __webpack_require__(3);
 var _app = __webpack_require__(4);
-const pdfjsVersion = '3.1.23';
-const pdfjsBuild = 'fa84f6338';
+const pdfjsVersion = '3.2.27';
+const pdfjsBuild = 'fa54a5879';
 const AppConstants = {
   LinkTarget: _pdf_link_service.LinkTarget,
   RenderingStates: _ui_utils.RenderingStates,
@@ -13514,8 +13443,6 @@ function getViewerConfiguration() {
       editorFreeTextParamsToolbar: document.getElementById("editorFreeTextParamsToolbar"),
       editorInkButton: document.getElementById("editorInk"),
       editorInkParamsToolbar: document.getElementById("editorInkParamsToolbar"),
-      editorPolygonButton: document.getElementById("editorPolygon"),
-      editorPolygonParamsToolbar: document.getElementById("editorPolygonParamsToolbar"),
       download: document.getElementById("download")
     },
     secondaryToolbar: {
@@ -13605,10 +13532,7 @@ function getViewerConfiguration() {
       editorFreeTextColor: document.getElementById("editorFreeTextColor"),
       editorInkColor: document.getElementById("editorInkColor"),
       editorInkThickness: document.getElementById("editorInkThickness"),
-      editorInkOpacity: document.getElementById("editorInkOpacity"),
-      editorPolygonColor: document.getElementById("editorPolygonColor"),
-      editorPolygonThickness: document.getElementById("editorPolygonThickness"),
-      editorPolygonOpacity: document.getElementById("editorPolygonOpacity")
+      editorInkOpacity: document.getElementById("editorInkOpacity")
     },
     printContainer: document.getElementById("printContainer"),
     openFileInput: document.getElementById("fileInput"),
@@ -13635,7 +13559,8 @@ if (document.readyState === "interactive" || document.readyState === "complete")
 } else {
   document.addEventListener("DOMContentLoaded", webViewerLoad, true);
 }
-}();
+})();
+
 /******/ })()
 ;
 //# sourceMappingURL=viewer.js.map

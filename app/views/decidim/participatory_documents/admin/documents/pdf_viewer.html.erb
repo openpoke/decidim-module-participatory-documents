@@ -148,23 +148,6 @@ See https://github.com/adobe-type-tools/cmap-resources
         </div>
       </div>
 
-      <div class="editorParamsToolbar hidden doorHangerRight" id="editorPolygonParamsToolbar">
-        <div class="editorParamsToolbarContainer">
-          <div class="editorParamsSetter">
-            <label for="editorPolygonColor" class="editorParamsLabel" data-l10n-id="editor_polygon_color">Color</label>
-            <input type="color" id="editorPolygonColor" class="editorParamsColor" tabindex="102">
-          </div>
-          <div class="editorParamsSetter">
-            <label for="editorPolygonThickness" class="editorParamsLabel" data-l10n-id="editor_polygon_thickness">Thickness</label>
-            <input type="range" id="editorPolygonThickness" class="editorParamsSlider" value="1" min="1" max="20" step="1" tabindex="103">
-          </div>
-          <div class="editorParamsSetter">
-            <label for="editorPolygonOpacity" class="editorParamsLabel" data-l10n-id="editor_polygon_opacity">Opacity</label>
-            <input type="range" id="editorPolygonOpacity" class="editorParamsSlider" value="100" min="1" max="100" step="1" tabindex="104">
-          </div>
-        </div>
-      </div>
-
       <div id="secondaryToolbar" class="secondaryToolbar hidden doorHangerRight">
         <div id="secondaryToolbarButtonContainer">
           <button id="secondaryOpenFile" class="secondaryToolbarButton visibleLargeView" title="Open File" tabindex="51" data-l10n-id="open_file">
@@ -300,9 +283,6 @@ See https://github.com/adobe-type-tools/cmap-resources
                   <span data-l10n-id="editor_free_text2_label">Text</span>
                 </button>
                 <button id="editorInk" class="toolbarButton" disabled="disabled" title="Draw" role="radio" aria-checked="false" tabindex="35" data-l10n-id="editor_ink2">
-                  <span data-l10n-id="editor_ink2_label">Draw</span>
-                </button>
-                <button id="editorPolygon" class="toolbarButton" disabled="disabled" title="Draw" role="radio" aria-checked="false" tabindex="35" data-l10n-id="editor_ink2">
                   <span data-l10n-id="editor_ink2_label">Draw</span>
                 </button>
               </div>
@@ -451,81 +431,22 @@ See https://github.com/adobe-type-tools/cmap-resources
   <div id="printContainer"></div>
 
   <input type="file" id="fileInput" class="hidden">
-<style type="text/css">
-  .box {
-    position: absolute;
-    background: rgba(0, 0, 0, 0.5);
-    min-width: 1px;
-    min-height: 1px;
-    border: 3px solid #333;
-  }
-  .dragging {
-    background: rgba(255, 0, 0, 0.5);
-    border-style: dashed;
-    border-color: red;
-  }
-</style>
+
 <script>
-  var pages = {}, box;
-  const editorMouseDown = function(e) {
-    const {left, top} = this.getBoundingClientRect();
-    let w = e.clientX - left - 3;
-    let h = e.clientY - top - 3;
-    let mousePercentLeft = (100 * w/this.clientWidth)
-    let mousePercentTop = (100 * h/this.clientHeight)
-    box = document.createElement("div");
-    box.classList.add("box", "dragging");
-    box.style.left = mousePercentLeft + "%";
-    box.style.top = mousePercentTop + "%";
-    this.appendChild(box);
-    console.log('mousedown', e, "w/h", w, h, "this", this, "box", box);
-  };
-  const editorMouseMove = function(e) {
-    const {left, top} = this.getBoundingClientRect();
-    if(box) {
-      let w = e.clientX - left - 9;
-      let h = e.clientY - top - 9;
-      let boxPercentLeft = parseInt(box.style.left);
-      let boxPercentTop = parseInt(box.style.top);
-      let mousePercentLeft = 100 * w/this.clientWidth;
-      let mousePercentTop = 100 * h/this.clientHeight;
-      box.style.width = (mousePercentLeft - boxPercentLeft) + "%";
-      box.style.height = (mousePercentTop - boxPercentTop) + "%";
-      console.log('mousemove', e,"mousePercent", mousePercentLeft,mousePercentTop, "this", this,"box",box);
-    }
-  };
-  const editorMouseUp = function(e) {
-    if(box) {
-      box.classList.remove("dragging");
-      if(box.clientWidth <= 5 && box.clientHeight <= 5) {
-        box.remove();
-      }
-      console.log('mouseup', e, "this", this, "box", box);
-      box = null;
-    }
-  };
+  var pages = {};
   PDFViewerApplication.initializedPromise.then(function() {
     PDFViewerApplication.eventBus.on('annotationeditorlayerrendered', function (doc) {
       if(!pages[doc.pageNumber]) {
-        const page = PDFViewerApplication.pdfViewer._pages[doc.pageNumber - 1];
+        var page = PDFViewerApplication.pdfViewer._pages[doc.pageNumber - 1];
         pages[doc.pageNumber] = page;
-        const editor = page.annotationEditorLayer && page.annotationEditorLayer.div;
-        if(editor) {
-          console.log('editor layer rendered', doc, "page", doc.pageNumber, "editor",editor,editor.getBoundingClientRect());
-          editor.style.pointerEvents = "all";
-          editor.classList.add("ready");
-          editor.removeEventListener('mousedown', editorMouseDown);
-          editor.removeEventListener('mousemove', editorMouseMove);
-          editor.removeEventListener('mouseup', editorMouseUp);
-          // editor.removeEventListener('click', editorMouseUp);
-          editor.addEventListener('mousedown', editorMouseDown);
-          editor.addEventListener('mousemove', editorMouseMove);
-          editor.addEventListener('mouseup', editorMouseUp);
-          // editor.addEventListener('click', editorMouseUp);
+        var annotationsLayer = page.annotationEditorLayer && page.annotationEditorLayer.div;
+        if(annotationsLayer) {
+          InitAdminEditor(annotationsLayer);
         }
       }
     });
   });
+
 
 </script>
 </body>

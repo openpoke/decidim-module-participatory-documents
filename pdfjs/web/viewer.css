@@ -765,6 +765,13 @@
   --editorInk-editing-cursor: url(images/cursor-editorInk.svg) 0 16, pointer;
 }
 
+@media (-webkit-min-device-pixel-ratio: 1.1), (min-resolution: 1.1dppx) {
+  :root {
+    --editorFreeText-editing-cursor: url(images/cursor-editorFreeText.svg) 0 16,
+      text;
+  }
+}
+
 @media (forced-colors: active) {
   :root {
     --focus-outline: solid 3px ButtonText;
@@ -886,45 +893,6 @@
 }
 
 .annotationEditorLayer .inkEditor .inkEditorCanvas {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  touch-action: none;
-}
-
-.annotationEditorLayer .polygonEditor.disabled {
-  resize: none;
-}
-
-.annotationEditorLayer .polygonEditor.disabled.selectedEditor {
-  resize: horizontal;
-}
-
-.annotationEditorLayer .freeTextEditor:hover:not(.selectedEditor),
-.annotationEditorLayer .polygonEditorCanvas:hover:not(.selectedEditor) {
-  outline: var(--hover-outline);
-}
-
-.annotationEditorLayer .polygonEditor {
-  position: absolute;
-  background: transparent;
-  border-radius: 3px;
-  overflow: auto;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
-  transform-origin: 0 0;
-  cursor: auto;
-}
-
-.annotationEditorLayer .polygonEditor.editing {
-  resize: none;
-  cursor: inherit;
-}
-
-.annotationEditorLayer .polygonEditor .polygonEditorCanvas {
   position: absolute;
   top: 0;
   left: 0;
