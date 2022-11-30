@@ -7,12 +7,16 @@
   &:hover {
     cursor: move;
   }
+  &.grabbing {
+    // opacity: 0.2;
+  }
 }
 .dragging,.grabbing {
   background: rgba(255, 0, 0, 0.5);
   border-style: dashed;
   border-color: red;
 }
+
 .blocked {
   pointer-events: none;
 }
