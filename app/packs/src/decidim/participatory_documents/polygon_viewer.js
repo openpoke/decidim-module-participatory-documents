@@ -1,0 +1,44 @@
+import BoxArea from "./box_area";
+
+export default class PolygonViewer {
+	constructor(div, json) {
+		this.div = div;
+    this.json = json && json.length && json || [];
+		this.boxes = {};
+    // events
+    this.onBoxClick = () => {};
+    this.onBoxBlur = () => {};
+    this.onBoxEnter = () => {};
+    this.onBoxLeave = () => {};
+		this.init();
+	}
+
+	init() {
+	  this.div.style.pointerEvents = "all";
+	  this.div.classList.add("polygon-ready");
+    this.json.forEach(box => {
+      this.boxes[box.id] = new BoxArea(this, box);
+      this.bindBoxEvents(this.boxes[box.id]);
+    });
+	}
+
+  // return all boxes in this layer
+  getBoxes() {
+    return Object.keys(this.boxes).map(id => this.boxes[id]);
+  }
+
+  bindBoxEvents(box) {
+    box.onClick = evt => this.onBoxClick(box, evt);
+    box.onBlur = evt => this.onBoxBlur(box, evt);
+    box.onEnter = evt => this.onBoxEnter(box, evt);
+    box.onLeave = evt => this.onBoxLeave(box, evt);
+  }
+
+  blockBoxes() {
+  	this.div.querySelectorAll(".box").forEach(div => div.classList.add("blocked"));
+	}
+
+  unBlockBoxes() {
+  	this.div.querySelectorAll(".box").forEach(div => div.classList.remove("blocked"));
+	}
+}

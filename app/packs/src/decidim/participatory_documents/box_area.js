@@ -1,38 +1,37 @@
 import BoxControls from "./box_controls";
 
 export default class BoxArea {
-	constructor(layer, left, top, width, height) {
+	constructor(layer, json) {
 		this.layer = layer;
-		this.id = this.createBox(left, top, width, height);
-		this.bindEvents();
+		this.json = json || { rect: {} };
+		this.id = this.createBox(this.json.id, this.json.rect);
+		this.div.dataset.boxGroup = this.json && this.json.group;
+		this.group = this.json && this.json.group;
+		this._bindEvents();
 		this.hover = false;
-		console.log("box constructor", this);
+		// console.log("box constructor", this);
 		// events
 		this.onClick = () => {};
+		this.onBlur = () => {};
 		this.onEnter = () => {};
 		this.onLeave = () => {};
 	}
 
-	createBox(left, top, width, height) {
+	// Creates a box using percentanges, with and height are optional
+	createBox(id, {left, top, width, height}) {
     this.div = document.createElement("div");
 		this.div.draggable = false;
-    this.div.id = "box-" + Date.now();
-    this.div.classList.add("box", "creating");
-    this.div.style.left = left;
-    this.div.style.top = top;
+    this.div.id = id || "box-" + Date.now();
+    this.div.classList.add("box");
+    this.div.style.left = left + "%";
+    this.div.style.top = top + "%";
     if(width && height) {
-	    this.div.style.width = width;
-	    this.div.style.height = height;
+	    this.div.style.width = width + "%";
+	    this.div.style.height = height + "%";
     }
     this.layer.div.appendChild(this.div);
 
     return this.div.id;
-  }
-
-  bindEvents() {  	
-  	this.div.addEventListener("mouseenter", this._mouseEnter.bind(this));
-  	this.div.addEventListener("mouseleave", this._mouseLeave.bind(this));
-  	this.div.addEventListener("click", this._click.bind(this));
   }
 
   createControls() {
@@ -41,9 +40,32 @@ export default class BoxArea {
 		this.resize.observe(this.div);
 	}
 
+  getRect() {
+    return {
+      left: parseFloat(this.div.style.left),
+      top: parseFloat(this.div.style.top),
+      width: parseFloat(this.div.style.width),
+      height: parseFloat(this.div.style.height)
+    }
+  }
+
+  _bindEvents() {  	
+  	this.div.addEventListener("mouseenter", this._mouseEnter.bind(this));
+  	this.div.addEventListener("mouseleave", this._mouseLeave.bind(this));
+  	this.div.addEventListener("click", this._click.bind(this));
+  }
+
 	_click(e) {
 		if(!this.layer.creating) {
+			e.stopPropagation();
 			this.onClick(e);
+  		window.addEventListener("click", this._blur.bind(this), {once: true});
+		}
+	}
+
+	_blur(e) {
+		if(!this.layer.creating) {
+			this.onBlur(e);
 		}
 	}
 
@@ -52,6 +74,7 @@ export default class BoxArea {
 			this.blockSibilings();
 			this.hover = true;
 			this.div.classList.add("hover");
+			this.focusGroup();
 			this.onEnter(e);
 			// console.log("box mousenter", e, "widht/height", this.div.style.width, this.div.style.height);
 		}	
@@ -61,6 +84,7 @@ export default class BoxArea {
 		if(!this.layer.creating) {
 			this.hover = false;
 			this.div.classList.remove("hover");
+			this.blurGroup()
 			this.unBlockSibilings();
 			this.onLeave(e);
 			// console.log("box mouseleave", e);
@@ -75,6 +99,14 @@ export default class BoxArea {
 			this.div.style.width = width;
 			this.div.style.height = height;
 		}
+	}
+
+	focusGroup() {
+		document.querySelectorAll(".polygon-ready .box").forEach(div => div.dataset.boxGroup == this.group && div.classList.add("focus"));
+	}
+
+	blurGroup() {
+		document.querySelectorAll(".polygon-ready .box").forEach(div => div.classList.remove("focus"));
 	}
 
 	blockSibilings() {

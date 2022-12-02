@@ -334,7 +334,7 @@ See https://github.com/adobe-type-tools/cmap-resources
       <div id="viewerContainer" tabindex="0">
         <div id="viewer" class="pdfViewer"></div>
 
-        <div id="participation">Comments here</div>
+        <div id="participation-modal">Comments here</div>
       </div>
     </div> <!-- mainContainer -->
 
@@ -435,7 +435,7 @@ See https://github.com/adobe-type-tools/cmap-resources
   <input type="file" id="fileInput" class="hidden">
 
 <style type="text/css">
-  #participation {
+  #participation-modal {
     width: 0;
     position: absolute;
     height: 100%;
@@ -445,58 +445,81 @@ See https://github.com/adobe-type-tools/cmap-resources
     overflow: hidden;
     transition: width .5s;
   }
-  #participation.active {
+  #participation-modal.active {
     overflow: auto;
     width: 40vw;
     transition: width 1s;
   }
 </style>
+
 <script>
-
-  let annotations = [{
-    page: 0,
-    id: "box1",
-    style: {      
-      top: "25%",
-      left: "25%",
-      width: "25%",
-      height: "25%",
-      background: "rgba(0,0,0,0.2)",
-      position: "absolute"
+  // TODO: from database
+  var currentBoxes = [
+    {
+      "id": "box-11",
+      "pageNumber": 1,
+      "group": "group-1", // participation can be linked to more than one box, clicking on one box will highlight all boxes in the group
+      "rect": {
+        "left": 25.5,
+        "top": 22.123,
+        "width": 30.1,
+        "height": 10.2
+      }
     },
-    hover: {
-      background: "rgba(255,0,0,0.7)",
-    }
-  }];
+    {
+      "id": "box-12",
+      "pageNumber": 1,
+      "group": "group-2",
+      "rect": {
+        "left": 5.5,
+        "top": 2.123,
+        "width": 10.1,
+        "height": 10.2
+      }
+    },
+    {
+      "id": "box-13",
+      "pageNumber": 1,
+      "group": "group-2",
+      "rect": {
+        "left": 15.5,
+        "top": 12.123,
+        "width": 10.1,
+        "height": 10.2
+      }
+    },
+    {
+      "id": "box-14",
+      "pageNumber": 1,
+      "group": "group-3",
+      "rect": {
+        "left":75.5,
+        "top": 82.123,
+        "width": 10.1,
+        "height": 10.2
+      },
+    },
+    {
+      "id": "box-21",
+      "pageNumber": 2,
+      "group": "group-3",
+      "rect": {
+        "left":15.5,
+        "top": 12.123,
+        "width": 10.1,
+        "height": 10.2
+      },
+    }  
+  ];
+  var pages = {};
   PDFViewerApplication.initializedPromise.then(function() {
-    PDFViewerApplication.eventBus.on('annotationeditorlayerrendered', function(doc) {
-      for (index in annotations){
-        if (false == annotations[index].hasOwnProperty('div')) {
-          let page = PDFViewerApplication.pdfViewer._pages[annotations[index].page];
-          const div = document.createElement('div');
-          div.id = annotations[index].id;
-          Object.assign(div.style, annotations[index].style);
-          
-          div.addEventListener('mouseover', function() {
-            Object.assign(div.style, annotations[index].hover);
-          });
-          div.addEventListener('mouseout', function() {
-            Object.assign(div.style, annotations[index].style);
-            setTimeout(function() {
-              document.getElementById("participation").classList.remove("active");
-            }, 800);
-          });
-          div.addEventListener('click', function() {
-            console.log("participate");
-            document.getElementById("participation").classList.add("active");
-          });
-
-          console.log("page",page,"div",div);
-
-
-          page.annotationEditorLayer.div.appendChild(div);
-          page.annotationEditorLayer.div.style.pointerEvents = "all";
-          annotations[index]['div'] = div;
+    PDFViewerApplication.eventBus.on('annotationeditorlayerrendered', function (doc) {
+      if(!pages[doc.pageNumber]) {
+        var page = PDFViewerApplication.pdfViewer._pages[doc.pageNumber - 1];
+        pages[doc.pageNumber] = page;
+        var annotationsLayer = page.annotationEditorLayer && page.annotationEditorLayer.div;
+        if(annotationsLayer) {
+          InitPolygonViewer(annotationsLayer, currentBoxes.filter(box => box.pageNumber === doc.pageNumber));
         }
       }
     });

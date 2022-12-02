@@ -1,24 +1,21 @@
+import PolygonViewer from "./polygon_viewer";
 import BoxArea from "./box_area";
 
-export default class PolygonEditor {
-	constructor(div) {
-		this.div = div;
-		this.box = null;
+export default class PolygonEditor extends PolygonViewer {
+	constructor(div, boxes) {
+    super(div, boxes);
+    this.div.classList.add("admin");
+    this.box = null;
 		this.creating = false;
     this.blocked = false;
 		this.top = 0;
 		this.left = 0;
-		this.boxes = {};
-    // events
-    this.onClick = () => {};
-    this.onEnter = () => {};
-    this.onLeave = () => {};
-		this.init();
 	}
 
 	init() {
-	  this.div.style.pointerEvents = "all";
-	  this.div.classList.add("ready");
+    super.init();
+    // add controls to existing boxes
+    this.getBoxes().map(box => box.createControls());
     this.div.removeEventListener('mousedown', this._mouseDown.bind(this));
     this.div.removeEventListener('mousemove', this._mouseMove.bind(this));
     this.div.removeEventListener('mouseup', this._mouseUp.bind(this));
@@ -30,7 +27,7 @@ export default class PolygonEditor {
   _mouseDown(e) {
     if(!this.creating && !this.blocked) {
       this.blockBoxes();
-      this.box = this._createBox(e);
+      this.box = this._createBoxFromMouseEvent(e);
       this.creating = true;
   	  this.left = this.div.getBoundingClientRect().x;
   	  this.top = this.div.getBoundingClientRect().y;
@@ -64,35 +61,25 @@ export default class PolygonEditor {
       }
       // console.log('mouseup', e, "box", this.box.div);
       this.creating = false;
-    	this.unblockBoxes();
+    	this.unBlockBoxes();
     }
   }
 
-  _createBox(e) {
+  _createBoxFromMouseEvent(e) {
     const {left, top} = this.div.getBoundingClientRect();
     let w = e.clientX - left - 3;
     let h = e.clientY - top - 3;
     let mousePercentLeft = (100 * w/this.div.clientWidth)
     let mousePercentTop = (100 * h/this.div.clientHeight)
 
-    return new BoxArea(this, mousePercentLeft + "%", mousePercentTop + "%");
+    return new BoxArea(this, { rect: { left: mousePercentLeft, top: mousePercentTop} });
   }
 
   _initBox() {
   	if(!this.boxes[this.box.id]) {
       this.box.createControls();
-  		this.box.onClick = (e) => this.onClick(this.box, e);
-      this.box.onEnter = (e) => this.onEnter(this.box, e);
-      this.box.onLeave = (e) => this.onLeave(this.box, e);
+      this.bindBoxEvents(this.box);
       this.boxes[this.box.id] = this.box;
   	}
   }
-
-  blockBoxes() {
-  	this.div.querySelectorAll(".box").forEach(div => div.classList.add("blocked"));
-	}
-
-  unblockBoxes() {
-  	this.div.querySelectorAll(".box").forEach(div => div.classList.remove("blocked"));
-	}
 }
