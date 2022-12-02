@@ -1,89 +1,98 @@
 import BoxArea from "./box_area";
 
 export default class PolygonEditor {
-	constructor(layer) {
-		this.layer = layer;
+	constructor(div) {
+		this.div = div;
 		this.box = null;
-		this.moving = true;
+		this.creating = false;
+    this.blocked = false;
 		this.top = 0;
 		this.left = 0;
 		this.boxes = {};
+    // events
+    this.onClick = () => {};
+    this.onEnter = () => {};
+    this.onLeave = () => {};
 		this.init();
 	}
 
 	init() {
-	  this.layer.style.pointerEvents = "all";
-	  this.layer.classList.add("ready");
-    this.layer.removeEventListener('mousedown', (e) => this.onMouseDown(e));
-    this.layer.removeEventListener('mousemove', (e) => this.onMouseMove(e));
-    this.layer.removeEventListener('mouseup', (e) => this.onMouseUp(e));
-    this.layer.removeEventListener('mouseleave', (e) => this.onMouseUp(e));
-    this.layer.removeEventListener('mouseout', (e) => this.onMouseUp(e));
-    this.layer.addEventListener('mousedown', (e) => this.onMouseDown(e));
-    this.layer.addEventListener('mousemove', (e) => this.onMouseMove(e));
-    this.layer.addEventListener('mouseup', (e) => this.onMouseUp(e));
-    // this.layer.addEventListener('mouseleave', (e) => this.onMouseUp(e));
-    // this.layer.addEventListener('mouseout', (e) => this.onMouseUp(e));
+	  this.div.style.pointerEvents = "all";
+	  this.div.classList.add("ready");
+    this.div.removeEventListener('mousedown', this._mouseDown.bind(this));
+    this.div.removeEventListener('mousemove', this._mouseMove.bind(this));
+    this.div.removeEventListener('mouseup', this._mouseUp.bind(this));
+    this.div.addEventListener('mousedown', this._mouseDown.bind(this));
+    this.div.addEventListener('mousemove', this._mouseMove.bind(this));
+    this.div.addEventListener('mouseup', this._mouseUp.bind(this));
 	}
 
-	onMouseDown(e) {
-    const {left, top} = this.layer.getBoundingClientRect();
-    let w = e.clientX - left - 3;
-    let h = e.clientY - top - 3;
-    let mousePercentLeft = (100 * w/this.layer.clientWidth)
-    let mousePercentTop = (100 * h/this.layer.clientHeight)
-	  this.blockBoxes();
-    this.box = document.createElement("div");
-    this.box.classList.add("box", "dragging");
-    this.box.style.left = mousePercentLeft + "%";
-    this.box.style.top = mousePercentTop + "%";
-    this.layer.appendChild(this.box);
-    this.moving = true;
-	  this.left = this.layer.getBoundingClientRect().x;
-	  this.top = this.layer.getBoundingClientRect().y;
-	  // disable mouse events on all children
-    // console.log('mousedown', e, "w/h", w, h, "box", this.box);
+  _mouseDown(e) {
+    if(!this.creating && !this.blocked) {
+      this.blockBoxes();
+      this.box = this._createBox(e);
+      this.creating = true;
+  	  this.left = this.div.getBoundingClientRect().x;
+  	  this.top = this.div.getBoundingClientRect().y;
+  	  // disable mouse events on all children
+      console.log('mousedown',"e", e,  "this", this, "box div", this.box.div);
+    }
   }
 
-  onMouseMove(e) {
-    if(this.moving && this.box) {
+  _mouseMove(e) {
+    if(!this.blocked && this.creating && this.box) {
       let w = e.clientX - this.left - 9;
       let h = e.clientY - this.top - 9;
-      let boxPercentLeft = parseInt(this.box.style.left);
-      let boxPercentTop = parseInt(this.box.style.top);
-      let mousePercentLeft = 100 * w/this.layer.clientWidth;
-      let mousePercentTop = 100 * h/this.layer.clientHeight;
-      this.box.style.width = (mousePercentLeft - boxPercentLeft) + "%";
-      this.box.style.height = (mousePercentTop - boxPercentTop) + "%";
+      let boxPercentLeft = parseInt(this.box.div.style.left);
+      let boxPercentTop = parseInt(this.box.div.style.top);
+      let mousePercentLeft = 100 * w/this.div.clientWidth;
+      let mousePercentTop = 100 * h/this.div.clientHeight;
+      this.box.div.style.width = (mousePercentLeft - boxPercentLeft) + "%";
+      this.box.div.style.height = (mousePercentTop - boxPercentTop) + "%";
       // console.log('mousemove', e,"mousePercent", mousePercentLeft,mousePercentTop, "box",this.box);
     }
   }
   
-  onMouseUp(e) {
-    if(this.moving && this.box) {
-      this.box.classList.remove("dragging");
-      if(this.box.clientWidth <= 5 && this.box.clientHeight <= 5) {
-        this.box.remove();
+  _mouseUp(e) {
+    if(!this.blocked && this.creating && this.box) {
+      this.box.div.classList.remove("creating");
+      if(this.box.div.clientWidth <= 5 && this.box.div.clientHeight <= 5) {
+        this.box.div.remove();
+        this.box = null;
       } else {
-      	this.initBox();
+      	this._initBox();
       }
-      // console.log('mouseup', e, "box", this.box);
-      this.moving = false;
+      // console.log('mouseup', e, "box", this.box.div);
+      this.creating = false;
     	this.unblockBoxes();
     }
   }
 
-  initBox() {
-  	if(this.box && !this.boxes[this.box.id]) {
-  		const box = new BoxArea(this.box);
-  		this.boxes[box.id] = box;
+  _createBox(e) {
+    const {left, top} = this.div.getBoundingClientRect();
+    let w = e.clientX - left - 3;
+    let h = e.clientY - top - 3;
+    let mousePercentLeft = (100 * w/this.div.clientWidth)
+    let mousePercentTop = (100 * h/this.div.clientHeight)
+
+    return new BoxArea(this, mousePercentLeft + "%", mousePercentTop + "%");
+  }
+
+  _initBox() {
+  	if(!this.boxes[this.box.id]) {
+      this.box.createControls();
+  		this.box.onClick = (e) => this.onClick(this.box, e);
+      this.box.onEnter = (e) => this.onEnter(this.box, e);
+      this.box.onLeave = (e) => this.onLeave(this.box, e);
+      this.boxes[this.box.id] = this.box;
   	}
   }
 
   blockBoxes() {
-  	this.layer.querySelectorAll(".box").forEach(div => div.classList.add("blocked"));
+  	this.div.querySelectorAll(".box").forEach(div => div.classList.add("blocked"));
 	}
+
   unblockBoxes() {
-  	this.layer.querySelectorAll(".box").forEach(div => div.classList.remove("blocked"));
+  	this.div.querySelectorAll(".box").forEach(div => div.classList.remove("blocked"));
 	}
 }

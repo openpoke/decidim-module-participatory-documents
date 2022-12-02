@@ -5,4 +5,7 @@ window.InitAdminEditor = function(layer) {
   console.log("initAdminEditor on layer",layer);
 
   var editor = new PolygonEditor(layer);
+  editor.onClick = function(box, e) {
+    console.log("click", e, "box", box);
+  };
 };
