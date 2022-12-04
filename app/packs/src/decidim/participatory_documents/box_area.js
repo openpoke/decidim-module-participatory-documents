@@ -5,10 +5,8 @@ export default class BoxArea {
 		this.layer = layer;
 		this.json = json || { rect: {} };
 		this.id = this.createBox(this.json.id, this.json.rect);
-		this.div.dataset.boxGroup = this.json && this.json.group;
-		this.group = this.json && this.json.group;
+		this.setGroup(this.json && this.json.group)
 		this._bindEvents();
-		this.hover = false;
 		// console.log("box constructor", this);
 		// events
 		this.onClick = () => {};
@@ -34,6 +32,12 @@ export default class BoxArea {
     return this.div.id;
   }
 
+  setGroup(group) {
+  	if(!group) group = "group-" + Date.now();
+  	this.group = group;
+		this.div.dataset.boxGroup = group;
+  }
+
   createControls() {
   	this.controls = new BoxControls(this);
 		this.resize = new ResizeObserver(this._resize.bind(this));
@@ -49,6 +53,14 @@ export default class BoxArea {
     }
   }
 
+  isMoving() {
+  	return this.div.classList.contains("moving");
+  }
+
+  isGrouping() {
+		return document.querySelectorAll(".polygon-ready .box.grouping").length
+  }
+
   _bindEvents() {  	
   	this.div.addEventListener("mouseenter", this._mouseEnter.bind(this));
   	this.div.addEventListener("mouseleave", this._mouseLeave.bind(this));
@@ -56,7 +68,7 @@ export default class BoxArea {
   }
 
 	_click(e) {
-		if(!this.layer.creating) {
+		if(!this.layer.creating && !this.isMoving() && !this.isGrouping()) {
 			e.stopPropagation();
 			this.onClick(e);
   		window.addEventListener("click", this._blur.bind(this), {once: true});
@@ -70,9 +82,8 @@ export default class BoxArea {
 	}
 
 	_mouseEnter(e) {
-		if(!this.layer.creating) {
+		if(!this.layer.creating && !this.isGrouping()) {
 			this.blockSibilings();
-			this.hover = true;
 			this.div.classList.add("hover");
 			this.focusGroup();
 			this.onEnter(e);
@@ -81,8 +92,7 @@ export default class BoxArea {
 	}
 
 	_mouseLeave(e) {
-		if(!this.layer.creating) {
-			this.hover = false;
+		if(!this.layer.creating && !this.isGrouping()) {
 			this.div.classList.remove("hover");
 			this.blurGroup()
 			this.unBlockSibilings();
@@ -101,6 +111,7 @@ export default class BoxArea {
 		}
 	}
 
+	// Not using getNodes because groups can span across layers
 	focusGroup() {
 		document.querySelectorAll(".polygon-ready .box").forEach(div => div.dataset.boxGroup == this.group && div.classList.add("focus"));
 	}
