@@ -1,6 +1,30 @@
 ---
+
 en:
   decidim:
     components:
       participatory_documents:
-        name: Participatory Documents
+        name: Participatory Document
+    participatory_documents:
+      admin:
+        documents:
+          index:
+            title: Add PDF suggestions
+          create:
+            invalid: There was a problem creating Document
+            success: Document has been successfully created
+          edit:
+            title: Edit Participatory document
+            update: Update
+          new:
+            create: Create  Participatory document
+            title: New Participatory document
+          update:
+            error: 
+            invalid: There was a problem updating Document
+            success: Document has been successfully updated
+      models:
+        document:
+          fields:
+            id: Id
+            title: Title

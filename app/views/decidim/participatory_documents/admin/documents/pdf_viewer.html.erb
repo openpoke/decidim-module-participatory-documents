@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<!--
+Copyright 2012 Mozilla Foundation
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+Adobe CMap resources are covered by their own copyright but the same license:
+
+    Copyright 1990-2015 Adobe Systems Incorporated.
+
+See https://github.com/adobe-type-tools/cmap-resources
+-->
+<html dir="ltr" mozdisallowselectionprint>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="google" content="notranslate">
+  <title>PDF.js viewer</title>
+
+  <link rel="stylesheet" href="/pdfjs/web/viewer.css">
+
+  <script src="/pdfjs/build/pdf.js"></script>
+
+  <!-- This snippet is used in production (included from viewer.html) -->
+  <link rel="resource" type="application/l10n" href="/pdfjs/web/locale/locale.properties">
+  <script src="/pdfjs/web/viewer.js"></script>
+
+  <%= javascript_pack_tag "decidim_participatory_documents_editor" %>
+  <%= stylesheet_pack_tag "decidim_participatory_documents_editor" %>
+
+</head>
+
+<body tabindex="1">
+  <%= render "decidim/participatory_documents/documents/pdfjs_base" %>
+
+  <%= render "decidim/participatory_documents/admin/documents/editor_modal" %>
+
+  <div id="notifications"></div>
+
+  <script>
+    // TODO: from database
+    var currentBoxes = [
+      {
+        "id": "box-11",
+        "pageNumber": 1,
+        "group": "group-1", // participation can be linked to more than one box, clicking on one box will highlight all boxes in the group
+        "rect": {
+          "left": 25.5,
+          "top": 22.123,
+          "width": 30.1,
+          "height": 10.2
+        }
+      },
+      {
+        "id": "box-12",
+        "pageNumber": 1,
+        "group": "group-2",
+        "rect": {
+          "left": 5.5,
+          "top": 2.123,
+          "width": 10.1,
+          "height": 10.2
+        }
+      },
+      {
+        "id": "box-13",
+        "pageNumber": 1,
+        "group": "group-2",
+        "rect": {
+          "left": 15.5,
+          "top": 12.123,
+          "width": 10.1,
+          "height": 10.2
+        }
+      },
+      {
+        "id": "box-14",
+        "pageNumber": 1,
+        "group": "group-3",
+        "rect": {
+          "left":75.5,
+          "top": 82.123,
+          "width": 10.1,
+          "height": 10.2
+        },
+      },
+      {
+        "id": "box-21",
+        "pageNumber": 2,
+        "group": "group-3",
+        "rect": {
+          "left":15.5,
+          "top": 12.123,
+          "width": 10.1,
+          "height": 10.2
+        },
+      }
+    ];
+    var pages = {};
+    PDFViewerApplication.initializedPromise.then(function() {
+      showInfo("Start creating boxes for participation by clicking and dragging. Once created, boxes can be resized, moved or grouped.", {delay: 5000});
+      PDFViewerApplication.eventBus.on('annotationeditorlayerrendered', function (doc) {
+        if(!pages[doc.pageNumber]) {
+          var page = PDFViewerApplication.pdfViewer._pages[doc.pageNumber - 1];
+          pages[doc.pageNumber] = page;
+          var annotationsLayer = page.annotationEditorLayer && page.annotationEditorLayer.div;
+          if(annotationsLayer) {
+            InitPolygonEditor(annotationsLayer, currentBoxes.filter(box => box.pageNumber === doc.pageNumber));
+          }
+        }
+      });
+    });
+  </script>
+</body>
+</html>

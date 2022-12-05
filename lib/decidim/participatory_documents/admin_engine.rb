@@ -10,9 +10,13 @@ module Decidim
       paths["lib/tasks"] = nil
 
       routes do
-        resources :participatory_documents
+        resources :documents do
+          collection do
+            get :pdf_viewer
+          end
+        end
 
-        root to: "participatory_documents#index"
+        root to: "documents#index"
       end
 
       # initializer "decidim_reporting_proposals.admin_mount_routes" do
