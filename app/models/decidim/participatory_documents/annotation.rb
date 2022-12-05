@@ -14,7 +14,7 @@ module Decidim
           id: "box-#{id}",
           rect: rect,
           group: "group-#{zone_id}",
-          pageNumber: page_number
+          page_number: page_number
         }
       end
     end

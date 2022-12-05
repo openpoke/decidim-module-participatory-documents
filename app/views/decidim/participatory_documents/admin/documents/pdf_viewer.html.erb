@@ -59,7 +59,7 @@ See https://github.com/adobe-type-tools/cmap-resources
           pages[doc.pageNumber] = page;
           var annotationsLayer = page.annotationEditorLayer && page.annotationEditorLayer.div;
           if(annotationsLayer) {
-            InitPolygonEditor(annotationsLayer, currentBoxes.filter(box => box.pageNumber === doc.pageNumber));
+            InitPolygonEditor(annotationsLayer, currentBoxes.filter(box => box.page_number === doc.pageNumber));
           }
         }
       });

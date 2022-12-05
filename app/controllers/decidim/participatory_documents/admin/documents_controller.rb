@@ -58,6 +58,7 @@ module Decidim
         end
 
         def pdf_viewer
+          @form = form(Decidim::ParticipatoryDocuments::Admin::AnnotationForm).from_params({})
           render layout: false
         end
 

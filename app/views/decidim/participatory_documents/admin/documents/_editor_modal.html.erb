@@ -1,15 +1,19 @@
 <div id="decidim">
   <div class="reveal-overlay">
     <div class="reveal" id="editor-modal">
-      <div class="card">
-        <div class="card-divider">
-          <h2 class="card-title" id="editor-modal-title">Card title</h2>
+      <%= decidim_form_for(@form, url: document_annotations_path(document), html: { class: "form" }) do |form| %>
+        <div class="card">
+          <div class="card-divider">
+            <h2 class="card-title" id="editor-modal-title">Card title</h2>
+          </div>
+          <div class="card-section" id="editor-modal-content">
+            <%= form.translated :text_field, :title, autofocus: true %>
+          </div>
+          <div class="card-section" id="editor-modal-content">
+            <%= form.translated :text_area, :description %>
+          </div>
         </div>
-        <div class="card-section" id="editor-modal-content">
-          TODO: create multi-lang form here for title and description
-          <input type="text" name="title">
-        </div>
-      </div>
+      <% end %>
 
       <div class="button--double form-general-submit">
         <button class="button" id="editor-modal-save">Save</button>

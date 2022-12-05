@@ -4,6 +4,8 @@ import "src/decidim/participatory_documents/pdf_notifications";
 // TODO: load configuration from server using ajax
 // This probably needs refactoring to its own class
 window.loadBoxModal = function(box) {
+
+console.log("box,box",  box);
     const decidim = document.getElementById("decidim")
     const close = document.getElementById("editor-modal-close");
     const title = document.getElementById("editor-modal-title");
