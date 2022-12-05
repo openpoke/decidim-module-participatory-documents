@@ -2,6 +2,11 @@
 
 en:
   decidim:
+    admin_log:
+      document:
+        create: "%{user_name} created a document named %{resource_name} in %{space_name}"
+        delete: "%{user_name} deleted a document named %{resource_name} in %{space_name}"
+        update: "%{user_name} updated a document named %{resource_name} in %{space_name}"
     components:
       participatory_documents:
         name: Participatory Document
