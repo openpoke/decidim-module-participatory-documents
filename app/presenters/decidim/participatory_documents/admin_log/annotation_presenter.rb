@@ -9,6 +9,7 @@ module Decidim
         end
 
         private
+
         def i18n_params
           super.merge({
                         document_name: document_presenter.present
