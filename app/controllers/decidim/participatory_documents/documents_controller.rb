@@ -4,7 +4,7 @@ module Decidim
   module ParticipatoryDocuments
     class DocumentsController < Decidim::ParticipatoryDocuments::ApplicationController
       helper_method :document
-      
+
       def index; end
 
       def pdf_viewer

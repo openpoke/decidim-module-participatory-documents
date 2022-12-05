@@ -43,7 +43,7 @@ See https://github.com/adobe-type-tools/cmap-resources
   <%= render "decidim/participatory_documents/documents/pdfjs_base" %>
 
   <div id="notifications"></div>
-  
+
   <div id="participation-modal">Comments here</div>
 
 <script>
@@ -103,12 +103,12 @@ See https://github.com/adobe-type-tools/cmap-resources
         "width": 10.1,
         "height": 10.2
       },
-    }  
+    }
   ];
   var pages = {};
   PDFViewerApplication.initializedPromise.then(function() {
     showInfo("Click on a marked area to participate!", {delay: 5000});
-      
+
     PDFViewerApplication.eventBus.on('annotationeditorlayerrendered', function (doc) {
       if(!pages[doc.pageNumber]) {
         var page = PDFViewerApplication.pdfViewer._pages[doc.pageNumber - 1];

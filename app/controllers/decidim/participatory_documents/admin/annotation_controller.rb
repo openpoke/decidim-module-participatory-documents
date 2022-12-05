@@ -4,9 +4,8 @@ module Decidim
   module ParticipatoryDocuments
     module Admin
       class AnnotationController < Admin::ApplicationController
+        def destroy; end
 
-        def destroy
-        end
         def create
           # enforce_permission_to :create, :participatory_document
           # @form = form(Decidim::ParticipatoryDocuments::Admin::DocumentForm).from_params(params)
