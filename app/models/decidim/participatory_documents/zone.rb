@@ -12,6 +12,9 @@ module Decidim
       has_many :annotations, class_name: "Decidim::ParticipatoryDocuments::Annotation", dependent: :destroy
 
       translatable_fields :title, :description
+      def self.log_presenter_class_for(_log)
+        Decidim::ParticipatoryDocuments::AdminLog::ZonePresenter
+      end
     end
   end
 end
