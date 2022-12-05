@@ -1,3 +1,10 @@
+@use "sass:meta";
+
 @import 'stylesheets/decidim/participatory_documents/pdf_tweaks.scss';
-@import 'stylesheets/decidim/participatory_documents/pdf_polygons.scss';
-@import 'stylesheets/decidim/participatory_documents/pdf_modals.scss';
+@import "stylesheets/decidim/participatory_documents/pdf_modals.scss";
+@import 'stylesheets/decidim/participatory_documents/pdf_notifications.scss';
+
+// Scope everything to the annotationslayer of the pdf to avoid any possible collision
+.annotationEditorLayer {
+	@include meta.load-css('stylesheets/decidim/participatory_documents/pdf_polygons.scss');
+}

@@ -8,7 +8,7 @@
   resize: none;
   overflow: hidden;
   box-sizing: content-box;
-  &.creating {
+  &.creating,&.moving,&.resizing {
     background: rgba(255, 0, 0, 0.5);
     border-style: dashed;
     border-color: red;
@@ -27,15 +27,22 @@
     border-color: red;
     opacity: 1;
   }
-  &.moving {
-    background: rgba(0, 255, 0, 0.5);
-    border-color: green;
-  }
   &.grouping {
     .group-control {
       color: red;
     }
   }
+  &.blocked {
+    pointer-events: none;
+    opacity: 0.4;
+    &.grouping {
+      opacity: 1;
+      // Same as "hover"
+      background: rgba(0, 0, 255, 0.5);
+      border-color: blue;
+    }
+  }
+
   .box-controls {
     background: white;
     position: absolute;
@@ -49,31 +56,6 @@
     }
     .group-control {
       cursor: cell;
-    }
-  }
-}
-
-.blocked {
-  pointer-events: none;
-  opacity: 0.4;
-  &.box.grouping {
-    opacity: 1;
-    // Same as "hover"
-    background: rgba(0, 0, 255, 0.5);
-    border-color: blue;
-  }
-}
-.polygon-ready {
-  &.admin {
-    cursor: crosshair;
-  }
-  &.grouping {
-    cursor: not-allowed;
-    .box {
-      cursor: cell;
-      &.blocked {
-        pointer-events: all;
-      }
     }
   }
 }

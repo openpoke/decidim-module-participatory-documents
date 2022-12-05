@@ -10,6 +10,8 @@ export default class PolygonViewer {
     this.onBoxBlur = () => {};
     this.onBoxEnter = () => {};
     this.onBoxLeave = () => {};
+    this.onBoxDestroy = () => {};
+    this.onBoxChange = () => {};
 		this.init();
 	}
 
@@ -32,6 +34,8 @@ export default class PolygonViewer {
     box.onBlur = evt => this.onBoxBlur(box, evt);
     box.onEnter = evt => this.onBoxEnter(box, evt);
     box.onLeave = evt => this.onBoxLeave(box, evt);
+    box.onDestroy = evt => this.onBoxDestroy(box, evt);
+    box.onChange = evt => this.onBoxChange(box, evt);
   }
 
   blockBoxes() {

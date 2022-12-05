@@ -6,6 +6,7 @@ export default class BoxArea {
 		this.json = json || { rect: {} };
 		this.id = this.createBox(this.json.id, this.json.rect);
 		this.setGroup(this.json && this.json.group)
+		this.setInfo();
 		this._bindEvents();
 		// console.log("box constructor", this);
 		// events
@@ -13,6 +14,8 @@ export default class BoxArea {
 		this.onBlur = () => {};
 		this.onEnter = () => {};
 		this.onLeave = () => {};
+		this.onDestroy = () => {};
+		this.onChange = () => {};
 	}
 
 	// Creates a box using percentanges, with and height are optional
@@ -53,6 +56,18 @@ export default class BoxArea {
     }
   }
 
+  getInfo() {
+		return {
+			id: this.id,
+			group: this.group,
+			rect: this.getRect()
+		}
+  }
+
+  setInfo(info) {
+		this.previousInfo = info || this.getInfo();
+  }
+
   isMoving() {
   	return this.div.classList.contains("moving");
   }
@@ -61,14 +76,20 @@ export default class BoxArea {
 		return document.querySelectorAll(".polygon-ready .box.grouping").length
   }
 
+  isResizing() {
+  	return this.div.classList.contains("resizing");
+	}
+
   _bindEvents() {  	
   	this.div.addEventListener("mouseenter", this._mouseEnter.bind(this));
   	this.div.addEventListener("mouseleave", this._mouseLeave.bind(this));
+  	this.div.addEventListener("mouseup", this._mouseUp.bind(this));
   	this.div.addEventListener("click", this._click.bind(this));
   }
 
 	_click(e) {
-		if(!this.layer.creating && !this.isMoving() && !this.isGrouping()) {
+		if(!this.layer.creating && !this.isMoving() && !this.isGrouping() && !this.isResizing()) {
+			console.log("box click", e);
 			e.stopPropagation();
 			this.onClick(e);
   		window.addEventListener("click", this._blur.bind(this), {once: true});
@@ -101,14 +122,34 @@ export default class BoxArea {
 		}	
 	}
 
+	_mouseUp() {
+		if(!this.layer.creating) {
+			// delay changing resizing status to avoid triggering the click event in the box
+			setTimeout(() => this.div.classList.remove("resizing"), 100);
+			if(this.hasChanged()) {
+				// console.log("box changed", e);
+				this.onChange();
+			}
+		}
+	}
+
 	_resize(entries) {
 		if(!this.layer.creating && this.div.classList.contains("hover")) {
+			this.div.classList.add("resizing")
 			let width = (100 * entries[0].contentRect.width / this.layer.div.clientWidth) + "%";
 			let height = (100 * entries[0].contentRect.height / this.layer.div.clientHeight) + "%";
 			// console.log("box resize", entries, this.div.style.width, this.div.style.height, "calculated", width, height);
 			this.div.style.width = width;
 			this.div.style.height = height;
 		}
+	}
+
+	hasChanged() {
+		if(JSON.stringify(this.getInfo()) != JSON.stringify(this.previousInfo)) {
+			this.previousInfo = this.getInfo();
+			return true;
+		}
+		return false;
 	}
 
 	// Not using getNodes because groups can span across layers
@@ -128,5 +169,11 @@ export default class BoxArea {
 	unBlockSibilings() {
 		this.layer.blocked = false;
 		this.layer.div.querySelectorAll(".box").forEach(div => div.classList.remove("blocked"));
+	}
+
+	destroy() {
+		this.div.remove();
+		this.resize.disconnect();
+		this.onDestroy();
 	}
 }

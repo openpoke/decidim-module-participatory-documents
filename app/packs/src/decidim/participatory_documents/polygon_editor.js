@@ -79,6 +79,7 @@ export default class PolygonEditor extends PolygonViewer {
   	if(!this.boxes[this.box.id]) {
       this.box.createControls();
       this.bindBoxEvents(this.box);
+      this.box.setInfo();
       this.boxes[this.box.id] = this.box;
   	}
   }

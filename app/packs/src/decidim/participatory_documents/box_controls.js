@@ -12,7 +12,7 @@ export default class BoxControls {
     this.div.classList.add("box-controls");
     this.box.div.appendChild(this.div);
 		this.box.div.classList.add("admin")
-		this.move = new BoxControlMove(this);
-		this.move = new BoxControlGroup(this);
+		this.mover = new BoxControlMove(this);
+		this.grouper = new BoxControlGroup(this);
 	}
 }

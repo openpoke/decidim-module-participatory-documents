@@ -1,35 +1,29 @@
-@use "sass:meta";
-
 @import "stylesheets/decidim/admin/variables";
 @import "stylesheets/decidim/utils/fontface";
 @import "stylesheets/decidim/admin/utils/settings";
 
-#decidim {
+#notifications {
 	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
+	top: 40px;
+	right: 20%;
+	width: 60%;
 	z-index: 100000;
 	display: none;
-
-  margin: 0;
-  padding: 0;
-
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   font-family: $body-font-family;
   font-weight: $global-weight-normal;
   line-height: $global-lineheight;
   color: $body-font-color;
 
-	@include meta.load-css("stylesheets/decidim/participatory_documents/decidim_admin_classes.scss");
+  border: 1px solid rgba($black, 0.25);
+  border-radius: 5px;
+	padding:1rem;
 
+  background: scale-color($success-color, $lightness: 75%);
 	&.show {
 		display: block;
-		.reveal-overlay {
-			display: block;
-			.reveal {
-				display: block;
-			}
-		}
+	}
+	&.alert {
+	  background: scale-color($alert-color, $lightness: 75%);
 	}
 }
