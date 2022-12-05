@@ -9,7 +9,7 @@ module Decidim
       include Decidim::TranslatableAttributes
       include Decidim::Publicable
       belongs_to :document, class_name: "Decidim::ParticipatoryDocuments::Document"
-      has_many :annotations, class_name: "Decidim::ParticipatoryDocuments::Annotation"
+      has_many :annotations, class_name: "Decidim::ParticipatoryDocuments::Annotation", dependent: :destroy
 
       translatable_fields :title, :description
       POSSIBLE_STATES = %w(draft published private closed).freeze

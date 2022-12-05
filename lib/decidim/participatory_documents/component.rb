@@ -88,7 +88,7 @@ Decidim.register_component(:participatory_documents) do |component|
         state: :draft,
         published_at: Time.zone.now
       },
-      visibility: "admin-only",
+      visibility: "admin-only"
     )
     group2 = Decidim.traceability.create!(
       Decidim::ParticipatoryDocuments::Zone,
@@ -100,7 +100,7 @@ Decidim.register_component(:participatory_documents) do |component|
         state: :draft,
         published_at: Time.zone.now
       },
-      visibility: "admin-only",
+      visibility: "admin-only"
     )
     group3 = Decidim.traceability.create!(
       Decidim::ParticipatoryDocuments::Zone,
@@ -112,7 +112,7 @@ Decidim.register_component(:participatory_documents) do |component|
         state: :draft,
         published_at: Time.zone.now
       },
-      visibility: "admin-only",
+      visibility: "admin-only"
     )
 
     annotations = [
@@ -150,21 +150,21 @@ Decidim.register_component(:participatory_documents) do |component|
         page_number: 1,
         zone: group3,
         rect: {
-          "left":75.5,
+          "left": 75.5,
           "top": 82.123,
           "width": 10.1,
           "height": 10.2
-        },
+        }
       },
       {
         page_number: 2,
         zone: group3,
         rect: {
-          "left":15.5,
+          "left": 15.5,
           "top": 12.123,
           "width": 10.1,
           "height": 10.2
-        },
+        }
       }
     ]
     annotations.each do |annotation|
@@ -172,7 +172,7 @@ Decidim.register_component(:participatory_documents) do |component|
         Decidim::ParticipatoryDocuments::Annotation,
         admin_user,
         annotation,
-        visibility: "admin-only",
+        visibility: "admin-only"
       )
     end
   end
