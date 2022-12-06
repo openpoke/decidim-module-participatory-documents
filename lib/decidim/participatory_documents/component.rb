@@ -86,7 +86,8 @@ Decidim.register_component(:participatory_documents) do |component|
         title: Decidim::Faker::Localized.sentence(word_count: 2),
         description: Decidim::Faker::Localized.sentence(word_count: 20),
         state: :draft,
-        published_at: Time.zone.now
+        published_at: Time.zone.now,
+        uid: "group-1"
       },
       visibility: "admin-only"
     )
@@ -98,7 +99,8 @@ Decidim.register_component(:participatory_documents) do |component|
         title: Decidim::Faker::Localized.sentence(word_count: 2),
         description: Decidim::Faker::Localized.sentence(word_count: 20),
         state: :draft,
-        published_at: Time.zone.now
+        published_at: Time.zone.now,
+        uid: "group-2"
       },
       visibility: "admin-only"
     )
@@ -110,13 +112,15 @@ Decidim.register_component(:participatory_documents) do |component|
         title: Decidim::Faker::Localized.sentence(word_count: 2),
         description: Decidim::Faker::Localized.sentence(word_count: 20),
         state: :draft,
-        published_at: Time.zone.now
+        published_at: Time.zone.now,
+        uid: "group-3"
       },
       visibility: "admin-only"
     )
 
     annotations = [
       {
+        uid: "box-1",
         page_number: 1,
         zone: group1,
         rect: {
@@ -127,6 +131,7 @@ Decidim.register_component(:participatory_documents) do |component|
         }
       },
       {
+        uid: "box-2",
         page_number: 1,
         zone: group2,
         rect: {
@@ -137,6 +142,7 @@ Decidim.register_component(:participatory_documents) do |component|
         }
       },
       {
+        uid: "box-3",
         page_number: 1,
         zone: group2,
         rect: {
@@ -147,6 +153,7 @@ Decidim.register_component(:participatory_documents) do |component|
         }
       },
       {
+        uid: "box-4",
         page_number: 1,
         zone: group3,
         rect: {
@@ -157,6 +164,7 @@ Decidim.register_component(:participatory_documents) do |component|
         }
       },
       {
+        uid: "box-5",
         page_number: 2,
         zone: group3,
         rect: {

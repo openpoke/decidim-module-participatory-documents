@@ -34,6 +34,7 @@ See https://github.com/adobe-type-tools/cmap-resources
   <!-- This snippet is used in production (included from viewer.html) -->
   <link rel="resource" type="application/l10n" href="/pdfjs/web/locale/locale.properties">
   <script src="/pdfjs/web/viewer.js"></script>
+  <%= csrf_meta_tags %>
 
   <%= javascript_pack_tag "decidim_participatory_documents_editor" %>
   <%= stylesheet_pack_tag "decidim_participatory_documents_editor" %>
@@ -48,7 +49,49 @@ See https://github.com/adobe-type-tools/cmap-resources
   <div id="notifications"></div>
 
   <script>
-    // TODO: from database
+  var AnnotationsRootPath = '<%= document_annotations_path(document) %>';
+  var I18n = {
+    operationFailed: "The Operation has failed",
+    removed: "The box has been removed",
+    updated: "The box has been updated",
+    created: "The box has been created",
+  }
+
+function loadBoxModal(box) {
+
+    console.log("box,box",  box);
+    const decidim = document.getElementById("decidim")
+    const close = document.getElementById("editor-modal-close");
+    const title = document.getElementById("editor-modal-title");
+    const content = document.getElementById("editor-modal-content");
+    const save = document.getElementById("editor-modal-save");
+    const remove = document.getElementById("editor-modal-remove");
+
+    title.innerHTML = `Edit box ${box.id}, group ${box.group}`;
+
+    decidim.classList.add("show");
+
+    close.addEventListener("click", (e) => {
+      e.stopPropagation();
+      decidim.classList.remove("show");
+    }, { once: true });
+
+    save.addEventListener("click", (e) => {
+      e.stopPropagation();
+      showInfo("Please, save me to the database for the group", box.group);
+      decidim.classList.remove("show");
+      createBox(box);
+    }, { once: true });
+
+    remove.addEventListener("click", (e) => {
+      e.stopPropagation();
+      // showAlert("Please, remove me (if allowed) from the database");
+      removeBox(box);
+      box.destroy();
+      decidim.classList.remove("show");
+    }, { once: true });
+};
+
     var currentBoxes = <%= document.annotations.collect(&:serialize).to_json.html_safe %>;
     var pages = {};
     PDFViewerApplication.initializedPromise.then(function() {

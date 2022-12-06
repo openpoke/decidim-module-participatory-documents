@@ -15,11 +15,7 @@ module Decidim
             get :pdf_viewer
             get :edit_pdf
           end
-          resources :annotations, only: [:create] do
-            collection do
-              delete :destroy
-            end
-          end
+          resources :annotations, except: [:show, :new, :edit]
         end
 
         root to: "documents#index"

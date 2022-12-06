@@ -5,17 +5,11 @@ module Decidim
     module Admin
       class AnnotationForm < Decidim::Form
         mimic :annotation
-        include TranslatableAttributes
 
+        attribute :id
         attribute :rect
         attribute :page_number
-        attribute :group_id
-
-        translatable_attribute :title, String
-        translatable_attribute :description, String
-
-        validates :title, translatable_presence: true
-        validates :description, translatable_presence: true
+        attribute :group
       end
     end
   end

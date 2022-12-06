@@ -1,8 +1,45 @@
 import PolygonEditor from "src/decidim/participatory_documents/polygon_editor";
 import "src/decidim/participatory_documents/pdf_notifications";
 
+
+window.sendRequest = function(url, action, box, message)
+{
+  let data = box.getInfo();
+  data.page_number = PDFViewerApplication.pdfViewer.currentPageNumber;
+  const csrfToken = document.getElementsByName("csrf-token")[0].content;
+
+
+   $.ajax({
+      url: url,
+      type: action,
+      data: data,
+      headers: { "X-CSRF-Token": csrfToken },
+   })
+   .done(function() {
+      showInfo(message);
+   })
+   .fail(function() {
+      box.destroy();
+      showAlert(I18n.operationFailed);
+   })
+   .always(function() {});
+}
+
+window.removeBox = function(box){
+  sendRequest(AnnotationsRootPath + "/" + box.id, "DELETE", box, I18n.removed);
+}
+
+window.createBox = function(box){
+  sendRequest(AnnotationsRootPath, "POST", box, I18n.created);
+}
+
+window.updateBox = function(box){
+  sendRequest(AnnotationsRootPath + "/" + box.id, "PUT", box, I18n.updated);
+}
+
 // TODO: load configuration from server using ajax
 // This probably needs refactoring to its own class
+/*
 window.loadBoxModal = function(box) {
 
 console.log("box,box",  box);
@@ -35,7 +72,7 @@ console.log("box,box",  box);
       decidim.classList.remove("show");
     }, { once: true });
 };
-
+*/
 // Call this on an annotation layer to initialize the polygon editor (admin side)
 window.InitPolygonEditor = function(layer, boxes) {
   var editor = new PolygonEditor(layer, boxes);
@@ -45,6 +82,7 @@ window.InitPolygonEditor = function(layer, boxes) {
   };
   editor.onBoxChange = (box, e) => {
     showAlert("box changed, should we save to the database now?", box, e, box.getInfo());
+    updateBox(box);
   };
   // editor.onBoxDestroy = (box, e) => {
   //   showAlert("box destroyed", box, e);

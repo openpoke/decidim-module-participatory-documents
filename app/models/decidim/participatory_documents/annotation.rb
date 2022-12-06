@@ -11,9 +11,9 @@ module Decidim
 
       def serialize
         {
-          id: "box-#{id}",
+          id: uid,
           rect: rect,
-          group: "group-#{zone_id}",
+          group: zone.uid,
           page_number: page_number
         }
       end
