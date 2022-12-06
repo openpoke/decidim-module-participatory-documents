@@ -49,7 +49,11 @@ See https://github.com/adobe-type-tools/cmap-resources
   <div id="notifications"></div>
 
   <script>
+
+
   var AnnotationsRootPath = '<%= document_annotations_path(document) %>';
+  var NewZonePath = '<%= document_zones_path(document)%>';
+
   var I18n = {
     operationFailed: "The Operation has failed",
     removed: "The box has been removed",
@@ -57,39 +61,86 @@ See https://github.com/adobe-type-tools/cmap-resources
     created: "The box has been created",
   }
 
-function loadBoxModal(box) {
+function registerSaveHandler(box){
+  const decidim = $("#decidim");
 
-    console.log("box,box",  box);
-    const decidim = document.getElementById("decidim")
-    const close = document.getElementById("editor-modal-close");
-    const title = document.getElementById("editor-modal-title");
-    const content = document.getElementById("editor-modal-content");
-    const save = document.getElementById("editor-modal-save");
-    const remove = document.getElementById("editor-modal-remove");
-
-    title.innerHTML = `Edit box ${box.id}, group ${box.group}`;
-
-    decidim.classList.add("show");
-
-    close.addEventListener("click", (e) => {
-      e.stopPropagation();
-      decidim.classList.remove("show");
-    }, { once: true });
-
-    save.addEventListener("click", (e) => {
-      e.stopPropagation();
-      showInfo("Please, save me to the database for the group", box.group);
-      decidim.classList.remove("show");
+  const save = document.getElementById("editor-modal-save");
+  save.addEventListener("click", (e) => {
+    e.stopPropagation();
+    var form = $("#decidim").find("form");
+    $.ajax({
+        type: form.attr("method"),
+        url: form.attr('action'),
+        data: form.serialize()
+    }).done(function(data) {
+      decidim.removeClass("show");
       createBox(box);
-    }, { once: true });
+    })
+    .fail(function(data) {
+      populateModal(data.responseText, box)
+    });
+    showInfo("Please, save me to the database for the group", box.group);
+  }, { once: true });
+}
+function displayModal(box) {
+  console.log("box,box",  box);
+  const decidim = $("#decidim");
 
-    remove.addEventListener("click", (e) => {
-      e.stopPropagation();
-      // showAlert("Please, remove me (if allowed) from the database");
-      removeBox(box);
-      box.destroy();
-      decidim.classList.remove("show");
-    }, { once: true });
+  const close = document.getElementById("editor-modal-close");
+  const title = document.getElementById("editor-modal-title");
+  const content = document.getElementById("editor-modal-content");
+  const remove = document.getElementById("editor-modal-remove");
+
+  const uid_field = document.getElementById("zone_uid");
+  uid_field.value = box.group
+
+  title.innerHTML = `Edit box ${box.id}, group ${box.group}`;
+
+  decidim.addClass("show");
+  decidim.foundation();
+
+  registerSaveHandler(box);
+
+  close.addEventListener("click", (e) => {
+    e.stopPropagation();
+    decidim.removeClass("show");
+  }, { once: true });
+
+  remove.addEventListener("click", (e) => {
+    e.stopPropagation();
+
+    removeBox(box);
+    box.destroy();
+    decidim.removeClass("show");
+  }, { once: true });
+}
+
+function populateModal(data, box)
+{
+  $('#decidim').html(data);
+  displayModal(box);
+}
+
+function loadNewGroupModal(box) {
+  $.ajax({
+    url: NewZonePath + "/new",
+    type: "GET",
+  }).done(function(data) {
+    populateModal(data, box);
+  });
+}
+
+function loadBoxModal(box) {
+  $.ajax({
+    url: NewZonePath + "/" + box.group + "/edit",
+    type: "GET",
+  }).done(function(data) {
+    populateModal(data, box);
+  })
+  .fail(function() {
+     loadNewGroupModal(box);
+  })
+  .always(function() {});
 };
 
     var currentBoxes = <%= document.annotations.collect(&:serialize).to_json.html_safe %>;

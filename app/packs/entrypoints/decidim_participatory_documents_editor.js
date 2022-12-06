@@ -6,7 +6,7 @@ import $ from "jquery"
 import "foundation-sites";
 
 
-$(() => {
-  // Modal tabs
-  $("#decidim").foundation();
+const csrfToken = document.getElementsByName("csrf-token")[0].content;
+$.ajaxSetup({
+   headers: { "X-CSRF-Token": csrfToken }
 });

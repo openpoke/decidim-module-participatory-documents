@@ -6,6 +6,8 @@ module Decidim
       class ZoneForm < Decidim::Form
         include TranslatableAttributes
 
+        attribute :uid
+
         translatable_attribute :title, String
         translatable_attribute :description, String
 

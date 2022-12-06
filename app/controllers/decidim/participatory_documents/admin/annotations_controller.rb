@@ -27,7 +27,7 @@ module Decidim
 
           Admin::UpdateAnnotation.call(@form, document) do
             on(:ok) do |annotation|
-              render(json: { data: annotation.serialize }, status: :created) && return
+              render(json: { data: annotation.serialize }, status: :accepted) && return
             end
 
             on(:invalid) do

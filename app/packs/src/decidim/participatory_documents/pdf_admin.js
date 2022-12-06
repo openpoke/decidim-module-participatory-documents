@@ -6,14 +6,10 @@ window.sendRequest = function(url, action, box, message)
 {
   let data = box.getInfo();
   data.page_number = PDFViewerApplication.pdfViewer.currentPageNumber;
-  const csrfToken = document.getElementsByName("csrf-token")[0].content;
-
-
    $.ajax({
       url: url,
       type: action,
       data: data,
-      headers: { "X-CSRF-Token": csrfToken },
    })
    .done(function() {
       showInfo(message);

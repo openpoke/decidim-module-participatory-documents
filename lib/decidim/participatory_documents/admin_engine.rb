@@ -16,6 +16,7 @@ module Decidim
             get :edit_pdf
           end
           resources :annotations, except: [:show, :new, :edit]
+          resources :zones, except: [:show, :index]
         end
 
         root to: "documents#index"
