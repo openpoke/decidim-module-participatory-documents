@@ -20,14 +20,12 @@ module Decidim
           # TODO: ADD Comment existance validation
           # return broadcast(:invalid) if form.invalid?
 
-          begin
-            transaction do
-              destroy_zone
-            end
-            broadcast(:ok)
-          rescue ActiveRecord::RecordInvalid
-            broadcast(:invalid, code: 3)
+          transaction do
+            destroy_zone
           end
+          broadcast(:ok)
+        rescue ActiveRecord::RecordInvalid
+          broadcast(:invalid, code: 3)
         end
 
         private

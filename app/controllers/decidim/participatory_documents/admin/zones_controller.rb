@@ -21,6 +21,7 @@ module Decidim
             end
           end
         end
+
         def create
           enforce_permission_to :update, :participatory_document
           @form = form(Decidim::ParticipatoryDocuments::Admin::ZoneForm).from_params(params)
