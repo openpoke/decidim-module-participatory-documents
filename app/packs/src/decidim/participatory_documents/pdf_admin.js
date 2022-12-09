@@ -10,18 +10,19 @@ window.sendRequest = function(url, action, box, page, message)
   let data = box.getInfo();
   data.page_number = page;
   $.ajax({
-      url: url,
-      type: action,
-      data: data,
-   })
-   .done(function() {
-      showInfo(message);
-   })
-   .fail(function() {
-      box.destroy();
-      showAlert(I18n.operationFailed);
-   })
-   .always(function() {});
+    url: url,
+    type: action,
+    data: data,
+  })
+  .done(function() {
+    box.setInfo();
+    showInfo(message);
+  })
+  .fail(function() {
+    box.destroy();
+    showAlert(I18n.operationFailed);
+  })
+  .always(function() {});
 }
 //
 //window.removeBox = function(box){
@@ -76,12 +77,18 @@ console.log("box,box",  box);
 window.InitPolygonEditor = function(layer, boxes) {
   var editor = new PolygonEditor(layer, boxes);
   editor.onBoxClick = (box, e) => {
+      console.log(box.hasChanged());
+
     showInfo("click on box", box, e);
     loadBoxModal(box);
   };
   editor.onBoxChange = (box, e) => {
-    showAlert("box changed, should we save to the database now?", box, e, box.getInfo());
-    updateBox(box, PDFViewerApplication.pdfViewer.currentPageNumber);
+//    console.log(box.hasChanged());
+//    showAlert("box changed, should we save to the database now?", box, e, box.getInfo());
+//    updateBox(box, PDFViewerApplication.pdfViewer.currentPageNumber);
+//    if (box.hasChanged()){
+      PdfDocStateManager.setModifiedState(box);
+//    }
   };
   // editor.onBoxDestroy = (box, e) => {
   //   showAlert("box destroyed", box, e);
@@ -95,10 +102,12 @@ window.InitPolygonEditor = function(layer, boxes) {
 //     console.log("BOX ENTER");
 //  }
   editor.onBoxLeave = (box, e) => {
-    console.log(box.hasChanged());
-     console.log("onBoxLeave");
+    if (box.hasChanged()){
+      PdfDocStateManager.setModifiedState(box);
+    }
   }
   editor.onBoxDestroy = (box, e) => {
+  console.log(box.hasChanged());
     console.log(box);
      console.log("onBoxDestroy");
   }

@@ -17,7 +17,8 @@ module Decidim
 
           begin
             transaction do
-              update_annotation
+              annotation.assign_attributes(**attributes)
+              update_annotation! if annotation.changed?
             end
             broadcast(:ok, annotation)
           rescue ActiveRecord::RecordInvalid
@@ -29,7 +30,7 @@ module Decidim
 
         attr_reader :form
 
-        def update_annotation
+        def update_annotation!
           @annotation = Decidim.traceability.update!(
             annotation,
             form.current_user,

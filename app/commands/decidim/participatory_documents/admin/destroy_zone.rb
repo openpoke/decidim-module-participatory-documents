@@ -13,7 +13,9 @@ module Decidim
         end
 
         def call
-          return broadcast(:invalid, code: form.errors) if form.invalid?
+          # we do not really need to validate the form, since we are removing the object
+          # return broadcast(:invalid, code: form.errors) if form.invalid? #
+          # TODO: Add annotation constraint ?!
           # return broadcast(:invalid, code: 2) if zone.annotations.length > 1
           # TODO: ADD Comment existance validation
           # return broadcast(:invalid) if form.invalid?

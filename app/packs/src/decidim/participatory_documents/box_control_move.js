@@ -33,7 +33,7 @@ export default class BoxControlMove {
 		e.stopPropagation();
 		window.removeEventListener("mousemove", this._move.bind(this));
 		// delay removing the moving class to avoid triggering the click event in the box
-		setTimeout(() => this.box.div.classList.remove("moving"), 100);
+		setTimeout(() => { this.box.setInfo(); this.box.div.classList.remove("moving") }, 100);
 		console.log("stop moving", e, this);
 	}
 

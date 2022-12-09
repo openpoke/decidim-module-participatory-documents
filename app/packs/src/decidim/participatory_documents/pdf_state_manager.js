@@ -26,6 +26,7 @@ export default class PdfStateManager {
 
   setDirty(){
     if (this.evtAdded === false) {
+      this.evtAdded = false
       window.addEventListener("beforeunload", this.beforeUnload, { capture: true });
     }
   }

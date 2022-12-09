@@ -74,14 +74,14 @@ function registerGlobalSave(){
     e.stopPropagation();
 
     PDFViewerApplication.pdfViewer._pages
-        .filter((p) => p.boxEditor !== undefined)
-        .filter((p) => Object.keys(p.boxEditor.boxes).length > 0)
-        .forEach(function(p) {
-          console.log(p);
-          Object.values(p.boxEditor.boxes).map((b) => {
-            updateOrCreateBox(b, p.id);
-          });
+      .filter((p) => p.boxEditor !== undefined)
+      .filter((p) => Object.keys(p.boxEditor.boxes).length > 0)
+      .forEach(function(p) {
+        console.log(p);
+        Object.values(p.boxEditor.boxes).map((b) => {
+          updateOrCreateBox(b, p.id);
         });
+      });
   });
 }
 
@@ -95,20 +95,19 @@ function updateOrCreateBox(box, page) {
   console.log(data);
   console.log(url);
   $.ajax({
-      url: url,
-      type: "PUT",
-      data: data,
-   })
-   .done(function() {
-      //showInfo(I18n.allSaved);
-   })
-   .fail(function() {
-      createBox(box, page);
-   })
-   .always(function() {});
+    url: url,
+    type: "PUT",
+    data: data,
+  })
+  .done(function() {
+    box.setInfo();
+    //showInfo(I18n.allSaved);
+  })
+  .fail(function() {
+    createBox(box, page);
+  })
+  .always(function() {});
 }
-
-
 
 function registerSaveHandler(box){
   const decidim = $("#decidim");
