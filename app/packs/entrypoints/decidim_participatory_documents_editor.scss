@@ -6,23 +6,25 @@
 
 // Scope editor boxes to the annotationslayer of the pdf to avoid any possible collision
 .annotationEditorLayer {
-	@include meta.load-css("stylesheets/decidim/participatory_documents/pdf_polygons.scss");
-	@include meta.load-css("stylesheets/decidim/participatory_documents/pdf_icons.scss");
+  @include meta.load-css("stylesheets/decidim/participatory_documents/pdf_polygons.scss");
+  @include meta.load-css("stylesheets/decidim/participatory_documents/pdf_icons.scss");
 
-	&.polygon-ready {
-	  &.admin {
-	    cursor: crosshair;
-	  }
-	  &.grouping {
-	    cursor: not-allowed;
-	    .box {
-	      cursor: cell;
-	      // When grouping do not put any opacity and allow events, otherwise cannot select the box
-	      &.blocked {
-	        pointer-events: all;
-	        opacity: 1;
-	      }
-	    }
-	  }
-	}
+  &.polygon-ready {
+    &.admin {
+      cursor: crosshair;
+    }
+
+    &.grouping {
+      cursor: not-allowed;
+
+      .box {
+        cursor: cell;
+        // When grouping do not put any opacity and allow events, otherwise cannot select the box
+        &.blocked {
+          pointer-events: all;
+          opacity: 1;
+        }
+      }
+    }
+  }
 }

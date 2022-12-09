@@ -1,10 +1,10 @@
 import BoxArea from "./box_area";
 
 export default class PolygonViewer {
-	constructor(div, json) {
-		this.div = div;
+  constructor(div, json) {
+    this.div = div;
     this.json = json && json.length && json || [];
-		this.boxes = {};
+    this.boxes = {};
     // events
     this.onBoxClick = () => {};
     this.onBoxBlur = () => {};
@@ -12,37 +12,37 @@ export default class PolygonViewer {
     this.onBoxLeave = () => {};
     this.onBoxDestroy = () => {};
     this.onBoxChange = () => {};
-		this.init();
-	}
+    this.init();
+  }
 
-	init() {
-	  this.div.style.pointerEvents = "all";
-	  this.div.classList.add("polygon-ready");
-    this.json.forEach(box => {
+  init() {
+    this.div.style.pointerEvents = "all";
+    this.div.classList.add("polygon-ready");
+    this.json.forEach((box) => {
       this.boxes[box.id] = new BoxArea(this, box);
       this.bindBoxEvents(this.boxes[box.id]);
     });
-	}
+  }
 
   // return all boxes in this layer
   getBoxes() {
-    return Object.keys(this.boxes).map(id => this.boxes[id]);
+    return Object.keys(this.boxes).map((id) => this.boxes[id]);
   }
 
   bindBoxEvents(box) {
-    box.onClick = evt => this.onBoxClick(box, evt);
-    box.onBlur = evt => this.onBoxBlur(box, evt);
-    box.onEnter = evt => this.onBoxEnter(box, evt);
-    box.onLeave = evt => this.onBoxLeave(box, evt);
-    box.onDestroy = evt => this.onBoxDestroy(box, evt);
-    box.onChange = evt => this.onBoxChange(box, evt);
+    box.onClick = (evt) => this.onBoxClick(box, evt);
+    box.onBlur = (evt) => this.onBoxBlur(box, evt);
+    box.onEnter = (evt) => this.onBoxEnter(box, evt);
+    box.onLeave = (evt) => this.onBoxLeave(box, evt);
+    box.onDestroy = (evt) => this.onBoxDestroy(box, evt);
+    box.onChange = (evt) => this.onBoxChange(box, evt);
   }
 
   blockBoxes() {
-  	this.div.querySelectorAll(".box").forEach(div => div.classList.add("blocked"));
-	}
+    this.div.querySelectorAll(".box").forEach((div) => div.classList.add("blocked"));
+  }
 
   unBlockBoxes() {
-  	this.div.querySelectorAll(".box").forEach(div => div.classList.remove("blocked"));
-	}
+    this.div.querySelectorAll(".box").forEach((div) => div.classList.remove("blocked"));
+  }
 }

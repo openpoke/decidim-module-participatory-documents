@@ -8,7 +8,7 @@ window.PdfDocStateManager = new PdfStateManager();
 
 // Call this on an annotation layer to initialize the polygon viewer (public side)
 window.InitPolygonViewer = function(layer, boxes) {
-  var viewer = new PolygonViewer(layer, boxes);
+  let viewer = new PolygonViewer(layer, boxes);
   viewer.onBoxClick = (box, e) => {
     console.log("click on box", box, e);
     console.log("show the participation modal");

@@ -1,4 +1,14 @@
 
-.process-content { flex-direction: column; display: flex; flex-grow: 1}
-.layout-content > .container { height: 100%; }
-.container .full-height { height: 100%; }
+.process-content {
+  flex-direction: column;
+  display: flex;
+  flex-grow: 1;
+}
+
+.layout-content > .container {
+  height: 100%;
+}
+
+.container .full-height {
+  height: 100%;
+}

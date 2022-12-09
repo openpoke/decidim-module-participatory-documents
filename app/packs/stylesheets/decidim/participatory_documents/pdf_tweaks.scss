@@ -6,14 +6,18 @@
 #openFile.toolbarButton {
   display: none;
 }
+
 #download.toolbarButton {
   display: none;
+
   & + .verticalToolbarSeparator {
     display: none;
   }
 }
+
 #editorModeButtons.splitToolbarButton {
   display: none;
+
   & + .verticalToolbarSeparator {
     display: none;
   }
