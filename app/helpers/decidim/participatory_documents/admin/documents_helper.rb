@@ -5,9 +5,10 @@ module Decidim
     module Admin
       module DocumentsHelper
         def pdf_manage_button(document)
-          title = document.present? && document.file.attached? ?
-                    t("actions.edit_pdf", scope: "decidim.participatory_documents") :
-                    t("actions.new", scope: "decidim.participatory_documents")
+          edit_title = t("actions.edit_pdf", scope: "decidim.participatory_documents")
+          new_title = t("actions.new", scope: "decidim.participatory_documents")
+
+          title = document.present? && document.file.attached? ? edit_title : new_title
 
           href = document.present? && document.file.attached? ? edit_pdf_documents_path(id: document.id) : new_document_path
 
