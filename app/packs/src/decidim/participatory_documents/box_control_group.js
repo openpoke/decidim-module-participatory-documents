@@ -22,7 +22,7 @@ export default class BoxControlGroup {
       // just in case
       if (div.id != this.box.id) {
         div.classList.remove("grouping", "mark-group", "focus");
-      } 
+      }
 
       if (div.dataset.boxGroup == this.box.group) {
         div.classList.add("mark-group");
