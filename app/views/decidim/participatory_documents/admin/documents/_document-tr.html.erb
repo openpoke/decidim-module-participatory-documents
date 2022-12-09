@@ -1,0 +1,32 @@
+<tr data-id="<%= document.id %>">
+  <td>
+    <%= check_box_tag "document_ids_s[]", document.id, false,
+                      class: "js-check-all-document js-document-list-check js-document-id-#{document.id}" %><br>
+  </td>
+  <td>
+    <%= document.id %><br>
+  </td>
+  <td>
+    <%= link_to translated_attribute(document.title), document_path(document) %><br>
+  </td>
+  <td>
+
+  </td>
+
+  <td>
+
+  </td>
+
+  <td>
+    <%#= l document.published_at, format: :decidim_short %>
+  </td>
+
+  <td class="table-list__actions">
+    <% if allowed_to? :edit, :document, document: document %>
+      <%= icon_link_to "pencil", edit_document_path(document), t("actions.edit_document", scope: "decidim.participatory_documents"), class: "" %>
+      <%= icon_link_to "document", edit_pdf_documents_path(document), t("actions.edit_pdf", scope: "decidim.participatory_documents"), class: "icon--document icon" %>
+    <% else %>
+      <span class="action-space icon"></span>
+    <% end %>
+  </td>
+</tr>

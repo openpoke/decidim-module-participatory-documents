@@ -1,0 +1,12 @@
+<!--Part of the show page-->
+<% if document.file.attached? %>
+  <div class="row column">
+    <strong>PDF:</strong>
+    <div id="pdf-file" class="row flex--fsc document-<%= document.id %>">
+      <div id="document-<%= document.id %>">
+        <!--PDF link or preview -->
+        <%= link_to translated_attribute(document.title), edit_pdf_documents_path(document) %>
+      </div>
+    </div>
+  </div>
+<% end %>
