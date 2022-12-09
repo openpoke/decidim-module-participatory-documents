@@ -49,63 +49,8 @@ See https://github.com/adobe-type-tools/cmap-resources
 
   <script>
     // TODO: from database
-    var currentBoxes = [
-      {
-        "id": "box-11",
-        "pageNumber": 1,
-        "group": "group-1", // participation can be linked to more than one box, clicking on one box will highlight all boxes in the group
-        "rect": {
-          "left": 25.5,
-          "top": 22.123,
-          "width": 30.1,
-          "height": 10.2
-        }
-      },
-      {
-        "id": "box-12",
-        "pageNumber": 1,
-        "group": "group-2",
-        "rect": {
-          "left": 5.5,
-          "top": 2.123,
-          "width": 10.1,
-          "height": 10.2
-        }
-      },
-      {
-        "id": "box-13",
-        "pageNumber": 1,
-        "group": "group-2",
-        "rect": {
-          "left": 15.5,
-          "top": 12.123,
-          "width": 10.1,
-          "height": 10.2
-        }
-      },
-      {
-        "id": "box-14",
-        "pageNumber": 1,
-        "group": "group-3",
-        "rect": {
-          "left":75.5,
-          "top": 82.123,
-          "width": 10.1,
-          "height": 10.2
-        },
-      },
-      {
-        "id": "box-21",
-        "pageNumber": 2,
-        "group": "group-3",
-        "rect": {
-          "left":15.5,
-          "top": 12.123,
-          "width": 10.1,
-          "height": 10.2
-        },
-      }
-    ];
+    var currentBoxes = [{"id":"box-5","rect":{"top":"12.123","left":"15.5","width":"10.1","height":"10.2"},"group":"group-3","pageNumber":2},{"id":"box-1670369381051","rect":{"top":"39.4238","left":"30.8636","width":"21.9823","height":"10.8415"},"group":"group-1670369381051","pageNumber":1},{"id":"box-4","rect":{"top":"82.123","left":"75.5","width":"10.1","height":"10.2"},"group":"group-3","pageNumber":1},{"id":"box-1670431509778","rect":{"top":"7.82828","left":"7.51634","width":"79.2965","height":"7.96176"},"group":"group-1670431509778","pageNumber":1},{"id":"box-1670604903911","rect":{"top":"8.18802","left":"50.0491","width":"42.1982","height":"59.3632"},"group":"group-1670604903911","pageNumber":2},{"id":"box-1670604903911","rect":{"top":"8.18802","left":"50.0491","width":"42.1982","height":"59.3632"},"group":"group-1670604903911","pageNumber":2},{"id":"box-1670604903911","rect":{"top":"8.18802","left":"50.0491","width":"42.1982","height":"59.3632"},"group":"group-1670604903911","pageNumber":2},{"id":"box-1","rect":{"top":"60.1971","left":"7.31109","width":"84.1021","height":"13.3434"},"group":"group-1","pageNumber":1},{"id":"box-1670605008713","rect":{"top":"9.02199","left":"6.3788","width":"864","height":"1231"},"group":"group-1670605008713","pageNumber":4},{"id":"box-1670605008713","rect":{"top":"9.02199","left":"6.3788","width":"864","height":"1231"},"group":"group-1670605008713","pageNumber":5},{"id":"box-1670605008713","rect":{"top":"9.02199","left":"6.3788","width":"864","height":"1231"},"group":"group-1670605008713","pageNumber":4},{"id":"box-1670605008713","rect":{"top":"9.02199","left":"6.3788","width":"864","height":"1231"},"group":"group-1670605008713","pageNumber":5},{"id":"box-1670367418386","rect":{"top":"76.649","left":"7.50736","width":"32.4014","height":"12.2487"},"group":"group-1670367418386","pageNumber":1},{"id":"box-1670431521308","rect":{"top":"19.5076","left":"8.49673","width":"83.6667","height":"5.93687"},"group":"group-1670431521308","pageNumber":1},{"id":"box-1670431509778","rect":{"top":"7.82828","left":"7.51634","width":"79.2965","height":"7.96176"},"group":"group-1670431509778","pageNumber":1}];
+    
     var pages = {};
     PDFViewerApplication.initializedPromise.then(function() {
       showInfo("Start creating boxes for participation by clicking and dragging. Once created, boxes can be resized, moved or grouped.", {delay: 5000});

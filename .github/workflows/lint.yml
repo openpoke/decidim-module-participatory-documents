@@ -17,18 +17,18 @@ jobs:
         with:
           fetch-depth: 1
 
-      # - uses: actions/setup-node@master
-      #   with:
-      #     node-version: ${{ env.NODE_VERSION }}
+      - uses: actions/setup-node@master
+        with:
+          node-version: ${{ env.NODE_VERSION }}
 
-      # - run: npm ci
-      #   name: Install JS deps
+      - run: npm ci
+        name: Install JS deps
 
-      # - run: npm run lint
-      #   name: Lint JS files
+      - run: npm run lint
+        name: Lint JS files
 
-      # - run: npm run stylelint
-      #   name: Lint SCSS files
+      - run: npm run stylelint
+        name: Lint SCSS files
 
       - uses: ruby/setup-ruby@v1
         with:
