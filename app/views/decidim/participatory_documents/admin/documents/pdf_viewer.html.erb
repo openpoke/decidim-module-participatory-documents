@@ -42,7 +42,7 @@ See https://github.com/adobe-type-tools/cmap-resources
 </head>
 
 <body tabindex="1">
-  <%= render "decidim/participatory_documents/documents/pdfjs_base" %>
+  <%= render "decidim/participatory_documents/documents/pdfjs_base", displaySave: true %>
 
   <%= render "decidim/participatory_documents/admin/documents/editor_modal" %>
 
@@ -50,16 +50,65 @@ See https://github.com/adobe-type-tools/cmap-resources
 
   <script>
 
-
   var AnnotationsRootPath = '<%= document_annotations_path(document) %>';
   var NewZonePath = '<%= document_zones_path(document)%>';
 
   var I18n = {
     operationFailed: "The Operation has failed",
+    allSaved: "All the boxes data has been saved to DB",
     removed: "The box has been removed",
     updated: "The box has been updated",
     created: "The box has been created",
   }
+
+class EventHandlers {
+  constructor(box) {
+    this.box = box;
+  }
+}
+
+function registerGlobalSave(){
+  const globalSave = document.getElementById("DecidimPDSaveButton");
+
+  globalSave.addEventListener("click", (e) => {
+    e.stopPropagation();
+
+    PDFViewerApplication.pdfViewer._pages
+        .filter((p) => p.boxEditor !== undefined)
+        .filter((p) => Object.keys(p.boxEditor.boxes).length > 0)
+        .forEach(function(p) {
+          console.log(p);
+          Object.values(p.boxEditor.boxes).map((b) => {
+            updateOrCreateBox(b, p.id);
+          });
+        });
+  });
+}
+
+registerGlobalSave();
+
+function updateOrCreateBox(box, page) {
+  let data = box.getInfo();
+  data.page_number = page;
+  let url = AnnotationsRootPath + "/" + box.id;
+  console.log(box);
+  console.log(data);
+  console.log(url);
+  $.ajax({
+      url: url,
+      type: "PUT",
+      data: data,
+   })
+   .done(function() {
+      //showInfo(I18n.allSaved);
+   })
+   .fail(function() {
+      createBox(box, page);
+   })
+   .always(function() {});
+}
+
+
 
 function registerSaveHandler(box){
   const decidim = $("#decidim");
@@ -74,7 +123,7 @@ function registerSaveHandler(box){
         data: form.serialize()
     }).done(function(data) {
       decidim.removeClass("show");
-      createBox(box);
+      createBox(box, PDFViewerApplication.pdfViewer.currentPageNumber);
     })
     .fail(function(data) {
       populateModal(data.responseText, box)
@@ -108,9 +157,22 @@ function displayModal(box) {
 
   remove.addEventListener("click", (e) => {
     e.stopPropagation();
+    $.ajax({
+      url: NewZonePath + "/" + box.group,
+      type: "DELETE",
+    }).done(function(data) {
 
-    removeBox(box);
-    box.destroy();
+      PDFViewerApplication.pdfViewer._pages
+        .filter((p) => p.boxEditor !== undefined)
+        .filter((p) => Object.keys(p.boxEditor.boxes).length > 0)
+        .forEach(function(p) {
+          Object.values(p.boxEditor.boxes).filter((p) => p.group === box.group).map((p) => {
+            p.destroy();
+          });
+        });
+    })
+    .fail(function() { box.destroy(); })
+    .always(function() {});
     decidim.removeClass("show");
   }, { once: true });
 }
@@ -153,7 +215,7 @@ function loadBoxModal(box) {
           pages[doc.pageNumber] = page;
           var annotationsLayer = page.annotationEditorLayer && page.annotationEditorLayer.div;
           if(annotationsLayer) {
-            InitPolygonEditor(annotationsLayer, currentBoxes.filter(box => box.page_number === doc.pageNumber));
+            page.boxEditor = InitPolygonEditor(annotationsLayer, currentBoxes.filter(box => box.page_number === doc.pageNumber));
           }
         }
       });

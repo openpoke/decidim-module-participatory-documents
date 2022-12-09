@@ -1,12 +1,15 @@
 import PolygonEditor from "src/decidim/participatory_documents/polygon_editor";
+import PdfStateManager from "src/decidim/participatory_documents/pdf_state_manager";
+
 import "src/decidim/participatory_documents/pdf_notifications";
+window.PdfDocStateManager = new PdfStateManager();
 
 
-window.sendRequest = function(url, action, box, message)
+window.sendRequest = function(url, action, box, page, message)
 {
   let data = box.getInfo();
-  data.page_number = PDFViewerApplication.pdfViewer.currentPageNumber;
-   $.ajax({
+  data.page_number = page;
+  $.ajax({
       url: url,
       type: action,
       data: data,
@@ -20,17 +23,17 @@ window.sendRequest = function(url, action, box, message)
    })
    .always(function() {});
 }
+//
+//window.removeBox = function(box){
+//  sendRequest(AnnotationsRootPath + "/" + box.id, "DELETE", box, I18n.removed);
+//}
 
-window.removeBox = function(box){
-  sendRequest(AnnotationsRootPath + "/" + box.id, "DELETE", box, I18n.removed);
+window.createBox = function(box, page){
+  sendRequest(AnnotationsRootPath, "POST", box, page, I18n.created);
 }
 
-window.createBox = function(box){
-  sendRequest(AnnotationsRootPath, "POST", box, I18n.created);
-}
-
-window.updateBox = function(box){
-  sendRequest(AnnotationsRootPath + "/" + box.id, "PUT", box, I18n.updated);
+window.updateBox = function(box, page){
+  sendRequest(AnnotationsRootPath + "/" + box.id, "PUT", box, page, I18n.updated);
 }
 
 // TODO: load configuration from server using ajax
@@ -45,11 +48,11 @@ console.log("box,box",  box);
     const content = document.getElementById("editor-modal-content");
     const save = document.getElementById("editor-modal-save");
     const remove = document.getElementById("editor-modal-remove");
-    
+
     title.innerHTML = `Edit box ${box.id}, group ${box.group}`;
 
     decidim.classList.add("show");
-    
+
     close.addEventListener("click", (e) => {
       e.stopPropagation();
       decidim.classList.remove("show");
@@ -78,9 +81,27 @@ window.InitPolygonEditor = function(layer, boxes) {
   };
   editor.onBoxChange = (box, e) => {
     showAlert("box changed, should we save to the database now?", box, e, box.getInfo());
-    updateBox(box);
+    updateBox(box, PDFViewerApplication.pdfViewer.currentPageNumber);
   };
   // editor.onBoxDestroy = (box, e) => {
   //   showAlert("box destroyed", box, e);
   // };
+  editor.onBoxBlur = (box, e) => {
+     console.log(box);
+     console.log("BLUR");
+  }
+//  editor.onBoxEnter = (box, e) => {
+//    console.log(box);
+//     console.log("BOX ENTER");
+//  }
+  editor.onBoxLeave = (box, e) => {
+    console.log(box.hasChanged());
+     console.log("onBoxLeave");
+  }
+  editor.onBoxDestroy = (box, e) => {
+    console.log(box);
+     console.log("onBoxDestroy");
+  }
+
+  return editor;
 };

@@ -245,6 +245,22 @@
               </button>
             </div>
 
+            <% if defined?(displaySave) && displaySave == true  %>
+            <style>
+              #DecidimPDSaveButton {
+                  min-width: 110px;
+              }
+              #DecidimPDSaveButton:before {
+                  display: none;
+              }
+            </style>
+            <div>
+              <button  id="DecidimPDSaveButton" class="toolbarButton" title="Text"  tabindex="34" data-l10n-id="editor_free_text2">
+                Save Changes!
+              </button>
+            </div>
+              <% end %>
+
             <div id="editorModeSeparator" class="verticalToolbarSeparator"></div>
 
             <button id="secondaryToolbarToggle" class="toolbarButton" title="Tools" tabindex="48" data-l10n-id="tools" aria-expanded="false" aria-controls="secondaryToolbar">

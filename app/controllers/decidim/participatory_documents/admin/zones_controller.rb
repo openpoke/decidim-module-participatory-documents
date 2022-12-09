@@ -7,6 +7,20 @@ module Decidim
         layout false, only: [:new, :edit]
         helper_method :document
 
+        def destroy
+          enforce_permission_to :destroy, :participatory_document
+          @form = form(Decidim::ParticipatoryDocuments::Admin::ZoneForm).from_model(zone)
+
+          Admin::DestroyZone.call(@form, document) do
+            on(:ok) do
+              render(json: {}, status: :accepted) && return
+            end
+
+            on(:invalid) do |code|
+              render(json: code, status: :bad_request) && return
+            end
+          end
+        end
         def create
           enforce_permission_to :update, :participatory_document
           @form = form(Decidim::ParticipatoryDocuments::Admin::ZoneForm).from_params(params)
