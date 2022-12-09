@@ -4,48 +4,16 @@
       <%= t(".title") %>
       <div class="flex--cc flex-gap--1">
         <% if allowed_to? :create, :participatory_document %>
-          <%= link_to new_document_path,
-                      title: t("actions.new", scope: "decidim.participatory_documents"),
-                      class: "button button--simple" do  %>
-            <%= icon "document", class: "icon icon-document" %>
-            <span><%= t("actions.new", scope: "decidim.participatory_documents") %></span>
-          <% end %>
+          <%= pdf_manage_button(document) %>
         <% end %>
       </div>
     </h2>
   </div>
   <div class="card-section">
-    <div class="table-scroll">
-      <table class="table-list">
-        <thead>
-        <tr>
-          <th>
-            <%= check_box_tag "documents_bulk", "all", false, class: "js-check-all" %>
-          </th>
-          <th>
-            <%= t("models.document.fields.id", scope: "decidim.participatory_documents") %>
-          </th>
-          <th>
-            <%= t("models.document.fields.title", scope: "decidim.participatory_documents") %>
-          </th>
-          <th>
-            <%= t("models.document.fields.document_section", scope: "decidim.participatory_documents") %>
-          </th>
-          <th>
-            <%= t("models.document.fields.state", scope: "decidim.participatory_documents") %>
-          </th>
-          <th>
-            <%= t("models.document.fields.published", scope: "decidim.participatory_documents") %>
-          </th>
-          <th class="actions"><%= t("actions.title", scope: "decidim.participatory_documents") %></th>
-        </tr>
-        </thead>
-        <tbody>
-        <% documents.each do |document| %>
-          <%= render partial: "document-tr", locals: { document: document } %>
-        <% end %>
-        </tbody>
-      </table>
-    </div>
+    <% if document.present? && document.file.attached? %>
+      <%= render partial: "table" %>
+    <% else %>
+      <p class="text-large text-center mt-s"><%= t(".start") %></p>
+    <% end %>
   </div>
 </div>

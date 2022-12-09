@@ -6,14 +6,12 @@ module Decidim
       # This controller allows admins to manage documents in a participatory process.
       class DocumentsController < Admin::ApplicationController
         include Decidim::ApplicationHelper
+        helper Decidim::ParticipatoryDocuments::Admin::DocumentsHelper
 
-        helper_method :document, :documents
+        helper_method :document, :annotations
         before_action :add_snippets, only: :index
 
-        def index
-          redirect_to(new_document_path) && return if document.blank?
-          redirect_to(edit_document_path(document)) && return unless current_component.published?
-        end
+        def index; end
 
         def show; end
 
@@ -82,8 +80,8 @@ module Decidim
           @document ||= Decidim::ParticipatoryDocuments::Document.find_by(component: current_component)
         end
 
-        def documents
-          @documents ||= Decidim::ParticipatoryDocuments::Document.where(component: current_component)
+        def annotations
+          @annotations ||= Decidim::ParticipatoryDocuments::Annotation.where(document: document)
         end
       end
     end

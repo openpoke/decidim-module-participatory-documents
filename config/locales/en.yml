@@ -19,6 +19,7 @@ en:
             title: Edit Participatory document
             update: Update
           index:
+            start: Please upload a PDF to start
             title: Add PDF suggestions
           new:
             create: Create  Participatory document

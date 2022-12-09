@@ -17,7 +17,7 @@ module Decidim
       has_one_attached :file
       validates_upload :file, uploader: Decidim::ParticipatoryDocuments::PdfDocumentUploader
 
-      has_many :annotations
+      has_many :annotations, dependent: :destroy
 
       attr_accessor :remove_file
     end

@@ -1,0 +1,32 @@
+<div class="table-scroll">
+  <table class="table-list">
+    <thead>
+    <tr>
+      <th>
+        <%= check_box_tag "annotations_bulk", "all", false, class: "js-check-all" %>
+      </th>
+      <th>
+        <%= t("models.document.fields.id", scope: "decidim.participatory_documents") %>
+      </th>
+      <th>
+        <%= t("models.document.fields.title", scope: "decidim.participatory_documents") %>
+      </th>
+      <th>
+        <%= t("models.document.fields.document_section", scope: "decidim.participatory_documents") %>
+      </th>
+      <th>
+        <%= t("models.document.fields.state", scope: "decidim.participatory_documents") %>
+      </th>
+      <th>
+        <%= t("models.document.fields.published", scope: "decidim.participatory_documents") %>
+      </th>
+      <th class="actions"><%= t("actions.title", scope: "decidim.participatory_documents") %></th>
+    </tr>
+    </thead>
+    <tbody>
+    <% annotations.each do |annotation| %>
+      <%= render partial: "annotation-tr", locals: { annotation: annotation } %>
+    <% end %>
+    </tbody>
+  </table>
+</div>
