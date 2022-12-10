@@ -3,9 +3,7 @@
     <h2 class="card-title flex--sbc">
       <%= t(".title") %>
       <div class="flex--cc flex-gap--1">
-        <% if allowed_to? :create, :participatory_document %>
-          <%= pdf_manage_button(document) %>
-        <% end %>
+        <%= pdf_manage_button(document) %>
       </div>
     </h2>
   </div>
