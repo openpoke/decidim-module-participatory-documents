@@ -21,7 +21,7 @@ module Decidim
         end
 
         def btn_title
-          return t("actions.new", scope: "decidim.participatory_documents") unless document.present?
+          return t("actions.new", scope: "decidim.participatory_documents") if document.blank?
 
           if document.file.attached?
             t("actions.edit_pdf", scope: "decidim.participatory_documents")
