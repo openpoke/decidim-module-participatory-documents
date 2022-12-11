@@ -12,7 +12,6 @@ module Decidim
       has_many :annotations, class_name: "Decidim::ParticipatoryDocuments::Annotation", dependent: :destroy
 
       translatable_fields :title, :description
-      POSSIBLE_STATES = %w(draft published private closed).freeze
     end
   end
 end
