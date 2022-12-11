@@ -40,8 +40,8 @@ export default class BoxArea {
     }
     this.group = group;
     this.div.dataset.boxGroup = group;
-		console.log("setGroup");
-		this.setInfo(); // We need to mark the change regarding the group
+    console.log("setGroup");
+    this.setInfo(); // We need to mark the change regarding the group
   }
 
   createControls() {
@@ -69,7 +69,7 @@ export default class BoxArea {
 
   setInfo(info) {
     console.log("setInfo");
-		this.previousInfo = info || this.getInfo();
+    this.previousInfo = info || this.getInfo();
   }
 
   isMoving() {
@@ -157,8 +157,9 @@ export default class BoxArea {
       // console.log("box resize", entries, this.div.style.width, this.div.style.height, "calculated", width, height);
       this.div.style.width = width;
       this.div.style.height = height;
-    this.setInfo(); // We need to record changes about the dimensions}
-  }
+      this.setInfo(); // We need to record changes about the dimensions}
+    }
+
 
   hasChanged() {
     if (JSON.stringify(this.getInfo()) != JSON.stringify(this.previousInfo)) {

@@ -6,11 +6,11 @@ export default class PdfStateManager {
 
   beforeUnload(evt) {
     evt.preventDefault();
-    if (PdfDocStateManager.changes.length > 0){
+    if (PdfDocStateManager.changes.length > 0) {
       return evt.returnValue = "Are you sure you want to exit?";
-    } else {
-      return false;
-    }
+    } 
+    return false;
+    
   }
 
   setModifiedState(box) {
@@ -24,7 +24,7 @@ export default class PdfStateManager {
     }
   }
 
-  setDirty(){
+  setDirty() {
     if (this.evtAdded === false) {
       this.evtAdded = false
       window.addEventListener("beforeunload", this.beforeUnload, { capture: true });
@@ -32,7 +32,7 @@ export default class PdfStateManager {
   }
 
   reset() {
-    if (this.evtAdded && this.changes.length === 0){
+    if (this.evtAdded && this.changes.length === 0) {
       window.removeEventListener("beforeunload", this.beforeUnload, { capture: true });
     }
   }

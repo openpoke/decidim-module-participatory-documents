@@ -8,5 +8,5 @@ import "foundation-sites";
 
 const csrfToken = document.getElementsByName("csrf-token")[0].content;
 $.ajaxSetup({
-   headers: { "X-CSRF-Token": csrfToken }
+  headers: { "X-CSRF-Token": csrfToken }
 });
