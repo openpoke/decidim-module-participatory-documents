@@ -59,13 +59,9 @@ See https://github.com/adobe-type-tools/cmap-resources
     removed: "The box has been removed",
     updated: "The box has been updated",
     created: "The box has been created",
+    move: "Move variable",
+    group: "Group variable"
   }
-
-class EventHandlers {
-  constructor(box) {
-    this.box = box;
-  }
-}
 
 function registerGlobalSave(){
   const globalSave = document.getElementById("DecidimPDSaveButton");
@@ -214,7 +210,7 @@ function loadBoxModal(box) {
           pages[doc.pageNumber] = page;
           var annotationsLayer = page.annotationEditorLayer && page.annotationEditorLayer.div;
           if(annotationsLayer) {
-            page.boxEditor = InitPolygonEditor(annotationsLayer, currentBoxes.filter(box => box.page_number === doc.pageNumber));
+            page.boxEditor = InitPolygonEditor(I18n, annotationsLayer, currentBoxes.filter(box => box.page_number === doc.pageNumber));
           }
         }
       });

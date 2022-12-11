@@ -2,8 +2,8 @@ import PolygonViewer from "./polygon_viewer";
 import BoxArea from "./box_area";
 
 export default class PolygonEditor extends PolygonViewer {
-  constructor(div, boxes) {
-    super(div, boxes);
+  constructor(i18n, div, boxes) {
+    super(i18n, div, boxes);
     this.div.classList.add("admin");
     this.box = null;
     this.creating = false;

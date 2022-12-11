@@ -72,8 +72,8 @@ console.log("box,box",  box);  const decidim = document.getElementById("decidim"
 };
 */
 // Call this on an annotation layer to initialize the polygon editor (admin side)
-window.InitPolygonEditor = function(layer, boxes) {
-  let editor = new PolygonEditor(layer, boxes);
+window.InitPolygonEditor = function(i18n, layer, boxes) {
+  let editor = new PolygonEditor(i18n, layer, boxes);
   editor.onBoxClick = (box, e) => {
     console.log(box.hasChanged());
 

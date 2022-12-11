@@ -3,7 +3,7 @@ import PdfStateManager from "src/decidim/participatory_documents/pdf_state_manag
 import "src/decidim/participatory_documents/pdf_notifications";
 
 // state manager
-window.PdfDocStateManager = new PdfStateManager();
+new PdfStateManager();
 
 
 // Call this on an annotation layer to initialize the polygon viewer (public side)

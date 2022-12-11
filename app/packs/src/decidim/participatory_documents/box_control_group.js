@@ -5,8 +5,7 @@ export default class BoxControlGroup {
     this.layer = control.box.layer;
     this.div = document.createElement("div");
     this.div.classList.add("group-control");
-    // TODO: from i18n
-    this.div.title = "Group";
+    this.div.title = this.layer.i18n.group;
     this.control.div.appendChild(this.div);
     this._bindEvents();
   }
