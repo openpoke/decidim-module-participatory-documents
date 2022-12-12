@@ -5,12 +5,9 @@ export default class PdfStateManager {
   }
 
   beforeUnload(evt) {
-    evt.preventDefault();
     if (!this.isEmpty()) {
       evt.returnValue = "Are you sure you want to exit?";
-      return evt;
-    } 
-    return false;
+    }
   }
 
   add(box) {
@@ -28,18 +25,10 @@ export default class PdfStateManager {
       this.reset();
     }
   }
-
-  // setModifiedState(box) {
-  //   let index = this.changes.indexOf(box.id);
-  //   if (index === -1) {
-  //    this.add(box);
-  //   } else {
-  //   }
-  // }
-
   setDirty() {
     if (this.evtAdded === false) {
-      this.evtAdded = false
+      console.log("setDirty")
+      this.evtAdded = true;
       window.addEventListener("beforeunload", this.beforeUnload.bind(this), { capture: true });
     }
   }
@@ -50,6 +39,8 @@ export default class PdfStateManager {
 
   reset() {
     if (this.evtAdded && this.isEmpty()) {
+      this.evtAdded = false;
+      console.log("reset");
       window.removeEventListener("beforeunload", this.beforeUnload.bind(this), { capture: true });
     }
   }

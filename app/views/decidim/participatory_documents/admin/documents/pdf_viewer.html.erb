@@ -75,6 +75,7 @@ function sendRequest(url, action, box, page, message)
       }).
       done(function() {
           box.setInfo();
+          box.layer.stateManager.remove(box);
           showInfo(message);
       }).
       fail(function() {
@@ -127,6 +128,7 @@ function updateOrCreateBox(box, page) {
   })
   .done(function() {
     box.setInfo();
+    box.layer.stateManager.remove(box);
     //showInfo(I18n.allSaved);
   })
   .fail(function() {

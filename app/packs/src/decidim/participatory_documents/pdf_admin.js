@@ -78,12 +78,12 @@ window.InitPolygonEditor = function(i18n, layer, boxes) {
     showInfo("click on box", box, e);
     loadBoxModal(box);
   };
-  editor.onBoxChange = (box, e) => {
-    e.stopPropagation();
+  editor.onBoxChange = (box) => {
+    // e.stopPropagation();
     box.setModified();
   };
-  editor.onBoxLeave = (box, e) => {
-    e.stopPropagation();
+  editor.onBoxLeave = (box) => {
+    // e.stopPropagation();
     if (box.hasChanged()) {
       box.setModified()
     }
