@@ -38,11 +38,15 @@ ca:
             error:
             invalid: There was a problem updating Document
             success: Document has been successfully updated
+          zones:
+            empty: "(empty)"
       models:
         document:
           fields:
-            document_section: Document section
+            document_pages: Page numbers
             id: Id
-            published: Published at
+            published: Published
             state: State
             title: Title
+      'no': 'No'
+      'yes': 'Yes'
