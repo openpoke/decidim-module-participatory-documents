@@ -9,7 +9,7 @@ module Decidim
         helper Decidim::ParticipatoryDocuments::Admin::DocumentsHelper
 
         helper_method :document, :zones
-        before_action :add_snippets, only: :index
+        before_action :add_snippets, only: :edit_pdf
 
         def index; end
 
