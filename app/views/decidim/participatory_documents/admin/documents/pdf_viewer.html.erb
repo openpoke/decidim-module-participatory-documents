@@ -89,7 +89,7 @@ class RegisterPDFActions {
     }
 
     getCSRFToken() {
-        document.getElementsByName("csrf-token")[0].content;
+        return document.getElementsByName("csrf-token")[0].content;
     }
 
     updateOrCreateBox(box, page){
@@ -109,7 +109,7 @@ class RegisterPDFActions {
         })
             .then((response) => {
                 if (response.ok) {
-                    return response.json()
+                    return response.json();
                 }
 
                 throw new Error(" ");
@@ -147,7 +147,7 @@ function createBox(box, page) {
     })
     .then((response) => {
         if (response.ok) {
-            return response.json()
+            return response.json();
         }
         throw new Error(" ");
     })

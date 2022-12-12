@@ -30,7 +30,7 @@ export default class PdfStateManager {
     if (this.evtAdded === false) {
       console.log("setDirty")
       this.evtAdded = true;
-      if (this.element){
+      if (this.element) {
         this.element.style.color = "#FF0000";
       }
 
@@ -46,7 +46,7 @@ export default class PdfStateManager {
     if (this.evtAdded && this.isEmpty()) {
       this.evtAdded = false;
       console.log("reset");
-      if (this.element){
+      if (this.element) {
         this.element.style.color = "#ffffff";
       }
       window.removeEventListener("beforeunload", this.beforeUnload.bind(this), { capture: true });
