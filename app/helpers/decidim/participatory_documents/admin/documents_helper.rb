@@ -16,6 +16,20 @@ module Decidim
           end
         end
 
+        def back_btn
+          btn_title = t("actions.back", scope: "decidim.participatory_documents")
+
+          content_tag(:a, title: btn_title, href: manage_component_path(current_component), class: "button small button--simple") do
+            button_builder(btn_title, icon: "caret-left")
+          end
+        end
+
+        def boolean_label(active)
+          content_tag(:span, class: "label #{active ? "success" : "alert"}") do
+            t(active ? "yes" : "no", scope: "decidim.participatory_documents")
+          end
+        end
+
         private
 
         def button_builder(btn_title, icon: "document")
@@ -24,14 +38,6 @@ module Decidim
 
         def btn_icon(icon, label)
           icon(icon, class: "icon--document icon icon icon-document mr-xs", aria_label: label, role: "img")
-        end
-
-        def back_btn
-          btn_title = t("actions.back", scope: "decidim.participatory_documents")
-
-          content_tag(:a, title: btn_title, href: manage_component_path(current_component), class: "button small button--simple") do
-            button_builder(btn_title, icon: "caret-left")
-          end
         end
 
         def new_pdf_btn
