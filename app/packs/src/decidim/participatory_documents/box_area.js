@@ -35,7 +35,7 @@ export default class BoxArea {
     this.div.classList.add("box");
     this.div.style.left = `${this._sanitizePercent(left)}%`;
     this.div.style.top = `${this._sanitizePercent(top)}%`;
-    // if with is not defined will use 15%
+    // if width is not defined will use 15%
     this.div.style.width = `${this._sanitizePercent(width, 1, 100 - parseFloat(left)) || 15}%`;
     this.div.style.height = `${this._sanitizePercent(height, 1, 100 - parseFloat(top)) || 15}%`;
     this.layer.div.appendChild(this.div);
