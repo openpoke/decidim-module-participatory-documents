@@ -17,7 +17,9 @@ describe "Admin manages participatory documents", type: :system do
     it "shows the upload button" do
       visit_component_admin
 
-      expect(page).to have_content("Upload")
+      expect(page).to have_content("Please upload a PDF to start")
+      expect(page).not_to have_link("Edit participatory areas")
+      expect(page).to have_link("Upload PDF document")
     end
   end
 
@@ -27,7 +29,9 @@ describe "Admin manages participatory documents", type: :system do
     it "shows the upload button" do
       visit_component_admin
 
-      expect(page).to have_content("Edit document")
+      expect(page).to have_content("Please upload a PDF to start")
+      expect(page).not_to have_link("Edit participatory areas")
+      expect(page).to have_link("Edit/upload document")
     end
   end
 
@@ -41,8 +45,8 @@ describe "Admin manages participatory documents", type: :system do
     it "shows the edit buttons" do
       visit_component_admin
 
-      expect(page).to have_content("Edit file")
-      expect(page).to have_content("Edit document")
+      expect(page).to have_link("Edit participatory areas")
+      expect(page).to have_link("Edit/upload document")
     end
   end
 end

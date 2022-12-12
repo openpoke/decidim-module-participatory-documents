@@ -19,7 +19,7 @@ en:
         back: Back
         edit_boxes: Edit participatory areas
         edit_document: Edit/upload document
-        new: Upload Participatory PDF
+        new: Upload PDF document
         title: Actions
       admin:
         documents:
