@@ -1,0 +1,8 @@
+<h2 class="card-title flex--sbc">
+  <%= t("admin.documents.index.title",
+        scope: "decidim.participatory_documents",
+        component: translated_attribute(current_component.name)) %>
+  <div class="flex--cc flex-gap--1">
+    <%= pdf_manage_button(document) %>
+  </div>
+</h2>

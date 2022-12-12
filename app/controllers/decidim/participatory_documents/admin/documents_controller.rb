@@ -13,8 +13,6 @@ module Decidim
 
         def index; end
 
-        def show; end
-
         def new
           enforce_permission_to :create, :participatory_document
           @form = form(Decidim::ParticipatoryDocuments::Admin::DocumentForm).from_params(params)

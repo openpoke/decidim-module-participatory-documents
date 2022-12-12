@@ -1,11 +1,6 @@
 <div class="card full-height">
   <div class="card-divider">
-    <h2 class="card-title flex--sbc">
-      <%= t(".title") %>
-      <div class="flex--cc flex-gap--1">
-        <%= pdf_manage_button(document) %>
-      </div>
-    </h2>
+    <%= render partial: "title" %>
   </div>
   <div class="card-section">
     <% if document.present? && document.file.attached? %>

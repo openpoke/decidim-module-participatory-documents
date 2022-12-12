@@ -17,7 +17,7 @@ en:
     participatory_documents:
       actions:
         edit_document: Edit document
-        edit_pdf: Edit PDF
+        edit_pdf: Edit file
         new: Upload Participatory PDF
         title: Actions
       admin:
@@ -30,7 +30,7 @@ en:
             update: Update
           index:
             start: Please upload a PDF to start
-            title: Add PDF suggestions
+            title: Add %{component}
           new:
             create: Create  Participatory document
             title: New Participatory document
