@@ -37,5 +37,143 @@ Decidim.register_component(:participatory_documents) do |component|
   # end
 
   component.seeds do |participatory_space|
+    admin_user = Decidim::User.find_by(
+      organization: participatory_space.organization,
+      email: "admin@example.org"
+    )
+
+    params = {
+      name: Decidim::Components::Namer.new(participatory_space.organization.available_locales, :participatory_documents).i18n_name,
+      published_at: Time.current,
+      manifest_name: :participatory_documents,
+      participatory_space: participatory_space
+    }
+
+    component = Decidim.traceability.perform_action!(
+      "publish",
+      Decidim::Component,
+      admin_user,
+      visibility: "all"
+    ) do
+      Decidim::Component.create!(params)
+    end
+
+    params = {
+      component: component,
+      title: Decidim::Faker::Localized.sentence(word_count: 2),
+      description: Decidim::Faker::Localized.sentence(word_count: 20),
+      author: admin_user,
+      file: ActiveStorage::Blob.create_after_upload!(
+        io: File.open(File.join(__dir__, "seeds", "Exampledocument.pdf")),
+        filename: "Exampledocument.pdf",
+        content_type: "application/pdf",
+        metadata: nil
+      ) # Keep after attached_to
+    }
+
+    document = Decidim.traceability.create!(
+      Decidim::ParticipatoryDocuments::Document,
+      admin_user,
+      params,
+      visibility: "all"
+    )
+
+    group1 = Decidim.traceability.create!(
+      Decidim::ParticipatoryDocuments::Zone,
+      admin_user,
+      {
+        document: document,
+        title: Decidim::Faker::Localized.sentence(word_count: 2),
+        description: Decidim::Faker::Localized.sentence(word_count: 20),
+        state: :draft,
+        published_at: Time.zone.now
+      },
+      visibility: "admin-only"
+    )
+    group2 = Decidim.traceability.create!(
+      Decidim::ParticipatoryDocuments::Zone,
+      admin_user,
+      {
+        document: document,
+        title: Decidim::Faker::Localized.sentence(word_count: 2),
+        description: Decidim::Faker::Localized.sentence(word_count: 20),
+        state: :draft,
+        published_at: Time.zone.now
+      },
+      visibility: "admin-only"
+    )
+    group3 = Decidim.traceability.create!(
+      Decidim::ParticipatoryDocuments::Zone,
+      admin_user,
+      {
+        document: document,
+        title: Decidim::Faker::Localized.sentence(word_count: 2),
+        description: Decidim::Faker::Localized.sentence(word_count: 20),
+        state: :draft,
+        published_at: Time.zone.now
+      },
+      visibility: "admin-only"
+    )
+
+    annotations = [
+      {
+        page_number: 1,
+        zone: group1,
+        rect: {
+          "left": 25.5,
+          "top": 22.123,
+          "width": 30.1,
+          "height": 10.2
+        }
+      },
+      {
+        page_number: 1,
+        zone: group2,
+        rect: {
+          "left": 5.5,
+          "top": 2.123,
+          "width": 10.1,
+          "height": 10.2
+        }
+      },
+      {
+        page_number: 1,
+        zone: group2,
+        rect: {
+          "left": 15.5,
+          "top": 12.123,
+          "width": 10.1,
+          "height": 10.2
+        }
+      },
+      {
+        page_number: 1,
+        zone: group3,
+        rect: {
+          "left": 75.5,
+          "top": 82.123,
+          "width": 10.1,
+          "height": 10.2
+        }
+      },
+      {
+        page_number: 2,
+        zone: group3,
+        rect: {
+          "left": 15.5,
+          "top": 12.123,
+          "width": 10.1,
+          "height": 10.2
+        }
+      }
+    ]
+    annotations.each do |annotation|
+      Decidim.traceability.create!(
+        Decidim::ParticipatoryDocuments::Annotation,
+        admin_user,
+        annotation,
+        visibility: "admin-only"
+      )
+    end
   end
 end
