@@ -20,6 +20,10 @@ module Decidim
       has_many :zones, class_name: "Decidim::ParticipatoryDocuments::Zone", dependent: :destroy
 
       attr_accessor :remove_file
+
+      def self.log_presenter_class_for(_log)
+        Decidim::ParticipatoryDocuments::AdminLog::DocumentPresenter
+      end
     end
   end
 end

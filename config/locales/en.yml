@@ -2,6 +2,16 @@
 
 en:
   decidim:
+    admin_log:
+      annotation:
+        create: "%{user_name} created a new participatory area for %{document_name}"
+        delete: "%{user_name} deleted a new participatory area for %{document_name}"
+      zone:
+        create: "%{user_name} has created a new Group named %{resource_name} for %{document_name}"
+      document:
+        create: "%{user_name} created a document named %{resource_name} in %{space_name}"
+        delete: "%{user_name} deleted a document named %{resource_name} in %{space_name}"
+        update: "%{user_name} updated a document named %{resource_name} in %{space_name}"
     components:
       participatory_documents:
         name: Participatory Document
