@@ -62,7 +62,7 @@ See https://github.com/adobe-type-tools/cmap-resources
     move: "Move",
     group: "Group"
   }
-
+/*
 function sendRequest(url, action, box, page, message)
   {
       let data = box.getInfo();
@@ -79,18 +79,46 @@ function sendRequest(url, action, box, page, message)
       }).
       fail(function() {
           box.destroy();
-          showAlert(I18n.operationFailed);
+          showAlert(I18n.operationFailed, {});
       }).
       always(function() {});
   }
-
+*/
 function createBox(box, page) {
-      sendRequest(AnnotationsRootPath, "POST", box, page, I18n.created);
+    const csrfToken = document.getElementsByName("csrf-token")[0].content;
+    let data = box.getInfo();
+    data.page_number = page;
+
+    fetch(AnnotationsRootPath, {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            "X-CSRF-Token": csrfToken
+        },
+        credentials: "include",
+        body: JSON.stringify(data)
+    })
+    .then((response) => {
+        if (!response.ok) {
+            throw new Error(" ");
+        }
+
+        return response.json()
+    })
+    .then((data) => {
+        console.log("eee", data);
+        box.setInfo();
+        box.layer.stateManager.remove(box);
+        showInfo(I18n.created);
+    })
+    .catch((error) => {
+        // console.log(error);
+        box.destroy();
+        showAlert(I18n.operationFailed, {});
+    });
   }
 
-function updateBox(box, page) {
-      sendRequest(`${AnnotationsRootPath}/${box.id}`, "PUT", box, page, I18n.updated);
-  }
 
   function registerGlobalSave(){
   const globalSave = document.getElementById("DecidimPDSaveButton");
@@ -113,26 +141,39 @@ function updateBox(box, page) {
 registerGlobalSave();
 
 function updateOrCreateBox(box, page) {
+  const csrfToken = document.getElementsByName("csrf-token")[0].content;
   let data = box.getInfo();
   data.page_number = page;
-  let url = AnnotationsRootPath + "/" + box.id;
-  console.log(box);
-  console.log(data);
-  console.log(url);
-  $.ajax({
-    url: url,
-    type: "PUT",
-    data: data,
+
+  console.log("FOOO BAR")
+
+  fetch(`${AnnotationsRootPath}/${box.id}`, {
+      method: "PUT",
+      headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          "X-CSRF-Token": csrfToken
+      },
+      credentials: "include",
+      body: JSON.stringify(data)
   })
-  .done(function() {
-    box.setInfo();
-    box.layer.stateManager.remove(box);
-    //showInfo(I18n.allSaved);
-  })
-  .fail(function() {
-    createBox(box, page);
-  })
-  .always(function() {});
+      .then((response) => {
+          if (!response.ok) {
+              throw new Error(" ");
+          }
+
+          return response.json()
+      })
+      .then((data) => {
+          console.log("aaa")
+          box.setInfo();
+          box.layer.stateManager.remove(box);
+          showInfo(I18n.allSaved);
+      })
+      .catch((error) => {
+          // console.error(error);
+          createBox(box, page);
+      });
 }
 
 function registerSaveHandler(box){
@@ -192,7 +233,9 @@ function displayModal(box) {
         .filter((p) => Object.keys(p.boxEditor.boxes).length > 0)
         .forEach(function(p) {
           Object.values(p.boxEditor.boxes).filter((p) => p.group === box.group).map((p) => {
+            delete p.layer.boxes[p.id];
             p.destroy();
+
           });
         });
     })

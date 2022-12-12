@@ -6,6 +6,10 @@ module Decidim
       class AnnotationsController < Admin::ApplicationController
         layout false
 
+        rescue_from ActiveRecord::RecordNotFound do |exception|
+          render json: { error: I18n.t("decidim.errors.not_found.content_doesnt_exist") }, status: :not_found
+        end
+
         def destroy
           enforce_permission_to :create, :participatory_document
           @form = form(Decidim::ParticipatoryDocuments::Admin::AnnotationForm).from_params(params)
