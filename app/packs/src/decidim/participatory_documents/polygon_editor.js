@@ -2,14 +2,15 @@ import PolygonViewer from "./polygon_viewer";
 import BoxArea from "./box_area";
 
 export default class PolygonEditor extends PolygonViewer {
-  constructor(i18n, div, boxes) {
-    super(i18n, div, boxes);
+  constructor(div, boxes, options) {
+    super(div, boxes, options);
     this.div.classList.add("admin");
     this.box = null;
     this.creating = false;
     this.blocked = false;
     this.top = 0;
     this.left = 0;
+    this.stateManager = options.stateManager;
   }
 
   init() {
@@ -80,6 +81,7 @@ export default class PolygonEditor extends PolygonViewer {
       this.box.createControls();
       this.bindBoxEvents(this.box);
       this.box.setInfo();
+      this.box.setModified();
       this.boxes[this.box.id] = this.box;
     }
   }

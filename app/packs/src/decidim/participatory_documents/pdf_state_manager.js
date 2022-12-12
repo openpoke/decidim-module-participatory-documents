@@ -2,34 +2,45 @@ export default class PdfStateManager {
   constructor() {
     this.changes = [];
     this.evtAdded = false;
-    window.PdfDocStateManager = this;
   }
 
   beforeUnload(evt) {
     evt.preventDefault();
-    if (!window.PdfDocStateManager.isEmpty()) {
+    if (!this.isEmpty()) {
       evt.returnValue = "Are you sure you want to exit?";
       return evt;
     } 
     return false;
-    
   }
 
-  setModifiedState(box) {
+  add(box) {
     let index = this.changes.indexOf(box.id);
     if (index === -1) {
       this.changes.push(box.id);
       this.setDirty();
-    } else {
+    }
+  }
+
+  remove(box) {
+    let index = this.changes.indexOf(box.id);
+    if (index >= 0) {
       this.changes.splice(index, 1);
       this.reset();
     }
   }
 
+  // setModifiedState(box) {
+  //   let index = this.changes.indexOf(box.id);
+  //   if (index === -1) {
+  //    this.add(box);
+  //   } else {
+  //   }
+  // }
+
   setDirty() {
     if (this.evtAdded === false) {
       this.evtAdded = false
-      window.addEventListener("beforeunload", this.beforeUnload, { capture: true });
+      window.addEventListener("beforeunload", this.beforeUnload.bind(this), { capture: true });
     }
   }
 
@@ -39,7 +50,7 @@ export default class PdfStateManager {
 
   reset() {
     if (this.evtAdded && this.isEmpty()) {
-      window.removeEventListener("beforeunload", this.beforeUnload, { capture: true });
+      window.removeEventListener("beforeunload", this.beforeUnload.bind(this), { capture: true });
     }
   }
 }

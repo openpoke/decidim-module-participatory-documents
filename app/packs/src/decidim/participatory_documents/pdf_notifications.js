@@ -3,11 +3,18 @@ window.showInfo = function (title, options) {
   info.innerHTML = title;
   info.classList.add("show");
   info.classList.remove("alert");
-  if (options && options.class) {info.classList.add(options.class);}
-  if (window.notificationTimeout) {clearTimeout(window.notificationTimeout);}
-  window.notificationTimeout = setTimeout(() => info.classList.remove("show"), options && options.delay || 3000);
+  if (options && options.class) {
+    info.classList.add(options.class);
+  }
+  if (window.notificationTimeout) {
+    clearTimeout(window.notificationTimeout);
+  }
+  window.notificationTimeout = setTimeout(() => {
+    info.classList.remove("show")
+  }, options && options.delay || 3000);
 };
 
 window.showAlert = function (title, options) {
-  showInfo(title, {class: "alert"});
+  options.class = "alert"
+  showInfo(title, options);
 };

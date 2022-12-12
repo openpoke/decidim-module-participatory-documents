@@ -1,11 +1,11 @@
 import BoxArea from "./box_area";
 
 export default class PolygonViewer {
-  constructor(i18n, div, json) {
+  constructor(div, json, options) {
     this.div = div;
     this.json = json && json.length && json || [];
     this.boxes = {};
-    this.i18n = i18n;
+    this.i18n = options.i18n;
     // events
     this.onBoxClick = () => {};
     this.onBoxBlur = () => {};

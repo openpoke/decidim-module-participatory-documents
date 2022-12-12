@@ -52,6 +52,7 @@ export default class BoxControlGroup {
         this.box.div.classList.add("mark-group");
         this.box.setGroup(this.layer.div.dataset.groupBoxGroup);
       }
+      this.box.setModified();
       console.log("group this", this.layer.div.dataset.groupBoxId, this.box.id, e, this.box.group);
     }
   }

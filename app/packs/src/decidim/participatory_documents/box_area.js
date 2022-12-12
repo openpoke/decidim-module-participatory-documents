@@ -2,6 +2,7 @@ import BoxControls from "./box_controls";
 
 export default class BoxArea {
   constructor(layer, json) {
+    console.log(layer);
     this.layer = layer;
     this.json = json || { rect: {} };
     this.id = this.createBox(this.json.id, this.json.rect);
@@ -16,6 +17,14 @@ export default class BoxArea {
     this.onLeave = () => {};
     this.onDestroy = () => {};
     this.onChange = () => {};
+  }
+
+  setModified(value = true) {
+    if (value === true) {
+      this.layer.stateManager.add(this);
+    } else {
+      this.layer.stateManager.remove(this);
+    }
   }
 
   // Creates a box using percentanges, with and height are optional
@@ -41,7 +50,6 @@ export default class BoxArea {
     this.group = group;
     this.div.dataset.boxGroup = group;
     console.log("setGroup");
-    this.setInfo(); // We need to mark the change regarding the group
   }
 
   createControls() {
@@ -68,7 +76,6 @@ export default class BoxArea {
   }
 
   setInfo(info) {
-    console.log("setInfo");
     this.previousInfo = info || this.getInfo();
   }
 
@@ -143,7 +150,6 @@ export default class BoxArea {
       // delay changing resizing status to avoid triggering the click event in the box
       setTimeout(() => this.div.classList.remove("resizing"), 100);
       if (this.hasChanged()) {
-        // console.log("box changed", e);
         this.onChange();
       }
     }
@@ -164,6 +170,7 @@ export default class BoxArea {
   hasChanged() {
     if (JSON.stringify(this.getInfo()) != JSON.stringify(this.previousInfo)) {
       this.previousInfo = this.getInfo();
+      this.setModified();
       return true;
     }
     return false;
@@ -191,6 +198,7 @@ export default class BoxArea {
   destroy() {
     this.div.remove();
     this.resize.disconnect();
+    this.layer.stateManager.remove(this);
     this.onDestroy();
   }
 }

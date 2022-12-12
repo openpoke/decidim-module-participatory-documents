@@ -48,7 +48,7 @@ See https://github.com/adobe-type-tools/cmap-resources
   <div id="participation-modal">Comments here</div>
 
 <script>
-  // TODO: from database
+  var I18n = { };
   var currentBoxes = <%= document.annotations.collect(&:serialize).to_json.html_safe %>;
   var pages = {};
   PDFViewerApplication.initializedPromise.then(function() {
@@ -60,7 +60,7 @@ See https://github.com/adobe-type-tools/cmap-resources
         pages[doc.pageNumber] = page;
         var annotationsLayer = page.annotationEditorLayer && page.annotationEditorLayer.div;
         if(annotationsLayer) {
-          InitPolygonViewer(annotationsLayer, currentBoxes.filter(box => box.page_number === doc.pageNumber));
+          InitPolygonViewer(I18n, annotationsLayer, currentBoxes.filter(box => box.page_number === doc.pageNumber));
         }
       }
     });

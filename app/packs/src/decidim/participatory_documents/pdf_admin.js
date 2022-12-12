@@ -73,7 +73,7 @@ console.log("box,box",  box);  const decidim = document.getElementById("decidim"
 */
 // Call this on an annotation layer to initialize the polygon editor (admin side)
 window.InitPolygonEditor = function(i18n, layer, boxes) {
-  let editor = new PolygonEditor(i18n, layer, boxes);
+  let editor = new PolygonEditor(layer, boxes, { i18n: i18n, stateManager: window.PdfDocStateManager});
   editor.onBoxClick = (box, e) => {
     console.log(box.hasChanged());
 
@@ -81,12 +81,8 @@ window.InitPolygonEditor = function(i18n, layer, boxes) {
     loadBoxModal(box);
   };
   editor.onBoxChange = (box, e) => {
-    //    console.log(box.hasChanged());
-    //    showAlert(`box changed, should we save to the database now? [${JSON.stringify(box.getInfo())}]`);
-    //    updateBox(box, PDFViewerApplication.pdfViewer.currentPageNumber);
-    //    if (box.hasChanged()){
-    PdfDocStateManager.setModifiedState(box);
-    //    }
+    // Move it in the layer or box
+    box.setModified();
   };
   // editor.onBoxDestroy = (box, e) => {
   //   showAlert("box destroyed", box, e);
@@ -101,7 +97,7 @@ window.InitPolygonEditor = function(i18n, layer, boxes) {
   //  }
   editor.onBoxLeave = (box, e) => {
     if (box.hasChanged()) {
-      PdfDocStateManager.setModifiedState(box);
+      box.setModified()
     }
   }
   editor.onBoxDestroy = (box, e) => {
