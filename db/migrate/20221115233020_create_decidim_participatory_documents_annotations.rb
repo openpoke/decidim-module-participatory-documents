@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateDecidimParticipatoryDocumentsAnnotations < ActiveRecord::Migration[6.0]
   def change
     create_table :decidim_participatory_documents_annotations do |t|
