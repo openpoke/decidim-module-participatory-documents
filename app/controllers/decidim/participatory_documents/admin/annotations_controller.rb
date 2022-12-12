@@ -6,7 +6,7 @@ module Decidim
       class AnnotationsController < Admin::ApplicationController
         layout false
 
-        rescue_from ActiveRecord::RecordNotFound do |exception|
+        rescue_from ActiveRecord::RecordNotFound do |_exception|
           render json: { error: I18n.t("decidim.errors.not_found.content_doesnt_exist") }, status: :not_found
         end
 
