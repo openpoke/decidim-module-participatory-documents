@@ -38,10 +38,11 @@ describe "Admin manages participatory documents", type: :system do
       upload_file
     end
 
-    it "shows the edit button" do
+    it "shows the edit buttons" do
       visit_component_admin
 
-      expect(page).to have_content("Edit PDF")
+      expect(page).to have_content("Edit file")
+      expect(page).to have_content("Edit document")
     end
   end
 end
