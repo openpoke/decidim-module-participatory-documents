@@ -63,7 +63,37 @@ See https://github.com/adobe-type-tools/cmap-resources
     group: "Group"
   }
 
-function registerGlobalSave(){
+
+function sendRequest(url, action, box, page, message)
+  {
+      let data = box.getInfo();
+      data.page_number = page;
+      $.ajax({
+          url: url,
+          type: action,
+          data: data
+      }).
+      done(function() {
+          box.setInfo();
+          showInfo(message);
+      }).
+      fail(function() {
+          box.destroy();
+          showAlert(I18n.operationFailed);
+      }).
+      always(function() {});
+  }
+
+function createBox(box, page) {
+      sendRequest(AnnotationsRootPath, "POST", box, page, I18n.created);
+  }
+
+function updateBox(box, page) {
+      sendRequest(`${AnnotationsRootPath}/${box.id}`, "PUT", box, page, I18n.updated);
+  }
+
+
+  function registerGlobalSave(){
   const globalSave = document.getElementById("DecidimPDSaveButton");
 
   globalSave.addEventListener("click", (e) => {

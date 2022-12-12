@@ -75,35 +75,18 @@ console.log("box,box",  box);  const decidim = document.getElementById("decidim"
 window.InitPolygonEditor = function(i18n, layer, boxes) {
   let editor = new PolygonEditor(layer, boxes, { i18n: i18n, stateManager: window.PdfDocStateManager});
   editor.onBoxClick = (box, e) => {
-    console.log(box.hasChanged());
-
     showInfo("click on box", box, e);
     loadBoxModal(box);
   };
   editor.onBoxChange = (box, e) => {
-    // Move it in the layer or box
+    e.stopPropagation();
     box.setModified();
   };
-  // editor.onBoxDestroy = (box, e) => {
-  //   showAlert("box destroyed", box, e);
-  // };
-  editor.onBoxBlur = (box, e) => {
-    console.log(box);
-    console.log("BLUR");
-  }
-  //  editor.onBoxEnter = (box, e) => {
-  //    console.log(box);
-  //     console.log("BOX ENTER");
-  //  }
   editor.onBoxLeave = (box, e) => {
+    e.stopPropagation();
     if (box.hasChanged()) {
       box.setModified()
     }
-  }
-  editor.onBoxDestroy = (box, e) => {
-    console.log(box.hasChanged());
-    console.log(box);
-    console.log("onBoxDestroy");
   }
 
   return editor;
