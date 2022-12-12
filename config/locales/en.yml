@@ -34,7 +34,7 @@ en:
             create: Create  Participatory document
             title: New Participatory document
           update:
-            error:
+            error: 
             invalid: There was a problem updating Document
             success: Document has been successfully updated
       models:
