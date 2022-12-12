@@ -2,6 +2,7 @@ export default class PdfStateManager {
   constructor() {
     this.changes = [];
     this.evtAdded = false;
+    this.element = document.getElementById("DecidimPDSaveButton");
   }
 
   beforeUnload(evt) {
@@ -29,6 +30,10 @@ export default class PdfStateManager {
     if (this.evtAdded === false) {
       console.log("setDirty")
       this.evtAdded = true;
+      if (this.element){
+        this.element.style.color = "#FF0000";
+      }
+
       window.addEventListener("beforeunload", this.beforeUnload.bind(this), { capture: true });
     }
   }
@@ -41,6 +46,9 @@ export default class PdfStateManager {
     if (this.evtAdded && this.isEmpty()) {
       this.evtAdded = false;
       console.log("reset");
+      if (this.element){
+        this.element.style.color = "#ffffff";
+      }
       window.removeEventListener("beforeunload", this.beforeUnload.bind(this), { capture: true });
     }
   }
