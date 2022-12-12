@@ -62,28 +62,74 @@ See https://github.com/adobe-type-tools/cmap-resources
     move: "Move",
     group: "Group"
   }
-/*
-function sendRequest(url, action, box, page, message)
-  {
-      let data = box.getInfo();
-      data.page_number = page;
-      $.ajax({
-          url: url,
-          type: action,
-          data: data
-      }).
-      done(function() {
-          box.setInfo();
-          box.layer.stateManager.remove(box);
-          showInfo(message);
-      }).
-      fail(function() {
-          box.destroy();
-          showAlert(I18n.operationFailed, {});
-      }).
-      always(function() {});
-  }
-*/
+
+class RegisterPDFActions {
+    constructor(options) {
+        this.i18n = options.i18n;
+
+        this.bindEvents();
+    }
+
+    bindEvents(){
+        document.getElementById("DecidimPDSaveButton").addEventListener("click", this.saveHandler.bind(this));
+    }
+
+    saveHandler(e){
+        e.stopPropagation();
+        let handler = this;
+
+        PDFViewerApplication.pdfViewer._pages
+            .filter((p) => p.boxEditor !== undefined)
+            .filter((p) => Object.keys(p.boxEditor.boxes).length > 0)
+            .forEach(function(page) {
+                Object.values(page.boxEditor.boxes).map((box) => {
+                    handler.updateOrCreateBox(box, page.id);
+                });
+            });
+    }
+
+    getCSRFToken() {
+        document.getElementsByName("csrf-token")[0].content;
+    }
+
+    updateOrCreateBox(box, page){
+        let data = box.getInfo();
+        data.page_number = page;
+
+        let handler = this;
+        fetch(`${AnnotationsRootPath}/${box.id}`, {
+            method: "PUT",
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                "X-CSRF-Token": handler.csrfToken()
+            },
+            credentials: "include",
+            body: JSON.stringify(data)
+        })
+            .then((response) => {
+                if (response.ok) {
+                    return response.json()
+                }
+
+                throw new Error(" ");
+            })
+            .then((data) => {
+                box.setInfo();
+                box.layer.stateManager.remove(box);
+                showInfo(handler.i18n.allSaved);
+            })
+            .catch((error) => {
+                // console.error(error);
+                createBox(box, page);
+            });
+    }
+}
+
+new RegisterPDFActions({
+    i18n: I18n,
+});
+
 function createBox(box, page) {
     const csrfToken = document.getElementsByName("csrf-token")[0].content;
     let data = box.getInfo();
@@ -100,14 +146,12 @@ function createBox(box, page) {
         body: JSON.stringify(data)
     })
     .then((response) => {
-        if (!response.ok) {
-            throw new Error(" ");
+        if (response.ok) {
+            return response.json()
         }
-
-        return response.json()
+        throw new Error(" ");
     })
     .then((data) => {
-        console.log("eee", data);
         box.setInfo();
         box.layer.stateManager.remove(box);
         showInfo(I18n.created);
@@ -118,63 +162,6 @@ function createBox(box, page) {
         showAlert(I18n.operationFailed, {});
     });
   }
-
-
-  function registerGlobalSave(){
-  const globalSave = document.getElementById("DecidimPDSaveButton");
-
-  globalSave.addEventListener("click", (e) => {
-    e.stopPropagation();
-
-    PDFViewerApplication.pdfViewer._pages
-      .filter((p) => p.boxEditor !== undefined)
-      .filter((p) => Object.keys(p.boxEditor.boxes).length > 0)
-      .forEach(function(p) {
-        console.log(p);
-        Object.values(p.boxEditor.boxes).map((b) => {
-          updateOrCreateBox(b, p.id);
-        });
-      });
-  });
-}
-
-registerGlobalSave();
-
-function updateOrCreateBox(box, page) {
-  const csrfToken = document.getElementsByName("csrf-token")[0].content;
-  let data = box.getInfo();
-  data.page_number = page;
-
-  console.log("FOOO BAR")
-
-  fetch(`${AnnotationsRootPath}/${box.id}`, {
-      method: "PUT",
-      headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          "X-CSRF-Token": csrfToken
-      },
-      credentials: "include",
-      body: JSON.stringify(data)
-  })
-      .then((response) => {
-          if (!response.ok) {
-              throw new Error(" ");
-          }
-
-          return response.json()
-      })
-      .then((data) => {
-          console.log("aaa")
-          box.setInfo();
-          box.layer.stateManager.remove(box);
-          showInfo(I18n.allSaved);
-      })
-      .catch((error) => {
-          // console.error(error);
-          createBox(box, page);
-      });
-}
 
 function registerSaveHandler(box){
   const decidim = $("#decidim");
