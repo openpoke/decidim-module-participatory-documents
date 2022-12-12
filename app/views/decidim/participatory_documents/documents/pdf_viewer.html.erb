@@ -48,6 +48,52 @@ See https://github.com/adobe-type-tools/cmap-resources
   <div id="participation-modal">Comments here</div>
 
 <script>
+
+  var zonesPath = '<%= document_zones_path(document) %>';
+    function BoxContainer(box, e) {
+
+        fetch(zonesPath + "/" + box.group, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                // "X-CSRF-Token": csrfToken
+            },
+            credentials: "include",
+            // body: JSON.stringify(data)
+        } ).then((response) => {
+            if (response.ok) {
+                return response.json();
+            }
+            throw new Error(" ");
+        })
+        .then((data) => {
+            // box.setInfo();
+            // box.layer.stateManager.remove(box);
+            // showInfo(I18n.created);
+        })
+        .catch((error) => {
+            // console.log(error);
+            // box.destroy();
+            // showAlert(I18n.operationFailed, {});
+        });
+
+
+
+
+
+
+
+
+        console.log("click on box", box, e);
+        console.log("show the participation modal");
+        let div = document.getElementById("participation-modal");
+        div.innerHTML = `c adsfdsfdsfdas fadsf ads fdsa   Clicked ${box.id}. Should allow comments for group ${box.group}`;
+        div.classList.add("active");
+    };
+
+
+
+
   var I18n = { };
   var currentBoxes = <%= annotations.collect(&:serialize).to_json.html_safe %>;
   var pages = {};
@@ -60,7 +106,9 @@ See https://github.com/adobe-type-tools/cmap-resources
         pages[doc.pageNumber] = page;
         var annotationsLayer = page.annotationEditorLayer && page.annotationEditorLayer.div;
         if(annotationsLayer) {
-          InitPolygonViewer(I18n, annotationsLayer, currentBoxes.filter(box => box.page_number === doc.pageNumber));
+            var viewer = InitPolygonViewer(I18n, annotationsLayer, currentBoxes.filter(box => box.page_number === doc.pageNumber));
+            viewer.onBoxClick = BoxContainer
+            page.boxEditor = viewer;
         }
       }
     });

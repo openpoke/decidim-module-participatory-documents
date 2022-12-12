@@ -11,6 +11,7 @@ module Decidim
           collection do
             get :pdf_viewer
           end
+          resources :zones, only: [:show, :index]
         end
 
         root to: "documents#index"
