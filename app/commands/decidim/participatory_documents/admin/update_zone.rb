@@ -18,6 +18,12 @@ module Decidim
           begin
             transaction do
               update_zone
+
+              if form.published?
+                publish_zone
+              else
+                unpublish_zone
+              end
             end
             broadcast(:ok, zone)
           rescue ActiveRecord::RecordInvalid
@@ -28,6 +34,14 @@ module Decidim
         private
 
         attr_reader :form
+
+        def publish_zone
+          @zone.publish!
+        end
+
+        def unpublish_zone
+          @zone.unpublish!
+        end
 
         def update_zone
           @zone = Decidim.traceability.update!(
@@ -41,7 +55,9 @@ module Decidim
           {
             title: form.title,
             description: form.description,
-            uid: form.uid
+            uid: form.uid,
+            closed_at: form.closed? ? (zone.closed_at || Time.zone.now) : nil,
+            private: form.private?,
           }.merge(document: document)
         end
 

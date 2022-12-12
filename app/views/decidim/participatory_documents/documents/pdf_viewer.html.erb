@@ -49,7 +49,7 @@ See https://github.com/adobe-type-tools/cmap-resources
 
 <script>
   var I18n = { };
-  var currentBoxes = <%= document.annotations.collect(&:serialize).to_json.html_safe %>;
+  var currentBoxes = <%= annotations.collect(&:serialize).to_json.html_safe %>;
   var pages = {};
   PDFViewerApplication.initializedPromise.then(function() {
     showInfo("Click on a marked area to participate!", {delay: 5000});
