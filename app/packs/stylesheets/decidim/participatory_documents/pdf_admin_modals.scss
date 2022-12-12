@@ -4,6 +4,21 @@
 @import "stylesheets/decidim/utils/fontface";
 @import "stylesheets/decidim/admin/utils/settings";
 
+@keyframes blinker {
+  50% {
+    opacity: 0;
+  }
+}
+
+#DecidimPDSaveButton {
+  cursor: pointer;
+
+  &.alert {
+    color: red;
+    animation: blinker 1s linear infinite;
+  }
+}
+
 #decidim {
   position: fixed;
   top: 0;

@@ -36,8 +36,9 @@ export default class BoxArea {
     this.div.style.left = `${this._sanitizePercent(left)}%`;
     this.div.style.top = `${this._sanitizePercent(top)}%`;
     // if width is not defined will use 15%
-    this.div.style.width = `${this._sanitizePercent(width, 1, 100 - parseFloat(left)) || 15}%`;
-    this.div.style.height = `${this._sanitizePercent(height, 1, 100 - parseFloat(top)) || 15}%`;
+    this.div.style.width = `${this._sanitizePercent(width, 0, 100 - parseFloat(left)) || 15}%`;
+    this.div.style.height = `${this._sanitizePercent(height, 0, 100 - parseFloat(top)) || 15}%`;
+    console.log(width, this.div.style.width)
     this.layer.div.appendChild(this.div);
 
     return this.div.id;

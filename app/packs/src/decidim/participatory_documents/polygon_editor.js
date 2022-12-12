@@ -70,10 +70,12 @@ export default class PolygonEditor extends PolygonViewer {
     const {left, top} = this.div.getBoundingClientRect();
     let w = e.clientX - left - 3;
     let h = e.clientY - top - 3;
-    let mousePercentLeft = (100 * w / this.div.clientWidth)
-    let mousePercentTop = (100 * h / this.div.clientHeight)
+    let mousePercentLeft = 100 * w / this.div.clientWidth;
+    let mousePercentTop = 100 * h / this.div.clientHeight;
+    let width = 1 / this.div.clientWidth; // % corresponding to 1px
+    let height = 1 / this.div.clientHeight;
 
-    return new BoxArea(this, { rect: { left: mousePercentLeft, top: mousePercentTop} });
+    return new BoxArea(this, { rect: { left: mousePercentLeft, top: mousePercentTop, width: width, height: height} });
   }
 
   _initBox() {

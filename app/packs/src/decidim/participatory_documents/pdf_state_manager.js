@@ -31,7 +31,7 @@ export default class PdfStateManager {
       console.log("setDirty")
       this.evtAdded = true;
       if (this.element) {
-        this.element.style.color = "#FF0000";
+        this.element.classList.add("alert");
       }
 
       window.addEventListener("beforeunload", this.beforeUnload.bind(this), { capture: true });
@@ -47,7 +47,7 @@ export default class PdfStateManager {
       this.evtAdded = false;
       console.log("reset");
       if (this.element) {
-        this.element.style.color = "#ffffff";
+        this.element.classList.remove("alert");
       }
       window.removeEventListener("beforeunload", this.beforeUnload.bind(this), { capture: true });
     }
