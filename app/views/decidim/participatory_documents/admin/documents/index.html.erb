@@ -1,24 +1,12 @@
 <div class="card full-height">
   <div class="card-divider">
-    <h2 class="card-title">
-      <%= t(".title") %>
-    </h2>
+    <%= render partial: "title" %>
   </div>
   <div class="card-section">
-    <object data="<%= pdf_viewer_documents_path(file: document.attached_uploader(:file).path) %>" type="application/pdf" width="100%" height="100%">
-      <iframe src="<%= pdf_viewer_documents_path(file: document.attached_uploader(:file).path) %>" width="100%" height="100%" id="iframe">
-        <p>This browser does not support PDF!</p>
-      </iframe>
-    </object>
+    <% if document.present? && document.file.attached? %>
+      <%= render partial: "table" %>
+    <% else %>
+      <p class="text-large text-center mt-s"><%= t(".start") %></p>
+    <% end %>
   </div>
 </div>
-<script>
-  document.addEventListener('polygonAddedAnnotations', function(e) {
-    console.log("added");
-    console.log(e.detail);
-  }, false);
-  document.addEventListener('polygonRemovedAnnotations', function(e) {
-     console.log("removed");
-      console.log(e.detail);
- }, false);
-</script>

@@ -3,17 +3,15 @@
 module Decidim
   module ParticipatoryDocuments
     module Admin
-      # This controller allows admins to manage proposals in a participatory process.
+      # This controller allows admins to manage documents in a participatory process.
       class DocumentsController < Admin::ApplicationController
         include Decidim::ApplicationHelper
+        helper Decidim::ParticipatoryDocuments::Admin::DocumentsHelper
 
-        helper_method :document
-        before_action :add_snippets, only: :index
+        helper_method :document, :zones
+        before_action :add_snippets, only: :edit_pdf
 
-        def index
-          redirect_to(new_document_path) && return if document.blank?
-          redirect_to(edit_document_path(document)) && return unless current_component.published?
-        end
+        def index; end
 
         def new
           enforce_permission_to :create, :participatory_document
@@ -38,6 +36,7 @@ module Decidim
         end
 
         def edit
+          # TODO: before uploading a new PDF, check no participation associated (no boxes/groups created)
           enforce_permission_to :update, :participatory_document, document: document
           @form = form(Admin::DocumentForm).from_model(document)
         end
@@ -62,6 +61,10 @@ module Decidim
           render layout: false
         end
 
+        def edit_pdf
+          enforce_permission_to :update, :participatory_document, document: document
+        end
+
         private
 
         def add_snippets
@@ -73,6 +76,10 @@ module Decidim
 
         def document
           @document ||= Decidim::ParticipatoryDocuments::Document.find_by(component: current_component)
+        end
+
+        def zones
+          @zones ||= Decidim::ParticipatoryDocuments::Zone.where(document: document)
         end
       end
     end

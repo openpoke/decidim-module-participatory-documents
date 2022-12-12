@@ -7,6 +7,7 @@ def install_module(path)
   Dir.chdir(path) do
     system("bundle exec rake decidim_participatory_documents:install:migrations")
     system("bundle exec rake db:migrate")
+    system("bundle exec rake decidim_participatory_documents:install_pdf_js")
   end
 end
 

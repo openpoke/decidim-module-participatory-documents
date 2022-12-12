@@ -1,0 +1,22 @@
+<div class="card full-height">
+  <div class="card-divider">
+    <%= render "title", button: :back %>
+  </div>
+  <div class="card-section">
+    <object data="<%= pdf_viewer_documents_path(file: document.attached_uploader(:file).path) %>" type="application/pdf" width="100%" height="100%">
+      <iframe src="<%= pdf_viewer_documents_path(file: document.attached_uploader(:file).path) %>" width="100%" height="100%" id="iframe">
+        <p>This browser does not support PDF!</p>
+      </iframe>
+    </object>
+  </div>
+</div>
+<script>
+    document.addEventListener('polygonAddedAnnotations', function(e) {
+        console.log("added");
+        console.log(e.detail);
+    }, false);
+    document.addEventListener('polygonRemovedAnnotations', function(e) {
+        console.log("removed");
+        console.log(e.detail);
+    }, false);
+</script>

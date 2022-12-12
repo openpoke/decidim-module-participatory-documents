@@ -1,0 +1,10 @@
+<h2 class="card-title flex--sbc">
+  <%= translated_attribute(current_component.name) %>
+  <div class="flex--cc flex-gap--1">
+    <% if defined?(button) &&  button == :back %>
+      <%= back_btn %>
+    <% else %>
+      <%= pdf_manage_button(document) %>
+    <% end %>
+  </div>
+</h2>

@@ -11,5 +11,9 @@ FactoryBot.define do
     description { Decidim::Faker::Localized.wrapped("<p>", "</p>") { generate_localized_title } }
     component { create(:participatory_documents_component) }
     author { build(:user, :confirmed, organization: component.organization) }
+
+    trait :with_file do
+      file { Decidim::Dev.test_file("Exampledocument.pdf", "application/pdf") }
+    end
   end
 end

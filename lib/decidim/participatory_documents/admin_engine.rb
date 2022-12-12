@@ -13,6 +13,7 @@ module Decidim
         resources :documents do
           collection do
             get :pdf_viewer
+            get :edit_pdf
           end
         end
 
