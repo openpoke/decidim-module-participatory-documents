@@ -16,8 +16,9 @@ en:
         name: Participatory Document
     participatory_documents:
       actions:
-        edit_document: Edit document
-        edit_pdf: Edit file
+        back: Back
+        edit_boxes: Edit participatory areas
+        edit_document: Edit/upload document
         new: Upload Participatory PDF
         title: Actions
       admin:

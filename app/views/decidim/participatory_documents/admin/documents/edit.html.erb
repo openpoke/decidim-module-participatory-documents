@@ -1,7 +1,15 @@
-<%= decidim_form_for(@form, url: { action: "update" }, html: { class: "form meetings_form edit_meeting" })  do |f| %>
-  <%= render partial: "form", object: f, locals: { form: f, title: t(".title") } %>
+<div class="card full-height">
+  <div class="card-divider">
+    <%= render "title", button: :back %>
+  </div>
+  <div class="card-section">
 
-    <div class="button--double form-general-submit">
-      <%= f.submit t(".update") %>
-    </div>
-<% end %>
+  <%= decidim_form_for(@form, url: { action: "update" }, html: { class: "form meetings_form edit_meeting" })  do |f| %>
+    <%= render partial: "form", object: f, locals: { form: f, title: t(".title") } %>
+
+      <div class="button--double form-general-submit">
+        <%= f.submit t(".update") %>
+      </div>
+  <% end %>
+  </div>
+</div>
