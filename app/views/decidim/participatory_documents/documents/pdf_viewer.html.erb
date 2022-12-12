@@ -36,6 +36,7 @@ See https://github.com/adobe-type-tools/cmap-resources
   <script src="/pdfjs/web/viewer.js"></script>
   <%= javascript_pack_tag "decidim_participatory_documents_viewer" %>
   <%= stylesheet_pack_tag "decidim_participatory_documents_viewer" %>
+  <%= csrf_meta_tags %>
 
 </head>
 
@@ -47,64 +48,8 @@ See https://github.com/adobe-type-tools/cmap-resources
   <div id="participation-modal">Comments here</div>
 
 <script>
-  // TODO: from database
-  var currentBoxes = [
-    {
-      "id": "box-11",
-      "pageNumber": 1,
-      "group": "group-1", // participation can be linked to more than one box, clicking on one box will highlight all boxes in the group
-      "rect": {
-        "left": 25.5,
-        "top": 22.123,
-        "width": 30.1,
-        "height": 10.2
-      }
-    },
-    {
-      "id": "box-12",
-      "pageNumber": 1,
-      "group": "group-2",
-      "rect": {
-        "left": 5.5,
-        "top": 2.123,
-        "width": 10.1,
-        "height": 10.2
-      }
-    },
-    {
-      "id": "box-13",
-      "pageNumber": 1,
-      "group": "group-2",
-      "rect": {
-        "left": 15.5,
-        "top": 12.123,
-        "width": 10.1,
-        "height": 10.2
-      }
-    },
-    {
-      "id": "box-14",
-      "pageNumber": 1,
-      "group": "group-3",
-      "rect": {
-        "left":75.5,
-        "top": 82.123,
-        "width": 10.1,
-        "height": 10.2
-      },
-    },
-    {
-      "id": "box-21",
-      "pageNumber": 2,
-      "group": "group-3",
-      "rect": {
-        "left":15.5,
-        "top": 12.123,
-        "width": 10.1,
-        "height": 10.2
-      },
-    }
-  ];
+  var I18n = { };
+  var currentBoxes = <%= document.annotations.collect(&:serialize).to_json.html_safe %>;
   var pages = {};
   PDFViewerApplication.initializedPromise.then(function() {
     showInfo("Click on a marked area to participate!", {delay: 5000});
@@ -115,7 +60,7 @@ See https://github.com/adobe-type-tools/cmap-resources
         pages[doc.pageNumber] = page;
         var annotationsLayer = page.annotationEditorLayer && page.annotationEditorLayer.div;
         if(annotationsLayer) {
-          InitPolygonViewer(annotationsLayer, currentBoxes.filter(box => box.pageNumber === doc.pageNumber));
+          InitPolygonViewer(I18n, annotationsLayer, currentBoxes.filter(box => box.page_number === doc.pageNumber));
         }
       }
     });

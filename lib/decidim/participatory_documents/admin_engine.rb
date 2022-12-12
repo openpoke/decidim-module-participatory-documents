@@ -15,6 +15,8 @@ module Decidim
             get :pdf_viewer
             get :edit_pdf
           end
+          resources :annotations, except: [:show, :new, :edit]
+          resources :zones, except: [:show, :index]
         end
 
         root to: "documents#index"

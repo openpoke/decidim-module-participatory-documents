@@ -8,6 +8,15 @@ module Decidim
       def self.log_presenter_class_for(_log)
         Decidim::ParticipatoryDocuments::AdminLog::AnnotationPresenter
       end
+
+      def serialize
+        {
+          id: uid,
+          rect: rect,
+          group: zone.uid,
+          page_number: page_number
+        }
+      end
     end
   end
 end

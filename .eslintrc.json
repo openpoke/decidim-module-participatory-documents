@@ -15,7 +15,9 @@
         "require": false,
         "$": false,
         "jQuery": false,
-        "L": false
+        "showInfo": false,
+        "showAlert": false,
+        "loadBoxModal": false
     },
   "rules": {
     "accessor-pairs": "error",

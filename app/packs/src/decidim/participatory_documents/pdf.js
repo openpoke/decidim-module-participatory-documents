@@ -1,9 +1,13 @@
 import PolygonViewer from "src/decidim/participatory_documents/polygon_viewer";
+import PdfStateManager from "src/decidim/participatory_documents/pdf_state_manager";
 import "src/decidim/participatory_documents/pdf_notifications";
 
+// state manager
+window.PdfDocStateManager = new PdfStateManager();
+
 // Call this on an annotation layer to initialize the polygon viewer (public side)
-window.InitPolygonViewer = function(layer, boxes) {
-  var viewer = new PolygonViewer(layer, boxes);
+window.InitPolygonViewer = function(i18n, layer, boxes) {
+  let viewer = new PolygonViewer(layer, boxes, { i18n: i18n, stateManager: window.PdfDocStateManager});
   viewer.onBoxClick = (box, e) => {
     console.log("click on box", box, e);
     console.log("show the participation modal");
