@@ -51,7 +51,7 @@ See https://github.com/adobe-type-tools/cmap-resources
   <script>
 
   var AnnotationsRootPath = '<%= document_annotations_path(document) %>';
-  var NewZonePath = '<%= document_zones_path(document)%>';
+  var NewZonePath = '<%= document_zones_path(document) %>';
 
   var I18n = {
     operationFailed: "The Operation has failed",
@@ -62,7 +62,6 @@ See https://github.com/adobe-type-tools/cmap-resources
     move: "Move",
     group: "Group"
   }
-
 
 function sendRequest(url, action, box, page, message)
   {
@@ -92,7 +91,6 @@ function createBox(box, page) {
 function updateBox(box, page) {
       sendRequest(`${AnnotationsRootPath}/${box.id}`, "PUT", box, page, I18n.updated);
   }
-
 
   function registerGlobalSave(){
   const globalSave = document.getElementById("DecidimPDSaveButton");

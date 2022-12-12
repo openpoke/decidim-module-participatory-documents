@@ -165,6 +165,7 @@ export default class BoxArea {
       this.div.style.height = height;
       this.setInfo(); // We need to record changes about the dimensions}
     }
+  }
 
 
   hasChanged() {
