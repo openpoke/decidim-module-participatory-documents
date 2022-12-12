@@ -8,7 +8,7 @@ module Decidim
         include Decidim::ApplicationHelper
         helper Decidim::ParticipatoryDocuments::Admin::DocumentsHelper
 
-        helper_method :document, :annotations
+        helper_method :document, :zones
         before_action :add_snippets, only: :index
 
         def index; end
@@ -80,8 +80,8 @@ module Decidim
           @document ||= Decidim::ParticipatoryDocuments::Document.find_by(component: current_component)
         end
 
-        def annotations
-          @annotations ||= Decidim::ParticipatoryDocuments::Annotation.where(document: document)
+        def zones
+          @zones ||= Decidim::ParticipatoryDocuments::Zone.where(document: document)
         end
       end
     end
