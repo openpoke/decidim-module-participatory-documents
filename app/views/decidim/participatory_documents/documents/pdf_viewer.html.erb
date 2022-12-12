@@ -54,45 +54,27 @@ See https://github.com/adobe-type-tools/cmap-resources
 
         fetch(zonesPath + "/" + box.group, {
             headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                // "X-CSRF-Token": csrfToken
+                'Content-Type': 'text/html; charset=utf-8',
+                'Accept': 'text/html',
             },
             credentials: "include",
             // body: JSON.stringify(data)
         } ).then((response) => {
             if (response.ok) {
-                return response.json();
+                return response.text();
             }
             throw new Error(" ");
         })
         .then((data) => {
-            // box.setInfo();
-            // box.layer.stateManager.remove(box);
-            // showInfo(I18n.created);
+
+            let div = document.getElementById("participation-modal");
+            div.innerHTML = data;
+            div.classList.add("active");
         })
         .catch((error) => {
             // console.log(error);
-            // box.destroy();
-            // showAlert(I18n.operationFailed, {});
         });
-
-
-
-
-
-
-
-
-        console.log("click on box", box, e);
-        console.log("show the participation modal");
-        let div = document.getElementById("participation-modal");
-        div.innerHTML = `c adsfdsfdsfdas fadsf ads fdsa   Clicked ${box.id}. Should allow comments for group ${box.group}`;
-        div.classList.add("active");
     };
-
-
-
 
   var I18n = { };
   var currentBoxes = <%= annotations.collect(&:serialize).to_json.html_safe %>;

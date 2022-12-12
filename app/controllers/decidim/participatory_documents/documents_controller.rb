@@ -16,7 +16,7 @@ module Decidim
       end
 
       def annotations
-        @annotations ||= Decidim::ParticipatoryDocuments::VisibleAnnotations.for(document, current_user)
+        @annotations ||= document.annotations.where(zone_id: document.zones.published)
       end
     end
   end
