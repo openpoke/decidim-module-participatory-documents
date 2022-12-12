@@ -9,7 +9,7 @@ module Decidim
             if document.blank? && allowed_to?(:create, :participatory_document)
               new_pdf_btn
             elsif document.file.attached? && allowed_to?(:update, :participatory_document)
-                edit_document_btn + edit_pdf_btn
+              edit_document_btn + edit_pdf_btn
             else
               edit_document_btn
             end
