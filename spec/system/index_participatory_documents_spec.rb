@@ -36,7 +36,6 @@ describe "Index participatory_documents", type: :system do
     let!(:document_description) { translated(document.description) }
 
     context "when the title and description are blank" do
-
       before do
         visit_component
       end
