@@ -1,7 +1,13 @@
-<div class="row" style="height:calc(100vh - 30rem)">
-  <object data="<%= pdf_viewer_documents_path(file: document.attached_uploader(:file).path) %>" type="application/pdf" width="100%" height="100%">
-    <iframe src="<%= pdf_viewer_documents_path(file: document.attached_uploader(:file).path) %>" width="100%" height="100%" id="pdf-iframe">
-      <p>This browser does not support PDF!</p>
-    </iframe>
-  </object>
-</div>
+<% if document.present? %>
+  <h2><%= translated_attribute document.title %></h2>
+  <p><%= translated_attribute document.description %></p>
+
+  <% if document.file.present? %>
+    <%= link_to t(".participate"), pdf_doc_documents_path, class: "button" %>
+  <% else %>
+    <p class="text-center heading2 text-primary"><%= t(".not_ready_doc") %></p>
+  <% end %>
+
+<% else %>
+  <p class="text-center heading2 text-primary"><%= t(".not_ready_component") %></p>
+<% end %>

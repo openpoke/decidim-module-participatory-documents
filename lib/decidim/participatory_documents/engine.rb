@@ -10,6 +10,7 @@ module Decidim
         resources :documents do
           collection do
             get :pdf_viewer
+            get :pdf_doc
           end
         end
 

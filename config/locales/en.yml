@@ -35,11 +35,16 @@ en:
             create: Create  Participatory document
             title: New Participatory document
           update:
-            error: 
+            error:
             invalid: There was a problem updating Document
             success: Document has been successfully updated
           zones:
             empty: "(empty)"
+      documents:
+        index:
+          not_ready_component: The component is not ready
+          not_ready_doc: The document is not ready
+          participate: Participate now!
       models:
         document:
           fields:
