@@ -1,0 +1,186 @@
+@import "stylesheets/decidim/variables";
+@import "stylesheets/decidim/utils/fontface";
+@import "stylesheets/decidim/utils/settings";
+
+@import "foundation-sites/scss/foundation";
+@import "stylesheets/foundation-overrides/components/button-group";
+
+@include foundation-everything();
+
+@import "stylesheets/decidim/utils/mixins";
+@import "stylesheets/decidim/modules/margins";
+
+/* Foundation button overrides */
+.button{
+  &.small{
+    padding-top: .5rem;
+    padding-bottom: .5rem;
+
+    &.compact{
+      padding-left: .5rem;
+      padding-right: .5rem;
+      letter-spacing: 0;
+      white-space: nowrap;
+    }
+  }
+
+  &.tiny{
+    padding-top: .25rem;
+    padding-bottom: .25rem;
+
+    &.compact{
+      padding-left: .25rem;
+      padding-right: .25rem;
+      letter-spacing: 0;
+    }
+  }
+
+  &.button--right{
+    float: right;
+  }
+
+  a{
+    color: inherit;
+
+    &:hover{
+      text-decoration: none;
+    }
+  }
+}
+
+.button{
+  position: relative;
+  background-color: $primary;
+
+  &.focus,
+  &:focus{
+    background-color: $primary;
+    box-shadow: $button-shadow-focus;
+    outline: $button-outline-focus;
+    outline-offset: $button-outline-offset;
+    filter: brightness($button-brightness-focus);
+  }
+
+  &.hover,
+  &:hover{
+    background-color: $primary;
+    filter: brightness($button-brightness-hover);
+    text-decoration: none;
+  }
+
+  &.active,
+  &:active{
+    filter: brightness($button-brightness-active);
+  }
+
+  &.disabled,
+  &[disabled]{
+    &,
+    &:active,
+    &:hover,
+    &:focus{
+      background-color: $primary;
+    }
+  }
+
+  &.hollow{
+    background-color: transparent;
+    color: $primary;
+    border-color: $primary;
+    text-decoration: $button-hollow-underline;
+
+    &.hover,
+    &:hover,
+    &.focus,
+    &:focus{
+      border-color: $primary;
+      background-color: $primary;
+      color: $white;
+    }
+
+    &.disabled,
+    &[disabled]{
+      &,
+      &:active,
+      &:hover,
+      &:focus{
+        background-color: transparent;
+        border-color: $primary;
+        color: $primary;
+        box-shadow: none;
+        text-decoration: none;
+      }
+    }
+
+    &.light{
+      &.hover,
+      &:hover,
+      &.focus,
+      &:focus{
+        border-color: $primary;
+        background-color: $primary;
+        color: $white;
+      }
+
+      &.disabled,
+      &[disabled]{
+        &,
+        &:active,
+        &:hover,
+        &:focus{
+          border-color: $white;
+          color: $white;
+        }
+      }
+    }
+  }
+
+  &.secondary{
+    @include button-hollow-variant(var(--secondary));
+  }
+
+  &.success{
+    @include button-hollow-variant(var(--success));
+  }
+
+  &.alert{
+    @include button-hollow-variant(var(--alert));
+  }
+
+  &.warning{
+    @include button-hollow-variant(var(--warning));
+  }
+
+  &.clear{
+    &.secondary,
+    &.success,
+    &.alert,
+    &.warning{
+      background-color: transparent;
+
+      &.hover,
+      &:hover,
+      &.focus,
+      &:focus{
+        background-color: transparent;
+      }
+    }
+
+    &.secondary{
+      color: var(--secondary);
+    }
+
+    &.success{
+      color: var(--success);
+    }
+
+    &.alert{
+      color: var(--alert);
+    }
+
+    &.warning{
+      color: var(--warning);
+    }
+  }
+}
+

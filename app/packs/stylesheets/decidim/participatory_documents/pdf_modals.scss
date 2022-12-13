@@ -1,3 +1,9 @@
+@use "sass:meta";
+
+@import "stylesheets/decidim/variables";
+@import "stylesheets/decidim/utils/fontface";
+@import "stylesheets/decidim/utils/settings";
+
 #participation-modal {
   width: 0;
   position: absolute;
@@ -9,10 +15,42 @@
   transition: width .5s;
   z-index: 100000;
   color: #ffffff;
+
+
+  @include meta.load-css("stylesheets/decidim/participatory_documents/decidim_classes.scss");
+
+  &.active {
+    overflow: auto;
+    width: 40vw;
+    transition: width 1s;
+  }
 }
 
-#participation-modal.active {
-  overflow: auto;
-  width: 40vw;
-  transition: width 1s;
+#participation-modal-form {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+
+  .button--double{
+    display: block;
+    text-align: center;
+    padding-top: 2%;
+  }
+
+  label, textarea {
+    width: 96% !important;
+    margin-left: 2% !important;
+  }
+
+  label{
+    display: block;
+    margin-bottom: 10px;
+    color: #ffffff;
+  }
+
+  .card {
+    border: none;
+    background: unset;
+  }
 }

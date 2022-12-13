@@ -50,6 +50,9 @@ See https://github.com/adobe-type-tools/cmap-resources
 <script>
 
   var zonesPath = '<%= document_zones_path(document) %>';
+    function blurBoxContainer(box, e) {
+      e.preventDefault();
+    }
     function BoxContainer(box, e) {
 
         fetch(zonesPath + "/" + box.group, {
@@ -90,6 +93,7 @@ See https://github.com/adobe-type-tools/cmap-resources
         if(annotationsLayer) {
             var viewer = InitPolygonViewer(I18n, annotationsLayer, currentBoxes.filter(box => box.page_number === doc.pageNumber));
             viewer.onBoxClick = BoxContainer
+            viewer.onBoxBlur = blurBoxContainer
             page.boxEditor = viewer;
         }
       }
