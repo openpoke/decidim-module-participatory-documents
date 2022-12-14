@@ -28,7 +28,8 @@ export default class BoxControlGroup {
         div.classList.add("mark-group");
       }
     });
-    this.layer.div.classList.add("grouping");
+    // Set all layers with the grouping property so we can join boxes in different layers
+    document.querySelectorAll(".polygon-ready").forEach((div) => div.classList.add("grouping"));
     this.layer.div.dataset.groupBoxId = this.box.id;
     this.layer.div.dataset.groupBoxGroup = this.box.group;
     window.addEventListener("click", this._stopGrouping.bind(this), { once: true });

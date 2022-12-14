@@ -41,13 +41,6 @@ See https://github.com/adobe-type-tools/cmap-resources
 </head>
 
 <body tabindex="1">
-<script type="text/javascript">
-  function fullscreen() {
-    var viewer = document.getElementById("outerContainer");
-    var rFS = viewer.mozRequestFullScreen || viewer.webkitRequestFullscreen || viewer.requestFullscreen;
-    rFS.call(viewer);
-  }
-</script>
   <%= render "decidim/participatory_documents/documents/pdfjs_base" %>
 
   <div id="notifications"></div>

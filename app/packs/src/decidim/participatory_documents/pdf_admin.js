@@ -1,3 +1,4 @@
+import "src/decidim/participatory_documents/global";
 import PolygonEditor from "src/decidim/participatory_documents/polygon_editor";
 import PdfStateManager from "src/decidim/participatory_documents/pdf_state_manager";
 

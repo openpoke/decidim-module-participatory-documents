@@ -1,6 +1,7 @@
 import PolygonViewer from "src/decidim/participatory_documents/polygon_viewer";
 import PdfStateManager from "src/decidim/participatory_documents/pdf_state_manager";
 import "src/decidim/participatory_documents/pdf_notifications";
+import "src/decidim/participatory_documents/global";
 
 // state manager
 window.PdfDocStateManager = new PdfStateManager();
