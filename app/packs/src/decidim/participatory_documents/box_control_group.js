@@ -28,9 +28,12 @@ export default class BoxControlGroup {
         div.classList.add("mark-group");
       }
     });
-    this.layer.div.classList.add("grouping");
-    this.layer.div.dataset.groupBoxId = this.box.id;
-    this.layer.div.dataset.groupBoxGroup = this.box.group;
+    // Set all layers with the grouping property so we can join boxes in different layers
+    document.querySelectorAll(".polygon-ready").forEach((div) => {
+      div.classList.add("grouping");
+      div.dataset.groupBoxId = this.box.id;
+      div.dataset.groupBoxGroup = this.box.group;
+    });
     window.addEventListener("click", this._stopGrouping.bind(this), { once: true });
     console.log("start grouping", e, this.group);
   }
@@ -38,11 +41,12 @@ export default class BoxControlGroup {
   _stopGrouping(e) {
     e.stopPropagation();
     document.querySelectorAll(".polygon-ready .box").forEach((div) => div.classList.remove("mark-group", "hover", "blocked", "grouping", "focus"));
-    this.layer.div.classList.remove("grouping");
+    document.querySelectorAll(".polygon-ready").forEach((div) => div.classList.remove("grouping"));
     console.log("stop grouping", e, this);
   }
 
   _groupBox(e) {
+    console.log("group box", this)
     e.stopPropagation();
     if (this.box.isGrouping() && this.layer.div.dataset.groupBoxId != this.box.id) {
       if (this.box.group == this.layer.div.dataset.groupBoxGroup) {
