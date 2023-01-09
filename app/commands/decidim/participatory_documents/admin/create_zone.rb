@@ -18,6 +18,7 @@ module Decidim
           begin
             transaction do
               create_zone
+              publish_zone if form.published?
             end
             broadcast(:ok, zone)
           rescue ActiveRecord::RecordInvalid
@@ -28,6 +29,10 @@ module Decidim
         private
 
         attr_reader :form, :document, :zone
+
+        def publish_zone
+          @zone.publish!
+        end
 
         def create_zone
           @zone = Decidim.traceability.create!(
@@ -41,7 +46,9 @@ module Decidim
           {
             title: form.title,
             description: form.description,
-            uid: form.uid
+            uid: form.uid,
+            closed_at: form.closed? ? Time.current : nil,
+            private: form.private?,
           }.merge(document: document)
         end
       end

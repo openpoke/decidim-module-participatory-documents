@@ -14,6 +14,13 @@
         <div class="card-section" id="editor-modal-content">
           <%= form.translated :text_area, :description %>
         </div>
+
+        <div class="card-section">
+          <div class="row"> <%= form.check_box :published_at, { checked: @form.published? } %></div>
+          <div class="row"> <%= form.check_box :private %></div>
+          <div class="row"> <%= form.check_box :closed_at, { checked: @form.closed? }%></div>
+        </div>
+
       </div>
     <% end %>
     <div class="button--double form-general-submit">

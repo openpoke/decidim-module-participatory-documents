@@ -23,4 +23,6 @@ window.InitPolygonViewer = function(i18n, layer, boxes) {
     let div = document.getElementById("participation-modal");
     div.classList.remove("active");
   };
+
+  return viewer;
 };

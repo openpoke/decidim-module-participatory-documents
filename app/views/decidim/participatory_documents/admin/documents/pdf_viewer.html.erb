@@ -120,13 +120,13 @@ class RegisterPDFActions {
                 showInfo(handler.i18n.allSaved);
             })
             .catch((error) => {
-                // console.error(error);
+                console.error(error);
                 createBox(box, page);
             });
     }
 }
 
-new RegisterPDFActions({
+var PDFActions = new RegisterPDFActions({
     i18n: I18n,
 });
 
@@ -176,7 +176,7 @@ function registerSaveHandler(box){
         data: form.serialize()
     }).done(function(data) {
       decidim.removeClass("show");
-      createBox(box, PDFViewerApplication.pdfViewer.currentPageNumber);
+        PDFActions.updateOrCreateBox(box, PDFViewerApplication.pdfViewer.currentPageNumber);
     })
     .fail(function(data) {
       populateModal(data.responseText, box)
