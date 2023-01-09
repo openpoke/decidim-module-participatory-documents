@@ -16,4 +16,8 @@ FactoryBot.define do
       file { Decidim::Dev.test_file("Exampledocument.pdf", "application/pdf") }
     end
   end
+
+  factory :participatory_documents_section, class: "Decidim::ParticipatoryDocuments::Section" do
+    document { create :participatory_documents_document }
+  end
 end
