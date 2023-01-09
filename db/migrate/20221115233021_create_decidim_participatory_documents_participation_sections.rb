@@ -9,6 +9,7 @@ class CreateDecidimParticipatoryDocumentsParticipationSections < ActiveRecord::M
       t.jsonb :title
       t.jsonb :description
       t.string :state
+      t.string :uid, index: true
       t.datetime :published_at
       t.timestamps
     end
