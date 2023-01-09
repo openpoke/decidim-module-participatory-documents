@@ -13,8 +13,6 @@ module Decidim
 
         attribute :file
         attribute :remove_file, Boolean, default: false
-
-        validates :title, :description, translatable_presence: true
       end
     end
   end
