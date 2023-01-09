@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-class CreateDecidimParticipatoryDocumentsParticipationZones < ActiveRecord::Migration[6.0]
+class CreateDecidimParticipatoryDocumentsParticipationSections < ActiveRecord::Migration[6.0]
   def change
-    create_table :decidim_participatory_documents_zones do |t|
+    create_table :decidim_participatory_documents_sections do |t|
       t.belongs_to :document,
                    null: true,
                    index: { name: "document_zones" }

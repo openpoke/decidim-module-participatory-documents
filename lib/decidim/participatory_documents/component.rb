@@ -79,7 +79,7 @@ Decidim.register_component(:participatory_documents) do |component|
     )
 
     group1 = Decidim.traceability.create!(
-      Decidim::ParticipatoryDocuments::Zone,
+      Decidim::ParticipatoryDocuments::Section,
       admin_user,
       {
         document: document,
@@ -92,7 +92,7 @@ Decidim.register_component(:participatory_documents) do |component|
       visibility: "admin-only"
     )
     group2 = Decidim.traceability.create!(
-      Decidim::ParticipatoryDocuments::Zone,
+      Decidim::ParticipatoryDocuments::Section,
       admin_user,
       {
         document: document,
@@ -105,7 +105,7 @@ Decidim.register_component(:participatory_documents) do |component|
       visibility: "admin-only"
     )
     group3 = Decidim.traceability.create!(
-      Decidim::ParticipatoryDocuments::Zone,
+      Decidim::ParticipatoryDocuments::Section,
       admin_user,
       {
         document: document,

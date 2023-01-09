@@ -31,7 +31,7 @@ module Decidim
 
         def create_zone
           @zone = Decidim.traceability.create!(
-            Decidim::ParticipatoryDocuments::Zone,
+            Decidim::ParticipatoryDocuments::Section,
             form.current_user,
             **attributes
           )

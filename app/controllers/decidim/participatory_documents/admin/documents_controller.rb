@@ -80,7 +80,7 @@ module Decidim
         end
 
         def zones
-          @zones ||= Decidim::ParticipatoryDocuments::Zone.where(document: document)
+          @zones ||= Decidim::ParticipatoryDocuments::Section.where(document: document)
         end
       end
     end

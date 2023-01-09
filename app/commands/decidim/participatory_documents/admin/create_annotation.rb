@@ -46,7 +46,7 @@ module Decidim
         end
 
         def zone
-          @zone ||= Decidim::ParticipatoryDocuments::Zone.where(document: document, uid: form.group).first_or_create
+          @zone ||= Decidim::ParticipatoryDocuments::Section.where(document: document, uid: form.group).first_or_create
         end
       end
     end

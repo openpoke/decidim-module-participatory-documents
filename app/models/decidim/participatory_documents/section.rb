@@ -2,7 +2,7 @@
 
 module Decidim
   module ParticipatoryDocuments
-    class Zone < ApplicationRecord
+    class Section < ApplicationRecord
       include Decidim::Traceable
       include Decidim::Loggable
       include Decidim::TranslatableResource
