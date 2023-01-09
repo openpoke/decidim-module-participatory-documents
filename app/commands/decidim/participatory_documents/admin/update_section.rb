@@ -3,7 +3,7 @@
 module Decidim
   module ParticipatoryDocuments
     module Admin
-      class UpdateZone < Rectify::Command
+      class UpdateSection < Rectify::Command
         # Public: Initializes the command.
         #
         # form - A form object with the params.
@@ -17,9 +17,9 @@ module Decidim
 
           begin
             transaction do
-              update_zone
+              update_section
             end
-            broadcast(:ok, zone)
+            broadcast(:ok, section)
           rescue ActiveRecord::RecordInvalid
             broadcast(:invalid)
           end
@@ -27,11 +27,11 @@ module Decidim
 
         private
 
-        attr_reader :form
+        attr_reader :form, :document
 
-        def update_zone
+        def update_section
           @zone = Decidim.traceability.update!(
-            zone,
+            section,
             form.current_user,
             **attributes
           )
@@ -45,8 +45,8 @@ module Decidim
           }.merge(document: document)
         end
 
-        def zone
-          @zone ||= document.zones.find_by!(uid: form.uid)
+        def section
+          @section ||= document.sections.find_by!(uid: form.uid)
         end
       end
     end

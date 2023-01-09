@@ -3,7 +3,7 @@
 module Decidim
   module ParticipatoryDocuments
     module Admin
-      class CreateZone < Rectify::Command
+      class CreateSection < Rectify::Command
         # Public: Initializes the command.
         #
         # form - A form object with the params.
@@ -17,9 +17,9 @@ module Decidim
 
           begin
             transaction do
-              create_zone
+              create_section
             end
-            broadcast(:ok, zone)
+            broadcast(:ok, section)
           rescue ActiveRecord::RecordInvalid
             broadcast(:invalid)
           end
@@ -27,10 +27,10 @@ module Decidim
 
         private
 
-        attr_reader :form, :document, :zone
+        attr_reader :form, :document, :section
 
-        def create_zone
-          @zone = Decidim.traceability.create!(
+        def create_section
+          @section = Decidim.traceability.create!(
             Decidim::ParticipatoryDocuments::Section,
             form.current_user,
             **attributes

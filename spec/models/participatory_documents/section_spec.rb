@@ -6,6 +6,7 @@ module Decidim
   module ParticipatoryDocuments
     describe Section do
       subject { section }
+
       let(:section) { create(:participatory_documents_section) }
 
       describe "associations" do

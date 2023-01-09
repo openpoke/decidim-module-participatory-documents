@@ -9,9 +9,9 @@ module Decidim
 
         def destroy
           enforce_permission_to :destroy, :participatory_document
-          @form = form(Decidim::ParticipatoryDocuments::Admin::ZoneForm).from_model(zone)
+          @form = form(Decidim::ParticipatoryDocuments::Admin::SectionForm).from_model(zone)
 
-          Admin::DestroyZone.call(@form, document) do
+          Admin::DestroySection.call(@form, document) do
             on(:ok) do
               render(json: {}, status: :accepted) && return
             end
@@ -24,9 +24,9 @@ module Decidim
 
         def create
           enforce_permission_to :update, :participatory_document
-          @form = form(Decidim::ParticipatoryDocuments::Admin::ZoneForm).from_params(params)
+          @form = form(Decidim::ParticipatoryDocuments::Admin::SectionForm).from_params(params)
 
-          Admin::CreateZone.call(@form, document) do
+          Admin::CreateSection.call(@form, document) do
             on(:ok) do |_zone|
               render(json: {}, status: :created) && return
             end
@@ -39,9 +39,9 @@ module Decidim
 
         def update
           enforce_permission_to :update, :participatory_document
-          @form = form(Decidim::ParticipatoryDocuments::Admin::ZoneForm).from_params(params)
+          @form = form(Decidim::ParticipatoryDocuments::Admin::SectionForm).from_params(params)
 
-          Admin::UpdateZone.call(@form, document) do
+          Admin::UpdateSection.call(@form, document) do
             on(:ok) do |_annotation|
               render(json: {}, status: :accepted) && return
             end
@@ -54,14 +54,14 @@ module Decidim
 
         def edit
           enforce_permission_to :update, :participatory_document
-          @form = form(Decidim::ParticipatoryDocuments::Admin::ZoneForm).from_model(zone)
+          @form = form(Decidim::ParticipatoryDocuments::Admin::SectionForm).from_model(zone)
 
           render partial: "form"
         end
 
         def new
           enforce_permission_to :update, :participatory_document
-          @form = form(Decidim::ParticipatoryDocuments::Admin::ZoneForm).from_params({})
+          @form = form(Decidim::ParticipatoryDocuments::Admin::SectionForm).from_params({})
 
           render partial: "form"
         end

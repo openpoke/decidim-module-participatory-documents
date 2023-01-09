@@ -58,7 +58,7 @@ module Decidim
         end
 
         def pdf_viewer
-          @form = form(Decidim::ParticipatoryDocuments::Admin::ZoneForm).from_params({})
+          @form = form(Decidim::ParticipatoryDocuments::Admin::SectionForm).from_params({})
           render layout: false
         end
 
