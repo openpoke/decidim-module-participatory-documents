@@ -7,6 +7,7 @@ module Decidim
     module Admin
       describe DocumentForm do
         subject { document }
+
         let!(:title) { "Test title" }
         let!(:description) { "Test description" }
         let(:document) { create(:participatory_documents_document, title: { en: title }, description: { en: description }) }

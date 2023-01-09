@@ -10,7 +10,7 @@ describe "Index participatory_documents", type: :system do
   let!(:component) { create :participatory_documents_component, participatory_space: participatory_process }
   let!(:title) { "Test title" }
   let!(:description) { "Test description" }
-  let!(:document) { create :participatory_documents_document, :with_file, title: { en: title }, description: {en: description }, component: component }
+  let!(:document) { create :participatory_documents_document, :with_file, title: { en: title }, description: { en: description }, component: component }
 
   before do
     visit_component
