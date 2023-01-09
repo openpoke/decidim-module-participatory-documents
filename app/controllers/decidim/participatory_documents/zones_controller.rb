@@ -3,11 +3,14 @@
 module Decidim
   module ParticipatoryDocuments
     class ZonesController < Decidim::ParticipatoryDocuments::ApplicationController
+      include FormFactory
+      include Paginable
 
-      helper_method :zone
+      helper_method :zone, :suggestions
       layout false , only: [:show]
 
       def show
+        @form = form(Decidim::ParticipatoryDocuments::SuggestionForm).from_params({})
       end
 
       private
@@ -15,10 +18,10 @@ module Decidim
         @zone ||= document.zones.find_by!(uid: params[:id])
       end
 
-      def document
-        @document ||= Decidim::ParticipatoryDocuments::Document.find_by(component: current_component)
-      end
 
+      def suggestions
+        zone.suggestions
+      end
     end
   end
 end

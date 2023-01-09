@@ -3,7 +3,7 @@
 module Decidim
   module ParticipatoryDocuments
     class Annotation < ApplicationRecord
-      belongs_to :zone, class_name: "Decidim::ParticipatoryDocuments::Zone"
+      belongs_to :zone, class_name: "Decidim::ParticipatoryDocuments::Zone", counter_cache: true
 
       def self.log_presenter_class_for(_log)
         Decidim::ParticipatoryDocuments::AdminLog::AnnotationPresenter

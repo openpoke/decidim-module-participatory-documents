@@ -50,34 +50,90 @@ See https://github.com/adobe-type-tools/cmap-resources
 <script>
 
   var zonesPath = '<%= document_zones_path(document) %>';
-    function blurBoxContainer(box, e) {
-      e.preventDefault();
-    }
-    function BoxContainer(box, e) {
+  function blurBoxContainer(box, e) {
+    e.preventDefault();
+  }
 
-        fetch(zonesPath + "/" + box.group, {
-            headers: {
-                'Content-Type': 'text/html; charset=utf-8',
-                'Accept': 'text/html',
-            },
-            credentials: "include",
-            // body: JSON.stringify(data)
-        } ).then((response) => {
-            if (response.ok) {
-                return response.text();
-            }
-            throw new Error(" ");
-        })
-        .then((data) => {
+  class SuggestionForm {
+      constructor(path, group) {
+          this.path = path;
+          this.group = group;
+      }
 
-            let div = document.getElementById("participation-modal");
-            div.innerHTML = data;
-            div.classList.add("active");
-        })
-        .catch((error) => {
-            // console.log(error);
-        });
-    };
+      getCSRFToken() {
+          return document.getElementsByName("csrf-token")[0].content;
+      }
+
+      getGroupUrl(){
+          return this.path + "/" + this.group;
+      }
+      addFormHandler(){
+
+          let handler = this;
+          let form = document.getElementById( 'new_suggestion_' );
+          if ( form){
+
+              form.addEventListener("submit", function(event){
+                  event.preventDefault();
+                  fetch(event.target.action, {
+                      method: event.target.method,
+                      body: new URLSearchParams(new FormData(event.target)),
+                      headers: {
+                          'Content-Type': 'application/x-www-form-urlencoded',
+                          'Accept': 'text/html',
+                          "X-CSRF-Token": handler.getCSRFToken()
+                      },
+                      credentials: "include"
+                  }).then((response) => {
+                      if (response.ok === false && response.status === 400) { // validation
+                          let div = document.getElementById("participation-modal-form");
+                          div.innerHTML = response.text();
+                          return Promise.reject();
+                      }
+                      return response.text();
+                  }).then((data)=>{
+                      let div = document.getElementById("participation-modal");
+                      div.innerHTML = data;
+                      handler.addFormHandler();
+                  }).catch((error) => {
+
+                      console.log(error);
+                  });
+              }, {once: true});
+          }
+      }
+
+      populateArea(data) {
+          let div = document.getElementById("participation-modal");
+          div.innerHTML = data;
+          div.classList.add("active");
+          this.addFormHandler();
+      }
+
+      fetchGroup(){
+          let handler = this;
+
+          fetch(handler.getGroupUrl(), {
+              headers: {
+                  'Content-Type': 'text/html; charset=utf-8',
+                  'Accept': 'text/html',
+              },
+              credentials: "include",
+              // body: JSON.stringify(data)
+          } ).then((response) => {
+              if (response.ok) {
+                  return response.text();
+              }
+              throw new Error(" ");
+          })
+              .then((data) => {
+                  handler.populateArea(data);
+              })
+              .catch((error) => {
+                  console.log(error);
+              });
+      }
+  }
 
   var I18n = { };
   var currentBoxes = <%= annotations.collect(&:serialize).to_json.html_safe %>;
@@ -92,7 +148,9 @@ See https://github.com/adobe-type-tools/cmap-resources
         var annotationsLayer = page.annotationEditorLayer && page.annotationEditorLayer.div;
         if(annotationsLayer) {
             var viewer = InitPolygonViewer(I18n, annotationsLayer, currentBoxes.filter(box => box.page_number === doc.pageNumber));
-            viewer.onBoxClick = BoxContainer
+            viewer.onBoxClick = function(box, e){
+                (new SuggestionForm(zonesPath, box.group)).fetchGroup();
+            }
             viewer.onBoxBlur = blurBoxContainer
             page.boxEditor = viewer;
         }
