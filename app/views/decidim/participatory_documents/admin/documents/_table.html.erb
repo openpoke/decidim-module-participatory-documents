@@ -24,9 +24,7 @@
     </tr>
     </thead>
     <tbody>
-    <% zones.each do |zone| %>
-      <%= render partial: "zone-tr", locals: { zone: zone } %>
-    <% end %>
+    <%= render partial: "sections-tr", collection: sections %>
     </tbody>
   </table>
 </div>

@@ -8,7 +8,7 @@ module Decidim
         include Decidim::ApplicationHelper
         helper Decidim::ParticipatoryDocuments::Admin::DocumentsHelper
 
-        helper_method :document, :zones
+        helper_method :document, :sections
         before_action :add_snippets, only: :edit_pdf
 
         def index; end
@@ -79,8 +79,8 @@ module Decidim
           @document ||= Decidim::ParticipatoryDocuments::Document.find_by(component: current_component)
         end
 
-        def zones
-          @zones ||= Decidim::ParticipatoryDocuments::Section.where(document: document)
+        def sections
+          @sections ||= Decidim::ParticipatoryDocuments::Section.where(document: document)
         end
       end
     end

@@ -9,8 +9,8 @@ en:
         create: "%{user_name} created a document named %{resource_name} in %{space_name}"
         delete: "%{user_name} deleted a document named %{resource_name} in %{space_name}"
         update: "%{user_name} updated a document named %{resource_name} in %{space_name}"
-      zone:
-        create: "%{user_name} has created a new Group named %{resource_name} for %{document_name}"
+      section:
+        create: "%{user_name} has created a new Section named %{resource_name} for %{document_name}"
     components:
       participatory_documents:
         name: Participatory Document
@@ -38,7 +38,7 @@ en:
             error: 
             invalid: There was a problem updating Document
             success: Document has been successfully updated
-          zones:
+          sections:
             empty: "(empty)"
       models:
         document:
