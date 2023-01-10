@@ -5,18 +5,23 @@ require "spec_helper"
 module Decidim
   module ParticipatoryDocuments
     module Admin
-      describe DestroyAnnotation do
-        subject { described_class.new(form, annotation.section.document) }
+      describe UpdateAnnotation do
+        subject { described_class.new(form, document) }
 
         let!(:annotation) { create(:participatory_documents_annotation) }
-        let(:user) { annotation.section.document.author }
+        let(:document) { annotation.section.document }
         let(:invalid) { false }
+        let(:current_user) { document.author }
+        let(:rect) { [0, 50, 100, 100] }
 
         let(:form) do
           double(
             invalid?: invalid,
+            page_number: 1,
+            rect: rect,
             id: annotation.uid,
-            current_user: user
+            group: "groupid",
+            current_user: current_user
           )
         end
 
@@ -29,8 +34,11 @@ module Decidim
         end
 
         context "when everything is ok" do
-          it "Removes a annotation" do
-            expect { subject.call }.to change(Decidim::ParticipatoryDocuments::Annotation, :count).by(-1)
+          it "creates a section" do
+            expect(annotation.rect).not_to eq(rect)
+            subject.call
+            annotation.reload
+            expect(annotation.rect).to eq(rect)
           end
         end
       end
