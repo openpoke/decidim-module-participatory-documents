@@ -27,13 +27,13 @@ module Decidim
 
         private
 
-        attr_reader :form
+        attr_reader :form, :document
 
         def destroy_annotation
           Decidim.traceability.perform_action!(
             :delete,
             annotation,
-            current_user
+            form.current_user
           ) do
             annotation.destroy!
           end

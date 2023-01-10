@@ -17,8 +17,8 @@ module Decidim
       has_one_attached :file
       validates_upload :file, uploader: Decidim::ParticipatoryDocuments::PdfDocumentUploader
 
-      has_many :zones, class_name: "Decidim::ParticipatoryDocuments::Zone", dependent: :restrict_with_error
-      has_many :annotations, through: :zones
+      has_many :sections, class_name: "Decidim::ParticipatoryDocuments::Section", dependent: :restrict_with_error
+      has_many :annotations, through: :sections
 
       attr_accessor :remove_file
 

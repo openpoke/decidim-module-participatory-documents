@@ -17,7 +17,7 @@ module Decidim
         end
 
         def document_presenter
-          Decidim::Log::ResourcePresenter.new(action_log.resource.zone.document, h, action_log.resource.zone.document)
+          Decidim::Log::ResourcePresenter.new(action_log.resource.section.document, h, action_log.resource.section.document)
         end
       end
     end

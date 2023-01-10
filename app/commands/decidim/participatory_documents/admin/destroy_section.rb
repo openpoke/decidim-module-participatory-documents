@@ -3,7 +3,7 @@
 module Decidim
   module ParticipatoryDocuments
     module Admin
-      class DestroyZone < Rectify::Command
+      class DestroySection < Rectify::Command
         # Public: Initializes the command.
         #
         # form - A form object with the params.
@@ -21,7 +21,7 @@ module Decidim
           # return broadcast(:invalid) if form.invalid?
 
           transaction do
-            destroy_zone
+            destroy_section
           end
           broadcast(:ok)
         rescue ActiveRecord::RecordInvalid
@@ -32,19 +32,19 @@ module Decidim
 
         attr_reader :form, :document
 
-        def destroy_zone
+        def destroy_section
           Decidim.traceability.perform_action!(
             :delete,
-            zone,
-            current_user
+            section,
+            form.current_user
           ) do
-            zone.annotations.destroy_all
-            zone.destroy!
+            section.annotations.destroy_all
+            section.destroy!
           end
         end
 
-        def zone
-          @zone ||= document.zones.find_by!(uid: form.uid)
+        def section
+          @section ||= document.sections.find_by!(uid: form.uid)
         end
       end
     end

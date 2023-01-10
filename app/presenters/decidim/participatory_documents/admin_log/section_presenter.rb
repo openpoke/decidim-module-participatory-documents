@@ -3,9 +3,9 @@
 module Decidim
   module ParticipatoryDocuments
     module AdminLog
-      class ZonePresenter < Decidim::Log::BasePresenter
+      class SectionPresenter < Decidim::Log::BasePresenter
         def action_string
-          "decidim.admin_log.zone.#{action}"
+          "decidim.admin_log.section.#{action}"
         end
 
         private

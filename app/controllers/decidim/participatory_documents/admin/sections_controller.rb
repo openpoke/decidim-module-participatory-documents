@@ -3,15 +3,15 @@
 module Decidim
   module ParticipatoryDocuments
     module Admin
-      class ZonesController < Admin::ApplicationController
+      class SectionsController < Admin::ApplicationController
         layout false, only: [:new, :edit]
         helper_method :document
 
         def destroy
           enforce_permission_to :destroy, :participatory_document
-          @form = form(Decidim::ParticipatoryDocuments::Admin::ZoneForm).from_model(zone)
+          @form = form(Decidim::ParticipatoryDocuments::Admin::SectionForm).from_model(section)
 
-          Admin::DestroyZone.call(@form, document) do
+          Admin::DestroySection.call(@form, document) do
             on(:ok) do
               render(json: {}, status: :accepted) && return
             end
@@ -24,10 +24,10 @@ module Decidim
 
         def create
           enforce_permission_to :update, :participatory_document
-          @form = form(Decidim::ParticipatoryDocuments::Admin::ZoneForm).from_params(params)
+          @form = form(Decidim::ParticipatoryDocuments::Admin::SectionForm).from_params(params)
 
-          Admin::CreateZone.call(@form, document) do
-            on(:ok) do |_zone|
+          Admin::CreateSection.call(@form, document) do
+            on(:ok) do
               render(json: {}, status: :created) && return
             end
 
@@ -39,9 +39,9 @@ module Decidim
 
         def update
           enforce_permission_to :update, :participatory_document
-          @form = form(Decidim::ParticipatoryDocuments::Admin::ZoneForm).from_params(params)
+          @form = form(Decidim::ParticipatoryDocuments::Admin::SectionForm).from_params(params)
 
-          Admin::UpdateZone.call(@form, document) do
+          Admin::UpdateSection.call(@form, document) do
             on(:ok) do |_annotation|
               render(json: {}, status: :accepted) && return
             end
@@ -54,14 +54,14 @@ module Decidim
 
         def edit
           enforce_permission_to :update, :participatory_document
-          @form = form(Decidim::ParticipatoryDocuments::Admin::ZoneForm).from_model(zone)
+          @form = form(Decidim::ParticipatoryDocuments::Admin::SectionForm).from_model(section)
 
           render partial: "form"
         end
 
         def new
           enforce_permission_to :update, :participatory_document
-          @form = form(Decidim::ParticipatoryDocuments::Admin::ZoneForm).from_params({})
+          @form = form(Decidim::ParticipatoryDocuments::Admin::SectionForm).from_params({})
 
           render partial: "form"
         end
@@ -72,8 +72,8 @@ module Decidim
           @document ||= Decidim::ParticipatoryDocuments::Document.find_by!(component: current_component)
         end
 
-        def zone
-          document.zones.find_by!(uid: params[:id])
+        def section
+          document.sections.find_by!(uid: params[:id])
         end
       end
     end

@@ -3,10 +3,11 @@
 module Decidim
   module ParticipatoryDocuments
     module Admin
-      class ZoneForm < Decidim::Form
+      class SectionForm < Decidim::Form
         include TranslatableAttributes
 
         attribute :uid
+        mimic :section
 
         translatable_attribute :title, String
         translatable_attribute :description, String
