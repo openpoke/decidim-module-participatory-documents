@@ -20,4 +20,11 @@ FactoryBot.define do
   factory :participatory_documents_section, class: "Decidim::ParticipatoryDocuments::Section" do
     document { create :participatory_documents_document }
   end
+
+  factory :participatory_documents_annotation, class: "Decidim::ParticipatoryDocuments::Annotation" do
+    section { create(:participatory_documents_section) }
+    page_number { 1 }
+    rect { [50, 50, 100, 100 ] }
+    uid { "randomstring" }
+  end
 end
