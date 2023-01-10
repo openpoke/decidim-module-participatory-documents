@@ -40,9 +40,7 @@ module Decidim
               "uid": "randomstring",
               "document_id": document.id,
               "title_en" => "Title",
-              "description_en" => "description",
-              "page_number" => "1",
-              "rect" => [5, 100, 50, 100]
+              "description_en" => "description"
             }
           end
 
@@ -61,9 +59,7 @@ module Decidim
               "id": section.uid,
               "uid": section.uid,
               "title_en" => "Title",
-              "description_en" => "description",
-              "page_number" => "1",
-              "rect" => [5, 100, 50, 100]
+              "description_en" => "description"
             }
           end
 
