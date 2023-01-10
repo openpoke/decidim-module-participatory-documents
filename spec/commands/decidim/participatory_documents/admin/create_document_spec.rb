@@ -25,12 +25,12 @@ module Decidim
             errors: errors
           )
         end
-        let(:file) {
+        let(:file) do
           Rack::Test::UploadedFile.new(
             Decidim::Dev.test_file("Exampledocument.pdf", "application/pdf"),
             "application/pdf"
           )
-        }
+        end
 
         context "when the form is not valid" do
           let(:invalid) { true }
@@ -58,7 +58,6 @@ module Decidim
             expect { subject.call }.to change(Decidim::ParticipatoryDocuments::Document, :count).by(1)
           end
         end
-
       end
     end
   end

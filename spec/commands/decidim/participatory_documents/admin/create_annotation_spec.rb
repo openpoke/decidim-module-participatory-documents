@@ -5,23 +5,20 @@ require "spec_helper"
 module Decidim
   module ParticipatoryDocuments
     module Admin
-      describe CreateSection do
+      describe CreateAnnotation do
         subject { described_class.new(form, document) }
 
         let(:document) { create(:participatory_documents_document) }
-        let(:uid) { "RandomUUID" }
-
+        let(:invalid) { false }
         let(:current_user) { document.author }
 
-        let(:title) { { en: "Title test Section" } }
-        let(:description) { { en: "Description test Section" } }
-        let(:invalid) { false }
         let(:form) do
           double(
             invalid?: invalid,
-            title: title,
-            description: description,
-            uid: uid,
+            page_number: 1,
+            rect: [50, 50, 100, 100],
+            id: "annotationid",
+            group: "groupid",
             current_user: current_user
           )
         end
@@ -36,7 +33,7 @@ module Decidim
 
         context "when everything is ok" do
           it "creates a section" do
-            expect { subject.call }.to change(Decidim::ParticipatoryDocuments::Section, :count).by(1)
+            expect { subject.call }.to change(Decidim::ParticipatoryDocuments::Annotation, :count).by(1)
           end
         end
       end

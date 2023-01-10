@@ -27,7 +27,7 @@ module Decidim
 
         private
 
-        attr_reader :form, :annotation
+        attr_reader :form, :annotation, :document
 
         def create_annotation
           @annotation = Decidim.traceability.create!(

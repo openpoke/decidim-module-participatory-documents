@@ -7,6 +7,7 @@ module Decidim
     module Admin
       describe UpdateDocument do
         subject { described_class.new(form, document) }
+
         let(:document) { create(:participatory_documents_document) }
 
         let(:title) { { en: "Title test Section" } }
@@ -28,12 +29,12 @@ module Decidim
           )
         end
 
-        let(:file) {
+        let(:file) do
           Rack::Test::UploadedFile.new(
             Decidim::Dev.test_file("Exampledocument.pdf", "application/pdf"),
             "application/pdf"
           )
-        }
+        end
 
         context "when the form is not valid" do
           let(:invalid) { true }
@@ -64,7 +65,6 @@ module Decidim
             expect(document.title["en"]).to eq(title[:en])
           end
         end
-
       end
     end
   end
