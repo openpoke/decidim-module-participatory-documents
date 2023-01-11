@@ -1,0 +1,28 @@
+<%= decidim_form_for(@form, url: document_suggestion_path(document, suggestion), html: { class: "form edit_suggestion suggestion_form_admin" })  do |form| %>
+  <div class="card" id="suggestion-answer">
+    <div class="card-divider">
+      <h2 class="card-title"><%= t ".title" %></h2>
+    </div>
+    <div class="card-section">
+
+      <div class="row column"><%= translated_attribute(suggestion.body) %></div>
+
+      <div class="row column">
+        <%= form.collection_radio_buttons :internal_state, [
+          ["not_answered", t(".not_answered")],
+          ["accepted", t(".accepted")],
+          ["rejected", t(".rejected")],
+          ["evaluating", t(".evaluating")]
+        ], :first, :last, prompt: true %>
+      </div>
+
+      <div class="row column">
+        <%= form.translated :text_area, :answer, autofocus: true, rows: 15 %>
+      </div>
+    </div>
+  </div>
+
+  <div class="button--double form-general-submit">
+    <%= form.submit t(".update") %>
+  </div>
+<% end %>

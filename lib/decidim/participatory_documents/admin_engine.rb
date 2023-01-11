@@ -17,6 +17,7 @@ module Decidim
           end
           resources :annotations, except: [:show, :new, :edit]
           resources :sections, except: [:show, :index]
+          resources :suggestions
         end
 
         root to: "documents#index"

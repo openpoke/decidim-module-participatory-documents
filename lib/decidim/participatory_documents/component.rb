@@ -183,5 +183,16 @@ Decidim.register_component(:participatory_documents) do |component|
         visibility: "admin-only"
       )
     end
+
+    [document, group1, group2, group3].each do |suggestable|
+      10.times do
+        Decidim::ParticipatoryDocuments::Suggestion.create(
+          body: Decidim::Faker::Localized.sentence(word_count: 20),
+          suggestable: suggestable,
+          author: admin_user,
+          state: Decidim::ParticipatoryDocuments::Suggestion::POSSIBLE_STATES.sample
+        )
+      end
+    end
   end
 end

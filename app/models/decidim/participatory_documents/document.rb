@@ -18,6 +18,7 @@ module Decidim
       validates_upload :file, uploader: Decidim::ParticipatoryDocuments::PdfDocumentUploader
 
       has_many :sections, class_name: "Decidim::ParticipatoryDocuments::Section", dependent: :restrict_with_error
+      has_many :suggestions, class_name: "Decidim::ParticipatoryDocuments::Suggestion", dependent: :restrict_with_error, as: :suggestable
       has_many :annotations, through: :sections
 
       attr_accessor :remove_file

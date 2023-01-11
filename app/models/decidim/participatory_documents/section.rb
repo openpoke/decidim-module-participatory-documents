@@ -10,6 +10,9 @@ module Decidim
       include Decidim::Publicable
       belongs_to :document, class_name: "Decidim::ParticipatoryDocuments::Document"
       has_many :annotations, class_name: "Decidim::ParticipatoryDocuments::Annotation", dependent: :restrict_with_error
+      has_many :suggestions, class_name: "Decidim::ParticipatoryDocuments::Suggestion", dependent: :restrict_with_error, as: :suggestable
+
+      delegate :organization, to: :document
 
       translatable_fields :title
       def self.log_presenter_class_for(_log)
