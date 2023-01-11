@@ -12,6 +12,7 @@ module Decidim
       describe "associations" do
         it { expect(described_class.reflect_on_association(:document).macro).to eq(:belongs_to) }
         it { expect(described_class.reflect_on_association(:annotations).macro).to eq(:has_many) }
+        it { expect(described_class.reflect_on_association(:suggestions).macro).to eq(:has_many) }
       end
 
       it { is_expected.to be_valid }

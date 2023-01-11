@@ -12,6 +12,12 @@ module Decidim
       let(:document) { create(:participatory_documents_document, component: component) }
       let!(:author) { create(:user, organization: organization) }
 
+      describe "associations" do
+        it { expect(described_class.reflect_on_association(:suggestions).macro).to eq(:has_many) }
+        it { expect(described_class.reflect_on_association(:sections).macro).to eq(:has_many) }
+        it { expect(described_class.reflect_on_association(:annotations).macro).to eq(:has_many) }
+      end
+
       include_examples "has component"
       include_examples "authorable" do
         subject { document }
