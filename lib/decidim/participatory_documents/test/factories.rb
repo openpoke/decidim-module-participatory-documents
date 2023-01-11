@@ -27,4 +27,10 @@ FactoryBot.define do
     rect { [50, 50, 100, 100] }
     uid { "randomstring" }
   end
+
+  factory :participatory_documents_suggestion, class: "Decidim::ParticipatoryDocuments::Suggestion" do
+    suggestable { build(:dummy_resource) }
+    author { build(:user, organization: suggestable.organization) }
+    body { Decidim::Faker::Localized.paragraph }
+  end
 end
