@@ -39,8 +39,7 @@ module Decidim
             {
               "uid": "randomstring",
               "document_id": document.id,
-              "title_en" => "Title",
-              "description_en" => "description"
+              "title_en" => "Title"
             }
           end
 
@@ -58,18 +57,15 @@ module Decidim
               "document_id": document.id,
               "id": section.uid,
               "uid": section.uid,
-              "title_en" => "Title",
-              "description_en" => "description"
+              "title_en" => "Title"
             }
           end
 
           it "Changes the database record" do
-            expect(section.title).to be_nil
-            expect(section.description).to be_nil
+            expect(section.title["en"]).to eq("Section 1")
             post(:update, params: params)
             section.reload
             expect(section.title["en"]).to eq("Title")
-            expect(section.description["en"]).to eq("description")
           end
         end
       end

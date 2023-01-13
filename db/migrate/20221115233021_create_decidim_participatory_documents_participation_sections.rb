@@ -7,7 +7,6 @@ class CreateDecidimParticipatoryDocumentsParticipationSections < ActiveRecord::M
                    null: true,
                    index: { name: "document_zones" }
       t.jsonb :title
-      t.jsonb :description
       t.string :state
       t.string :uid, index: true
       t.datetime :published_at

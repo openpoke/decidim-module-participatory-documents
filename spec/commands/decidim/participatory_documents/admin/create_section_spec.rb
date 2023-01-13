@@ -14,13 +14,11 @@ module Decidim
         let(:current_user) { document.author }
 
         let(:title) { { en: "Title test Section" } }
-        let(:description) { { en: "Description test Section" } }
         let(:invalid) { false }
         let(:form) do
           double(
             invalid?: invalid,
             title: title,
-            description: description,
             uid: uid,
             current_user: current_user
           )

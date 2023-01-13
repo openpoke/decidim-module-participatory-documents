@@ -49,5 +49,8 @@ en:
             published: Published
             state: State
             title: Title
+        section:
+          fields:
+            artificial_tile: Section %{position}
       'no': 'No'
       'yes': 'Yes'

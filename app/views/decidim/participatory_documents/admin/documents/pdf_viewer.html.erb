@@ -57,6 +57,7 @@ See https://github.com/adobe-type-tools/cmap-resources
     operationFailed: "The Operation has failed",
     allSaved: "All the boxes data has been saved to DB",
     removed: "The box has been removed",
+    removeBoxConfirm: "Are you sure you want to delete?",
     updated: "The box has been updated",
     created: "The box has been created",
     move: "Move",
@@ -210,25 +211,30 @@ function displayModal(box) {
 
   remove.addEventListener("click", (e) => {
     e.stopPropagation();
-    $.ajax({
-      url: NewZonePath + "/" + box.group,
-      type: "DELETE",
-    }).done(function(data) {
 
-      PDFViewerApplication.pdfViewer._pages
-        .filter((p) => p.boxEditor !== undefined)
-        .filter((p) => Object.keys(p.boxEditor.boxes).length > 0)
-        .forEach(function(p) {
-          Object.values(p.boxEditor.boxes).filter((p) => p.group === box.group).map((p) => {
-            delete p.layer.boxes[p.id];
-            p.destroy();
+    if ( confirm(I18n.removeBoxConfirm) ) {
 
-          });
-        });
-    })
-    .fail(function() { box.destroy(); })
-    .always(function() {});
-    decidim.removeClass("show");
+        $.ajax({
+            url: NewZonePath + "/" + box.group,
+            type: "DELETE",
+        }).done(function(data) {
+
+            PDFViewerApplication.pdfViewer._pages
+                .filter((p) => p.boxEditor !== undefined)
+                .filter((p) => Object.keys(p.boxEditor.boxes).length > 0)
+                .forEach(function(p) {
+                    Object.values(p.boxEditor.boxes).filter((p) => p.group === box.group).map((p) => {
+                        delete p.layer.boxes[p.id];
+                        p.destroy();
+
+                    });
+                });
+        })
+            .fail(function() { box.destroy(); })
+            .always(function() {});
+        decidim.removeClass("show");
+
+    }
   }, { once: true });
 }
 
