@@ -7,7 +7,10 @@ module Decidim
       include Decidim::TranslatableResource
       include Decidim::TranslatableAttributes
 
-      translatable_fields :body
+      include Decidim::Traceable
+      include Decidim::Loggable
+
+      translatable_fields :body, :answer
       validates :body, presence: true
 
       delegate :organization, to: :suggestable

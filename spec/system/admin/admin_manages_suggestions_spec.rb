@@ -44,12 +44,55 @@ describe "Admin manages participatory documents", type: :system do
     end
   end
 
-  #
-  # context "when answering suggestion" do
-  #   it "opens the form" do
-  #     within(".table-scroll") do
-  #       find(".action-icon--show-suggestion", match: :first).click
-  #     end
-  #   end
-  # end
+  shared_examples "publish suggestion answers" do |selection:, draft: false|
+    before do
+      within(".table-scroll") do
+        find(".action-icon--show-suggestion", match: :first).click
+      end
+    end
+
+    it "publishes some answers" do
+      within "form.suggestion_form_admin" do
+        choose selection
+        fill_in_i18n(
+          :answer_suggestion_answer,
+          "#answer_suggestion-answer-tabs",
+          en: "This is my answer"
+        )
+        check :answer_suggestion_answer_is_draft if draft
+        click_button "Answer"
+      end
+      expect(page).to have_content("Successfully")
+    end
+  end
+
+  context "when answering suggestion" do
+    context "when rejects the suggestion" do
+      it_behaves_like "publish suggestion answers", selection: "Rejected"
+      context "and is saved as draft" do
+        it_behaves_like "publish suggestion answers", selection: "Rejected", draft: true
+      end
+    end
+
+    context "when accepts the suggestion" do
+      it_behaves_like "publish suggestion answers", selection: "Accepted"
+      context "and is saved as draft" do
+        it_behaves_like "publish suggestion answers", selection: "Accepted", draft: true
+      end
+    end
+
+    context "when evaluate the suggestion" do
+      it_behaves_like "publish suggestion answers", selection: "Evaluating"
+      context "and is saved as draft" do
+        it_behaves_like "publish suggestion answers", selection: "Evaluating", draft: true
+      end
+    end
+
+    context "when Not Answering the suggestion" do
+      it_behaves_like "publish suggestion answers", selection: "Not Answered"
+      context "and is saved as draft" do
+        it_behaves_like "publish suggestion answers", selection: "Not Answered", draft: true
+      end
+    end
+  end
 end

@@ -6,9 +6,10 @@ module Decidim
       class AnswerSuggestionForm < Decidim::Form
         include TranslatableAttributes
         translatable_attribute :answer, String
-        attribute :internal_state, String
+        attribute :state, String
+        attribute :answer_is_draft, Boolean, default: false
 
-        validates :internal_state, presence: true, inclusion: { in: %w(not_answered accepted rejected evaluating) }
+        validates :state, presence: true, inclusion: { in: %w(not_answered accepted rejected evaluating) }
       end
     end
   end
