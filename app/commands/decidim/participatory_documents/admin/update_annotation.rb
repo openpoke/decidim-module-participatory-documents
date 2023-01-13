@@ -28,7 +28,7 @@ module Decidim
 
         private
 
-        attr_reader :form
+        attr_reader :form, :document
 
         def update_annotation!
           @annotation = Decidim.traceability.update!(
@@ -43,11 +43,11 @@ module Decidim
             page_number: form.page_number,
             rect: form.rect,
             uid: form.id
-          }.merge(zone: zone)
+          }.merge(section: section)
         end
 
-        def zone
-          @zone ||= Decidim::ParticipatoryDocuments::Zone.where(document: document, uid: form.group).first_or_create
+        def section
+          @section ||= Decidim::ParticipatoryDocuments::Section.where(document: document, uid: form.group).first_or_create
         end
 
         def annotation

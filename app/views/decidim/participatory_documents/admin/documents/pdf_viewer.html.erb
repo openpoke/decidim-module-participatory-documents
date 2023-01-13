@@ -51,7 +51,7 @@ See https://github.com/adobe-type-tools/cmap-resources
   <script>
 
   var AnnotationsRootPath = '<%= document_annotations_path(document) %>';
-  var NewZonePath = '<%= document_zones_path(document) %>';
+  var NewZonePath = '<%= document_sections_path(document) %>';
 
   var I18n = {
     operationFailed: "The Operation has failed",
@@ -193,7 +193,7 @@ function displayModal(box) {
   const content = document.getElementById("editor-modal-content");
   const remove = document.getElementById("editor-modal-remove");
 
-  const uid_field = document.getElementById("zone_uid");
+  const uid_field = document.getElementById("section_uid");
   uid_field.value = box.group
 
   title.innerHTML = `Edit box ${box.id}, group ${box.group}`;

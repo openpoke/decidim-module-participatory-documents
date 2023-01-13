@@ -2,7 +2,7 @@
 
 module Decidim
   module ParticipatoryDocuments
-    class Zone < ApplicationRecord
+    class Section < ApplicationRecord
       include Decidim::Traceable
       include Decidim::Loggable
       include Decidim::TranslatableResource
@@ -13,7 +13,7 @@ module Decidim
 
       translatable_fields :title, :description
       def self.log_presenter_class_for(_log)
-        Decidim::ParticipatoryDocuments::AdminLog::ZonePresenter
+        Decidim::ParticipatoryDocuments::AdminLog::SectionPresenter
       end
     end
   end

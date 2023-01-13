@@ -79,7 +79,7 @@ Decidim.register_component(:participatory_documents) do |component|
     )
 
     group1 = Decidim.traceability.create!(
-      Decidim::ParticipatoryDocuments::Zone,
+      Decidim::ParticipatoryDocuments::Section,
       admin_user,
       {
         document: document,
@@ -92,7 +92,7 @@ Decidim.register_component(:participatory_documents) do |component|
       visibility: "admin-only"
     )
     group2 = Decidim.traceability.create!(
-      Decidim::ParticipatoryDocuments::Zone,
+      Decidim::ParticipatoryDocuments::Section,
       admin_user,
       {
         document: document,
@@ -105,7 +105,7 @@ Decidim.register_component(:participatory_documents) do |component|
       visibility: "admin-only"
     )
     group3 = Decidim.traceability.create!(
-      Decidim::ParticipatoryDocuments::Zone,
+      Decidim::ParticipatoryDocuments::Section,
       admin_user,
       {
         document: document,
@@ -122,7 +122,7 @@ Decidim.register_component(:participatory_documents) do |component|
       {
         uid: "box-1",
         page_number: 1,
-        zone: group1,
+        section: group1,
         rect: {
           "left": 25.5,
           "top": 22.123,
@@ -133,7 +133,7 @@ Decidim.register_component(:participatory_documents) do |component|
       {
         uid: "box-2",
         page_number: 1,
-        zone: group2,
+        section: group2,
         rect: {
           "left": 5.5,
           "top": 2.123,
@@ -144,7 +144,7 @@ Decidim.register_component(:participatory_documents) do |component|
       {
         uid: "box-3",
         page_number: 1,
-        zone: group2,
+        section: group2,
         rect: {
           "left": 15.5,
           "top": 12.123,
@@ -155,7 +155,7 @@ Decidim.register_component(:participatory_documents) do |component|
       {
         uid: "box-4",
         page_number: 1,
-        zone: group3,
+        section: group3,
         rect: {
           "left": 75.5,
           "top": 82.123,
@@ -166,7 +166,7 @@ Decidim.register_component(:participatory_documents) do |component|
       {
         uid: "box-5",
         page_number: 2,
-        zone: group3,
+        section: group3,
         rect: {
           "left": 15.5,
           "top": 12.123,
