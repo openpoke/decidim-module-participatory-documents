@@ -40,7 +40,6 @@ module Decidim
         def attributes
           {
             title: form.title,
-            description: form.description,
             uid: form.uid
           }.merge(document: document)
         end

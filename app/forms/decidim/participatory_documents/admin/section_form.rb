@@ -10,10 +10,8 @@ module Decidim
         mimic :section
 
         translatable_attribute :title, String
-        translatable_attribute :description, String
 
         validates :title, translatable_presence: true
-        validates :description, translatable_presence: true
       end
     end
   end

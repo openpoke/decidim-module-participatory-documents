@@ -17,11 +17,6 @@ module Decidim
               "en" => "Foo bar title",
               "ca" => "Foo bar title",
               "es" => "Foo bar title"
-            },
-            "description" => {
-              "en" => "Foo bar description",
-              "ca" => "Foo bar description",
-              "es" => "Foo bar description"
             }
           }
         end

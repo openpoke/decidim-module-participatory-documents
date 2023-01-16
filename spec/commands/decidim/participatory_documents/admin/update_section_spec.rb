@@ -12,14 +12,12 @@ module Decidim
         let(:uid) { section.uid }
         let(:invalid) { false }
         let(:title) { { en: "Title test Section" } }
-        let(:description) { { en: "Description test Section" } }
         let(:current_user) { section.document.author }
 
         let(:form) do
           double(
             invalid?: invalid,
             title: title,
-            description: description,
             uid: uid,
             current_user: current_user
           )
@@ -39,7 +37,6 @@ module Decidim
             section.reload
 
             expect(section.title["en"]).to eq(title[:en])
-            expect(section.description["en"]).to eq(description[:en])
           end
         end
       end
