@@ -38,8 +38,7 @@ module Decidim
         end
 
         def suggestions
-          # filtered_collection
-          paginate(filtered_collection)
+          filtered_collection
         end
 
         def base_query

@@ -32,6 +32,7 @@ module Decidim
         context "when is not being provided" do
           context "when is the first section" do
             let!(:after_section) { create_list(:participatory_documents_section, 2, document: section.document) }
+            let(:section) { create(:participatory_documents_section, title: nil) }
 
             it "returns computed value" do
               expect(translated(subject.title)).to eq("Section 1")
@@ -44,7 +45,7 @@ module Decidim
             let(:expected_position) { section_count + 1 }
             let(:document) { create(:participatory_documents_document) }
             let(:precedent_section) { create_list(:participatory_documents_section, section_count, document: document) }
-            let(:section) { create(:participatory_documents_section, document: precedent_section.first.document) }
+            let(:section) { create(:participatory_documents_section, document: precedent_section.first.document, title: nil) }
             let!(:after_section) { create_list(:participatory_documents_section, section_count, document: section.document) }
 
             it "returns computed value" do
@@ -58,7 +59,7 @@ module Decidim
             let(:expected_position) { section_count + 1 }
             let(:document) { create(:participatory_documents_document) }
             let(:precedent_section) { create_list(:participatory_documents_section, section_count, document: document) }
-            let(:section) { create(:participatory_documents_section, document: precedent_section.first.document) }
+            let(:section) { create(:participatory_documents_section, document: precedent_section.first.document, title: nil) }
 
             it "returns computed value" do
               expect(translated(subject.title)).to eq("Section #{expected_position}")
