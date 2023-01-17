@@ -50,7 +50,7 @@ module Decidim
         end
 
         describe ".update" do
-          let!(:section) { create(:participatory_documents_section, document: document, uid: "randomstring") }
+          let!(:section) { create(:participatory_documents_section, document: document, uid: "randomstring", title: nil) }
 
           let(:params) do
             {

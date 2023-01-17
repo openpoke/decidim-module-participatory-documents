@@ -19,6 +19,7 @@ FactoryBot.define do
 
   factory :participatory_documents_section, class: "Decidim::ParticipatoryDocuments::Section" do
     document { create :participatory_documents_document }
+    title { generate_localized_title }
   end
 
   factory :participatory_documents_annotation, class: "Decidim::ParticipatoryDocuments::Annotation" do
@@ -26,5 +27,19 @@ FactoryBot.define do
     page_number { 1 }
     rect { [50, 50, 100, 100] }
     uid { "randomstring" }
+  end
+
+  factory :participatory_documents_suggestion, class: "Decidim::ParticipatoryDocuments::Suggestion" do
+    suggestable { build(:dummy_resource) }
+    author { build(:user, organization: suggestable.organization) }
+    body { Decidim::Faker::Localized.localized { Faker::Lorem.paragraphs(number: 3).join("\n") } }
+    state { Decidim::ParticipatoryDocuments::Suggestion::POSSIBLE_STATES.sample }
+
+    trait :not_answered do
+      state { :not_answered }
+    end
+    trait :evaluating do
+      state { :evaluating }
+    end
   end
 end

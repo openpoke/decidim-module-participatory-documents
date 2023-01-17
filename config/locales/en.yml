@@ -1,6 +1,22 @@
 ---
 en:
   decidim:
+    admin:
+      filters:
+        search_placeholder:
+          body_cont: Body Contains
+        suggestions:
+          body_cont:
+            label: Body contains
+          state_eq:
+            label: State is
+            values:
+              accepted: Accepted
+              evaluating: Evaluating
+              not_answered: Not Answered
+              published: Published
+              rejected: Rejected
+              withdrawn: Withdrawn
     admin_log:
       annotation:
         create: "%{user_name} created a new participatory area for %{document_name}"
@@ -41,6 +57,25 @@ en:
             error: 
             invalid: There was a problem updating Document
             success: Document has been successfully updated
+        suggestions:
+          index:
+            actions:
+              answer: Answer
+              title: Actions
+            created_at: Submitted on
+            global: Global
+            id: Id
+            section: Section
+            state: State
+            suggestion: Suggestion
+            title: List Suggestions
+          show:
+            accepted: Accepted
+            evaluating: Evaluating
+            not_answered: Not Answered
+            rejected: Rejected
+            title: Answer Suggestion
+            update: Update
       models:
         document:
           fields:
@@ -53,4 +88,12 @@ en:
           fields:
             artificial_tile: Section %{position}
       'no': 'No'
+      suggestions:
+        answers:
+          accepted: Accepted
+          evaluating: Evaluating
+          not_answered: Not Answered
+          published: Published
+          rejected: Rejected
+          withdrawn: Withdrawn
       'yes': 'Yes'
