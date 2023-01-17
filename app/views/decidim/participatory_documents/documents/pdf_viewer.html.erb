@@ -48,7 +48,93 @@ See https://github.com/adobe-type-tools/cmap-resources
   <div id="participation-modal">Comments here</div>
 
 <script>
+
+  function blurBoxContainer(box, e) {
+    e.preventDefault();
+  }
+
+  class SuggestionForm {
+      constructor(path, group) {
+          this.path = path;
+          this.group = group;
+      }
+
+      getCSRFToken() {
+          return document.getElementsByName("csrf-token")[0].content;
+      }
+
+      getGroupUrl(){
+          return this.path + "/" + this.group;
+      }
+
+      populateArea(data) {
+          let div = document.getElementById("participation-modal");
+          div.innerHTML = data;
+          div.classList.add("active");
+          this.addFormHandler();
+      }
+
+      addFormHandler(){
+
+          let handler = this;
+          let form = document.getElementById( 'new_suggestion_' );
+          if ( form){
+
+              form.addEventListener("submit", function(event){
+                  event.preventDefault();
+                  fetch(event.target.action, {
+                      method: event.target.method,
+                      body: new URLSearchParams(new FormData(event.target)),
+                      headers: {
+                          'Content-Type': 'application/x-www-form-urlencoded',
+                          'Accept': 'text/html',
+                          "X-CSRF-Token": handler.getCSRFToken()
+                      },
+                      credentials: "include"
+                  }).then((response) => {
+                      if (response.ok === false && response.status === 400) { // validation
+                          return response.text();
+                      }
+                      return response.text();
+                  }).then((data)=>{
+                      let div = document.getElementById("participation-modal");
+                      div.innerHTML = data;
+                      handler.addFormHandler();
+                  }).catch((error) => {
+                      let div = document.getElementById("participation-modal-form");
+                      div.innerHTML = response.text();
+                  });
+              }, {once: true});
+          }
+      }
+
+      fetchGroup(){
+          let handler = this;
+
+          fetch(handler.getGroupUrl(), {
+              headers: {
+                  'Content-Type': 'text/html; charset=utf-8',
+                  'Accept': 'text/html',
+              },
+              credentials: "include",
+              // body: JSON.stringify(data)
+          }).then((response) => {
+              if (response.ok) {
+                  return response.text();
+              }
+              throw new Error(" ");
+          })
+          .then((data) => {
+              handler.populateArea(data);
+          })
+          .catch((error) => {
+              console.log(error);
+          });
+      }
+  }
+
   var I18n = { };
+  var sectionsPath = '<%= document_sections_path(document) %>';
   var currentBoxes = <%= document.annotations.collect(&:serialize).to_json.html_safe %>;
   var pages = {};
   PDFViewerApplication.initializedPromise.then(function() {
@@ -60,7 +146,12 @@ See https://github.com/adobe-type-tools/cmap-resources
         pages[doc.pageNumber] = page;
         var annotationsLayer = page.annotationEditorLayer && page.annotationEditorLayer.div;
         if(annotationsLayer) {
-          InitPolygonViewer(I18n, annotationsLayer, currentBoxes.filter(box => box.page_number === doc.pageNumber));
+            var viewer = InitPolygonViewer(I18n, annotationsLayer, currentBoxes.filter(box => box.page_number === doc.pageNumber));
+            viewer.onBoxClick = function(box, e){
+                (new SuggestionForm(sectionsPath, box.group)).fetchGroup();
+            }
+            viewer.onBoxBlur = blurBoxContainer
+            page.boxEditor = viewer;
         }
       }
     });

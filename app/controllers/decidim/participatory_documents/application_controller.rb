@@ -8,6 +8,13 @@ module Decidim
     # Note that it inherits from `Decidim::Components::BaseController`, which
     # override its layout and provide all kinds of useful methods.
     class ApplicationController < Decidim::Components::BaseController
+      helper_method :document
+
+      private
+
+      def document
+        @document ||= Decidim::ParticipatoryDocuments::Document.find_by(component: current_component)
+      end
     end
   end
 end
