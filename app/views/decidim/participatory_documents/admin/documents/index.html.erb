@@ -1,6 +1,9 @@
 <div class="card full-height">
   <div class="card-divider">
-    <%= render partial: "title" %>
+    <h2 class="card-title flex--sbc">
+      <%= translated_attribute(current_component.name) %>
+      <%= render "title" %>
+    </h2>
   </div>
   <div class="card-section">
     <% if document.present? && document.file.attached? %>

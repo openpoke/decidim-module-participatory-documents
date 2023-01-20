@@ -1,6 +1,9 @@
 <div class="card full-height">
   <div class="card-divider">
-    <%= render "title", button: :back %>
+    <h2 class="card-title flex--sbc">
+      <%= translated_attribute(current_component.name) %>
+      <%= render "title", button: :back %>
+    </h2>
   </div>
   <div class="card-section">
     <%= decidim_form_for(@form, html: { class: "form new_proposal proposal_form_admin" }) do |f| %>
