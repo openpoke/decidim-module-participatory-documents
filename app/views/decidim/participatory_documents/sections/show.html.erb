@@ -1,5 +1,7 @@
 <div id="suggestion-list">
-  <%= render partial: "decidim/participatory_documents/suggestions/suggestions", suggestions: suggestions %>
+  <% suggestions.each do |suggestion| %>
+    <%= cell("decidim/participatory_documents/suggestion", suggestion) %>
+  <% end %>
 </div>
 
 <div id="participation-modal-form">

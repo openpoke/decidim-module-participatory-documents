@@ -38,7 +38,7 @@ module Decidim
               answer_is_draft: form.answer_is_draft
             }
 
-            attributes[:answered_at] = if form.state == "not_answered"
+            attributes[:answered_at] = if %w(not_answered withdrawn).include?(form.state)
                                          nil
                                        else
                                          Time.current

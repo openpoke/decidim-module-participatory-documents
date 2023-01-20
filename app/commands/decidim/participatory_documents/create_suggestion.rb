@@ -16,7 +16,8 @@ module Decidim
             create_suggestion
           end
           broadcast(:ok, suggestion)
-        rescue ActiveRecord::RecordInvalid
+        rescue ActiveRecord::RecordInvalid => e
+          Rails.logger.info e.message
           broadcast(:invalid)
         end
       end

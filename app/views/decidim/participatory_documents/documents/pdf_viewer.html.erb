@@ -110,7 +110,6 @@ See https://github.com/adobe-type-tools/cmap-resources
 
       fetchGroup(){
           let handler = this;
-
           fetch(handler.getGroupUrl(), {
               headers: {
                   'Content-Type': 'text/html; charset=utf-8',
@@ -128,7 +127,7 @@ See https://github.com/adobe-type-tools/cmap-resources
               handler.populateArea(data);
           })
           .catch((error) => {
-              console.log(error);
+              console.error(error);
           });
       }
   }

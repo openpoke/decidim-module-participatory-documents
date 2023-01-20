@@ -8,13 +8,16 @@ module Decidim
 
       helper_method :section, :suggestions
       layout false, only: [:show]
-      delegate :suggestions, to: :section
 
       def show
         @form = form(Decidim::ParticipatoryDocuments::SuggestionForm).from_params({})
       end
 
       private
+
+      def suggestions
+        @suggestions ||= section.suggestions.where(author: current_user)
+      end
 
       def section
         @section ||= document.sections.find_by!(uid: params[:id])

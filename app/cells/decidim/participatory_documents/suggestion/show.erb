@@ -1,4 +1,5 @@
 <div class="row">
   <%#= cell "decidim/author", present(suggestion.author), has_action: false, from: suggestion %>
-  <%= translated_attribute(suggestion.body) %>
+  <%= translated_attribute(model.body) %>
+  <%= render :admin_answer if has_answer? %>
 </div>
