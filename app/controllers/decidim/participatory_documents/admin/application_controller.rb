@@ -11,6 +11,13 @@ module Decidim
       class ApplicationController < Decidim::Admin::Components::BaseController
         helper Decidim::ApplicationHelper
         helper Decidim::ParticipatoryDocuments::Admin::DocumentsHelper
+        helper_method :document
+
+        protected
+
+        def document
+          @document ||= Decidim::ParticipatoryDocuments::Document.find_by(component: current_component)
+        end
       end
     end
   end
