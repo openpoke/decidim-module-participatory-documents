@@ -16,6 +16,14 @@ describe "Index participatory_documents", type: :system do
     visit_component
   end
 
+  context "when document is not uploaded" do
+    let!(:document) { nil }
+
+    it_behaves_like "a 404 page" do
+      let(:target_path) { main_component_path(component) }
+    end
+  end
+
   it "shows the index page" do
     expect(page).to have_css("iframe", id: "pdf-iframe")
   end
