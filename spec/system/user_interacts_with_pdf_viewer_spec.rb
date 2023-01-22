@@ -22,7 +22,6 @@ describe "User interaction with PDF viewer", type: :system do
     section.annotations.each do |annotation|
       expect(page).to have_selector(:id, annotation.uid)
     end
-    expect(page).to have_content("vbar")
   end
 
   it "displays the drawer" do

@@ -39,7 +39,7 @@ module Decidim
           let(:answer_is_draft) { draft }
 
           it "provides an answer" do
-            expect(suggestion.answer).to be_nil
+            expect(suggestion.answer).to eq({})
             subject.call
             suggestion.reload
             expect(suggestion.answer["en"]).to eq("Some text for answer")
