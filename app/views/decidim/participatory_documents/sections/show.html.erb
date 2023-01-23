@@ -1,3 +1,8 @@
+<div class="suggestion-title">
+  <%= translated_attribute(section.title) %>
+  <div class="close">X</div>
+</div>
+
 <div id="suggestion-list">
   <% suggestions.each do |suggestion| %>
     <%= cell("decidim/participatory_documents/suggestion", suggestion) %>
@@ -7,3 +12,5 @@
 <div id="participation-modal-form">
   <%= render "decidim/participatory_documents/suggestions/form" %>
 </div>
+<style type="text/css">
+</style>

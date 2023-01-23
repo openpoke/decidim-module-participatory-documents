@@ -1,17 +1,36 @@
 #participation-modal {
   width: 0;
   position: absolute;
-  height: 100%;
-  background: rgba(0, 0, 255, .5);
-  top: 0;
   right: 0;
   overflow: hidden;
   transition: width .5s;
   z-index: 100000;
+  height: calc(100vh - 66px);
+  top: 66px;
+  background: #f0f8fd;
+  font-size: 12px;
+  color: #000;
 }
 
 #participation-modal.active {
   overflow: auto;
   width: 40vw;
   transition: width 1s;
+}
+
+.suggestion-title {
+  height: 2rem;
+  background: #dfedf5;
+  border-bottom: 2px solid #c6e0ee;
+}
+
+#suggestion-list {
+  padding: 1.5rem 1rem;
+  border-bottom: 1px solid #c6e0ee;
+}
+
+#participation-modal-form {
+  padding-top: 1rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
 }
