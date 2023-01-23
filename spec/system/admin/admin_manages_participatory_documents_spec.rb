@@ -47,6 +47,7 @@ describe "Admin manages participatory documents", type: :system do
 
       expect(page).to have_link("Edit participatory areas")
       expect(page).to have_link("Edit/upload document")
+      expect(page).to have_content("List Suggestions")
     end
   end
 end
