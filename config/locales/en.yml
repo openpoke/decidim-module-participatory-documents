@@ -79,6 +79,9 @@ en:
             body: Body
             created_at: Creation date
             title: Answer Suggestion
+            update: Update
+      documents:
+        missing: There is no document uploaded
       models:
         document:
           fields:
