@@ -5,8 +5,6 @@ module Decidim
     module Admin
       class SectionsController < Admin::ApplicationController
         layout false, only: [:new, :edit]
-        helper_method :document
-
         def destroy
           enforce_permission_to :destroy, :participatory_document
           @form = form(Decidim::ParticipatoryDocuments::Admin::SectionForm).from_model(section)
@@ -67,10 +65,6 @@ module Decidim
         end
 
         private
-
-        def document
-          @document ||= Decidim::ParticipatoryDocuments::Document.find_by!(component: current_component)
-        end
 
         def section
           document.sections.find_by!(uid: params[:id])

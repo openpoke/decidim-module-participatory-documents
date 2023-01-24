@@ -9,7 +9,7 @@ module Decidim
         helper Decidim::ParticipatoryDocuments::Admin::SuggestionHelper
         helper Decidim::Messaging::ConversationHelper
 
-        helper_method :suggestions, :suggestion, :document
+        helper_method :suggestions, :suggestion
 
         def show
           enforce_permission_to :update, :participatory_document, suggestion: suggestion
@@ -65,10 +65,6 @@ module Decidim
 
         def suggestion
           base_query.find(params[:id])
-        end
-
-        def document
-          @document ||= Decidim::ParticipatoryDocuments::Document.find_by(component: current_component)
         end
       end
     end

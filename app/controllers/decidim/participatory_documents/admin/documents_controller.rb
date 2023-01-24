@@ -7,7 +7,7 @@ module Decidim
       class DocumentsController < Admin::ApplicationController
         include Decidim::ApplicationHelper
 
-        helper_method :document, :sections
+        helper_method :sections
         before_action :add_snippets, only: :edit_pdf
 
         def index
@@ -76,12 +76,8 @@ module Decidim
           snippets.add(:head, helpers.javascript_pack_tag("decidim_participatory_documents_admin"))
         end
 
-        def document
-          @document ||= Decidim::ParticipatoryDocuments::Document.find_by(component: current_component)
-        end
-
         def sections
-          @sections ||= Decidim::ParticipatoryDocuments::Section.where(document: document)
+          @sections ||= document.sections
         end
       end
     end

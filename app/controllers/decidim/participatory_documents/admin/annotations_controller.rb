@@ -54,12 +54,6 @@ module Decidim
             end
           end
         end
-
-        private
-
-        def document
-          @document ||= Decidim::ParticipatoryDocuments::Document.find_by!(component: current_component)
-        end
       end
     end
   end
