@@ -58,6 +58,9 @@ en:
             invalid: There was a problem updating Document
             success: Document has been successfully updated
         suggestions:
+          answer:
+            invalid: There was an error adding the answer
+            success: Successfully added the answer
           index:
             actions:
               answer: Answer
@@ -70,12 +73,12 @@ en:
             suggestion: Suggestion
             title: List Suggestions
           show:
-            accepted: Accepted
-            evaluating: Evaluating
-            not_answered: Not Answered
-            rejected: Rejected
+            answer: Answer
+            answer_is_draft: Draft
+            authors: Authors
+            body: Body
+            created_at: Creation date
             title: Answer Suggestion
-            update: Update
       models:
         document:
           fields:

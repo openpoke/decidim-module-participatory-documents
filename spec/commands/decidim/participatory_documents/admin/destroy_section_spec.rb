@@ -28,7 +28,7 @@ module Decidim
           it "is not valid" do
             # expect { subject.call }.to broadcast(:invalid)
             pending "There are no existance constraints yet"
-            raise "failure"
+            raise "Pending"
           end
         end
 

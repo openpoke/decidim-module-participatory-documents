@@ -7,12 +7,30 @@ module Decidim
         include Decidim::Admin::Filterable
         include Decidim::Admin::Paginable
         helper Decidim::ParticipatoryDocuments::Admin::SuggestionHelper
+        helper Decidim::Messaging::ConversationHelper
 
         helper_method :suggestions, :suggestion, :document
 
         def show
           enforce_permission_to :update, :participatory_document, suggestion: suggestion
           @form = form(Decidim::ParticipatoryDocuments::Admin::AnswerSuggestionForm).from_model(suggestion)
+        end
+
+        def answer
+          enforce_permission_to :update, :participatory_document, suggestion: suggestion
+          @form = form(Decidim::ParticipatoryDocuments::Admin::AnswerSuggestionForm).from_params(params)
+
+          Admin::AnswerSuggestion.call(@form, suggestion) do
+            on(:ok) do
+              flash[:notice] = I18n.t("suggestions.answer.success", scope: "decidim.participatory_documents.admin")
+              redirect_to document_suggestions_path(document)
+            end
+
+            on(:invalid) do
+              flash.now[:alert] = I18n.t("suggestions.answer.invalid", scope: "decidim.participatory_documents.admin")
+              render action: "show"
+            end
+          end
         end
 
         private
@@ -28,7 +46,7 @@ module Decidim
         end
 
         def suggestion_stats
-          Suggestion::POSSIBLE_STATES
+          Decidim::ParticipatoryDocuments::Suggestion::POSSIBLE_STATES
         end
 
         def filters
