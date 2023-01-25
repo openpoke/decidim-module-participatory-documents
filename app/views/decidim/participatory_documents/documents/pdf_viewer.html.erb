@@ -63,8 +63,17 @@ See https://github.com/adobe-type-tools/cmap-resources
           return document.getElementsByName("csrf-token")[0].content;
       }
 
+      // Sanitize internal path
+      getPath() {
+        return this.path.split('?')[0];
+      }
+
+      getQueryString() {
+        return this.path.indexOf('?') !== -1 ? "?" + this.path.split('?')[1] : '';
+      }
+
       getGroupUrl(){
-          return this.path + "/" + this.group;
+          return this.getPath() + "/" + this.group + this.getQueryString();
       }
 
       populateArea(data) {
