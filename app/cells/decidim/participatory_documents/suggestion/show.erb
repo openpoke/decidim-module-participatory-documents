@@ -1,0 +1,10 @@
+<div class="row">
+  <%#= cell "decidim/author", present(suggestion.author), has_action: false, from: suggestion %>
+  <%= translated_attribute(model.body) %>
+
+  <% if has_answer? || model.withdrawn? %>
+    <span class="<%= suggestion_state_badge_css_class %> label proposal-status"><%= humanize_suggestion_state %></span>
+  <% end %>
+
+  <%= render :admin_answer if has_answer? %>
+</div>

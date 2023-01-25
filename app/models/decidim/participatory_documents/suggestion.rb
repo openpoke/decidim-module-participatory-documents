@@ -18,6 +18,16 @@ module Decidim
 
       POSSIBLE_STATES = %w(not_answered evaluating accepted rejected withdrawn).freeze
 
+      POSSIBLE_STATES.each do |possible|
+        define_method(:"#{possible}?") do
+          state == possible.to_s
+        end
+      end
+
+      def answered?
+        answered_at.present?
+      end
+
       scope :sort_by_suggestable_asc, lambda {
         order(suggestable_type: :asc, suggestable_id: :asc)
       }

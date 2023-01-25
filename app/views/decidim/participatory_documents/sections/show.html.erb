@@ -1,0 +1,9 @@
+<div id="suggestion-list">
+  <% suggestions.each do |suggestion| %>
+    <%= cell("decidim/participatory_documents/suggestion", suggestion) %>
+  <% end %>
+</div>
+
+<div id="participation-modal-form">
+  <%= render "decidim/participatory_documents/suggestions/form" %>
+</div>
