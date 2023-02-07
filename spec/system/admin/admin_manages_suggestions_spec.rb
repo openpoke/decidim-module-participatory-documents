@@ -44,7 +44,7 @@ describe "Admin manages participatory documents", type: :system do
     end
   end
 
-  shared_examples "publish suggestion answers" do |selection:, draft: false|
+  shared_examples "publish suggestion answers" do |selection:, published: false|
     before do
       within(".table-scroll") do
         find(".action-icon--show-suggestion", match: :first).click
@@ -59,7 +59,7 @@ describe "Admin manages participatory documents", type: :system do
           "#answer_suggestion-answer-tabs",
           en: "This is my answer"
         )
-        check :answer_suggestion_answer_is_draft if draft
+        check :answer_suggestion_answer_is_published if published
         click_button "Answer"
       end
       expect(page).to have_content("Successfully")
@@ -69,29 +69,46 @@ describe "Admin manages participatory documents", type: :system do
   context "when answering suggestion" do
     context "when rejects the suggestion" do
       it_behaves_like "publish suggestion answers", selection: "Rejected"
-      context "and is saved as draft" do
-        it_behaves_like "publish suggestion answers", selection: "Rejected", draft: true
+      context "and being published" do
+        it_behaves_like "publish suggestion answers", selection: "Rejected", published: true
       end
     end
 
     context "when accepts the suggestion" do
       it_behaves_like "publish suggestion answers", selection: "Accepted"
-      context "and is saved as draft" do
-        it_behaves_like "publish suggestion answers", selection: "Accepted", draft: true
+      context "and being published" do
+        it_behaves_like "publish suggestion answers", selection: "Accepted", published: true
       end
     end
 
     context "when evaluate the suggestion" do
       it_behaves_like "publish suggestion answers", selection: "Evaluating"
-      context "and is saved as draft" do
-        it_behaves_like "publish suggestion answers", selection: "Evaluating", draft: true
+      context "and being published" do
+        it_behaves_like "publish suggestion answers", selection: "Evaluating", published: true
       end
     end
 
     context "when Not Answering the suggestion" do
       it_behaves_like "publish suggestion answers", selection: "Not Answered"
-      context "and is saved as draft" do
-        it_behaves_like "publish suggestion answers", selection: "Not Answered", draft: true
+      context "and being published" do
+        # it_behaves_like "publish suggestion answers", selection: "Not Answered", published: true
+        it "publishes some answers" do
+          within(".table-scroll") do
+            find(".action-icon--show-suggestion", match: :first).click
+          end
+          within "form.suggestion_form_admin" do
+            choose "Not Answered"
+            fill_in_i18n(
+              :answer_suggestion_answer,
+              "#answer_suggestion-answer-tabs",
+              en: "This is my answer"
+            )
+            check :answer_suggestion_answer_is_published
+            click_button "Answer"
+          end
+          expect(page).not_to have_content("Successfully added the answer")
+          expect(page).to have_content(%q(It's not possible to publish with status "not answered"))
+        end
       end
     end
   end
