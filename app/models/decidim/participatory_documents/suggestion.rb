@@ -16,6 +16,8 @@ module Decidim
       delegate :organization, to: :suggestable
       belongs_to :suggestable, polymorphic: true
 
+      has_many :notes, class_name: "Decidim::ParticipatoryDocuments::SuggestionNote", dependent: :destroy, counter_cache: :suggestion_notes_count
+
       POSSIBLE_STATES = %w(not_answered evaluating accepted rejected withdrawn).freeze
 
       POSSIBLE_STATES.each do |possible|
