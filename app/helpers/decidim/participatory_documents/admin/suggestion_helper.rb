@@ -9,7 +9,7 @@ module Decidim
         end
 
         def icon_with_link_to_suggestion(document, suggestion)
-          return unless allowed_to?(:create, :suggestion, suggestion: suggestion)
+          return unless allowed_to?(:create, :suggestion_note, suggestion: suggestion) || allowed_to?(:update, :suggestion_answer, suggestion: suggestion)
 
           icon_link_to("comment-square",
                        document_suggestion_path(document, suggestion),
