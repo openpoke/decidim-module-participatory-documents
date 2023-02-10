@@ -89,4 +89,13 @@ FactoryBot.define do
       answer_is_published { true }
     end
   end
+
+  factory :suggestion_valuation_assignment, class: "Decidim::ParticipatoryDocuments::ValuationAssignment" do
+    suggestion
+    valuator_role do
+      space = proposal.component.participatory_space
+      organization = space.organization
+      build :participatory_process_user_role, role: :valuator, user: build(:user, organization: organization)
+    end
+  end
 end

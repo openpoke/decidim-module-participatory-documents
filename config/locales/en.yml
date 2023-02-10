@@ -75,11 +75,17 @@ en:
           index:
             actions:
               answer: Answer
+              assign_to_valuator: Assign to valuator
+              assign_to_valuator_button: Assign
+              cancel: Cancel
               title: Actions
+              unassign_from_valuator: Unassign from valuator
+              unassign_from_valuator_button: Unassign
             created_at: Submitted on
             global: Global
             id: Id
             section: Section
+            selected: selected
             state: State
             suggestion: Suggestion
             title: List Suggestions
