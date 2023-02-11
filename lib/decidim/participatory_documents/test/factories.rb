@@ -91,9 +91,9 @@ FactoryBot.define do
   end
 
   factory :suggestion_valuation_assignment, class: "Decidim::ParticipatoryDocuments::ValuationAssignment" do
-    suggestion
+    suggestion { build(:participatory_documents_suggestion) }
     valuator_role do
-      space = proposal.component.participatory_space
+      space = suggestion.component.participatory_space
       organization = space.organization
       build :participatory_process_user_role, role: :valuator, user: build(:user, organization: organization)
     end

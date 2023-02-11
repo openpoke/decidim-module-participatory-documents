@@ -39,20 +39,37 @@ module Decidim
           :body_cont
         end
 
+        def filters
+          [
+            :state_eq,
+            :valuator_role_ids_has
+          ]
+        end
+
         def filters_with_values
           {
-            state_eq: suggestion_stats
+            state_eq: suggestion_stats,
+            valuator_role_ids_has: valuator_role_ids
           }
+        end
+
+        def valuator_role_ids
+          current_participatory_space.user_roles(:valuator).pluck(:id)
+        end
+
+        # Can't user `super` here, because it does not belong to a superclass
+        # but to a concern.
+        def dynamically_translated_filters
+          [:valuator_role_ids_has]
         end
 
         def suggestion_stats
           Decidim::ParticipatoryDocuments::Suggestion::POSSIBLE_STATES
         end
 
-        def filters
-          [
-            :state_eq
-          ]
+        def translated_valuator_role_ids_has(valuator_role_id)
+          user_role = current_participatory_space.user_roles(:valuator).find_by(id: valuator_role_id)
+          user_role&.user&.name
         end
 
         def suggestions

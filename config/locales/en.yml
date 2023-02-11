@@ -24,6 +24,8 @@ en:
               published: Published
               rejected: Rejected
               withdrawn: Withdrawn
+          valuator_role_ids_has:
+            label: Assigned to valuator
     admin_log:
       annotation:
         create: "%{user_name} created a new participatory area for %{document_name}"
@@ -94,6 +96,13 @@ en:
             body: Body
             created_at: Creation date
             update: Update
+        valuation_assignments:
+          create:
+            invalid: There was an error assigning suggestions to a valuator
+            success: Suggestions assigned to a valuator successfully
+          delete:
+            invalid: There was an error unassigning suggestions from a valuator
+            success: Valuator unassigned from suggestions successfully
       documents:
         missing: There is no document uploaded
       models:
@@ -107,6 +116,9 @@ en:
         section:
           fields:
             artificial_tile: Section %{position}
+        suggestion:
+          fields:
+            valuators: Valuators
       'no': 'No'
       suggestions:
         answers:
