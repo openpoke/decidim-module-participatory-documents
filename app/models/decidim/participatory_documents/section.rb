@@ -12,7 +12,7 @@ module Decidim
       has_many :annotations, class_name: "Decidim::ParticipatoryDocuments::Annotation", dependent: :restrict_with_error
       has_many :suggestions, class_name: "Decidim::ParticipatoryDocuments::Suggestion", dependent: :restrict_with_error, as: :suggestable
 
-      delegate :organization, :participatory_space, to: :document, allow_nil: true
+      delegate :organization, :participatory_space, :component, to: :document, allow_nil: true
 
       translatable_fields :title
       def self.log_presenter_class_for(_log)
