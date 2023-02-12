@@ -13,7 +13,7 @@ module Decidim
       translatable_fields :body, :answer
       validates :body, presence: true
 
-      delegate :organization, to: :suggestable
+      delegate :organization, to: :suggestable, allow_nil: true
       belongs_to :suggestable, polymorphic: true
       has_many :valuation_assignments, class_name: "Decidim::ParticipatoryDocuments::ValuationAssignment",
                                        foreign_key: "decidim_participatory_documents_suggestion_id", dependent: :destroy

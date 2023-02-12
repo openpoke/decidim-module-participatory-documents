@@ -7,13 +7,14 @@ module Decidim
       isolate_namespace Decidim::ParticipatoryDocuments
 
       routes do
+        scope path: "documents/:document_id/sections/:section_id" do
+          resources :suggestions, only: [:index, :create], controller: :section_suggestions, as: :document_section_suggestions
+        end
         resources :documents do
           collection do
             get :pdf_viewer
           end
-          resources :sections, only: [:show, :index] do
-            resources :suggestions, except: [:show, :index, :destroy]
-          end
+          resources :suggestions, only: [:index, :create], controller: :document_suggestions
         end
 
         root to: "documents#index"
