@@ -40,6 +40,9 @@ en:
     components:
       participatory_documents:
         name: Participatory Document
+        settings:
+          global:
+            suggestion_answering_enabled: Enable suggestion answering from admin
     participatory_documents:
       actions:
         back: Back
@@ -96,6 +99,12 @@ en:
             body: Body
             created_at: Creation date
             update: Update
+          valuators:
+            assigned_valuators: Assigned valuators
+            remove_assignment: Remove assignment
+            remove_assignment_confirmation: Are you sure you want to remove the valuator
+              from this suggestion?
+            valuators: Valuators
         valuation_assignments:
           create:
             invalid: There was an error assigning suggestions to a valuator

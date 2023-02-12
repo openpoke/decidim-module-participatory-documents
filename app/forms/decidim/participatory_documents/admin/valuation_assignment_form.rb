@@ -13,7 +13,8 @@ module Decidim
         validate :same_participatory_space
 
         def suggestions
-          @suggestions ||= Decidim::ParticipatoryDocuments::Suggestion.where(id: suggestion_ids).uniq
+          # here we need to check for component
+          @suggestions ||= Decidim::ParticipatoryDocuments::Suggestion.where(id: suggestion_ids).uniq.filter { |suggestion| suggestion.component == current_component }
         end
 
         def valuator_role

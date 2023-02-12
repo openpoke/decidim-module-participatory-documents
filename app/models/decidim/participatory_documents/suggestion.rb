@@ -18,24 +18,7 @@ module Decidim
       has_many :valuation_assignments, class_name: "Decidim::ParticipatoryDocuments::ValuationAssignment",
                                        foreign_key: "decidim_participatory_documents_suggestion_id", dependent: :destroy
 
-      def valuators
-        valuator_role_ids = valuation_assignments.where(suggestion: self).pluck(:valuator_role_id)
-        user_ids = participatory_space.user_roles(:valuator).where(id: valuator_role_ids).pluck(:decidim_user_id)
-        participatory_space.organization.users.where(id: user_ids)
-      end
-
-      # method to filter by assigned valuator role ID
-      def self.valuator_role_ids_has(value)
-        query = <<-SQL.squish
-        :value = any(
-          (SELECT decidim_participatory_documents_valuation_assignments.valuator_role_id
-          FROM decidim_participatory_documents_valuation_assignments
-          WHERE decidim_participatory_documents_valuation_assignments.decidim_participatory_documents_suggestion_id = decidim_participatory_documents_suggestions.id
-          )
-        )
-        SQL
-        where(query, value: value)
-      end
+      delegate :participatory_space, :component, to: :suggestable, allow_nil: true
 
       POSSIBLE_STATES = %w(not_answered evaluating accepted rejected withdrawn).freeze
 
@@ -69,6 +52,49 @@ module Decidim
 
       ransacker :body do
         Arel.sql(%{cast("decidim_participatory_documents_suggestions"."body" as text)})
+      end
+
+      scope :sort_by_valuation_assignments_count_asc, lambda {
+        order(Arel.sql("#{sort_by_valuation_assignments_count_nulls_last_query} ASC NULLS FIRST").to_s)
+      }
+
+      scope :sort_by_valuation_assignments_count_desc, lambda {
+        order(Arel.sql("#{sort_by_valuation_assignments_count_nulls_last_query} DESC NULLS LAST").to_s)
+      }
+
+      def self.ransackable_scopes(_auth = nil)
+        [:valuator_role_ids_has]
+      end
+
+      # method to filter by assigned valuator role ID
+      def self.valuator_role_ids_has(value)
+        query = <<-SQL.squish
+        :value = any(
+          (SELECT decidim_participatory_documents_valuation_assignments.valuator_role_id
+          FROM decidim_participatory_documents_valuation_assignments
+          WHERE decidim_participatory_documents_valuation_assignments.decidim_participatory_documents_suggestion_id = decidim_participatory_documents_suggestions.id
+          )
+        )
+        SQL
+        where(query, value: value)
+      end
+
+      # Defines the base query so that ransack can actually sort by this value
+      def self.sort_by_valuation_assignments_count_nulls_last_query
+        <<-SQL.squish
+        (
+          SELECT COUNT(decidim_participatory_documents_valuation_assignments.id)
+          FROM decidim_participatory_documents_valuation_assignments
+          WHERE decidim_participatory_documents_valuation_assignments.decidim_participatory_documents_suggestion_id = decidim_participatory_documents_suggestions.id
+          GROUP BY decidim_participatory_documents_valuation_assignments.decidim_participatory_documents_suggestion_id
+        )
+        SQL
+      end
+
+      def valuators
+        valuator_role_ids = valuation_assignments.where(suggestion: self).pluck(:valuator_role_id)
+        user_ids = participatory_space.user_roles(:valuator).where(id: valuator_role_ids).pluck(:decidim_user_id)
+        participatory_space.organization.users.where(id: user_ids)
       end
     end
   end
