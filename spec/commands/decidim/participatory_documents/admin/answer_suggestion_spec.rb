@@ -13,7 +13,7 @@ module Decidim
 
         let(:invalid) { false }
         let(:state) { "not_answered" }
-        let(:answer_is_draft) { true }
+        let(:answer_is_published) { false }
         let(:answer) { { en: "Some text for answer" } }
         let(:form) do
           double(
@@ -22,7 +22,7 @@ module Decidim
             invalid?: invalid,
             state: state,
             answer: answer,
-            answer_is_draft: answer_is_draft
+            answer_is_published: answer_is_published
           )
         end
 
@@ -36,7 +36,7 @@ module Decidim
 
         shared_examples "provides an answer to suggestion" do |selection:, draft: false|
           let(:state) { selection }
-          let(:answer_is_draft) { draft }
+          let(:answer_is_published) { draft }
 
           it "provides an answer" do
             expect(suggestion.answer).to eq({})
@@ -44,7 +44,7 @@ module Decidim
             suggestion.reload
             expect(suggestion.answer["en"]).to eq("Some text for answer")
             expect(suggestion.state).to eq(selection)
-            expect(suggestion.answer_is_draft).to eq(answer_is_draft)
+            expect(suggestion.answer_is_published).to eq(answer_is_published)
           end
 
           it "saves an additional version", versioning: true do
