@@ -60,7 +60,7 @@ FactoryBot.define do
     answer { {} }
 
     trait :draft do
-      answer_is_draft { true }
+      answer_is_published { false }
     end
 
     trait :not_answered do
@@ -70,6 +70,7 @@ FactoryBot.define do
     trait :evaluating do
       state { :evaluating }
       answered_at { Time.zone.now }
+      answer_is_published { true }
     end
 
     trait :withdrawn do
@@ -79,11 +80,13 @@ FactoryBot.define do
     trait :rejected do
       state { :rejected }
       answered_at { Time.zone.now }
+      answer_is_published { true }
     end
 
     trait :accepted do
       state { :accepted }
       answered_at { Time.zone.now }
+      answer_is_published { true }
     end
   end
 end

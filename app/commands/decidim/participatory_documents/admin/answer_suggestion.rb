@@ -35,7 +35,7 @@ module Decidim
             attributes = {
               state: form.state,
               answer: form.answer,
-              answer_is_draft: form.answer_is_draft
+              answer_is_published: form.answer_is_published
             }
 
             attributes[:answered_at] = if %w(not_answered withdrawn).include?(form.state)
