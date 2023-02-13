@@ -27,6 +27,9 @@ module Decidim
           allow! if permission_action.subject == :document_section
           allow! if permission_action.subject == :document_annotations
           allow! if permission_action.subject == :participatory_document
+          allow! if permission_action.subject == :suggestions
+
+          # raise permission_action.subject.inspect
           permission_action
         end
 
@@ -38,8 +41,10 @@ module Decidim
           allow! if permission_action.subject == :suggestion_note
         end
 
+        # Proposals can only be answered from the admin when the
+        # corresponding setting is enabled.
         def can_create_suggestion_answer?
-          allow! if permission_action.subject == :suggestion_answer
+          toggle_allow(admin_suggestion_answering_is_enabled?) if permission_action.subject == :suggestion_answer
         end
 
         def create_permission_action?
@@ -59,12 +64,6 @@ module Decidim
             component_settings.try(:suggestion_answering_enabled)
         end
 
-        # Proposals can only be answered from the admin when the
-        # corresponding setting is enabled.
-        def can_create_suggestion_answer?
-          toggle_allow(admin_suggestion_answering_is_enabled?) if permission_action.subject == :suggestion_answer
-        end
-
         # There's no special condition to create proposal notes, only
         # users with access to the admin section can do it.
         def can_create_proposal_note?
@@ -80,8 +79,8 @@ module Decidim
         def valuator_assigned_to_suggestion?
           @valuator_assigned_to_suggestion ||=
             Decidim::Proposals::ValuationAssignment
-              .where(suggestion: suggestion, valuator_role: user_valuator_role)
-              .any?
+            .where(suggestion: suggestion, valuator_role: user_valuator_role)
+            .any?
         end
 
         def user_valuator_role
