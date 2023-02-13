@@ -6,7 +6,7 @@ module Decidim
       class SectionsController < Admin::ApplicationController
         layout false, only: [:new, :edit]
         def destroy
-          enforce_permission_to :destroy, :participatory_document
+          enforce_permission_to :destroy, :document_section
           @form = form(Decidim::ParticipatoryDocuments::Admin::SectionForm).from_model(section)
 
           Admin::DestroySection.call(@form, document) do
@@ -21,7 +21,7 @@ module Decidim
         end
 
         def create
-          enforce_permission_to :update, :participatory_document
+          enforce_permission_to :update, :document_section
           @form = form(Decidim::ParticipatoryDocuments::Admin::SectionForm).from_params(params)
 
           Admin::CreateSection.call(@form, document) do
@@ -36,7 +36,7 @@ module Decidim
         end
 
         def update
-          enforce_permission_to :update, :participatory_document
+          enforce_permission_to :update, :document_section
           @form = form(Decidim::ParticipatoryDocuments::Admin::SectionForm).from_params(params)
 
           Admin::UpdateSection.call(@form, document) do
@@ -51,14 +51,14 @@ module Decidim
         end
 
         def edit
-          enforce_permission_to :update, :participatory_document
+          enforce_permission_to :update, :document_section
           @form = form(Decidim::ParticipatoryDocuments::Admin::SectionForm).from_model(section)
 
           render partial: "form"
         end
 
         def new
-          enforce_permission_to :update, :participatory_document
+          enforce_permission_to :update, :document_section
           @form = form(Decidim::ParticipatoryDocuments::Admin::SectionForm).from_params({})
 
           render partial: "form"

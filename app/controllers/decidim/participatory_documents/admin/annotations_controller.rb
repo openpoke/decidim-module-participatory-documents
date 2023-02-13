@@ -11,7 +11,7 @@ module Decidim
         end
 
         def destroy
-          enforce_permission_to :create, :participatory_document
+          enforce_permission_to :create, :document_annotations
           @form = form(Decidim::ParticipatoryDocuments::Admin::AnnotationForm).from_params(params)
 
           Admin::DestroyAnnotation.call(@form, document) do
@@ -26,7 +26,7 @@ module Decidim
         end
 
         def update
-          enforce_permission_to :update, :participatory_document
+          enforce_permission_to :update, :document_annotations
           @form = form(Decidim::ParticipatoryDocuments::Admin::AnnotationForm).from_params(params)
 
           Admin::UpdateAnnotation.call(@form, document) do
@@ -41,7 +41,7 @@ module Decidim
         end
 
         def create
-          enforce_permission_to :create, :participatory_document
+          enforce_permission_to :create, :document_annotations
           @form = form(Decidim::ParticipatoryDocuments::Admin::AnnotationForm).from_params(params)
 
           Admin::CreateAnnotation.call(@form, document) do

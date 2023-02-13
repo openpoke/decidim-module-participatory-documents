@@ -12,12 +12,12 @@ module Decidim
         helper_method :suggestions, :suggestion
 
         def show
-          enforce_permission_to :update, :participatory_document, suggestion: suggestion
+          enforce_permission_to :update, :suggestion_answer, suggestion: suggestion
           @form = form(Decidim::ParticipatoryDocuments::Admin::AnswerSuggestionForm).from_model(suggestion)
         end
 
         def answer
-          enforce_permission_to :update, :participatory_document, suggestion: suggestion
+          enforce_permission_to :update, :suggestion_answer, suggestion: suggestion
           @form = form(Decidim::ParticipatoryDocuments::Admin::AnswerSuggestionForm).from_params(params)
 
           Admin::AnswerSuggestion.call(@form, suggestion) do
