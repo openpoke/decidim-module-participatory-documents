@@ -98,4 +98,10 @@ FactoryBot.define do
       build :participatory_process_user_role, role: :valuator, user: build(:user, organization: organization)
     end
   end
+
+  factory :participatory_documents_suggestion_note, class: "Decidim::ParticipatoryDocuments::SuggestionNote" do
+    body { Faker::Lorem.sentences(number: 3).join("\n") }
+    suggestion { build(:participatory_documents_suggestion) }
+    author { build(:user, organization: suggestion.organization) }
+  end
 end

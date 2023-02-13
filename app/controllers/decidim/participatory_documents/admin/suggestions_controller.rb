@@ -9,7 +9,7 @@ module Decidim
         helper Decidim::ParticipatoryDocuments::Admin::SuggestionHelper
         helper Decidim::Messaging::ConversationHelper
 
-        helper_method :suggestions, :suggestion, :find_valuators_for_select
+        helper_method :suggestions, :suggestion, :notes_form, :find_valuators_for_select
 
         def show
           enforce_permission_to :update, :suggestion_answer, suggestion: suggestion
@@ -34,6 +34,10 @@ module Decidim
         end
 
         private
+
+        def notes_form
+          @notes_form ||= form(Decidim::ParticipatoryDocuments::Admin::SuggestionNoteForm).from_params({})
+        end
 
         def search_field_predicate
           :body_cont

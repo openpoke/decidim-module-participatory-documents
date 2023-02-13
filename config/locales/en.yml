@@ -37,6 +37,8 @@ en:
       section:
         create: "%{user_name} has created a new Section named %{resource_name} for
           %{document_name}"
+      suggestion_note:
+        create: "%{user_name} created a new suggestion note %{suggestion}"
     components:
       participatory_documents:
         name: Participatory Document
@@ -69,6 +71,15 @@ en:
             error: 
             invalid: There was a problem updating Document
             success: Document has been successfully updated
+        suggestion_notes:
+          create:
+            error: There was a problem creating this suggestion note
+            success: Suggestion note successfully created
+          form:
+            note: Note
+            submit: Submit
+          leave_your_note: Leave your note
+          title: Private notes
         suggestions:
           answer:
             invalid: There was an error adding the answer

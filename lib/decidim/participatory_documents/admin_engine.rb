@@ -26,6 +26,7 @@ module Decidim
             member do
               patch :answer
             end
+            resources :suggestion_notes, only: [:create]
           end
         end
 
