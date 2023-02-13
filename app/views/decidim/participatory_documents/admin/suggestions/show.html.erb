@@ -44,5 +44,7 @@
 </div>
 
 <% if allowed_to?(:create, :suggestion_note, suggestion: suggestion) %>
-  <%= render "decidim/participatory_documents/admin/suggestions/form" %>
+  <%= render "decidim/participatory_documents/admin/suggestion_notes/suggestion_notes" %>
 <% end %>
+
+<%= render "decidim/participatory_documents/admin/suggestions/form" %>
