@@ -1,5 +1,12 @@
 ---
 en:
+  activemodel:
+    errors:
+      models:
+        answer_suggestion:
+          attributes:
+            state:
+              inclusion: It's not possible to publish with status "not answered"
   decidim:
     admin:
       filters:
@@ -61,10 +68,6 @@ en:
           answer:
             invalid: There was an error adding the answer
             success: Successfully added the answer
-          form:
-            answer: Answer
-            answer_is_draft: Draft
-            title: Answer Suggestion
           index:
             actions:
               answer: Answer
@@ -77,9 +80,12 @@ en:
             suggestion: Suggestion
             title: List Suggestions
           show:
+            answer: Answer
+            answer_is_published: Published
             authors: Authors
             body: Body
             created_at: Creation date
+            title: Answer Suggestion
             update: Update
       documents:
         missing: There is no document uploaded

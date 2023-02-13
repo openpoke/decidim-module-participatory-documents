@@ -32,13 +32,10 @@ module Decidim
 
       protected
 
-      delegate :answer_is_draft?, to: :model
       def has_answer?
-        return false if answer_is_draft?
         return false if %w(not_answered withdrawn).include?(model.state)
-        return false unless model.answered?
 
-        true
+        model.answered? && model.answer_is_published?
       end
     end
   end
