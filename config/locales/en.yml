@@ -24,6 +24,8 @@ en:
               published: Published
               rejected: Rejected
               withdrawn: Withdrawn
+          valuator_role_ids_has:
+            label: Assigned to valuator
     admin_log:
       annotation:
         create: "%{user_name} created a new participatory area for %{document_name}"
@@ -40,6 +42,9 @@ en:
     components:
       participatory_documents:
         name: Participatory Document
+        settings:
+          global:
+            suggestion_answering_enabled: Enable suggestion answering from admin
     participatory_documents:
       actions:
         back: Back
@@ -86,11 +91,17 @@ en:
           index:
             actions:
               answer: Answer
+              assign_to_valuator: Assign to valuator
+              assign_to_valuator_button: Assign
+              cancel: Cancel
               title: Actions
+              unassign_from_valuator: Unassign from valuator
+              unassign_from_valuator_button: Unassign
             created_at: Submitted on
             global: Global
             id: Id
             section: Section
+            selected: selected
             state: State
             suggestion: Suggestion
             title: List Suggestions
@@ -99,6 +110,19 @@ en:
             body: Body
             created_at: Creation date
             update: Update
+          valuators:
+            assigned_valuators: Assigned valuators
+            remove_assignment: Remove assignment
+            remove_assignment_confirmation: Are you sure you want to remove the valuator
+              from this suggestion?
+            valuators: Valuators
+        valuation_assignments:
+          create:
+            invalid: There was an error assigning suggestions to a valuator
+            success: Suggestions assigned to a valuator successfully
+          delete:
+            invalid: There was an error unassigning suggestions from a valuator
+            success: Valuator unassigned from suggestions successfully
       documents:
         missing: There is no document uploaded
       models:
@@ -112,6 +136,9 @@ en:
         section:
           fields:
             artificial_tile: Section %{position}
+        suggestion:
+          fields:
+            valuators: Valuators
       'no': 'No'
       suggestions:
         answers:

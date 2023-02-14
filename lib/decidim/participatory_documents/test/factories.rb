@@ -90,6 +90,15 @@ FactoryBot.define do
     end
   end
 
+  factory :suggestion_valuation_assignment, class: "Decidim::ParticipatoryDocuments::ValuationAssignment" do
+    suggestion { build(:participatory_documents_suggestion) }
+    valuator_role do
+      space = suggestion.component.participatory_space
+      organization = space.organization
+      build :participatory_process_user_role, role: :valuator, user: build(:user, organization: organization)
+    end
+  end
+
   factory :participatory_documents_suggestion_note, class: "Decidim::ParticipatoryDocuments::SuggestionNote" do
     body { Faker::Lorem.sentences(number: 3).join("\n") }
     suggestion { build(:participatory_documents_suggestion) }

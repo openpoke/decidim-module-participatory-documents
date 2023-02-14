@@ -18,6 +18,11 @@ module Decidim
           resources :annotations, except: [:show, :new, :edit]
           resources :sections, except: [:show, :index]
           resources :suggestions, only: [:index, :show] do
+            resources :valuation_assignments, only: [:destroy]
+            collection do
+              resource :valuation_assignment, only: [:create, :destroy]
+            end
+
             member do
               patch :answer
             end

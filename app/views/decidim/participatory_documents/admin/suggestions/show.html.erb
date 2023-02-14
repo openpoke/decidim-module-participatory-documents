@@ -43,6 +43,8 @@
   </div>
 </div>
 
+<%= render "decidim/participatory_documents/admin/suggestions/valuators" %>
+
 <% if allowed_to?(:create, :suggestion_note, suggestion: suggestion) %>
   <%= render "decidim/participatory_documents/admin/suggestion_notes/suggestion_notes" %>
 <% end %>

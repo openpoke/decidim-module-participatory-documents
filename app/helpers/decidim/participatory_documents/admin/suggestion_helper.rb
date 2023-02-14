@@ -16,6 +16,11 @@ module Decidim
                        t(:answer, scope: "decidim.participatory_documents.admin.suggestions.index.actions"),
                        class: "icon--small action-icon--show-suggestion")
         end
+
+        def bulk_valuators_select(participatory_space, prompt)
+          options_for_select = find_valuators_for_select(participatory_space)
+          select(:valuator_role, :id, options_for_select, prompt: prompt)
+        end
       end
     end
   end
