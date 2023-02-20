@@ -22,6 +22,35 @@ describe "Admin manages suggestion valuators", type: :system do
 
   include_context "when managing a component as an admin"
 
+  context "when listing suggestions" do
+    let(:valuator2) { create :user, organization: organization }
+    let(:valuator_role2) { create :participatory_process_user_role, role: :valuator, user: valuator2, participatory_process: participatory_process }
+
+    let!(:assignment) { create :suggestion_valuation_assignment, suggestion: suggestion, valuator_role: valuator_role }
+
+    before do
+      document.file.attach(io: File.open(Decidim::Dev.asset("Exampledocument.pdf")), filename: "Exampledocument.pdf")
+    end
+
+    it "shows the valuator name" do
+      visit current_path
+      within(".valuators-count") do
+        expect(page).to have_content(valuator.name)
+        expect(page).not_to have_content("(+1)")
+      end
+    end
+
+    it "shows the valuator name and counter" do
+      create :suggestion_valuation_assignment, suggestion: suggestion, valuator_role: valuator_role2
+
+      visit current_path
+      within(".valuators-count") do
+        expect(page).to have_content(valuator.name)
+        expect(page).to have_content("(+1)")
+      end
+    end
+  end
+
   context "when assigning to a valuator" do
     before do
       document.file.attach(io: File.open(Decidim::Dev.asset("Exampledocument.pdf")), filename: "Exampledocument.pdf")
@@ -55,7 +84,7 @@ describe "Admin manages suggestion valuators", type: :system do
         expect(page).to have_content("Suggestions assigned to a valuator successfully")
 
         within find("tr", text: suggestion.id) do
-          expect(page).to have_selector("td.valuators-count", text: 1)
+          expect(page).to have_selector("td.valuators-count", text: valuator.name)
         end
       end
     end
