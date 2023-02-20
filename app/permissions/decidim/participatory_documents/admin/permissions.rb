@@ -15,6 +15,11 @@ module Decidim
             end
             valuator_can_unassign_valuator_from_suggestions?
 
+            begin
+              permission_action.allowed?
+            rescue Decidim::PermissionAction::PermissionNotSetError
+              disallow!
+            end
             return permission_action
           end
 
@@ -34,6 +39,10 @@ module Decidim
         end
 
         private
+
+        def suggestion
+          @suggestion ||= context.fetch(:suggestion, nil)
+        end
 
         # There's no special condition to create proposal notes, only
         # users with access to the admin section can do it.
@@ -78,7 +87,7 @@ module Decidim
 
         def valuator_assigned_to_suggestion?
           @valuator_assigned_to_suggestion ||=
-            Decidim::Proposals::ValuationAssignment
+            Decidim::ParticipatoryDocuments::ValuationAssignment
             .where(suggestion: suggestion, valuator_role: user_valuator_role)
             .any?
         end
