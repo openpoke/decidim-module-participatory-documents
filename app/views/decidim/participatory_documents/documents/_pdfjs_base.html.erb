@@ -286,6 +286,11 @@
                 Save Changes!
               </button>
             <% end %>
+            <% if defined?(globalSuggestions) && globalSuggestions == true %>
+              <button id="globalSuggestionTrigger" class="toolbarButton" title="Add Global Suggestion" tabindex="34" data-l10n-id="Global suggestions">
+                Global suggestions
+              </button>
+            <% end %>
           </div>
         </div>
         <div id="loadingBar">

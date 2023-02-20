@@ -2,22 +2,26 @@
 
 module Decidim
   module ParticipatoryDocuments
-    class SuggestionsController < Decidim::ParticipatoryDocuments::ApplicationController
+    class DocumentSuggestionsController < Decidim::ParticipatoryDocuments::ApplicationController
       include FormFactory
       include Paginable
-      layout false
 
       helper_method :section, :suggestions
+      layout false
+
+      def index
+        @form = form(Decidim::ParticipatoryDocuments::SuggestionForm).from_params({})
+      end
 
       def create
         @form = form(Decidim::ParticipatoryDocuments::SuggestionForm).from_params(params)
 
         CreateSuggestion.call(@form, section) do
           on(:ok) do |_suggestion|
-            redirect_to(document_section_path(document, section.uid)) && return
+            redirect_to(document_suggestions_path(document)) && return
           end
           on(:invalid) do
-            render template: "decidim/participatory_documents/sections/show", format: [:html], status: :bad_request
+            render template: "decidim/participatory_documents/document_suggestions/index", format: [:html], status: :bad_request
           end
         end
       end
@@ -29,7 +33,7 @@ module Decidim
       end
 
       def section
-        document.sections.find_by(uid: params[:section_id])
+        document
       end
     end
   end

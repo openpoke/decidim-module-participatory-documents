@@ -70,6 +70,14 @@
   }
 }
 
+#globalSuggestionTrigger {
+  min-width: 160px;
+
+  &::before {
+    display: none;
+  }
+}
+
 #fullscreenButton {
   background-image: url(../images/fullscreen.svg);
   background-repeat: no-repeat;

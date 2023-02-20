@@ -41,7 +41,7 @@ See https://github.com/adobe-type-tools/cmap-resources
 </head>
 
 <body tabindex="1">
-  <%= render "decidim/participatory_documents/documents/pdfjs_base" %>
+  <%= render "decidim/participatory_documents/documents/pdfjs_base", displaySave: false, globalSuggestions: true %>
 
   <div id="notifications"></div>
 
@@ -54,7 +54,7 @@ See https://github.com/adobe-type-tools/cmap-resources
   }
 
   class SuggestionForm {
-      constructor(path, group) {
+      constructor(path, group = null) {
           this.path = path;
           this.group = group;
       }
@@ -73,7 +73,11 @@ See https://github.com/adobe-type-tools/cmap-resources
       }
 
       getGroupUrl(){
-          return this.getPath() + "/" + this.group + this.getQueryString();
+          if (this.group === null ) {
+              return this.getPath() + "/suggestions" + this.getQueryString();
+          } else {
+              return this.getPath() + "/sections/" + this.group + '/suggestions' + this.getQueryString();
+          }
       }
 
       populateArea(data) {
@@ -141,8 +145,14 @@ See https://github.com/adobe-type-tools/cmap-resources
       }
   }
 
+  document.getElementById("globalSuggestionTrigger").addEventListener("click", (e) => {
+      let div = document.getElementById("participation-modal");
+      div.classList.add("document");
+      (new SuggestionForm(sectionsPath, null)).fetchGroup();
+  });
+
   var I18n = { };
-  var sectionsPath = '<%= document_sections_path(document) %>';
+  var sectionsPath = '<%= document_path(document) %>';
   var currentBoxes = <%= document.annotations.collect(&:serialize).to_json.html_safe %>;
   var pages = {};
   PDFViewerApplication.initializedPromise.then(function() {
