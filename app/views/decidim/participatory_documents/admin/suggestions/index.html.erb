@@ -40,7 +40,15 @@
             <td><%= truncate(translated_attribute(suggestion.body), length: 50) %></td>
             <td><%= suggestion.suggestable.is_a?(Decidim::ParticipatoryDocuments::Document) ? t(".global") : translated_attribute(suggestion.suggestable.title) %></td>
             <td><%= humanize_suggestion_state(suggestion.state) %></td>
-            <td class="valuators-count"><%= suggestion.valuation_assignments.size %></td>
+            <td class="valuators-count">
+              <% count = suggestion.valuation_assignments.size %>
+              <% if count.zero? %>
+              0
+              <% else %>
+                <%= suggestion.valuation_assignments.first&.valuator_role&.user&.name %>
+                <%= "(+#{(count - 1)})" if count > 1 %>
+              <% end %>
+            </td>
             <td><%= l suggestion.created_at, format: :decidim_short %></td>
             <td><%= icon_with_link_to_suggestion(document, suggestion) %></td>
           </tr>

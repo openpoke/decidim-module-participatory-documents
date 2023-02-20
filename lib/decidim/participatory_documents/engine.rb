@@ -20,6 +20,14 @@ module Decidim
         root to: "documents#index"
       end
 
+      config.to_prepare do
+        Decidim.participatory_space_manifests.each do |manifest|
+          manifest.model_class_name.constantize.new.user_roles.model.include(Decidim::ParticipatoryDocuments::ParticipatorySpaceUserRoleOverride)
+        end
+      rescue StandardError => e
+        Rails.logger.error("Error while trying to include Decidim::ReportingProposals::ParticipatorySpaceUserRoleOverride: #{e.message}")
+      end
+
       initializer "decidim_participatory_documents.add_cells_view_paths" do
         Cell::ViewModel.view_paths << File.expand_path("#{Decidim::ParticipatoryDocuments::Engine.root}/app/cells")
       end
