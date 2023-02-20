@@ -6,7 +6,7 @@
     </h2>
   </div>
   <div class="card-section">
-    <%= decidim_form_for(@form, html: { class: "form new_proposal proposal_form_admin" }) do |f| %>
+    <%= decidim_form_for(@form, html: { class: "form  documents_form new_document" }) do |f| %>
       <%= render partial: "form", object: f, locals: { title: t(".title") } %>
 
       <div class="button--double form-general-submit">
