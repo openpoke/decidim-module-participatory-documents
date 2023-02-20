@@ -11,13 +11,13 @@ module Decidim
         private
 
         def i18n_params
-          super.merge({
-                        document_name: document_presenter.present
-                      })
+          super.merge({ document_name: document_presenter })
         end
 
         def document_presenter
-          Decidim::Log::ResourcePresenter.new(action_log.resource.section.document, h, action_log.resource.section.document)
+          return "" if action_log.resource.blank?
+
+          Decidim::Log::ResourcePresenter.new(action_log.resource.section.document, h, action_log.resource.section.document).present
         end
       end
     end
