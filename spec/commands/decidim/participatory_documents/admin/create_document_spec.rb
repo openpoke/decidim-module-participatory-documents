@@ -56,6 +56,7 @@ module Decidim
         context "when everything is ok" do
           it "creates a section" do
             expect { subject.call }.to change(Decidim::ParticipatoryDocuments::Document, :count).by(1)
+            expect { subject.call }.to broadcast(:ok)
           end
         end
       end
