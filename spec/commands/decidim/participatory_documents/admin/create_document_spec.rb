@@ -43,7 +43,6 @@ module Decidim
             let(:component) { nil }
             let(:current_user) { create(:user, :admin, :confirmed) }
 
-
             it "is not valid" do
               expect { subject.call }.to broadcast(:invalid)
             end

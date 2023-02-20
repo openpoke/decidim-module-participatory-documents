@@ -31,7 +31,7 @@ module Decidim
         end
 
         context "when the form is valid" do
-          it "saves the data when inexistent" do
+          it "successfuly ignore the existing records" do
             create :suggestion_valuation_assignment, suggestion: suggestion, valuator_role: valuator_role
             expect { subject.call }.to change(Decidim::ParticipatoryDocuments::ValuationAssignment, :count).by(0)
             expect { subject.call }.to broadcast(:ok)
@@ -50,14 +50,14 @@ module Decidim
             expect { subject.call }.to broadcast(:invalid)
           end
 
-          context " when valuator is missing" do
-            let(:valuator_role) {nil}
+          context "when valuator is missing" do
+            let(:valuator_role) { nil }
+
             it "is not valid" do
               expect { subject.call }.to broadcast(:invalid)
             end
           end
         end
-
       end
     end
   end

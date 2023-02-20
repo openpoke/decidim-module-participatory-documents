@@ -38,6 +38,7 @@ module Decidim
               expect { subject.call }.to broadcast(:invalid)
             end
           end
+
           context "when there is no current user" do
             let(:current_user) { nil }
 
