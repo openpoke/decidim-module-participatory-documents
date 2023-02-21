@@ -29,7 +29,8 @@ en:
     admin_log:
       annotation:
         create: "%{user_name} created a new participatory area for %{document_name}"
-        delete: "%{user_name} deleted a new participatory area for %{document_name}"
+        delete: "%{user_name} deleted a participatory area for %{document_name}"
+        update: "%{user_name} has updated a participatory area for %{document_name}"
       document:
         create: "%{user_name} created a document named %{resource_name} in %{space_name}"
         delete: "%{user_name} deleted a document named %{resource_name} in %{space_name}"
@@ -37,6 +38,8 @@ en:
       section:
         create: "%{user_name} has created a new Section named %{resource_name} for
           %{document_name}"
+        delete: "%{user_name} has deleted a section"
+        update: "%{user_name} has updated a section in %{document_name}"
       suggestion_note:
         create: "%{user_name} created a new suggestion note %{suggestion}"
     components:
