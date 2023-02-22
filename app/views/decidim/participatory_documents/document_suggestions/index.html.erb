@@ -1,4 +1,8 @@
-<div id="suggestion-list">
+<div id="suggestions-list">
+  <h3>
+    <%= t "global_suggestions", scope: "decidim.participatory_documents.document" %>
+    <a href="#" class="close" id="close-suggestions" title="<%= t "close", scope: "decidim.participatory_documents.document" %>">&times;</a>
+  </h3>
   <% suggestions.each do |suggestion| %>
     <%= cell("decidim/participatory_documents/suggestion", suggestion) %>
   <% end %>

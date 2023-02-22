@@ -126,6 +126,11 @@ en:
           delete:
             invalid: There was an error unassigning suggestions from a valuator
             success: Valuator unassigned from suggestions successfully
+      document:
+        close: Close
+        global_suggestions: Global suggestions
+        save_changes: Save changes!
+        send_suggestion: Send suggestion
       documents:
         missing: There is no document uploaded
       models:

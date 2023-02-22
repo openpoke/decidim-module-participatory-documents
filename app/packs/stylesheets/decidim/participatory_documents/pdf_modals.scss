@@ -1,22 +1,57 @@
+@import "stylesheets/decidim/variables";
+@import "stylesheets/decidim/utils/fontface";
+@import "stylesheets/decidim/utils/settings";
+
+@import "foundation-sites/scss/foundation";
+@include foundation-everything();
+
+@import "stylesheets/decidim/modules/comments";
+
 #participation-modal {
   width: 0;
+  height: 66px;
   position: absolute;
-  height: 100%;
-  background: rgba(0, 0, 255, .5);
+  background: rgba(255, 2550, 255, .95);
   top: 0;
   right: 0;
+  margin: 0 0 0 0;
   overflow: hidden;
-  transition: width .5s;
   z-index: 100000;
-}
 
-#participation-modal.active {
-  overflow: auto;
-  width: 40vw;
-  transition: width 1s;
-}
+  &.active {
+    overflow: auto;
+  }
 
-#participation-modal.document {
-  width: 100% !important;
-  transition: width 2s;
+  &.section {
+    height: 100% !important;
+    width: 0;
+    transition: width .5s;
+    &.active {
+      width: 50vw;
+      transition: width 1s;      
+    }
+  }
+
+  &.document {
+    height: 0;
+    width: 100% !important;
+    transition: height .5s;
+    &.active {
+      height: 100%;
+      transition: height 1s;
+    }
+  }
+
+  .close {
+    color: #000;
+    text-decoration: none;
+    float: right;
+  }
+
+  #suggestions-list {
+    padding: 1em;
+  }
+  #participation-modal-form {
+    padding: 1em;
+  }
 }

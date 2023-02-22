@@ -45,7 +45,7 @@ See https://github.com/adobe-type-tools/cmap-resources
 
   <div id="notifications"></div>
 
-  <div id="participation-modal">Comments here</div>
+  <div id="participation-modal">Loading...</div>
 
 <script>
 
@@ -54,101 +54,117 @@ See https://github.com/adobe-type-tools/cmap-resources
   }
 
   class SuggestionForm {
-      constructor(path, group = null) {
-          this.path = path;
-          this.group = group;
+    constructor(path, group = null) {
+      this.path = path;
+      this.group = group;
+      this.div = document.getElementById("participation-modal");
+      this.div.classList.remove("section", "document", "active");
+      console.log(this.div.style, getComputedStyle(this.div))
+      if(group) {
+        this.div.classList.add("section");
+      } else {
+        this.div.classList.add("document");
       }
+    }
 
-      getCSRFToken() {
-          return document.getElementsByName("csrf-token")[0].content;
+    getCSRFToken() {
+      return document.getElementsByName("csrf-token")[0].content;
+    }
+
+    // Sanitize internal path
+    getPath() {
+      return this.path.split('?')[0];
+    }
+
+    getQueryString() {
+      return this.path.indexOf('?') !== -1 ? "?" + this.path.split('?')[1] : '';
+    }
+
+    getGroupUrl(){
+      if (this.group === null ) {
+        return this.getPath() + "/suggestions" + this.getQueryString();
+      } else {
+        return this.getPath() + "/sections/" + this.group + '/suggestions' + this.getQueryString();
       }
+    }
 
-      // Sanitize internal path
-      getPath() {
-        return this.path.split('?')[0];
+    populateArea(data) {
+      this.div.innerHTML = data;
+      this.div.classList.add("active");
+      this.addCloseHandler();
+      this.addFormHandler();
+    }
+
+    addCloseHandler(){
+      let close = document.getElementById("close-suggestions")
+      if(close) {
+        close.addEventListener("click", (e) => {
+          console.log("close");
+          this.div.classList.remove("active");
+        }, {once: true});
       }
+    }
 
-      getQueryString() {
-        return this.path.indexOf('?') !== -1 ? "?" + this.path.split('?')[1] : '';
-      }
-
-      getGroupUrl(){
-          if (this.group === null ) {
-              return this.getPath() + "/suggestions" + this.getQueryString();
-          } else {
-              return this.getPath() + "/sections/" + this.group + '/suggestions' + this.getQueryString();
-          }
-      }
-
-      populateArea(data) {
-          let div = document.getElementById("participation-modal");
-          div.innerHTML = data;
-          div.classList.add("active");
-          this.addFormHandler();
-      }
-
-      addFormHandler(){
-
-          let handler = this;
-          let form = document.getElementById( 'new_suggestion_' );
-          if ( form){
-
-              form.addEventListener("submit", function(event){
-                  event.preventDefault();
-                  fetch(event.target.action, {
-                      method: event.target.method,
-                      body: new URLSearchParams(new FormData(event.target)),
-                      headers: {
-                          'Content-Type': 'application/x-www-form-urlencoded',
-                          'Accept': 'text/html',
-                          "X-CSRF-Token": handler.getCSRFToken()
-                      },
-                      credentials: "include"
-                  }).then((response) => {
-                      if (response.ok === false && response.status === 400) { // validation
-                          return response.text();
-                      }
-                      return response.text();
-                  }).then((data)=>{
-                      let div = document.getElementById("participation-modal");
-                      div.innerHTML = data;
-                      handler.addFormHandler();
-                  }).catch((error) => {
-                      let div = document.getElementById("participation-modal-form");
-                      div.innerHTML = response.text();
-                  });
-              }, {once: true});
-          }
-      }
-
-      fetchGroup(){
-          let handler = this;
-          fetch(handler.getGroupUrl(), {
-              headers: {
-                  'Content-Type': 'text/html; charset=utf-8',
-                  'Accept': 'text/html',
-              },
-              credentials: "include",
-              // body: JSON.stringify(data)
+    addFormHandler(){
+      let handler = this;
+      let form = document.getElementById( 'new_suggestion_' );
+      if (form){
+        form.addEventListener("submit", (event) => {
+          event.preventDefault();
+          fetch(event.target.action, {
+            method: event.target.method,
+            body: new URLSearchParams(new FormData(event.target)),
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+              'Accept': 'text/html',
+              "X-CSRF-Token": handler.getCSRFToken()
+            },
+            credentials: "include"
           }).then((response) => {
-              if (response.ok) {
-                  return response.text();
-              }
-              throw new Error(" ");
-          })
-          .then((data) => {
-              handler.populateArea(data);
-          })
-          .catch((error) => {
-              console.error(error);
+            // if (response.ok === false && response.status === 400) { // validation
+            //   return response.text();
+            // }
+            return response.text();
+          }).then((data) => {
+            console.log("data", data);
+            handler.div.innerHTML = data;
+            handler.addFormHandler();
+          }).catch((error) => {
+            console.error("error", error);
+            // if(handler.form && handler.form[0]) {
+            //   handler.form.innerHTML = error.text();
+            // }
           });
-      }
+        }, {once: true});
+    }
+    }
+
+    fetchGroup(){
+      let handler = this;
+      fetch(handler.getGroupUrl(), {
+        headers: {
+          'Content-Type': 'text/html; charset=utf-8',
+          'Accept': 'text/html',
+        },
+        credentials: "include",
+        // body: JSON.stringify(data)
+      }).then((response) => {
+          if (response.ok) {
+            return response.text();
+          }
+          throw new Error(" ");
+      })
+      .then((data) => {
+        handler.populateArea(data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+    }
   }
 
   document.getElementById("globalSuggestionTrigger").addEventListener("click", (e) => {
-      let div = document.getElementById("participation-modal");
-      div.classList.add("document");
-      (new SuggestionForm(sectionsPath, null)).fetchGroup();
+    (new SuggestionForm(sectionsPath, null)).fetchGroup();
   });
 
   var I18n = { };
@@ -164,12 +180,12 @@ See https://github.com/adobe-type-tools/cmap-resources
         pages[doc.pageNumber] = page;
         var annotationsLayer = page.annotationEditorLayer && page.annotationEditorLayer.div;
         if(annotationsLayer) {
-            var viewer = InitPolygonViewer(I18n, annotationsLayer, currentBoxes.filter(box => box.page_number === doc.pageNumber));
-            viewer.onBoxClick = function(box, e){
-                (new SuggestionForm(sectionsPath, box.group)).fetchGroup();
-            }
-            viewer.onBoxBlur = blurBoxContainer
-            page.boxEditor = viewer;
+          var viewer = InitPolygonViewer(I18n, annotationsLayer, currentBoxes.filter(box => box.page_number === doc.pageNumber));
+          viewer.onBoxClick = function(box, e){
+            (new SuggestionForm(sectionsPath, box.group)).fetchGroup();
+          }
+          viewer.onBoxBlur = blurBoxContainer
+          page.boxEditor = viewer;
         }
       }
     });

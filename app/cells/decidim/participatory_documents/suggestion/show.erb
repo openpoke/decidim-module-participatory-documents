@@ -1,5 +1,9 @@
-<div class="row">
+<div class="comment">
   <%#= cell "decidim/author", present(suggestion.author), has_action: false, from: suggestion %>
-  <%= translated_attribute(model.body) %>
-  <%= render :admin_answer if has_answer? %>
+  <div class="comment__content">
+    <%= translated_attribute(model.body) %>
+  </div>
+  <div class="comment__footer">
+    <%= render :admin_answer if has_answer? %>
+  </div>
 </div>
