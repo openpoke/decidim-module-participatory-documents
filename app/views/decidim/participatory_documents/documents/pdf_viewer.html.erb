@@ -129,8 +129,9 @@ See https://github.com/adobe-type-tools/cmap-resources
             console.log("data", data);
             handler.div.innerHTML = data;
             handler.addFormHandler();
+            handler.addCloseHandler();
           }).catch((error) => {
-            console.error("error", error);
+            console.error(error);
             // if(handler.form && handler.form[0]) {
             //   handler.form.innerHTML = error.text();
             // }

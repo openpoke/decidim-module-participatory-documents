@@ -16,5 +16,5 @@ window.showInfo = function (title, options) {
 
 window.showAlert = function (title, options) {
   options.class = "alert"
-  showInfo(title, options);
+  window.showInfo(title, options);
 };

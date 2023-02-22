@@ -16,39 +16,39 @@ export default class BoxControlMove {
     this.div.addEventListener("mousedown", this._startMoving.bind(this));
   }
 
-  _startMoving(e) {
-    e.stopPropagation();
+  _startMoving(evt) {
+    evt.stopPropagation();
     this.box.div.classList.add("moving");
-    this.left = this.layer.div.getBoundingClientRect().x + e.layerX;
+    this.left = this.layer.div.getBoundingClientRect().x + evt.layerX;
     // We need to substract the controls height because is aligned at the bottom
-    this.top = this.layer.div.getBoundingClientRect().y + this.box.div.clientHeight - this.div.clientHeight + e.layerY;
+    this.top = this.layer.div.getBoundingClientRect().y + this.box.div.clientHeight - this.div.clientHeight + evt.layerY;
     // Binding mouseup and mousemove to the entire window so it works even if the mouse is outside the box
     window.addEventListener("mouseup", this._stopMoving.bind(this), { once: true });
     window.addEventListener("mousemove", this._move.bind(this));
-    console.log("start moving", e, this.box.div.style.left, this.box.div.style.top, this);
+    console.log("start moving", evt, this.box.div.style.left, this.box.div.style.top, this);
   }
 
-  _stopMoving(e) {
-    e.stopPropagation();
+  _stopMoving(evt) {
+    evt.stopPropagation();
     window.removeEventListener("mousemove", this._move.bind(this));
     // delay removing the moving class to avoid triggering the click event in the box
     setTimeout(() => {
       this.box.setInfo();
       this.box.div.classList.remove("moving")
     }, 100);
-    console.log("stop moving", e, this);
+    console.log("stop moving", evt, this);
   }
 
-  _move(e) {
+  _move(evt) {
     if (this.box.isMoving()) {
-      e.stopPropagation();
-      let w = e.clientX - this.left;
-      let h = e.clientY - this.top;
-      let mousePercentLeft = (100 * w / this.layer.div.clientWidth)
-      let mousePercentTop = (100 * h / this.layer.div.clientHeight)
+      evt.stopPropagation();
+      let width = evt.clientX - this.left;
+      let height = evt.clientY - this.top;
+      let mousePercentLeft = (100 * width / this.layer.div.clientWidth)
+      let mousePercentTop = (100 * height / this.layer.div.clientHeight)
       this.box.div.style.left = `${mousePercentLeft}%`;
       this.box.div.style.top = `${mousePercentTop}%`;
-      // console.log("moving", e, mousePercentLeft, mousePercentTop, this);
+      // console.log("moving", evt, mousePercentLeft, mousePercentTop, this);
     }
   }
 }

@@ -9,16 +9,16 @@ window.PdfDocStateManager = new PdfStateManager();
 // Call this on an annotation layer to initialize the polygon viewer (public side)
 window.InitPolygonViewer = function(i18n, layer, boxes) {
   let viewer = new PolygonViewer(layer, boxes, { i18n: i18n, stateManager: window.PdfDocStateManager});
-  viewer.onBoxClick = (box, e) => {
-    console.log("click on box", box, e);
+  viewer.onBoxClick = (box, evt) => {
+    console.log("click on box", box, evt);
     console.log("show the participation modal");
     let div = document.getElementById("participation-modal");
     div.innerHTML = `Clicked ${box.id}. Should allow comments for group ${box.group}`;
     div.classList.add("active");
   };
 
-  viewer.onBoxBlur = (box, e) => {
-    console.log("click ouside box", box, e);
+  viewer.onBoxBlur = (box, evt) => {
+    console.log("click ouside box", box, evt);
     console.log("hide the participation modal");
     let div = document.getElementById("participation-modal");
     div.classList.remove("active");

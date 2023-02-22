@@ -1,6 +1,7 @@
-.pdf-viewer-container, .pdf-viewer-container iframe {
+.pdf-viewer-container,
+.pdf-viewer-container iframe {
   height: calc(100vh - 30rem);
   min-height: 50em;
   margin: 0;
-  padding: 0 0 2em 0;
+  padding: 0 0 2em;
 }

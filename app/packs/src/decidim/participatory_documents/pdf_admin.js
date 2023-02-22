@@ -8,9 +8,9 @@ window.PdfDocStateManager = new PdfStateManager();
 // Call this on an annotation layer to initialize the polygon editor (admin side)
 window.InitPolygonEditor = function(i18n, layer, boxes) {
   let editor = new PolygonEditor(layer, boxes, { i18n: i18n, stateManager: window.PdfDocStateManager});
-  editor.onBoxClick = (box, e) => {
-    showInfo("click on box", box, e);
-    loadBoxModal(box);
+  editor.onBoxClick = (box, evt) => {
+    window.showInfo("click on box", box, evt);
+    window.loadBoxModal(box);
   };
   editor.onBoxChange = (box) => {
     // e.stopPropagation();

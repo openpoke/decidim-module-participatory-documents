@@ -2,7 +2,6 @@ import BoxControls from "./box_controls";
 
 export default class BoxArea {
   constructor(layer, json) {
-    console.log(layer);
     this.layer = layer;
     this.json = json || { rect: {} };
     this.id = this.createBox(this.json.id, this.json.rect);
@@ -45,12 +44,11 @@ export default class BoxArea {
   }
 
   setGroup(group) {
-    if (!group) {
-      group = `group-${Date.now()}`;
-    }
     this.group = group;
-    this.div.dataset.boxGroup = group;
-    console.log("setGroup");
+    if (!this.group) {
+      this.group = `group-${Date.now()}`;
+    }
+    this.div.dataset.boxGroup = this.group;
   }
 
   createControls() {
@@ -111,38 +109,38 @@ export default class BoxArea {
     this.div.addEventListener("click", this._click.bind(this));
   }
 
-  _click(e) {
+  _click(evt) {
     if (!this.layer.creating && !this.isMoving() && !this.isGrouping() && !this.isResizing()) {
-      console.log("box click", e);
-      e.stopPropagation();
-      this.onClick(e);
+      console.log("box click", evt);
+      evt.stopPropagation();
+      this.onClick(evt);
       window.addEventListener("click", this._blur.bind(this), {once: true});
     }
   }
 
-  _blur(e) {
+  _blur(evt) {
     if (!this.layer.creating) {
-      this.onBlur(e);
+      this.onBlur(evt);
     }
   }
 
-  _mouseEnter(e) {
+  _mouseEnter(evt) {
     if (!this.layer.creating && !this.isGrouping()) {
       this.blockSibilings();
       this.div.classList.add("hover");
       this.focusGroup();
-      this.onEnter(e);
-      // console.log("box mousenter", e, "widht/height", this.div.style.width, this.div.style.height);
+      this.onEnter(evt);
+      // console.log("box mousenter", evt, "widht/height", this.div.style.width, this.div.style.height);
     }
   }
 
-  _mouseLeave(e) {
+  _mouseLeave(evt) {
     if (!this.layer.creating && !this.isGrouping()) {
       this.div.classList.remove("hover");
       this.blurGroup()
       this.unBlockSibilings();
-      this.onLeave(e);
-      // console.log("box mouseleave", e);
+      this.onLeave(evt);
+      // console.log("box mouseleave", evt);
     }
   }
 
@@ -164,13 +162,14 @@ export default class BoxArea {
       // console.log("box resize", entries, this.div.style.width, this.div.style.height, "calculated", width, height);
       this.div.style.width = width;
       this.div.style.height = height;
-      this.setInfo(); // We need to record changes about the dimensions}
+      // We need to record changes about the dimensions}
+      this.setInfo();
     }
   }
 
 
   hasChanged() {
-    if (JSON.stringify(this.getInfo()) != JSON.stringify(this.previousInfo)) {
+    if (JSON.stringify(this.getInfo()) !== JSON.stringify(this.previousInfo)) {
       this.previousInfo = this.getInfo();
       this.setModified();
       return true;
@@ -180,7 +179,7 @@ export default class BoxArea {
 
   // Not using getNodes because groups can span across layers
   focusGroup() {
-    document.querySelectorAll(".polygon-ready .box").forEach((div) => div.dataset.boxGroup == this.group && div.classList.add("focus"));
+    document.querySelectorAll(".polygon-ready .box").forEach((div) => div.dataset.boxGroup === this.group && div.classList.add("focus"));
   }
 
   blurGroup() {
@@ -189,7 +188,7 @@ export default class BoxArea {
 
   blockSibilings() {
     this.layer.blocked = true;
-    this.layer.div.querySelectorAll(".box").forEach((div) => div.id != this.id && div.classList.add("blocked"));
+    this.layer.div.querySelectorAll(".box").forEach((div) => div.id !== this.id && div.classList.add("blocked"));
   }
 
   unBlockSibilings() {

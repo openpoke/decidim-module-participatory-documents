@@ -40,9 +40,9 @@ window.addEventListener("load", () => {
     hideBulkActionForms();
     document.getElementById("js-bulk-actions-button").classList.add("hide");
     document.querySelectorAll("#js-bulk-actions-dropdown ul li button").forEach((button) => {
-      button.addEventListener("click", (e) => {
-        e.preventDefault();
-        let action = e.target.dataset.action;
+      button.addEventListener("click", (evt) => {
+        evt.preventDefault();
+        let action = evt.target.dataset.action;
 
         if (action) {
           document.getElementById(`js-${action}-actions`).classList.remove("hide");
@@ -70,9 +70,9 @@ window.addEventListener("load", () => {
     });
 
     document.querySelectorAll(".js-check-all-suggestion").forEach((checkbox) => {
-      checkbox.addEventListener("change", (e) => {
-        let suggestionId = e.target.value;
-        let checked = e.target.checked;
+      checkbox.addEventListener("change", (evt) => {
+        let suggestionId = evt.target.value;
+        let checked = evt.target.checked;
 
         let selector = ".table-list .js-check-all-suggestion"
         document.getElementById("js-check-all").checked =
@@ -80,10 +80,10 @@ window.addEventListener("load", () => {
 
         if (checked) {
           showBulkActionsButton();
-          e.target.closest("tr").classList.add("selected");
+          evt.target.closest("tr").classList.add("selected");
         } else {
           hideBulkActionsButton();
-          e.target.closest("tr").classList.remove("selected");
+          evt.target.closest("tr").classList.remove("selected");
         }
 
         if (selectedSuggestionsCount() === 0) {
