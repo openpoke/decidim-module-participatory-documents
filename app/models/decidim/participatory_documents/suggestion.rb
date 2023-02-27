@@ -73,7 +73,11 @@ module Decidim
       }
 
       def self.ransackable_scopes(_auth = nil)
-        [:valuator_role_ids_has]
+        [:valuator_role_ids_has, :dummy_author_ids_has]
+      end
+
+      def self.dummy_author_ids_has(value)
+        where(decidim_author_id: value)
       end
 
       # method to filter by assigned valuator role ID
