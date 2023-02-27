@@ -24,6 +24,7 @@
           <th><%= check_box_tag "suggestions_bulk", "all", false, id: "js-check-all" %></th>
           <th><%= sort_link(query, :id, t(".id"), default_order: :desc ) %></th>
           <th><%= sort_link(query, :translated_body, t(".suggestion") ) %></th>
+          <th><%= sort_link(query, :author, t(".author"))%></th>
           <th><%= sort_link(query, :suggestable, t(".section")) %></th>
           <th><%= sort_link(query, :state, t(".state")) %></th>
           <th><%= sort_link(query, :valuation_assignments_count, t("models.suggestion.fields.valuators", scope: "decidim.participatory_documents") ) %></th>
@@ -38,6 +39,7 @@
             </td>
             <td><%= suggestion.id %></td>
             <td><%= truncate(translated_attribute(suggestion.body), length: 50) %></td>
+            <td><%= suggestion.try(:normalized_author).try(:name) %></td>
             <td><%= suggestion.suggestable.is_a?(Decidim::ParticipatoryDocuments::Document) ? t(".global") : translated_attribute(suggestion.suggestable.title) %></td>
             <td><%= humanize_suggestion_state(suggestion.state) %></td>
             <td class="valuators-count">
