@@ -3,6 +3,7 @@
 require "spec_helper"
 
 describe "Admin manages participatory documents", type: :system do
+  include Decidim::TranslationsHelper
   let(:manifest_name) { "participatory_documents" }
   let(:router) { Decidim::EngineRouter.admin_proxy(document.component).decidim_admin_participatory_process_participatory_documents }
 
@@ -66,6 +67,39 @@ describe "Admin manages participatory documents", type: :system do
     end
     expect(page).not_to have_content(document_suggestions.first.author.name)
     expect(page).to have_content(document_suggestions.last.author.name)
+  end
+
+  context "when sorting by section's name" do
+    let(:section1) { create(:participatory_documents_section, document: document, title: { en: "zzzz-section" }) }
+
+    it "sorts ascendent" do
+      expect(page).to have_content(translated_attribute(section1.title))
+      click_link "Section"
+      expect(page).not_to have_content(translated_attribute(section1.title))
+    end
+
+    it "sorts descendent" do
+      expect(page).to have_content(translated_attribute(section1.title))
+      click_link "Author"
+      click_link "Author"
+      expect(page).to have_content(translated_attribute(section1.title))
+    end
+  end
+
+  it "filters by section name" do
+    within ".container" do
+      expect(page).to have_content("Global")
+      expect(page).to have_content(translated_attribute(section1.title))
+    end
+    within ".filters__section" do
+      find("a.dropdown", text: "Filter").hover
+      find("a", text: "Section").hover
+      find("a", text: translated_attribute(section1.title)).click
+    end
+    within ".container" do
+      expect(page).not_to have_content("Global")
+      expect(page).to have_content(translated_attribute(section1.title))
+    end
   end
 
   it "does not raise an error" do
