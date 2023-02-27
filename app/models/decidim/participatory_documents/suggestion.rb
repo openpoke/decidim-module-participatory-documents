@@ -42,6 +42,14 @@ module Decidim
         order(suggestable_type: :desc, suggestable_id: :desc)
       }
 
+      scope :sort_by_author_asc, lambda {
+        joins("LEFT JOIN decidim_users ON decidim_users.id = decidim_author_id").order("decidim_users.name asc")
+      }
+
+      scope :sort_by_author_desc, lambda {
+        joins("LEFT JOIN decidim_users ON decidim_users.id = decidim_author_id").order("decidim_users.name DESC")
+      }
+
       def self.sort_by_translated_body_asc
         field = Arel::Nodes::InfixOperation.new("->>", arel_table[:body], Arel::Nodes.build_quoted(I18n.locale))
         order(Arel::Nodes::InfixOperation.new("", field, Arel.sql("ASC")))

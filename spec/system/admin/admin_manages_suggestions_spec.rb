@@ -27,6 +27,16 @@ describe "Admin manages participatory documents", type: :system do
     visit router.document_suggestions_path(document)
   end
 
+  it "displays the author's name" do
+    expect(page).to have_content("List Suggestions")
+    within(".table-list") do
+      expect(page).to have_content("Author")
+      document_suggestions.each do |suggestion|
+        expect(page).to have_content(suggestion.author.name)
+      end
+    end
+  end
+
   it "does not raise an error" do
     expect(page).to have_content("List Suggestions")
     within(".table-scroll") do
