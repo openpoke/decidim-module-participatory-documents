@@ -35,11 +35,23 @@ module Decidim
       end
 
       scope :sort_by_suggestable_asc, lambda {
-        order(suggestable_type: :asc, suggestable_id: :asc)
+        joins("LEFT JOIN decidim_participatory_documents_documents d ON suggestable_id = d.id and suggestable_type= 'Decidim::ParticipatoryDocuments::Document'")
+          .joins("LEFT JOIN decidim_participatory_documents_sections s ON suggestable_id = s.id and suggestable_type= 'Decidim::ParticipatoryDocuments::Section'")
+          .order(Arel.sql("#{sort_by_suggestable_title_query} ASC NULLS FIRST"))
       }
 
       scope :sort_by_suggestable_desc, lambda {
-        order(suggestable_type: :desc, suggestable_id: :desc)
+        joins("LEFT JOIN decidim_participatory_documents_documents d ON suggestable_id = d.id and suggestable_type= 'Decidim::ParticipatoryDocuments::Document'")
+          .joins("LEFT JOIN decidim_participatory_documents_sections s ON suggestable_id = s.id and suggestable_type= 'Decidim::ParticipatoryDocuments::Section'")
+          .order(Arel.sql("#{sort_by_suggestable_title_query} DESC NULLS LAST"))
+      }
+
+      scope :sort_by_author_asc, lambda {
+        joins("LEFT JOIN decidim_users ON decidim_users.id = decidim_author_id").order("decidim_users.name asc")
+      }
+
+      scope :sort_by_author_desc, lambda {
+        joins("LEFT JOIN decidim_users ON decidim_users.id = decidim_author_id").order("decidim_users.name DESC")
       }
 
       def self.sort_by_translated_body_asc
@@ -65,7 +77,19 @@ module Decidim
       }
 
       def self.ransackable_scopes(_auth = nil)
-        [:valuator_role_ids_has]
+        [:valuator_role_ids_has, :dummy_author_ids_has, :dummy_suggestable_id_has]
+      end
+
+      def self.dummy_author_ids_has(value)
+        where(decidim_author_id: value)
+      end
+
+      def self.dummy_suggestable_id_has(value)
+        if value.split("-").first == "d"
+          where(suggestable_id: value.split("-").last, suggestable_type: "Decidim::ParticipatoryDocuments::Document")
+        else
+          where(suggestable_id: value.split("-").last, suggestable_type: "Decidim::ParticipatoryDocuments::Section")
+        end
       end
 
       # method to filter by assigned valuator role ID
@@ -91,6 +115,10 @@ module Decidim
           GROUP BY decidim_participatory_documents_valuation_assignments.decidim_participatory_documents_suggestion_id
         )
         SQL
+      end
+
+      def self.sort_by_suggestable_title_query
+        Arel.sql("COALESCE(d.title->>'#{I18n.locale}', s.title->>'#{I18n.locale}')")
       end
 
       def valuators

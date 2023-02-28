@@ -46,15 +46,27 @@ module Decidim
         def filters
           [
             :state_eq,
-            :valuator_role_ids_has
+            :valuator_role_ids_has,
+            :dummy_author_ids_has,
+            :dummy_suggestable_id_has
           ]
         end
 
         def filters_with_values
           {
             state_eq: suggestion_stats,
-            valuator_role_ids_has: valuator_role_ids
+            valuator_role_ids_has: valuator_role_ids,
+            dummy_author_ids_has: author_ids,
+            dummy_suggestable_id_has: suggestable_ids
           }
+        end
+
+        def suggestable_ids
+          ["d-#{document.id}"] + document.sections.map { |s| "s-#{s.id}" }
+        end
+
+        def author_ids
+          base_query.pluck(:decidim_author_id)
         end
 
         def valuator_role_ids
@@ -64,11 +76,21 @@ module Decidim
         # Can't user `super` here, because it does not belong to a superclass
         # but to a concern.
         def dynamically_translated_filters
-          [:valuator_role_ids_has]
+          [:valuator_role_ids_has, :dummy_author_ids_has, :dummy_suggestable_id_has]
+        end
+
+        def translated_dummy_suggestable_id_has(value)
+          return translated_attribute(document.title) if value.split("-").first == "d"
+
+          translated_attribute(document.sections.find_by(id: value.split("-").last).try(:title))
         end
 
         def suggestion_stats
           Decidim::ParticipatoryDocuments::Suggestion::POSSIBLE_STATES
+        end
+
+        def translated_dummy_author_ids_has(value)
+          Decidim::UserBaseEntity.find_by(id: value).try(:name)
         end
 
         def translated_valuator_role_ids_has(valuator_role_id)

@@ -39,6 +39,23 @@ module Decidim
             expect { subject.call }.to broadcast(:invalid)
           end
 
+          context "when component is missing" do
+            let(:component) { nil }
+            let(:current_user) { create(:user, :admin, :confirmed) }
+
+            it "is not valid" do
+              expect { subject.call }.to broadcast(:invalid)
+            end
+          end
+
+          context "when current_user is missing" do
+            let(:current_user) { nil }
+
+            it "is not valid" do
+              expect { subject.call }.to broadcast(:invalid)
+            end
+          end
+
           context "when is not the right file" do
             let(:file) do
               Rack::Test::UploadedFile.new(

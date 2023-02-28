@@ -15,6 +15,10 @@ en:
         suggestions:
           body_cont:
             label: Body contains
+          dummy_author_ids_has:
+            label: Author
+          dummy_suggestable_id_has:
+            label: Section
           state_eq:
             label: State is
             values:
@@ -100,6 +104,7 @@ en:
               title: Actions
               unassign_from_valuator: Unassign from valuator
               unassign_from_valuator_button: Unassign
+            author: Author
             created_at: Submitted on
             global: Global
             id: Id

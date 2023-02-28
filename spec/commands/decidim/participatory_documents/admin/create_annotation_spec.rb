@@ -29,6 +29,23 @@ module Decidim
           it "is not valid" do
             expect { subject.call }.to broadcast(:invalid)
           end
+
+          context "when there is no document" do
+            let(:document) { nil }
+            let(:current_user) { create :user, :admin, :confirmed }
+
+            it "is not valid" do
+              expect { subject.call }.to broadcast(:invalid)
+            end
+          end
+
+          context "when there is no current user" do
+            let(:current_user) { nil }
+
+            it "is not valid" do
+              expect { subject.call }.to broadcast(:invalid)
+            end
+          end
         end
 
         context "when everything is ok" do
