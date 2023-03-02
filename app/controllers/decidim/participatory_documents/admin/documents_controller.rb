@@ -6,9 +6,9 @@ module Decidim
       # This controller allows admins to manage documents in a participatory process.
       class DocumentsController < Admin::ApplicationController
         include Decidim::ApplicationHelper
+        include Decidim::ParticipatoryDocuments::Admin::NeedsAdminSnippets
 
         helper_method :sections
-        before_action :add_snippets, only: :edit_pdf
 
         def index
           redirect_to(document_suggestions_path(document)) && return if document.present? && document.file.attached?
@@ -68,13 +68,6 @@ module Decidim
         end
 
         private
-
-        def add_snippets
-          return unless respond_to?(:snippets)
-
-          snippets.add(:head, helpers.stylesheet_pack_tag("decidim_participatory_documents_admin"))
-          snippets.add(:head, helpers.javascript_pack_tag("decidim_participatory_documents_admin"))
-        end
 
         def sections
           @sections ||= document.sections

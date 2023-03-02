@@ -6,6 +6,25 @@
   <%= form.translated :editor, :description %>
 </div>
 
-<div class="preview">
-  <%= form.upload( :file, optional: !current_component.published?) %>
+<div class="row column">
+  <fieldset class="fieldset">
+    <%= form.upload( :file, optional: !current_component.published?) %>
+  </fieldset>
+</div>
+
+<div class="row column">
+  <%= form.color_field :box_color %>
+</div>
+
+<div class="row column">
+  <%= form.number_field :box_opacity, min: 0, max: 100 %>
+</div>
+
+<div class="row column box-preview">
+  <fieldset class="fieldset">
+    <h4><%= t ".box_style_preview" %></h4>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus. Sed sit amet ipsum mauris. Maecenas congue ligula ac quam viverra nec consectetur ante hendrerit. Donec et mollis dolor. Praesent et diam eget libero egestas mattis sit amet vitae augue. Nam tincidunt congue enim, ut porta lorem lacinia consectetur. Donec ut libero sed arcu vehicula ultricies a non tortor. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut gravida lorem. Ut turpis felis, pulvinar a semper sed, adipiscing id dolor. Pellentesque auctor nisi id magna consequat sagittis. Curabitur dapibus enim sit amet elit pharetra tincidunt feugiat nisl imperdiet.</p>
+    <p>Ut convallis libero in urna ultrices accumsan. Donec sed odio eros. Donec viverra mi quis quam pulvinar at malesuada arcu rhoncus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. In rutrum accumsan ultricies. Mauris vitae nisi at sem facilisis semper ac in est.</p>
+    <div class="box" style="border-color: <%= form.object.box_color %>;background: <%= box_color_as_rgba(form.object) %>"></div>
+  </fieldset>
 </div>

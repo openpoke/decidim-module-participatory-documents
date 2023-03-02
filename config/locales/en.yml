@@ -1,6 +1,12 @@
 ---
 en:
   activemodel:
+    attributes:
+      document:
+        title: Helper title
+        description: Helper description
+        box_color: Color of the boxes
+        box_opacity: Opacity applied at the color of the boxes (%)
     errors:
       models:
         answer_suggestion:
@@ -61,6 +67,8 @@ en:
         title: Actions
       admin:
         documents:
+          form:
+            box_style_preview: "Box style preview:"
           create:
             invalid: There was a problem creating Document
             success: Document has been successfully created

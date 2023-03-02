@@ -19,3 +19,23 @@
   margin: 0;
   padding: 0;
 }
+
+.box-preview {
+  fieldset {
+    position: relative;
+
+    h4 {
+      font-weight: 600;
+    }
+
+    .box {
+      border-style: dotted;
+      border-width: 2px;
+      position: absolute;
+      width: 50%;
+      height: 50%;
+      top: 25%;
+      left: 25%;
+    }
+  }
+}
