@@ -36,6 +36,12 @@ See https://github.com/adobe-type-tools/cmap-resources
   <script src="/pdfjs/web/viewer.js"></script>
   <%= javascript_pack_tag "decidim_participatory_documents_viewer" %>
   <%= stylesheet_pack_tag "decidim_participatory_documents_viewer" %>
+  <style>
+    .annotationEditorLayer .box {
+      background: <%= box_color_as_rgba(document) %>;
+      border-color: <%= document.box_color %>;
+    }
+  </style>
   <%= csrf_meta_tags %>
 
 </head>

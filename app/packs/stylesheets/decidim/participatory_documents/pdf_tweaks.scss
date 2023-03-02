@@ -62,11 +62,36 @@
   }
 }
 
+.decidimButton {
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0 0 1rem;
+  padding: .85em 1em;
+  border-radius: 4px;
+  transition: background-color .25s ease-out, color .25s ease-out;
+  font-family: inherit;
+  font-size: 1rem;
+  -webkit-appearance: none;
+  line-height: 1;
+  text-align: center;
+  cursor: pointer;
+  // TODO: use decidim root variables
+  background-color: #f0f0f0;
+  border: #333 solid 1px;
+}
+
 #DecidimPDSaveButton {
   min-width: 110px;
 
   &::before {
     display: none;
+  }
+
+  &.alert {
+    border-color: red;
+    color: red;
+    background: lighten(red, 40%);
+    animation: blinker 2s linear infinite;
   }
 }
 

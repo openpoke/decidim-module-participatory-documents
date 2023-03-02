@@ -38,7 +38,15 @@ See https://github.com/adobe-type-tools/cmap-resources
 
   <%= javascript_pack_tag "decidim_participatory_documents_editor" %>
   <%= stylesheet_pack_tag "decidim_participatory_documents_editor" %>
-
+  <style>
+    .annotationEditorLayer .box {
+      background: <%= box_color_as_rgba(document) %>;
+      border-color: <%= document.box_color %>;
+    }
+    .annotationEditorLayer .box .box-controls {
+      background: <%= box_color_as_rgba(document) %>;
+    }
+  </style>
 </head>
 
 <body tabindex="1">

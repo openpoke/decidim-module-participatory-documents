@@ -25,6 +25,8 @@ describe "Admin sees the action logs on homepage", type: :system do
         invalid?: false,
         title: { en: "Title test Section" },
         description: { en: "Description test Section" },
+        box_color: "#f00f00",
+        box_opacity: "50",
         current_user: current_user,
         file: file,
         current_component: component
@@ -34,7 +36,7 @@ describe "Admin sees the action logs on homepage", type: :system do
     context "when is created" do
       let(:command) { Decidim::ParticipatoryDocuments::Admin::CreateDocument.new(form) }
 
-      it "saves the create log" do
+      it "saves the created log" do
         expect { command.call }.to broadcast(:ok)
         visit decidim_admin.root_path
 
@@ -47,7 +49,7 @@ describe "Admin sees the action logs on homepage", type: :system do
 
       let(:command) { Decidim::ParticipatoryDocuments::Admin::UpdateDocument.new(form, document) }
 
-      it "saves the create log" do
+      it "saves the created log" do
         expect { command.call }.to broadcast(:ok)
         visit decidim_admin.root_path
 
@@ -73,7 +75,7 @@ describe "Admin sees the action logs on homepage", type: :system do
 
       let(:command) { Decidim::ParticipatoryDocuments::Admin::CreateAnnotation.new(form, document) }
 
-      it "saves the create log" do
+      it "saves the created log" do
         expect { command.call }.to broadcast(:ok)
         visit decidim_admin.root_path
 
@@ -98,7 +100,7 @@ describe "Admin sees the action logs on homepage", type: :system do
         )
       end
 
-      it "saves the update log" do
+      it "saves the updated log" do
         expect { command.call }.to broadcast(:ok)
         visit decidim_admin.root_path
 
@@ -144,7 +146,7 @@ describe "Admin sees the action logs on homepage", type: :system do
 
       let(:command) { Decidim::ParticipatoryDocuments::Admin::CreateSection.new(form, document) }
 
-      it "saves the create log" do
+      it "saves the created log" do
         expect { command.call }.to broadcast(:ok)
         visit decidim_admin.root_path
 
@@ -165,7 +167,7 @@ describe "Admin sees the action logs on homepage", type: :system do
         )
       end
 
-      it "saves the update log" do
+      it "saves the updated log" do
         expect { command.call }.to broadcast(:ok)
         visit decidim_admin.root_path
 
@@ -210,7 +212,7 @@ describe "Admin sees the action logs on homepage", type: :system do
 
       let(:command) { Decidim::ParticipatoryDocuments::Admin::CreateSuggestionNote.new(form, suggestion) }
 
-      it "saves the create log" do
+      it "saves the created log" do
         expect { command.call }.to broadcast(:ok)
         visit decidim_admin.root_path
 

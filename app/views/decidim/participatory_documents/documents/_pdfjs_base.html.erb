@@ -282,12 +282,12 @@
           </div>
           <div id="toolbarViewerMiddle">
             <% if defined?(displaySave) && displaySave == true %>
-              <button id="DecidimPDSaveButton" class="toolbarButton" title="Text" tabindex="34" data-l10n-id="editor_free_text2">
+              <button id="DecidimPDSaveButton" class="decidimButton" title="Text" tabindex="34" data-l10n-id="editor_free_text2">
                 <%= t "save_changes", scope: "decidim.participatory_documents.document" %>
               </button>
             <% end %>
             <% if defined?(globalSuggestions) && globalSuggestions == true %>
-              <button id="globalSuggestionTrigger" class="toolbarButton" title="Add Global Suggestion" tabindex="34" data-l10n-id="Global suggestions">
+              <button id="globalSuggestionTrigger" class="decidimButton" title="Add Global Suggestion" tabindex="34" data-l10n-id="Global suggestions">
                 <%= t "global_suggestions", scope: "decidim.participatory_documents.document" %>
               </button>
             <% end %>
