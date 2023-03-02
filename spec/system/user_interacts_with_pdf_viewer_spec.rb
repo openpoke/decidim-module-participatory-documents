@@ -14,7 +14,7 @@ describe "User interaction with PDF viewer", type: :system do
     it "displays the drawer" do
       expect(page).to have_selector("#participation-modal")
       expect(page).to have_selector("#participation-modal-form")
-      expect(page).to have_selector("#suggestion-list")
+      expect(page).to have_selector("#suggestions-list")
     end
 
     context "when displaying the suggestions" do
