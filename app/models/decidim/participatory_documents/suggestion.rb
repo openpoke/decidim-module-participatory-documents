@@ -34,6 +34,16 @@ module Decidim
         answered_at.present?
       end
 
+      scope :sort_by_published_asc, lambda {
+        field = Arel::Nodes::InfixOperation.new("->>", arel_table[:answer], Arel::Nodes.build_quoted(I18n.locale))
+        order("answered_at ASC NULLS FIRST", Arel::Nodes::InfixOperation.new("", field, Arel.sql("ASC")))
+      }
+
+      scope :sort_by_published_desc, lambda {
+        field = Arel::Nodes::InfixOperation.new("->>", arel_table[:answer], Arel::Nodes.build_quoted(I18n.locale))
+        order("answered_at DESC NULLS LAST", Arel::Nodes::InfixOperation.new("", field, Arel.sql("DESC")))
+      }
+
       scope :sort_by_suggestable_asc, lambda {
         order(suggestable_type: :asc, suggestable_id: :asc)
       }

@@ -62,6 +62,10 @@ FactoryBot.define do
     trait :draft do
       answer_is_published { false }
     end
+    trait :published do
+      answered_at { Time.zone.now }
+      answer_is_published { true }
+    end
 
     trait :not_answered do
       state { :not_answered }

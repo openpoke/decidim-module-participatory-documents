@@ -27,6 +27,94 @@ describe "Admin manages participatory documents", type: :system do
     visit router.document_suggestions_path(document)
   end
 
+  context "when sorting answered questions" do
+    context "when sorting ascending" do
+      let!(:document_suggestion) do
+        create(:participatory_documents_suggestion, :published,
+               state: :accepted, suggestable: document, answer: { en: "Foo bar" })
+      end
+
+      it "displays the right state" do
+        visit router.document_suggestions_path(document)
+
+        click_link("Published Answer")
+
+        within(".table-list") do
+          expect(page).not_to have_content(document_suggestion.body["en"].first(10))
+        end
+      end
+    end
+
+    context "when sorting descending" do
+      let!(:document_suggestion) do
+        create(:participatory_documents_suggestion, :published,
+               state: :accepted, suggestable: document, answer: { en: "Foo bar" })
+      end
+
+      it "displays the right state" do
+        visit router.document_suggestions_path(document)
+
+        click_link("Published Answer")
+        click_link("Published Answer")
+
+        within(".table-list") do
+          expect(page).to have_content(document_suggestion.body["en"].first(10))
+        end
+      end
+    end
+  end
+
+  context "when asnwering suggestions" do
+    let!(:document_suggestions) { nil }
+    let!(:section1_suggestions) { nil }
+    let!(:section2_suggestions) { nil }
+
+    shared_examples "marks the answer by state" do |state:|
+      context "when there is no answer" do
+        let!(:document_suggestion) { create(:participatory_documents_suggestion, :draft, state: state, suggestable: document) }
+
+        it "displays the right state" do
+          visit router.document_suggestions_path(document)
+
+          within(".table-list") do
+            expect(page).to have_content("-")
+          end
+        end
+      end
+
+      context "when not published" do
+        let!(:document_suggestion) { create(:participatory_documents_suggestion, :draft, state: state, suggestable: document, answer: { en: "Foo bar" }) }
+
+        it "displays the right state" do
+          visit router.document_suggestions_path(document)
+
+          within(".table-list") do
+            expect(page).to have_content("No")
+          end
+        end
+      end
+
+      context "when published" do
+        let!(:document_suggestion) { create(:participatory_documents_suggestion, :published, state: state, suggestable: document, answer: { en: "Foo bar" }) }
+
+        it "displays the right state" do
+          visit router.document_suggestions_path(document)
+
+          within(".table-list") do
+            expect(page).to have_content("Yes")
+          end
+        end
+      end
+    end
+
+    context "when suggestion has an answer not published" do
+      it_behaves_like "marks the answer by state", state: :not_answered
+      it_behaves_like "marks the answer by state", state: :withdrawn
+      it_behaves_like "marks the answer by state", state: :rejected
+      it_behaves_like "marks the answer by state", state: :accepted
+    end
+  end
+
   it "displays the author's name" do
     expect(page).to have_content("List Suggestions")
     within(".table-list") do
