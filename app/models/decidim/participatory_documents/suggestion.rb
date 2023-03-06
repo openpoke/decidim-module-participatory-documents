@@ -22,16 +22,34 @@ module Decidim
 
       has_many :notes, class_name: "Decidim::ParticipatoryDocuments::SuggestionNote", dependent: :destroy, counter_cache: :suggestion_notes_count
 
+      scope :missing_answer, -> { where(answered_at: nil) }
+      scope :not_published, -> { where(answer_is_published: false) }
+
       POSSIBLE_STATES = %w(not_answered evaluating accepted rejected withdrawn).freeze
 
       POSSIBLE_STATES.each do |possible|
+        scope "state_not_#{possible}".to_sym, -> { where.not(state: possible) }
+        scope "state_#{possible}".to_sym, -> { where(state: possible) }
+
         define_method(:"#{possible}?") do
           state == possible.to_s
         end
+        define_method(:"not_#{possible}?") do
+          state != possible.to_s
+        end
       end
+
+      scope :having_text_answer, lambda {
+        field = Arel::Nodes::InfixOperation.new("->>", arel_table[:answer], Arel::Nodes.build_quoted(I18n.locale))
+        where(Arel::Nodes::InfixOperation.new("", field, Arel.sql("!= ''")))
+      }
 
       def answered?
         answered_at.present?
+      end
+
+      def has_answer?
+        translated_attribute(answer).present?
       end
 
       scope :sort_by_published_asc, lambda {

@@ -97,12 +97,13 @@ en:
               assign_to_valuator: Assign to valuator
               assign_to_valuator_button: Assign
               cancel: Cancel
+              publish: Publish
+              publish_answers: Publish answers
               title: Actions
               unassign_from_valuator: Unassign from valuator
               unassign_from_valuator_button: Unassign
             author: Author
             created_at: Submitted on
-            global: Global
             id: Id
             published_answer: Published Answer
             section: Section
@@ -110,11 +111,17 @@ en:
             state: State
             suggestion: Suggestion
             title: List Suggestions
+          publish_answers:
+            number_of_suggestions: Answers for %{number} suggestions will be published.
+            select_a_suggestion: Please select a suggestion
+            success: Suggestion answers successfully published.
           show:
             authors: Authors
             body: Body
             created_at: Creation date
             update: Update
+          suggestion:
+            global: Global
           valuators:
             assigned_valuators: Assigned valuators
             remove_assignment: Remove assignment

@@ -15,11 +15,6 @@ module Decidim
             end
             valuator_can_unassign_valuator_from_suggestions?
 
-            begin
-              permission_action.allowed?
-            rescue Decidim::PermissionAction::PermissionNotSetError
-              disallow!
-            end
             return permission_action
           end
 
@@ -34,7 +29,6 @@ module Decidim
           allow! if permission_action.subject == :participatory_document
           allow! if permission_action.subject == :suggestions
 
-          # raise permission_action.subject.inspect
           permission_action
         end
 

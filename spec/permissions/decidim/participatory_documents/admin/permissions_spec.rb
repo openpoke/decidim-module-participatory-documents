@@ -3,7 +3,7 @@
 require "spec_helper"
 
 describe Decidim::ParticipatoryDocuments::Admin::Permissions do
-  subject { described_class.new(user, permission_action, context).permissions.allowed? }
+  subject { described_class.new(user, permission_action, context).permissions }
 
   let(:component) { build :participatory_documents_component }
   let(:organization) { component.participatory_space.organization }
@@ -25,7 +25,13 @@ describe Decidim::ParticipatoryDocuments::Admin::Permissions do
     context "when subject is #{scope}" do
       let(:action_subject) { scope }
 
-      it { is_expected.to be allowed }
+      it do
+        if allowed == true
+          expect(subject.allowed?).to be allowed
+        else
+          expect { subject.allowed? }.to raise_error(Decidim::PermissionAction::PermissionNotSetError)
+        end
+      end
     end
   end
 

@@ -1,0 +1,17 @@
+<% locals = flash.key?(:notice) ? { css: %q{success}, text: flash.now[:notice] } : { css: %q{alert}, text: flash.now[:alert] } %>
+
+$("<%= escape_javascript(render partial: "js-callout", locals: locals) %>").appendTo(".callout-wrapper");
+
+<% suggestion_ids.each do |id| %>
+  $(".table-list [data-id='<%= id %>']")
+    .replaceWith("<%= escape_javascript(render partial: %q{suggestion}, locals: { suggestion: suggestion_find(id) }) %>");
+<% end %>
+
+document.getElementById("suggestions_bulk").checked = false;
+document.querySelectorAll(".js-check-all-suggestion").forEach((suggestion) => {
+    suggestion.checked = false;
+});
+
+window.hideBulkActionForms()
+window.showBulkActionsButton();
+window.selectedSugestionsCountUpdate();
