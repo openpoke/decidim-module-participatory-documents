@@ -35,17 +35,17 @@ module Decidim
         attr_reader :suggestion, :initial_state
 
         def notify_followers
-          if proposal.accepted?
+          if suggestion.accepted?
             publish_event(
               "decidim.events.participatory_documents.suggestion_accepted",
               Decidim::ParticipatoryDocuments::AcceptedSuggestionEvent
             )
-          elsif proposal.rejected?
+          elsif suggestion.rejected?
             publish_event(
               "decidim.events.participatory_documents.suggestion_rejected",
               Decidim::ParticipatoryDocuments::RejectedSuggestionEvent
             )
-          elsif proposal.evaluating?
+          elsif suggestion.evaluating?
             publish_event(
               "decidim.events.participatory_documents.suggestion_evaluating",
               Decidim::ParticipatoryDocuments::EvaluatingSuggestionEvent

@@ -93,6 +93,12 @@ FactoryBot.define do
       state { :accepted }
       answered_at { Time.zone.now }
     end
+    trait :with_answer do
+      state { "accepted" }
+      answer { generate_localized_title }
+      answered_at { Time.current }
+      answer_is_published { true }
+    end
   end
 
   factory :suggestion_valuation_assignment, class: "Decidim::ParticipatoryDocuments::ValuationAssignment" do

@@ -52,6 +52,39 @@ en:
         settings:
           global:
             suggestion_answering_enabled: Enable suggestion answering from admin
+    events:
+      participatory_documents:
+        suggestion_accepted:
+          follower:
+            email_intro: 'A suggestion for "<a href="%{resource_path}">%{resource_title}</a>"
+              document has been accepted. You can read the answer in this page:'
+            email_outro: You have received this notification because you are following
+              "<a href="%{resource_path}">%{resource_title}</a>". You can unfollow
+              it from the previous link.
+            email_subject: A suggestion you're following has been accepted
+            notification_title: A suggestion for <a href="%{resource_path}">%{resource_title}</a>
+              document has been accepted
+        suggestion_evaluating:
+          follower:
+            email_intro: 'A suggestion for "<a href="%{resource_path}">%{resource_title}</a>"
+              document is currently being evaluated. You can check the answer in this
+              page:'
+            email_outro: You have received this notification because you are following
+              "<a href="%{resource_path}">%{resource_title}</a>". You can unfollow
+              it from the previous link.
+            email_subject: A suggestion you're following is being evaluated
+            notification_title: A suggestion for "<a href="%{resource_path}">%{resource_title}</a>"
+              document is currently being evaluated
+        suggestion_rejected:
+          follower:
+            email_intro: 'A suggestion for "<a href="%{resource_path}">%{resource_title}</a>"
+              document has been rejected. You can read the answer in this page:'
+            email_outro: You have received this notification because you are following
+              "<a href="%{resource_path}">%{resource_title}</a>". You can unfollow
+              it from the previous link.
+            email_subject: A suggestion you're following has been rejected
+            notification_title: A suggestion for "<a href="%{resource_path}">%{resource_title}</a>"
+              document has been rejected
     participatory_documents:
       actions:
         back: Back
