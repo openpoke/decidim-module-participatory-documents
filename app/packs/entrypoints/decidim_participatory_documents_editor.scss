@@ -1,13 +1,13 @@
 @use "sass:meta";
 
-@import "stylesheets/decidim/participatory_documents/pdf_tweaks.scss";
-@import "stylesheets/decidim/participatory_documents/pdf_admin_modals.scss";
-@import "stylesheets/decidim/participatory_documents/pdf_notifications.scss";
+@import "stylesheets/decidim/participatory_documents/pdf/tweaks.scss";
+@import "stylesheets/decidim/participatory_documents/pdf/admin_modals.scss";
+@import "stylesheets/decidim/participatory_documents/pdf/notifications.scss";
 
 // Scope editor boxes to the annotationslayer of the pdf to avoid any possible collision
 .annotationEditorLayer {
-  @include meta.load-css("stylesheets/decidim/participatory_documents/pdf_polygons.scss");
-  @include meta.load-css("stylesheets/decidim/participatory_documents/pdf_icons.scss");
+  @include meta.load-css("stylesheets/decidim/participatory_documents/pdf/polygons.scss");
+  @include meta.load-css("stylesheets/decidim/participatory_documents/pdf/icons.scss");
 
   &.polygon-ready {
     &.admin {

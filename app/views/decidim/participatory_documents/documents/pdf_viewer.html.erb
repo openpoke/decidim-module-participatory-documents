@@ -36,12 +36,8 @@ See https://github.com/adobe-type-tools/cmap-resources
   <script src="/pdfjs/web/viewer.js"></script>
   <%= javascript_pack_tag "decidim_participatory_documents_viewer" %>
   <%= stylesheet_pack_tag "decidim_participatory_documents_viewer" %>
-  <style>
-    .annotationEditorLayer .box {
-      background: <%= box_color_as_rgba(document) %>;
-      border-color: <%= document.box_color %>;
-    }
-  </style>
+  <%= organization_colors %>
+  <%= pdf_custom_style %>
   <%= csrf_meta_tags %>
 
 </head>
@@ -174,12 +170,12 @@ See https://github.com/adobe-type-tools/cmap-resources
     (new SuggestionForm(sectionsPath, null)).fetchGroup();
   });
 
-  var I18n = { };
+  var I18n = <%= pdf_i18n.to_json.html_safe %>;
   var sectionsPath = '<%= document_path(document) %>';
   var currentBoxes = <%= document.annotations.collect(&:serialize).to_json.html_safe %>;
   var pages = {};
   PDFViewerApplication.initializedPromise.then(function() {
-    showInfo("Click on a marked area to participate!", {delay: 5000});
+    showInfo(I18n.startSuggesting, {delay: 5000});
 
     PDFViewerApplication.eventBus.on('annotationeditorlayerrendered', function (doc) {
       if(!pages[doc.pageNumber]) {

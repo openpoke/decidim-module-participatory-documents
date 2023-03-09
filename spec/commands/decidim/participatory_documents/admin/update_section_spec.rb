@@ -9,7 +9,7 @@ module Decidim
         subject { described_class.new(form, section.document) }
 
         let(:section) { create(:participatory_documents_section) }
-        let(:uid) { section.uid }
+        let(:id) { section.id }
         let(:invalid) { false }
         let(:title) { { en: "Title test Section" } }
         let(:current_user) { section.document.author }
@@ -18,7 +18,7 @@ module Decidim
           double(
             invalid?: invalid,
             title: title,
-            uid: uid,
+            id: id,
             current_user: current_user
           )
         end

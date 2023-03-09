@@ -9,7 +9,7 @@ module Decidim
         attribute :id
         attribute :rect
         attribute :page_number
-        attribute :group
+        attribute :section
       end
     end
   end

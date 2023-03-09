@@ -12,7 +12,6 @@ module Decidim
 
         let(:attributes) do
           {
-            "uuid" => "Randomuuid",
             "title" => {
               "en" => "Foo bar title",
               "ca" => "Foo bar title",

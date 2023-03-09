@@ -1,11 +1,12 @@
 import BoxControls from "./box_controls";
 
-export default class BoxArea {
+export default class Box {
   constructor(layer, json) {
     this.layer = layer;
     this.json = json || { rect: {} };
-    this.id = this.createBox(this.json.id, this.json.rect);
-    this.setGroup(this.json && this.json.group)
+    this.id = this.json.id;
+    this.section = this.json.section;
+    this.createBox(this.id, this.json.position, this.json.rect);
     this.setInfo();
     this._bindEvents();
     // console.log("box constructor", this);
@@ -18,19 +19,13 @@ export default class BoxArea {
     this.onChange = () => {};
   }
 
-  setModified(value = true) {
-    if (value === true) {
-      this.layer.stateManager.add(this);
-    } else {
-      this.layer.stateManager.remove(this);
-    }
-  }
-
   // Creates a box using percentanges, with and height are optional
-  createBox(id, {left, top, width, height}) {
+  createBox(id, position, {left, top, width, height}) {
     this.div = document.createElement("div");
     this.div.draggable = false;
-    this.div.id = id || `box-${Date.now()}`;
+    this.div.id = `box-${id || Date.now()}`;
+    this.div.dataset.position = position || this._getNextPosition();
+    this.div.dataset.section = this.section;
     this.div.classList.add("box");
     this.div.style.left = `${this._sanitizePercent(left)}%`;
     this.div.style.top = `${this._sanitizePercent(top)}%`;
@@ -39,17 +34,12 @@ export default class BoxArea {
     this.div.style.height = `${this._sanitizePercent(height, 0, 100 - parseFloat(top)) || 15}%`;
     console.log(width, this.div.style.width)
     this.layer.div.appendChild(this.div);
-
-    return this.div.id;
   }
 
-  setGroup(group) {
-    this.group = group;
-    if (!this.group) {
-      this.group = `group-${Date.now()}`;
-    }
-    this.div.dataset.boxGroup = this.group;
-  }
+  // setGroup(section) {
+  //   this.group = `group-${section || Date.now()}`;
+  //   this.div.dataset.boxGroup = this.group;
+  // }
 
   createControls() {
     this.controls = new BoxControls(this);
@@ -69,7 +59,7 @@ export default class BoxArea {
   getInfo() {
     return {
       id: this.id,
-      group: this.group,
+      section: this.section,
       rect: this.getRect()
     }
   }
@@ -88,6 +78,10 @@ export default class BoxArea {
 
   isResizing() {
     return this.div.classList.contains("resizing");
+  }
+
+  _getNextPosition() {
+    return Object.keys(this.layer.boxes).length  + 2;
   }
 
   _ensureCssPercent(num, max) {
@@ -171,7 +165,6 @@ export default class BoxArea {
   hasChanged() {
     if (JSON.stringify(this.getInfo()) !== JSON.stringify(this.previousInfo)) {
       this.previousInfo = this.getInfo();
-      this.setModified();
       return true;
     }
     return false;
@@ -179,7 +172,7 @@ export default class BoxArea {
 
   // Not using getNodes because groups can span across layers
   focusGroup() {
-    document.querySelectorAll(".polygon-ready .box").forEach((div) => div.dataset.boxGroup === this.group && div.classList.add("focus"));
+    document.querySelectorAll(".polygon-ready .box").forEach((div) => div.dataset.section === this.section && div.classList.add("focus"));
   }
 
   blurGroup() {
@@ -188,7 +181,7 @@ export default class BoxArea {
 
   blockSibilings() {
     this.layer.blocked = true;
-    this.layer.div.querySelectorAll(".box").forEach((div) => div.id !== this.id && div.classList.add("blocked"));
+    this.layer.div.querySelectorAll(".box").forEach((div) => div.id !== this.div.id && div.classList.add("blocked"));
   }
 
   unBlockSibilings() {
@@ -199,7 +192,6 @@ export default class BoxArea {
   destroy() {
     this.div.remove();
     this.resize.disconnect();
-    this.layer.stateManager.remove(this);
     this.onDestroy();
   }
 }

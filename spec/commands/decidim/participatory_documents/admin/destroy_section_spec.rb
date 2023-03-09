@@ -10,14 +10,14 @@ module Decidim
 
         let(:section) { create(:participatory_documents_section) }
         let!(:annotations) { create_list(:participatory_documents_annotation, 2, section: section) }
-        let(:uid) { section.uid }
+        let(:id) { section.id }
 
         let(:current_user) { section.document.author }
         let(:invalid) { false }
         let(:form) do
           double(
             invalid?: invalid,
-            uid: uid,
+            id: id,
             current_user: current_user
           )
         end

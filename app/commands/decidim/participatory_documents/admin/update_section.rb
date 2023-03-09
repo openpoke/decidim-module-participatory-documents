@@ -39,13 +39,12 @@ module Decidim
 
         def attributes
           {
-            title: form.title,
-            uid: form.uid
+            title: form.title
           }.merge(document: document)
         end
 
         def section
-          @section ||= document.sections.find_by!(uid: form.uid)
+          @section ||= document.sections.find(form.id)
         end
       end
     end

@@ -1,27 +1,42 @@
 import "src/decidim/participatory_documents/global";
-import PolygonEditor from "src/decidim/participatory_documents/polygon_editor";
-import PdfStateManager from "src/decidim/participatory_documents/pdf_state_manager";
-
 import "src/decidim/participatory_documents/pdf_notifications";
-window.PdfDocStateManager = new PdfStateManager();
+import PolygonEditor from "src/decidim/participatory_documents/pdf/polygon_editor";
+import PdfStateManager from "src/decidim/participatory_documents/pdf/pdf_state_manager";
+import PdfModalManager from "src/decidim/participatory_documents/pdf/pdf_modal_manager";
 
 // Call this on an annotation layer to initialize the polygon editor (admin side)
-window.InitPolygonEditor = function(i18n, layer, boxes) {
-  let editor = new PolygonEditor(layer, boxes, { i18n: i18n, stateManager: window.PdfDocStateManager});
-  editor.onBoxClick = (box, evt) => {
-    window.showInfo("click on box", box, evt);
-    window.loadBoxModal(box);
+window.InitPolygonEditor = function(layer, boxes, options) {
+  options.saveButton = document.getElementById("DecidimPDSaveButton");
+  options.csrfToken = document.getElementsByName("csrf-token")[0].content;
+  options.showInfo = window.showInfo;
+  options.showAlert = window.showAlert;
+  
+  window.PdfDocStateManager = new PdfStateManager(options);
+  // show message when saving
+  window.PdfDocStateManager.onSave = () => {
+    window.showInfo(options.i18n.allSaved);
   };
+  
+  window.PdfModalManager = new PdfModalManager(options);
+  let editor = new PolygonEditor(layer, boxes, { i18n: options.i18n });
+
+  // remove box from the global state manager if edited though the modal
+  window.PdfModalManager.onSave = (box) => {
+    window.PdfDocStateManager.remove(box);
+  };
+  
+  // Open the global box modal settings when a box is clicked
+  editor.onBoxClick = (box) => {
+    window.PdfModalManager.loadBoxModal(box);
+  };
+
+  // update the global state manager when a box is edited or destroyed using the polygon editor (mouse interaction)
   editor.onBoxChange = (box) => {
-    // e.stopPropagation();
-    box.setModified();
+    window.PdfDocStateManager.add(box);
   };
-  editor.onBoxLeave = (box) => {
-    // e.stopPropagation();
-    if (box.hasChanged()) {
-      box.setModified()
-    }
-  }
+  editor.onBoxDestroy = (box) => {
+    window.PdfDocStateManager.remove(box);
+  };
 
   return editor;
 };

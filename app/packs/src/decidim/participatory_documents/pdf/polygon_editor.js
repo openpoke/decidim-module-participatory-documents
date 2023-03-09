@@ -1,5 +1,5 @@
 import PolygonViewer from "./polygon_viewer";
-import BoxArea from "./box_area";
+import Box from "./box";
 
 export default class PolygonEditor extends PolygonViewer {
   constructor(div, boxes, options) {
@@ -10,7 +10,6 @@ export default class PolygonEditor extends PolygonViewer {
     this.blocked = false;
     this.top = 0;
     this.left = 0;
-    this.stateManager = options.stateManager;
   }
 
   init() {
@@ -76,7 +75,7 @@ export default class PolygonEditor extends PolygonViewer {
     width = 1 / this.div.clientWidth;
     height = 1 / this.div.clientHeight;
 
-    return new BoxArea(this, { rect: { left: mousePercentLeft, top: mousePercentTop, width: width, height: height} });
+    return new Box(this, { rect: { left: mousePercentLeft, top: mousePercentTop, width: width, height: height} });
   }
 
   _initBox() {
@@ -84,7 +83,7 @@ export default class PolygonEditor extends PolygonViewer {
       this.box.createControls();
       this.bindBoxEvents(this.box);
       this.box.setInfo();
-      this.box.setModified();
+      this.box.onChange();
       this.boxes[this.box.id] = this.box;
     }
   }

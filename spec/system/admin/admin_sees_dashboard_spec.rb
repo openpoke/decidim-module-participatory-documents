@@ -94,7 +94,7 @@ describe "Admin sees the action logs on homepage", type: :system do
           invalid?: false,
           page_number: 1,
           rect: [50, 50, 100, 100],
-          id: annotation.uid,
+          id: annotation.id,
           group: "groupid",
           current_user: current_user
         )
@@ -117,7 +117,7 @@ describe "Admin sees the action logs on homepage", type: :system do
       let(:form) do
         double(
           invalid?: false,
-          id: annotation.uid,
+          id: annotation.id,
           current_user: current_user
         )
       end
@@ -139,7 +139,6 @@ describe "Admin sees the action logs on homepage", type: :system do
         double(
           invalid?: false,
           title: { en: "Title test Section" },
-          uid: "RandomUUID",
           current_user: current_user
         )
       end
@@ -162,7 +161,7 @@ describe "Admin sees the action logs on homepage", type: :system do
         double(
           invalid?: false,
           title: { en: "Title test Section" },
-          uid: section.uid,
+          id: section.id,
           current_user: current_user
         )
       end
@@ -182,7 +181,7 @@ describe "Admin sees the action logs on homepage", type: :system do
       let(:form) do
         double(
           invalid?: false,
-          uid: section.uid,
+          id: section.id,
           current_user: current_user
         )
       end

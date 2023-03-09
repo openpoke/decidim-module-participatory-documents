@@ -154,14 +154,14 @@ describe "User interaction with PDF viewer", type: :system do
 
       page.visit Decidim::EngineRouter.main_proxy(component).pdf_viewer_documents_path(file: document.attached_uploader(:file).path)
       annotation = section.annotations.last
-      find("##{annotation.uid}").click
+      find("##{annotation.id}").click
     end
 
     it_behaves_like "interacts with drawer"
 
     it "displays boxes in page" do
       section.annotations.each do |annotation|
-        expect(page).to have_selector(:id, annotation.uid)
+        expect(page).to have_selector(:id, annotation.id)
       end
     end
   end
@@ -185,7 +185,7 @@ describe "User interaction with PDF viewer", type: :system do
 
       page.visit Decidim::EngineRouter.main_proxy(component).pdf_viewer_documents_path(file: document.attached_uploader(:file).path)
       annotation = section.annotations.last
-      find("##{annotation.uid}").click
+      find("##{annotation.id}").click
     end
 
     it "submits the content" do

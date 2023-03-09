@@ -1,4 +1,4 @@
-<%= decidim_form_for(@form, url: document_section_suggestions_path(document, section_id: section.uid), html: { class: "form" }) do |form| %>
+<%= decidim_form_for(@form, url: document_section_suggestions_path(document, section_id: section.id), html: { class: "form" }) do |form| %>
   <div class="column">
     <%= form.text_area :body %>
   </div>

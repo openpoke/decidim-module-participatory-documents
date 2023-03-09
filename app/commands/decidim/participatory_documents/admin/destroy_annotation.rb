@@ -40,7 +40,7 @@ module Decidim
         end
 
         def annotation
-          @annotation ||= document.annotations.find_by!(uid: form.id)
+          @annotation ||= document.annotations.find(form.id)
         end
       end
     end

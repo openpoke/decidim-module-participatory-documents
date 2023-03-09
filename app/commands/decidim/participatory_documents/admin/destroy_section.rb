@@ -44,7 +44,7 @@ module Decidim
         end
 
         def section
-          @section ||= document.sections.find_by!(uid: form.uid)
+          @section ||= document.sections.find(form.id)
         end
       end
     end

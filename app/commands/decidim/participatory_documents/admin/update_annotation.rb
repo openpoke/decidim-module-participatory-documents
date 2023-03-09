@@ -41,17 +41,16 @@ module Decidim
         def attributes
           {
             page_number: form.page_number,
-            rect: form.rect,
-            uid: form.id
+            rect: form.rect
           }.merge(section: section)
         end
 
         def section
-          @section ||= Decidim::ParticipatoryDocuments::Section.where(document: document, uid: form.group).first_or_create
+          @section ||= Decidim::ParticipatoryDocuments::Section.where(document: document, id: form.section).first_or_create
         end
 
         def annotation
-          @annotation ||= document.annotations.find_by!(uid: form.id)
+          @annotation ||= document.annotations.find(form.id)
         end
       end
     end

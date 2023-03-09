@@ -1,5 +1,5 @@
-import PolygonViewer from "src/decidim/participatory_documents/polygon_viewer";
-import PdfStateManager from "src/decidim/participatory_documents/pdf_state_manager";
+import PolygonViewer from "src/decidim/participatory_documents/pdf/polygon_viewer";
+import PdfStateManager from "src/decidim/participatory_documents/pdf/pdf_state_manager";
 import "src/decidim/participatory_documents/pdf_notifications";
 import "src/decidim/participatory_documents/global";
 
@@ -13,7 +13,7 @@ window.InitPolygonViewer = function(i18n, layer, boxes) {
     console.log("click on box", box, evt);
     console.log("show the participation modal");
     let div = document.getElementById("participation-modal");
-    div.innerHTML = `Clicked ${box.id}. Should allow comments for group ${box.group}`;
+    div.innerHTML = `Clicked ${box.id}. Should allow comments for group ${box.section}`;
     div.classList.add("active");
   };
 

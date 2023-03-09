@@ -1,4 +1,4 @@
-import BoxArea from "./box_area";
+import Box from "./box";
 
 export default class PolygonViewer {
   constructor(div, json, options) {
@@ -20,7 +20,7 @@ export default class PolygonViewer {
     this.div.style.pointerEvents = "all";
     this.div.classList.add("polygon-ready");
     this.json.forEach((box) => {
-      this.boxes[box.id] = new BoxArea(this, box);
+      this.boxes[box.id] = new Box(this, box);
       this.bindBoxEvents(this.boxes[box.id]);
     });
   }

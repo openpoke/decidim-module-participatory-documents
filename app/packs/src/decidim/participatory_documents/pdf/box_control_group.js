@@ -12,11 +12,11 @@ export default class BoxControlGroup {
 
   _bindEvents() {
     this.div.addEventListener("click", this._startGrouping.bind(this));
-    this.box.div.addEventListener("click", this._groupBox.bind(this));
   }
 
   _startGrouping(evt) {
     evt.stopPropagation();
+    this.box.div.addEventListener("click", this._groupBox.bind(this));
     this.box.div.classList.add("grouping");
     document.querySelectorAll(".polygon-ready .box").forEach((div) => {
       // just in case
@@ -24,7 +24,7 @@ export default class BoxControlGroup {
         div.classList.remove("grouping", "mark-group", "focus");
       }
 
-      if (div.dataset.boxGroup === this.box.group) {
+      if (div.dataset.section === this.box.section) {
         div.classList.add("mark-group");
       }
     });
@@ -32,14 +32,15 @@ export default class BoxControlGroup {
     document.querySelectorAll(".polygon-ready").forEach((div) => {
       div.classList.add("grouping");
       div.dataset.groupBoxId = this.box.id;
-      div.dataset.groupBoxGroup = this.box.group;
+      div.dataset.groupBoxSection = this.box.section;
     });
     window.addEventListener("click", this._stopGrouping.bind(this), { once: true });
-    console.log("start grouping", evt, this.group);
+    console.log("start grouping", evt, this.section);
   }
 
   _stopGrouping(evt) {
     evt.stopPropagation();
+    this.box.div.removeEventListener("click", this._groupBox.bind(this));
     document.querySelectorAll(".polygon-ready .box").forEach((div) => div.classList.remove("mark-group", "hover", "blocked", "grouping", "focus"));
     document.querySelectorAll(".polygon-ready").forEach((div) => div.classList.remove("grouping"));
     console.log("stop grouping", evt, this);
@@ -49,15 +50,15 @@ export default class BoxControlGroup {
     console.log("group box", this)
     evt.stopPropagation();
     if (this.box.isGrouping() && this.layer.div.dataset.groupBoxId !== this.box.id) {
-      if (this.box.group === this.layer.div.dataset.groupBoxGroup) {
+      if (this.box.section === this.layer.div.dataset.groupBoxSection) {
         this.box.div.classList.remove("mark-group");
-        this.box.setGroup();
       } else {
         this.box.div.classList.add("mark-group");
-        this.box.setGroup(this.layer.div.dataset.groupBoxGroup);
+        this.box.section = this.layer.div.dataset.groupBoxSection;
+        this.box.dataset.section = this.layer.div.dataset.groupBoxSection;
       }
-      this.box.setModified();
-      console.log("group this", this.layer.div.dataset.groupBoxId, this.box.id, evt, this.box.group);
+      this.box.onChange();
+      console.log("group this", this.layer.div.dataset.groupBoxId, this.box.id, evt, this.box.section);
     }
   }
 }

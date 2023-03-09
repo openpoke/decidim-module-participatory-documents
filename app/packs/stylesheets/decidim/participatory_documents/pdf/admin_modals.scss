@@ -6,7 +6,7 @@
 
 @keyframes blinker {
   50% {
-    opacity: 0;
+    background-color: rgba(var(--primary-rgb), .6);
   }
 }
 

@@ -3,7 +3,7 @@
 module Decidim
   module ParticipatoryDocuments
     module Admin
-      # This module contains adds custom javascript and css for the admin controllers related to participatory documents
+      # This module adds custom javascript and css for the admin controllers related to participatory documents
       module NeedsAdminSnippets
         extend ActiveSupport::Concern
 

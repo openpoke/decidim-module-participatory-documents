@@ -9,7 +9,6 @@ module Decidim
         subject { described_class.new(form, document) }
 
         let(:document) { create(:participatory_documents_document) }
-        let(:uid) { "RandomUUID" }
 
         let(:current_user) { document.author }
 
@@ -19,7 +18,6 @@ module Decidim
           double(
             invalid?: invalid,
             title: title,
-            uid: uid,
             current_user: current_user
           )
         end

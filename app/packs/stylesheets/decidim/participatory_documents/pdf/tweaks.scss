@@ -1,3 +1,6 @@
+@import "stylesheets/decidim/variables";
+@import "stylesheets/decidim/properties";
+
 #toolbarViewer,
 #toolbarContainer {
   box-shadow: none;
@@ -75,9 +78,10 @@
   line-height: 1;
   text-align: center;
   cursor: pointer;
-  // TODO: use decidim root variables
-  background-color: #f0f0f0;
-  border: #333 solid 1px;
+  background-color: var(--secondary);
+  border: transparent solid 1px;
+  color: white;
+  text-shadow: 0 0 0 #fff;
 }
 
 #DecidimPDSaveButton {
@@ -88,9 +92,7 @@
   }
 
   &.alert {
-    border-color: red;
-    color: red;
-    background: lighten(red, 40%);
+    background-color: var(--primary);
     animation: blinker 2s linear infinite;
   }
 }

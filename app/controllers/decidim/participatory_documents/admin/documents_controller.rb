@@ -8,7 +8,13 @@ module Decidim
         include Decidim::ApplicationHelper
         include Decidim::ParticipatoryDocuments::Admin::NeedsAdminSnippets
 
+        helper Decidim::LayoutHelper
         helper_method :sections
+
+        before_action except: [:index, :new, :create] do
+          redirect_to(documents_path) if document.blank?
+          redirect_to(edit_document_path(document)) unless document.file.attached?
+        end
 
         def index
           redirect_to(document_suggestions_path(document)) && return if document.present? && document.file.attached?

@@ -19,8 +19,8 @@ module Decidim
             invalid?: invalid,
             page_number: 1,
             rect: rect,
-            id: annotation.uid,
-            group: "groupid",
+            id: annotation.id,
+            section: annotation.section.id,
             current_user: current_user
           )
         end

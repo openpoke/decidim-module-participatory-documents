@@ -1,0 +1,98 @@
+@import "stylesheets/decidim/admin/variables";
+@import "stylesheets/decidim/utils/fontface";
+@import "stylesheets/decidim/admin/utils/settings";
+
+.box {
+  position: absolute;
+  background: rgba(30, 152, 215, .12);
+  min-width: 1px;
+  min-height: 1px;
+  border-color: #1e98d7;
+  border-style: dotted;
+  border-width: 2px;
+  resize: none;
+  box-sizing: content-box;
+  font-family: $body-font-family;
+  font-weight: 400;
+  font-size: 13px;
+
+  // Box number badge
+  &::before {
+    content: attr(data-position);
+    position: absolute;
+    top: -2px;
+    left: -17px;
+    width: 32px;
+    height: 42px;
+    pointer-events: none;
+    background: rbg(30, 152, 215);
+    -webkit-mask-image: url(../images/badge.svg);
+    mask-image: url(../images/badge.svg);
+    color: white;
+    text-align: center;
+    line-height: 2.5;
+    text-shadow: 0 0 8px #fff;
+  }
+
+  // Admin controls
+  .box-controls {
+    background: rgba(30, 152, 215, .12);
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 64px;
+    height: 32px;
+    display: none;
+
+    .move-control {
+      cursor: move;
+    }
+
+    .group-control {
+      cursor: cell;
+    }
+  }
+
+  &.creating,
+  &.moving,
+  &.resizing {
+    border-style: dashed;
+  }
+
+  &.hover {
+    border-style: solid;
+    z-index: 10000;
+    cursor: pointer;
+
+    &.admin {
+      resize: both;
+    }
+
+    .box-controls {
+      display: block;
+    }
+  }
+
+  &.focus,
+  &.mark-group {
+    border-style: solid;
+    opacity: 1;
+  }
+
+  &.grouping {
+    .group-control {
+      color: red;
+    }
+  }
+
+  &.blocked {
+    pointer-events: none;
+    opacity: .4;
+
+    &.grouping {
+      opacity: 1;
+      // Same as "hover"
+      border-style: solid;
+    }
+  }
+}

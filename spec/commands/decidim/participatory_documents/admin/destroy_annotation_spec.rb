@@ -15,7 +15,7 @@ module Decidim
         let(:form) do
           double(
             invalid?: invalid,
-            id: annotation.uid,
+            id: annotation.id,
             current_user: user
           )
         end

@@ -67,7 +67,7 @@ module Decidim
         private
 
         def section
-          document.sections.find_by!(uid: params[:id])
+          document.sections.find(params[:id])
         end
       end
     end

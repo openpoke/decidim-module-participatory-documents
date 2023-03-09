@@ -23,9 +23,9 @@ module Decidim
         end
 
         describe ".destroy" do
-          let!(:section) { create(:participatory_documents_section, document: document, uid: "randomstring") }
+          let!(:section) { create(:participatory_documents_section, document: document) }
 
-          let(:params) { { document_id: document.id, id: section.uid } }
+          let(:params) { { document_id: document.id, id: section.id } }
 
           it "removes the entry from database" do
             expect(model.count).to eq(1)
@@ -37,7 +37,6 @@ module Decidim
         describe ".create" do
           let(:params) do
             {
-              "uid": "randomstring",
               "document_id": document.id,
               "title_en" => "Title"
             }
@@ -50,13 +49,12 @@ module Decidim
         end
 
         describe ".update" do
-          let!(:section) { create(:participatory_documents_section, document: document, uid: "randomstring", title: nil) }
+          let!(:section) { create(:participatory_documents_section, document: document, title: nil) }
 
           let(:params) do
             {
               "document_id": document.id,
-              "id": section.uid,
-              "uid": section.uid,
+              "id": section.id,
               "title_en" => "Title"
             }
           end

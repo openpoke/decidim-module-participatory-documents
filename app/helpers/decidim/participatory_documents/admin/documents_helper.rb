@@ -4,8 +4,6 @@ module Decidim
   module ParticipatoryDocuments
     module Admin
       module DocumentsHelper
-        include Decidim::ParticipatoryDocuments::DocumentsHelper
-
         def pdf_manage_button(document)
           content_tag(:div, class: "flex--cc flex-gap--1") do
             if document.blank? && allowed_to?(:create, :participatory_document)

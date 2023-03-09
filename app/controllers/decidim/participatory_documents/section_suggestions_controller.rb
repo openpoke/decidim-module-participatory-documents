@@ -18,7 +18,7 @@ module Decidim
 
         CreateSuggestion.call(@form, section) do
           on(:ok) do |_suggestion|
-            redirect_to(document_section_suggestions_path(document, section.uid)) && return
+            redirect_to(document_section_suggestions_path(document, section.id)) && return
           end
           on(:invalid) do
             render template: "decidim/participatory_documents/section_suggestions/index", format: [:html], status: :bad_request
@@ -33,7 +33,7 @@ module Decidim
       end
 
       def section
-        @section ||= document.sections.find_by!(uid: params[:section_id])
+        @section ||= document.sections.find(params[:section_id])
       end
     end
   end
