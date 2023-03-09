@@ -25,21 +25,20 @@ export default class Box {
     this.div.draggable = false;
     this.div.id = `box-${id || Date.now()}`;
     this.div.dataset.position = position || this._getNextPosition();
-    this.div.dataset.section = this.section;
-    this.div.classList.add("box");
+    this.div.dataset.section = this.section || this._getNextSection();
+    this.div.classList.add("box", "admin");
     this.div.style.left = `${this._sanitizePercent(left)}%`;
     this.div.style.top = `${this._sanitizePercent(top)}%`;
     // if width is not defined will use 15%
     this.div.style.width = `${this._sanitizePercent(width, 0, 100 - parseFloat(left)) || 15}%`;
     this.div.style.height = `${this._sanitizePercent(height, 0, 100 - parseFloat(top)) || 15}%`;
-    console.log(width, this.div.style.width)
+
+    // add the number of the box in the middle
+    let span = document.createElement("span");
+    span.innerHTML = this.div.dataset.position;
+    this.div.appendChild(span)
     this.layer.div.appendChild(this.div);
   }
-
-  // setGroup(section) {
-  //   this.group = `group-${section || Date.now()}`;
-  //   this.div.dataset.boxGroup = this.group;
-  // }
 
   createControls() {
     this.controls = new BoxControls(this);
@@ -73,7 +72,7 @@ export default class Box {
   }
 
   isGrouping() {
-    return document.querySelectorAll(".polygon-ready .box.grouping").length
+    return document.querySelectorAll(".polygon-ready .box.grouping").length;
   }
 
   isResizing() {
@@ -81,14 +80,20 @@ export default class Box {
   }
 
   _getNextPosition() {
-    return Object.keys(this.layer.boxes).length  + 2;
+    return document.querySelectorAll(".polygon-ready .box").length + 1;
+  }
+
+  _getNextSection() {
+    let positions = new Set();
+    document.querySelectorAll(".polygon-ready .box").forEach((div) => positions.add(div.dataset.section));
+    return positions.size + 1;
   }
 
   _ensureCssPercent(num, max) {
     if (num.indexOf("%") !== -1) {
       return parseFloat(num);
     }
-    return this._sanitizePercent(100 * parseFloat(num) / max)
+    return this._sanitizePercent(100 * parseFloat(num) / max);
 
   }
 
@@ -172,7 +177,7 @@ export default class Box {
 
   // Not using getNodes because groups can span across layers
   focusGroup() {
-    document.querySelectorAll(".polygon-ready .box").forEach((div) => div.dataset.section === this.section && div.classList.add("focus"));
+    document.querySelectorAll(".polygon-ready .box").forEach((div) => div.dataset.section === this.div.dataset.section && div.classList.add("focus"));
   }
 
   blurGroup() {

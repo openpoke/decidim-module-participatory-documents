@@ -6,7 +6,7 @@ export default class BoxControlMove {
     this.left = 0;
     this.top = 0;
     this.div = document.createElement("div");
-    this.div.classList.add("move-control");
+    this.div.classList.add("control", "move");
     this.div.title = this.layer.i18n.move;
     this.control.div.appendChild(this.div);
     this._bindEvents();

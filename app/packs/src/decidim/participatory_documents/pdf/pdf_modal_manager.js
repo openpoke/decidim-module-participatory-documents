@@ -106,7 +106,7 @@ export default class PdfModalManager {
     if (confirm(this.i18n.removeBoxConfirm)) {
       console.log("remove box", box)
       // Do not call ajax if not persisted
-      if(box.id) {
+      if (box.id) {
         $.ajax({
           url: this.sectionPath(box.section),
           type: "DELETE"

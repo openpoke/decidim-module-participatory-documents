@@ -27,17 +27,17 @@ module Decidim
             css = <<~CSS
               <style media="all">
                 .annotationEditorLayer .box {
-                  background: #{box_color_as_rgba(document)};
+                  background-color: #{box_color_as_rgba(document)};
                   border-color: #{document.box_color};
                 }
                 .annotationEditorLayer .box::before {
-                  background: #{document.box_color};
+                  background-color: #{document.box_color};
                 }
-                .annotationEditorLayer .box .box-controls {
-                  background: #{document.box_color};
+                .annotationEditorLayer .box .box-controls .control {
+                  background-color: #{document.box_color};
                 }
                 #notifications {
-                  background: #{box_color_as_rgba(document, opacity: 60)};
+                  background-color: #{box_color_as_rgba(document, opacity: 60)};
                 }
               </style>
             CSS
