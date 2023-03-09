@@ -28,6 +28,22 @@ Decidim.register_component(:participatory_documents) do |component|
   component.settings(:step) do |settings|
   end
 
+  component.exports :suggestions do |exports|
+    exports.collection do |component_instance|
+      space = component_instance.participatory_space
+      Decidim::ParticipatoryDocuments::Suggestion.joins(
+        "INNER JOIN decidim_participatory_documents_documents ON decidim_participatory_documents_documents.id = decidim_participatory_documents_suggestions.suggestable_id " +
+          "INNER JOIN decidim_components ON decidim_components.id = decidim_participatory_documents_documents.decidim_component_id"
+      ).where(
+        decidim_components: { participatory_space_id: space.id }
+      )
+    end
+
+    exports.include_in_open_data = true
+
+    exports.serializer Decidim::ParticipatoryDocuments::SuggestionSerializer
+  end
+
   # component.register_resource(:participatory_document) do |resource|
   #   resource.model_class_name = "Decidim::ParticipatoryDocuments::Document"
   #   resource.template = "decidim/participatory_documents/documents/linked_participatory_documents"

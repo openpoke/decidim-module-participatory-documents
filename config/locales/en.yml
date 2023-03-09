@@ -78,6 +78,8 @@ en:
             error: 
             invalid: There was a problem updating Document
             success: Document has been successfully updated
+        exports:
+          suggestions: Suggestions
         suggestion_notes:
           create:
             error: There was a problem creating this suggestion note
