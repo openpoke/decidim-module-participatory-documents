@@ -6,11 +6,12 @@ export default class PdfModalManager {
     this.editSectionPath = options.editSectionPath;
     this.sectionPath = options.sectionPath;
     this.annotationsPath = options.annotationsPath;
-    this.$modalLayout = $("#decidim");
     this.pdfViewer = options.pdfViewer;
     this.showInfo = options.showInfo;
     this.showAlert = options.showAlert;
     this.csrfToken = options.csrfToken;
+    // UI
+    this.$modalLayout = $("#decidim");
     // events
     this.onSave = () => {};
     this.onCancel = () => {};
@@ -38,48 +39,18 @@ export default class PdfModalManager {
   }
 
   displayModal(box) {
-    const close = document.getElementById("editor-modal-close");
-    const title = document.getElementById("editor-modal-title");
-    const remove = document.getElementById("editor-modal-remove");
-
-    title.innerHTML = `Edit box ${box.id}, section ${box.section}`;
+    const uiSave = document.getElementById("editor-modal-save");
+    const uiClose = document.getElementById("editor-modal-close");
+    const uiTitle = document.getElementById("editor-modal-title");
+    const uiRemove = document.getElementById("editor-modal-remove");
+    uiTitle.innerHTML = `Edit box ${box.id}, section ${box.section}`;
 
     this.$modalLayout.addClass("show");
     this.$modalLayout.foundation();
 
-    this.registerSaveHandler(box);
-
-    close.addEventListener("click", (evt) => {
-      evt.stopPropagation();
-      this.$modalLayout.removeClass("show");
-    }, { once: true });
-
-    remove.addEventListener("click", (evt) => {
-      evt.stopPropagation();
-
-      if (confirm(this.i18n.removeBoxConfirm)) {
-        $.ajax({
-          url: this.sectionPath(box.section),
-          type: "DELETE"
-        }).done(() => {
-          this.pdfViewer._pages.
-            filter((page) => page.boxEditor).
-            filter((page) => Object.keys(page.boxEditor.boxes).length > 0).
-            forEach((page) => {
-              return Object.values(page.boxEditor.boxes).filter((item) => item.section === box.section).map(() => {
-                Reflect.deleteProperty(page.layer.boxes, box.id);
-                return box.destroy();
-              });
-            });
-        }).
-          fail((resp) => {
-            this.showAlert(resp.responseText);
-            box.destroy();
-          }).
-          always(() => {});
-        this.$modalLayout.removeClass("show");
-      }
-    }, { once: true });
+    uiClose.addEventListener("click", this._closeHandler.bind(this), { once: true });
+    uiRemove.addEventListener("click", (evt) => this._removeHandler(box, evt), { once: true });
+    uiSave.addEventListener("click", (evt) => this._saveHandler(box, evt), { once: true });
   }
 
   createBox(box, page) {
@@ -114,21 +85,56 @@ export default class PdfModalManager {
       });
   }
 
-  registerSaveHandler(box) {
-    const save = document.getElementById("editor-modal-save");
-    save.addEventListener("click", (evt) => {
-      evt.stopPropagation();
-      let form = this.$modalLayout.find("form");
+  _saveHandler(box, evt) {
+    evt.stopPropagation();
+    let form = this.$modalLayout.find("form");
 
-      $.ajax({
-        type: form.attr("method"),
-        url: form.attr("action"),
-        data: form.serialize()
-      }).done(() => {
-        this.$modalLayout.removeClass("show");
-        this.createBox(box, this.pdfViewer.currentPageNumber);
-      }).
-        fail((data) => this.populateModal(data.responseText, box));
-    }, { once: true });
+    $.ajax({
+      type: form.attr("method"),
+      url: form.attr("action"),
+      data: form.serialize()
+    }).done(() => {
+      this.$modalLayout.removeClass("show");
+      this.createBox(box, this.pdfViewer.currentPageNumber);
+    }).
+      fail((data) => this.populateModal(data.responseText, box));
+  }
+
+  _removeHandler(box, evt) {
+    evt.stopPropagation();
+
+    if (confirm(this.i18n.removeBoxConfirm)) {
+      console.log("remove box", box)
+      // Do not call ajax if not persisted
+      if(box.id) {
+        $.ajax({
+          url: this.sectionPath(box.section),
+          type: "DELETE"
+        }).done(() => {
+          this.pdfViewer._pages.
+            filter((page) => page.boxEditor && Object.keys(page.boxEditor.boxes).length > 0).
+            forEach((page) => {
+              return Object.values(page.boxEditor.boxes).filter((item) => item.section === box.section).map((item) => {
+                Reflect.deleteProperty(item.layer.boxes, item.id);
+                return item.destroy();
+              });
+            });
+        }).
+          fail((resp) => {
+            // This should be improved a proper message with the reason why hasn't been destroyed (ie: it has suggestions)
+            this.showAlert(resp.responseText);
+          }).
+          always(() => {});
+      } else {
+        Reflect.deleteProperty(box.layer.boxes, box.id);
+        box.destroy();
+      }
+      this.$modalLayout.removeClass("show");
+    }
+  }
+
+  _closeHandler(evt) {
+    evt.stopPropagation();
+    this.$modalLayout.removeClass("show");
   }
 }

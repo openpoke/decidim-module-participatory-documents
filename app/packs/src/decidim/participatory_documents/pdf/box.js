@@ -108,7 +108,7 @@ export default class Box {
       console.log("box click", evt);
       evt.stopPropagation();
       this.onClick(evt);
-      window.addEventListener("click", this._blur.bind(this), {once: true});
+      window.addEventListener("click", this._blur.bind(this), { once: true });
     }
   }
 
