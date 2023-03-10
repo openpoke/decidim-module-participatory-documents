@@ -39,6 +39,21 @@ describe "Admin manages participatory documents", type: :system do
     end
   end
 
+  context "export suggestions" do
+    it "exports a JSON" do
+      find(".exports.dropdown").click
+      perform_enqueued_jobs { click_link "Suggestions as JSON" }
+
+      within ".callout.success" do
+        expect(page).to have_content("in progress")
+      end
+
+      expect(last_email.subject).to include("suggestions", "json")
+      expect(last_email.attachments.length).to be_positive
+      expect(last_email.attachments.first.filename).to match(/^suggestions.*\.zip$/)
+    end
+  end
+
   context "when sorting by author's name" do
     let(:dummy_user) { create(:user, name: "zzz-user 1", organization: organization) }
     let!(:single_document_suggestion) { create(:participatory_documents_suggestion, suggestable: document, author: dummy_user) }

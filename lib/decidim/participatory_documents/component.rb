@@ -35,9 +35,13 @@ Decidim.register_component(:participatory_documents) do |component|
         "INNER JOIN decidim_participatory_documents_documents ON decidim_participatory_documents_documents.id = decidim_participatory_documents_suggestions.suggestable_id " +
           "INNER JOIN decidim_components ON decidim_components.id = decidim_participatory_documents_documents.decidim_component_id"
       ).where(
-        decidim_components: { participatory_space_id: space.id }
+        decidim_components: {
+          participatory_space_id: space.id,
+          participatory_space_type: space.class.name
+        }
       )
     end
+
 
     exports.include_in_open_data = true
 
