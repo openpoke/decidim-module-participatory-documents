@@ -11,19 +11,21 @@
   &.polygon-ready {
     &.admin {
       cursor: crosshair;
-    }
 
-    &.grouping {
-      cursor: not-allowed;
+      &.grouping {
+        cursor: not-allowed;
 
-      .box {
-        cursor: cell;
-        // When grouping do not put any opacity and allow events, otherwise cannot select the box
-        &.blocked {
-          pointer-events: all;
-          opacity: 1;
+        .box {
+          cursor: cell;
+          // When grouping do not put any opacity and allow events, otherwise cannot select the box
+          &.blocked {
+            pointer-events: all;
+            opacity: 1;
+          }
         }
       }
+
+      @include meta.load-css("stylesheets/decidim/participatory_documents/pdf/admin_polygons.scss");
     }
   }
 }

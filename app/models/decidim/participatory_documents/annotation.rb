@@ -22,6 +22,7 @@ module Decidim
           position: position,
           rect: rect,
           section: section.id,
+          section_number: section.position,
           page_number: page_number
         }
       end

@@ -50,14 +50,16 @@ module Decidim
             startSuggesting: "Click on a marked area to participate!",
             confirmExit: "Are you sure you want to exit?",
             operationFailed: "The Operation has failed",
-            allSaved: "All the boxes data has been saved to DB",
-            removed: "The box has been removed",
-            removeBoxConfirm: "Are you sure you want to delete?",
-            updated: "The box has been updated",
-            created: "The box has been created",
+            allSaved: "All the areas have been saved succesfully",
+            errorsSaving: "Some errors have occurred while saving the areas",
+            needsSaving: "You have to save the areas before editing them",
+            removed: "The area has been removed",
+            removeBoxConfirm: "Are you sure you want to delete this area? This will remove any other area that is grouped with it.",
+            updated: "The area has been updated",
+            created: "The area has been created",
             move: "Move",
             group: "Group",
-            startEditing: "Start creating boxes for participation by clicking and dragging. Once created, boxes can be resized, moved or grouped."
+            startEditing: "Start creating areas for participation by clicking and dragging. Once created, boxes can be resized, moved or grouped."
           }
         end
       end

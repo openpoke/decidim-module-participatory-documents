@@ -20,21 +20,6 @@ module Decidim
           end
         end
 
-        def create
-          enforce_permission_to :update, :document_section
-          @form = form(Decidim::ParticipatoryDocuments::Admin::SectionForm).from_params(params)
-
-          Admin::CreateSection.call(@form, document) do
-            on(:ok) do
-              render(json: {}, status: :created) && return
-            end
-
-            on(:invalid) do
-              render(partial: "form", status: :bad_request) && return
-            end
-          end
-        end
-
         def update
           enforce_permission_to :update, :document_section
           @form = form(Decidim::ParticipatoryDocuments::Admin::SectionForm).from_params(params)
@@ -53,13 +38,6 @@ module Decidim
         def edit
           enforce_permission_to :update, :document_section
           @form = form(Decidim::ParticipatoryDocuments::Admin::SectionForm).from_model(section)
-
-          render partial: "form"
-        end
-
-        def new
-          enforce_permission_to :update, :document_section
-          @form = form(Decidim::ParticipatoryDocuments::Admin::SectionForm).from_params({})
 
           render partial: "form"
         end

@@ -4,8 +4,9 @@ export default class Box {
   constructor(layer, json) {
     this.layer = layer;
     this.json = json || { rect: {} };
-    this.id = this.json.id;
-    this.section = this.json.section;
+    this.id = this.json.id || 0;
+    this.section = this.json.section || 0;
+    this.sectionNumber = this.json.section_number || 0;
     this.createBox(this.id, this.json.position, this.json.rect);
     this.setInfo();
     this._bindEvents();
@@ -25,8 +26,8 @@ export default class Box {
     this.div.draggable = false;
     this.div.id = `box-${id || Date.now()}`;
     this.div.dataset.position = position || this._getNextPosition();
-    this.div.dataset.section = this.section || this._getNextSection();
-    this.div.classList.add("box", "admin");
+    this.setSection(this.section, this.sectionNumber);
+    this.div.classList.add("box");
     this.div.style.left = `${this._sanitizePercent(left)}%`;
     this.div.style.top = `${this._sanitizePercent(top)}%`;
     // if width is not defined will use 15%
@@ -38,6 +39,17 @@ export default class Box {
     span.innerHTML = this.div.dataset.position;
     this.div.appendChild(span)
     this.layer.div.appendChild(this.div);
+  }
+
+  setSection(section, sectionNumber) {
+    if (section) {
+      this.div.dataset.sectionNumber = sectionNumber || this._getNextSectionNumber();
+      this.div.dataset.section = section;
+    } else {
+      // ensure a new section will be created in the next save
+      this.div.dataset.sectionNumber = this.sectionNumber || this._getNextSectionNumber();
+      this.div.dataset.section = this.section;
+    }
   }
 
   createControls() {
@@ -58,13 +70,23 @@ export default class Box {
   getInfo() {
     return {
       id: this.id,
-      section: this.section,
+      // Section in the dataset can be manipulated by the group editor
+      // this.section is always the original
+      section: this.div.dataset.section,
       rect: this.getRect()
     }
   }
 
-  setInfo(info) {
-    this.previousInfo = info || this.getInfo();
+  setInfo(data) {
+    if (data) {
+      this.id = data.id || this.id;
+      this.section = data.section || this.section;
+      this.div.dataset.section = this.section;
+    }
+    if (this.id) {
+      this.div.classList.add("persisted");
+    }
+    this.previousInfo = this.getInfo();
   }
 
   isMoving() {
@@ -83,9 +105,9 @@ export default class Box {
     return document.querySelectorAll(".polygon-ready .box").length + 1;
   }
 
-  _getNextSection() {
+  _getNextSectionNumber() {
     let positions = new Set();
-    document.querySelectorAll(".polygon-ready .box").forEach((div) => positions.add(div.dataset.section));
+    document.querySelectorAll(".polygon-ready .box").forEach((div) => positions.add(div.dataset.sectionNumber));
     return positions.size + 1;
   }
 
@@ -110,7 +132,7 @@ export default class Box {
 
   _click(evt) {
     if (!this.layer.creating && !this.isMoving() && !this.isGrouping() && !this.isResizing()) {
-      console.log("box click", evt);
+      // console.log("box click", evt);
       evt.stopPropagation();
       this.onClick(evt);
       window.addEventListener("click", this._blur.bind(this), { once: true });
@@ -145,9 +167,11 @@ export default class Box {
 
   _mouseUp() {
     if (!this.layer.creating) {
+      console.log("mouseup", this.hasChanged())
       // delay changing resizing status to avoid triggering the click event in the box
       setTimeout(() => this.div.classList.remove("resizing"), 100);
       if (this.hasChanged()) {
+        this.setInfo();
         this.onChange();
       }
     }
@@ -161,18 +185,12 @@ export default class Box {
       // console.log("box resize", entries, this.div.style.width, this.div.style.height, "calculated", width, height);
       this.div.style.width = width;
       this.div.style.height = height;
-      // We need to record changes about the dimensions}
-      this.setInfo();
     }
   }
 
 
   hasChanged() {
-    if (JSON.stringify(this.getInfo()) !== JSON.stringify(this.previousInfo)) {
-      this.previousInfo = this.getInfo();
-      return true;
-    }
-    return false;
+    return JSON.stringify(this.getInfo()) !== JSON.stringify(this.previousInfo);
   }
 
   // Not using getNodes because groups can span across layers
@@ -185,13 +203,17 @@ export default class Box {
   }
 
   blockSibilings() {
-    this.layer.blocked = true;
-    this.layer.div.querySelectorAll(".box").forEach((div) => div.id !== this.div.id && div.classList.add("blocked"));
+    document.querySelectorAll(".polygon-ready").forEach((layer) => {
+      layer.classList.add("blocked");
+      layer.querySelectorAll(".box").forEach((div) => div.id !== this.div.id && div.classList.add("blocked"));
+    });
   }
 
   unBlockSibilings() {
-    this.layer.blocked = false;
-    this.layer.div.querySelectorAll(".box").forEach((div) => div.classList.remove("blocked"));
+    document.querySelectorAll(".polygon-ready").forEach((layer) => {
+      layer.classList.remove("blocked");
+      layer.querySelectorAll(".box").forEach((div) => div.classList.remove("blocked"));
+    });
   }
 
   destroy() {

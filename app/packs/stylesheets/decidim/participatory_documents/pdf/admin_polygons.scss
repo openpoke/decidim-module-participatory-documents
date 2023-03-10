@@ -1,0 +1,85 @@
+.box {
+  &.hover {
+    resize: both;
+    // In order to resize to work, it needs to have overflow
+    // but this clips the elements outside
+    overflow: hidden;
+
+    // Make the resize a little bit more visible
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, transparent 0, transparent 25%, #fff 75%, #fff 100%);
+    }
+
+    &::before {
+      // display: none;
+      left: 0;
+    }
+
+    .box-controls {
+      display: block;
+    }
+  }
+
+  &.grouping {
+    .box-controls {
+      .control.group {
+        background-color: red;
+      }
+    }
+  }
+
+  // Non persisted cannot group yet (although we could refactor to allow it)
+  &.persisted {
+    .box-controls {
+      .control.group {
+        display: inline-block;
+      }
+    }
+  }
+
+  // Admin controls
+  .box-controls {
+    position: absolute;
+    display: none;
+    bottom: 0;
+    left: 0;
+    width: auto;
+    height: auto;
+
+    .control {
+      background: rgb(30, 152, 215);
+      display: inline-block;
+      width: 40px;
+      height: 36px;
+      margin: 0 3px;
+      padding: 2px;
+      mask-repeat: no-repeat;
+      mask-size: 38px 37px;
+      mask-position: 5px 0;
+
+      &:hover {
+        transform: scale(.9);
+        opacity: .8;
+      }
+
+      &.group {
+        cursor: cell;
+        mask-image: url(../images/group.svg);
+        mask-size: 32px 32px;
+        mask-position: 2px 3px;
+        display: none;
+      }
+
+      &.move {
+        mask-image: url(../images/move.svg);
+        cursor: move;
+      }
+    }
+  }
+}

@@ -4,8 +4,8 @@
  * */
 export default class PdfStateManager {
   constructor(options) {
+    console.log("init states manager", this)
     this.changes = [];
-    this.evtAdded = false;
     this.element = options.saveButton;
     this.i18n = options.i18n;
     this.csrfToken = options.csrfToken;
@@ -14,16 +14,12 @@ export default class PdfStateManager {
     this.bindEvents();
     // events
     this.onSave = () => {};
-  }
-
-  beforeUnload(evt) {
-    if (!this.isEmpty()) {
-      evt.returnValue = this.i18n.confirmExit;
-    }
+    this.onError = () => {};
   }
 
   add(box) {
     let index = this.changes.indexOf(box.id);
+    console.log(box, this.changes, index)
     if (index === -1) {
       this.changes.push(box.id);
       this.setDirty();
@@ -34,18 +30,9 @@ export default class PdfStateManager {
     let index = this.changes.indexOf(box.id);
     if (index >= 0) {
       this.changes.splice(index, 1);
-      this.reset();
-    }
-  }
-  setDirty() {
-    if (this.evtAdded === false) {
-      console.log("setDirty")
-      this.evtAdded = true;
-      if (this.element) {
-        this.element.classList.add("alert");
+      if (this.isEmpty()) {
+        this.reset();
       }
-
-      window.addEventListener("beforeunload", this.beforeUnload.bind(this), { capture: true });
     }
   }
 
@@ -53,36 +40,64 @@ export default class PdfStateManager {
     return this.changes.length === 0;
   }
 
-  reset() {
-    if (this.evtAdded && this.isEmpty()) {
-      this.evtAdded = false;
-      console.log("reset");
-      if (this.element) {
-        this.element.classList.remove("alert");
-      }
-      window.removeEventListener("beforeunload", this.beforeUnload.bind(this), { capture: true });
+  bindEvents() {
+    this.element.addEventListener("click", this._saveHandler.bind(this));
+  }
+
+  setDirty() {
+    console.log("setDirty", this)
+    if (this.element) {
+      this.element.classList.add("alert");
+    }
+    if (!this.beforeUnloadHandler) {
+      // create a global reference to ensure the method is the same on adding and removing
+      this.beforeUnloadHandler = this._beforeUnload.bind(this);
+      window.addEventListener("beforeunload", this.beforeUnloadHandler, { capture: true });
+      console.log("add beforeunload", this, this.beforeUnloadHandler);
     }
   }
 
-  bindEvents() {
-    this.element.addEventListener("click", this.saveHandler.bind(this));
+  reset() {
+    this.changes = [];
+    if (this.element) {
+      this.element.classList.remove("alert");
+      this.element.classList.remove("loading");
+    }
+
+    window.removeEventListener("beforeunload", this.beforeUnloadHandler, { capture: true });
+    console.log("remove beforeunload", this, this.beforeUnloadHandler);
+    this.beforeUnloadHandler = null;
   }
 
-  saveHandler(evt) {
-    evt.stopPropagation();
 
+  _beforeUnload(evt) {
+    if (!this.isEmpty()) {
+      evt.returnValue = this.i18n.confirmExit;
+    }
+  }
+
+  _saveHandler(evt) {
+    evt.preventDefault();
+    if (this.element.classList.contains("loading")) {
+      return;
+    }
+    this.element.classList.add("loading");
+    this.processed = {};
+    this.errors = {};
+    this.totalBoxes = 0;
     this.pdfViewer._pages.
       filter((page) => page.boxEditor).
       filter((page) => Object.keys(page.boxEditor.boxes).length > 0).
-      forEach((page) => Object.values(page.boxEditor.boxes).map((box) => this.updateOrCreateBox(box, page.id)));
+      forEach((page) => Object.values(page.boxEditor.boxes).map((box) => this._updateOrCreateBox(box, page.id)));
   }
 
-  updateOrCreateBox(box, page) {
+  _updateOrCreateBox(box, page) {
     let body = box.getInfo();
-    body.pageNumber = page;
+    body.page_number = page; // eslint-disable-line camelcase
+    this.totalBoxes += 1;
 
-    fetch(`${this.annotationsPath}/${box.id}`, {
-      method: "PUT",
+    fetch(this.annotationsPath, {
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
         "Accept": "application/json",
@@ -98,13 +113,29 @@ export default class PdfStateManager {
 
         throw new Error(" ");
       }).
-      then((data) => {
-        box.setInfo();
-        this.onSave(box, data);
+      then((resp) => {
+        box.setInfo(resp.data);
+        this._setProcessed(box, resp.data);
       }).
       catch((error) => {
-        console.error(error);
-        // createBox(box, page);
+        this._setProcessed(box, null, error);
       });
+  }
+
+  _setProcessed(box, data, error) {
+    if (data) {
+      this.processed[box.id] = data;
+    } else {
+      this.errors[box.id] = error;
+    }
+
+    if (Object.keys(this.processed).length + Object.keys(this.errors).length === this.totalBoxes) {
+      this.reset();
+      if (Object.keys(this.errors).length > 0) {
+        this.onError(this.errors);
+      } else {
+        this.onSave(this.processed);
+      }
+    }
   }
 }

@@ -7,7 +7,6 @@ export default class PolygonEditor extends PolygonViewer {
     this.div.classList.add("admin");
     this.box = null;
     this.creating = false;
-    this.blocked = false;
     this.top = 0;
     this.left = 0;
   }
@@ -24,8 +23,12 @@ export default class PolygonEditor extends PolygonViewer {
     this.div.addEventListener("mouseup", this._mouseUp.bind(this));
   }
 
+  isBlocked() {
+    return this.div.classList.contains("blocked");
+  }
+
   _mouseDown(evt) {
-    if (!this.creating && !this.blocked) {
+    if (!this.creating && !this.isBlocked()) {
       this.blockBoxes();
       this.box = this._createBoxFromMouseEvent(evt);
       this.creating = true;
@@ -37,7 +40,7 @@ export default class PolygonEditor extends PolygonViewer {
   }
 
   _mouseMove(evt) {
-    if (!this.blocked && this.creating && this.box) {
+    if (!this.isBlocked() && this.creating && this.box) {
       let width = evt.clientX - this.left - 9;
       let height = evt.clientY - this.top - 9;
       let boxPercentLeft = parseInt(this.box.div.style.left, 10);
@@ -51,7 +54,7 @@ export default class PolygonEditor extends PolygonViewer {
   }
   
   _mouseUp() {
-    if (!this.blocked && this.creating && this.box) {
+    if (!this.isBlocked() && this.creating && this.box) {
       this.box.div.classList.remove("creating");
       if (this.box.div.clientWidth <= 5 && this.box.div.clientHeight <= 5) {
         this.box.div.remove();

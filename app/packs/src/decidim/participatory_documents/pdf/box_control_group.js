@@ -12,19 +12,22 @@ export default class BoxControlGroup {
 
   _bindEvents() {
     this.div.addEventListener("click", this._startGrouping.bind(this));
+    this.box.div.addEventListener("click", this._groupBox.bind(this));
   }
 
   _startGrouping(evt) {
     evt.stopPropagation();
-    this.box.div.addEventListener("click", this._groupBox.bind(this));
+    if (this.box.div.classList.contains("grouping")) {
+      this._stopGrouping(evt);
+      return;
+    }
     this.box.div.classList.add("grouping");
     document.querySelectorAll(".polygon-ready .box").forEach((div) => {
       // just in case
       if (div.id !== this.box.div.id) {
         div.classList.remove("grouping", "mark-group", "focus");
       }
-      console.log(div, div.dataset, this.box)
-      if (div.dataset.section === this.box.div.dataset.section) {
+      if (div.dataset.sectionNumber === this.box.div.dataset.sectionNumber) {
         div.classList.add("mark-group");
       }
     });
@@ -33,6 +36,7 @@ export default class BoxControlGroup {
       div.classList.add("grouping");
       div.dataset.groupBoxId = this.box.div.id;
       div.dataset.groupBoxSection = this.box.div.dataset.section;
+      div.dataset.groupBoxNumber = this.box.div.dataset.sectionNumber;
     });
     window.addEventListener("click", this._stopGrouping.bind(this), { once: true });
     console.log("start grouping", evt, this);
@@ -49,16 +53,22 @@ export default class BoxControlGroup {
   _groupBox(evt) {
     console.log("group box", this)
     evt.stopPropagation();
-    if (this.box.isGrouping() && this.layer.div.dataset.groupBoxId !== this.box.di.id) {
-      if (this.box.div.dataset.section === this.layer.div.dataset.groupBoxSection) {
+    if (this.box.isGrouping() && this.layer.div.dataset.groupBoxId !== this.box.div.id) {
+      if (this.box.div.dataset.sectionNumber === this.layer.div.dataset.groupBoxNumber) {
         this.box.div.classList.remove("mark-group");
+        if (this.box.sectionNumber === parseInt(this.layer.div.dataset.groupBoxNumber, 10)) {
+          console.log("reset to original", this.box)
+          // reset section to the original
+          this.box.setSection(-1);
+        } else {
+          this.box.setSection(this.box.section, this.box.sectionNumber);
+        }
       } else {
         this.box.div.classList.add("mark-group");
-        this.box.div.dataset.section = this.layer.div.dataset.groupBoxSection;
-        this.box.div.dataset.section = this.layer.div.dataset.groupBoxSection;
+        this.box.setSection(this.layer.div.dataset.groupBoxSection, this.layer.div.dataset.groupBoxNumber);
       }
       this.box.onChange();
-      console.log("group this", this.layer.div.dataset.groupBoxId, this.box.div.id, evt, this.box.div.dataset.section);
+      // console.log("group this", this.layer.div.dataset.groupBoxId, this.box.div.id, evt, this.box.div.dataset.sectionNumber);
     }
   }
 }

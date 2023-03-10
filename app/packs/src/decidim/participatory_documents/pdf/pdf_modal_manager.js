@@ -1,19 +1,17 @@
 /* eslint-disable no-alert */
 export default class PdfModalManager {
   constructor(options) {
-    this.newSectionPath = options.newSectionPath;
     this.i18n = options.i18n;
     this.editSectionPath = options.editSectionPath;
     this.sectionPath = options.sectionPath;
     this.annotationsPath = options.annotationsPath;
     this.pdfViewer = options.pdfViewer;
-    this.showInfo = options.showInfo;
-    this.showAlert = options.showAlert;
     this.csrfToken = options.csrfToken;
     // UI
     this.$modalLayout = $("#decidim");
     // events
     this.onSave = () => {};
+    this.onError = () => {};
     this.onCancel = () => {};
   }
 
@@ -22,15 +20,8 @@ export default class PdfModalManager {
       url: this.editSectionPath(box.section),
       type: "GET"
     }).done((data) => this.populateModal(data, box)).
-      fail(() => this.loadNewGroupModal(box)).
+      fail((error) => this.onError(box, error)).
       always(() => {});
-  }
-
-  loadNewGroupModal(box) {
-    $.ajax({
-      url: this.newSectionPath,
-      type: "GET"
-    }).done((data) => this.populateModal(data, box));
   }
 
   populateModal(data, box) {
@@ -73,15 +64,14 @@ export default class PdfModalManager {
         }
         throw new Error(" ");
       }).
-      then((data) => {
+      then((resp) => {
         box.setInfo();
-        this.onSave(box, data);
-        this.showInfo(this.i18n.created);
+        this.onSave(box, resp.data);
       }).
       catch((error) => {
         console.error("Error creating box, removing it from the UI", error);
         box.destroy();
-        this.showAlert(this.i18n.operationFailed);
+        this.onError(box, error);
       });
   }
 
@@ -121,8 +111,7 @@ export default class PdfModalManager {
             });
         }).
           fail((resp) => {
-            // This should be improved a proper message with the reason why hasn't been destroyed (ie: it has suggestions)
-            this.showAlert(resp.responseText);
+            this.onError(box, resp);
           }).
           always(() => {});
       } else {

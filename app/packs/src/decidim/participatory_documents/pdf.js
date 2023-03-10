@@ -3,9 +3,6 @@ import PdfStateManager from "src/decidim/participatory_documents/pdf/pdf_state_m
 import "src/decidim/participatory_documents/pdf_notifications";
 import "src/decidim/participatory_documents/global";
 
-// state manager
-window.PdfDocStateManager = new PdfStateManager();
-
 // Call this on an annotation layer to initialize the polygon viewer (public side)
 window.InitPolygonViewer = function(i18n, layer, boxes) {
   let viewer = new PolygonViewer(layer, boxes, { i18n: i18n, stateManager: window.PdfDocStateManager});

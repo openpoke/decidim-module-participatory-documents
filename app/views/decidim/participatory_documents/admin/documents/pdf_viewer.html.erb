@@ -36,22 +36,28 @@
 
     var pages = {};
     PDFViewerApplication.initializedPromise.then(function() {
-      showInfo(I18n.startEditing, {delay: 5000});
+      var options = {
+        i18n: I18n,
+        editSectionPath: (group) => SectionPath + `/${group}/edit`,
+        sectionPath: (group) => SectionPath + `/${group}`,
+        newSectionPath: SectionPath + "/new",
+        annotationsPath: AnnotationsPath,
+        pdfViewer: PDFViewerApplication.pdfViewer,
+        saveButton: document.getElementById("DecidimPDSaveButton"),
+        csrfToken: document.getElementsByName("csrf-token")[0].content,
+        showInfo: window.showInfo,
+        showAlert: window.showAlert
+      };
+      window.InitDocumentManagers(options);
+
+      window.showInfo(I18n.startEditing, {delay: 5000});
       PDFViewerApplication.eventBus.on('annotationeditorlayerrendered', function (doc) {
         if(!pages[doc.pageNumber]) {
           var page = PDFViewerApplication.pdfViewer._pages[doc.pageNumber - 1];
           pages[doc.pageNumber] = page;
           var annotationsLayer = page.annotationEditorLayer && page.annotationEditorLayer.div;
-          var options = {
-            i18n: I18n,
-            editSectionPath: (group) => SectionPath + `/${group}/edit`,
-            sectionPath: (group) => SectionPath + `/${group}`,
-            newSectionPath: SectionPath + "/new",
-            annotationsPath: AnnotationsPath,
-            pdfViewer: PDFViewerApplication.pdfViewer
-          }
           if(annotationsLayer) {
-            page.boxEditor = InitPolygonEditor(annotationsLayer, CurrentBoxes.filter(box => box.page_number === doc.pageNumber), options);
+            page.boxEditor = window.InitPolygonEditor(annotationsLayer, CurrentBoxes.filter(box => box.page_number === doc.pageNumber), options);
           }
         }
       });
