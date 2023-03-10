@@ -6,7 +6,6 @@ module Decidim
     # formats.
     class SuggestionSerializer < Decidim::Exporters::Serializer
       include Decidim::ApplicationHelper
-      include Decidim::ResourceHelper
       include Decidim::TranslationsHelper
       include Decidim::ParticipatoryDocuments::Admin::SuggestionHelper
       include ActionView::Helpers::TextHelper

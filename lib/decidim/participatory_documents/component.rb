@@ -42,9 +42,7 @@ Decidim.register_component(:participatory_documents) do |component|
       )
     end
 
-
     exports.include_in_open_data = true
-
     exports.serializer Decidim::ParticipatoryDocuments::SuggestionSerializer
   end
 
