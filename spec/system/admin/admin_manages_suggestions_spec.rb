@@ -39,7 +39,7 @@ describe "Admin manages participatory documents", type: :system do
     end
   end
 
-  context "export suggestions" do
+  context "when admin to exports suggestions" do
     it "exports a JSON" do
       find(".exports.dropdown").click
       perform_enqueued_jobs { click_link "Suggestions as JSON" }

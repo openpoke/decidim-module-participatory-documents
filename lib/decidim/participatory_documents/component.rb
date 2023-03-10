@@ -30,16 +30,13 @@ Decidim.register_component(:participatory_documents) do |component|
 
   component.exports :suggestions do |exports|
     exports.collection do |component_instance|
-      space = component_instance.participatory_space
-      Decidim::ParticipatoryDocuments::Suggestion.joins(
-        "INNER JOIN decidim_participatory_documents_documents ON decidim_participatory_documents_documents.id = decidim_participatory_documents_suggestions.suggestable_id " +
-          "INNER JOIN decidim_components ON decidim_components.id = decidim_participatory_documents_documents.decidim_component_id"
-      ).where(
-        decidim_components: {
-          participatory_space_id: space.id,
-          participatory_space_type: space.class.name
-        }
+      suggestion_ids = Decidim::ParticipatoryDocuments::Suggestion.joins(
+        "INNER JOIN decidim_participatory_documents_documents ON decidim_participatory_documents_documents.id = decidim_participatory_documents_suggestions.suggestable_id " \
+        "INNER JOIN decidim_components ON decidim_components.id = decidim_participatory_documents_documents.decidim_component_id"
       )
+      Decidim::ParticipatoryDocuments::Suggestion
+        .where(id: suggestion_ids).uniq
+        .filter { |suggestion| suggestion.component == component_instance }
     end
 
     exports.include_in_open_data = true
