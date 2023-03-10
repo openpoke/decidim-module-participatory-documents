@@ -5,15 +5,11 @@ require "spec_helper"
 module Decidim
   describe ParticipatoryDocuments::SuggestionSerializer do
     include Decidim::TranslationsHelper
-    include Decidim::TranslationsHelper
     include Decidim::ParticipatoryDocuments::Admin::SuggestionHelper
     include ActionView::Helpers::TextHelper
 
-    let(:suggestion) { create(:participatory_documents_suggestion) }
-    subject { described_class.new(suggestion).serialize }
-
     let(:subject) { described_class.new(suggestion) }
-
+    let(:suggestion) { create(:participatory_documents_suggestion) }
     let(:serialized) { subject.serialize }
 
     describe "serialize" do
