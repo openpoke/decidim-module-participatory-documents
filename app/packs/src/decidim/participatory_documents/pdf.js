@@ -1,24 +1,27 @@
 import PolygonViewer from "src/decidim/participatory_documents/pdf/polygon_viewer";
-import PdfStateManager from "src/decidim/participatory_documents/pdf/pdf_state_manager";
+import SuggestionForm from "src/decidim/participatory_documents/pdf/suggestion_form";
 import "src/decidim/participatory_documents/pdf_notifications";
 import "src/decidim/participatory_documents/global";
 
+window.InitDocumentManagers = function(options) {
+  options.globalSuggestionsButton.addEventListener("click", () => {
+    (new SuggestionForm(options.documentPath, null)).fetchGroup();
+  });
+};
+
 // Call this on an annotation layer to initialize the polygon viewer (public side)
-window.InitPolygonViewer = function(i18n, layer, boxes) {
-  let viewer = new PolygonViewer(layer, boxes, { i18n: i18n, stateManager: window.PdfDocStateManager});
-  viewer.onBoxClick = (box, evt) => {
+window.InitPolygonViewer = function(layer, boxes, options) {
+  let viewer = new PolygonViewer(layer, boxes, { i18n: options.i18n});
+
+  viewer.onBoxClick = function(box, evt) {
     console.log("click on box", box, evt);
-    console.log("show the participation modal");
-    let div = document.getElementById("participation-modal");
-    div.innerHTML = `Clicked ${box.id}. Should allow comments for group ${box.section}`;
-    div.classList.add("active");
-  };
+    options.participationLayout.classList.add("active");
+    (new SuggestionForm(options.documentPath, box.section)).fetchGroup();
+  }
 
   viewer.onBoxBlur = (box, evt) => {
     console.log("click ouside box", box, evt);
-    console.log("hide the participation modal");
-    let div = document.getElementById("participation-modal");
-    div.classList.remove("active");
+    options.participationLayout.classList.remove("active");
   };
 
   return viewer;
