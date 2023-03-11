@@ -24,13 +24,14 @@ export default class BoxControlMove {
     this.top = this.layer.div.getBoundingClientRect().y + this.box.div.clientHeight - this.div.clientHeight + evt.layerY;
     // Binding mouseup and mousemove to the entire window so it works even if the mouse is outside the box
     window.addEventListener("mouseup", this._stopMoving.bind(this), { once: true });
-    window.addEventListener("mousemove", this._move.bind(this));
+    this.moveHandler = this._move.bind(this);
+    window.addEventListener("mousemove", this.moveHandler);
     // console.log("start moving", evt, this.box.div.style.left, this.box.div.style.top, this);
   }
 
   _stopMoving(evt) {
     evt.stopPropagation();
-    window.removeEventListener("mousemove", this._move.bind(this));
+    window.removeEventListener("mousemove", this.moveHandler);
     // delay removing the moving class to avoid triggering the click event in the box
     setTimeout(() => {
       this.box.setInfo();

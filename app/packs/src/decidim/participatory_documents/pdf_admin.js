@@ -23,6 +23,10 @@ window.InitDocumentManagers = function(options) {
     window.PdfDocStateManager.remove(box);
     window.showInfo(options.i18n.created);
   };
+  window.PdfModalManager.onDestroy = (box) => {
+    window.PdfDocStateManager.remove(box);
+    window.showInfo(options.i18n.removed);
+  };
   window.PdfModalManager.onError = (box, error) => {
     window.showAlert(options.i18n.operationFailed);
     console.error("Modal Manager Error:", error);

@@ -12,7 +12,8 @@ export default class BoxControlGroup {
 
   _bindEvents() {
     this.div.addEventListener("click", this._startGrouping.bind(this));
-    this.box.div.addEventListener("click", this._groupBox.bind(this));
+    this.groupBoxHandler = this._groupBox.bind(this);
+    this.box.div.addEventListener("click", this.groupBoxHandler);
   }
 
   _startGrouping(evt) {
@@ -44,7 +45,7 @@ export default class BoxControlGroup {
 
   _stopGrouping(evt) {
     evt.stopPropagation();
-    this.box.div.removeEventListener("click", this._groupBox.bind(this));
+    this.box.div.removeEventListener("click", this.groupBoxHandler);
     document.querySelectorAll(".polygon-ready .box").forEach((div) => div.classList.remove("mark-group", "hover", "blocked", "grouping", "focus"));
     document.querySelectorAll(".polygon-ready").forEach((div) => div.classList.remove("grouping"));
     console.log("stop grouping", evt, this);

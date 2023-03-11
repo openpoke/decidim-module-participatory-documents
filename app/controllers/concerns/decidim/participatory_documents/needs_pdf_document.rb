@@ -47,6 +47,7 @@ module Decidim
 
         def pdf_i18n
           {
+            modalTitle: "Section %{section}, area %{box}",
             startSuggesting: "Click on a marked area to participate!",
             confirmExit: "Are you sure you want to exit?",
             operationFailed: "The Operation has failed",
@@ -54,8 +55,7 @@ module Decidim
             errorsSaving: "Some errors have occurred while saving the areas",
             needsSaving: "You have to save the areas before editing them",
             removed: "The area has been removed",
-            removeBoxConfirm: "Are you sure you want to delete this area? This will remove any other area that is grouped with it.",
-            updated: "The area has been updated",
+            removeBoxConfirm: "Are you sure you want to delete this area? This cannot be undone.",
             created: "The area has been created",
             move: "Move",
             group: "Group",

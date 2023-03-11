@@ -4,7 +4,6 @@
  * */
 export default class PdfStateManager {
   constructor(options) {
-    console.log("init states manager", this)
     this.changes = [];
     this.element = options.saveButton;
     this.i18n = options.i18n;
@@ -19,7 +18,6 @@ export default class PdfStateManager {
 
   add(box) {
     let index = this.changes.indexOf(box.id);
-    console.log(box, this.changes, index)
     if (index === -1) {
       this.changes.push(box.id);
       this.setDirty();
@@ -45,7 +43,7 @@ export default class PdfStateManager {
   }
 
   setDirty() {
-    console.log("setDirty", this)
+    // console.log("setDirty", this)
     if (this.element) {
       this.element.classList.add("alert");
     }
@@ -53,7 +51,6 @@ export default class PdfStateManager {
       // create a global reference to ensure the method is the same on adding and removing
       this.beforeUnloadHandler = this._beforeUnload.bind(this);
       window.addEventListener("beforeunload", this.beforeUnloadHandler, { capture: true });
-      console.log("add beforeunload", this, this.beforeUnloadHandler);
     }
   }
 
@@ -65,7 +62,6 @@ export default class PdfStateManager {
     }
 
     window.removeEventListener("beforeunload", this.beforeUnloadHandler, { capture: true });
-    console.log("remove beforeunload", this, this.beforeUnloadHandler);
     this.beforeUnloadHandler = null;
   }
 
