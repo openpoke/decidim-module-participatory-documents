@@ -4,7 +4,7 @@ export default class Box {
   constructor(layer, json) {
     this.layer = layer;
     this.json = json || { rect: {} };
-    this.id = this.json.id || 0;
+    this.id = this.json.id || -Object.keys(layer.boxes).length;
     this.section = this.json.section || 0;
     this.sectionNumber = this.json.section_number || 0;
     this.createBox(this.id, this.json.position, this.json.rect);
@@ -79,14 +79,22 @@ export default class Box {
 
   setInfo(data) {
     if (data) {
-      this.id = data.id || this.id;
+      if (data.id) {
+        Reflect.deleteProperty(this.layer.boxes, this.id);
+        this.id = data.id;
+        this.layer.boxes[this.id] = this;
+      }
       this.section = data.section || this.section;
       this.div.dataset.section = this.section;
     }
-    if (this.id) {
+    if (this.isPersisted()) {
       this.div.classList.add("persisted");
     }
     this.previousInfo = this.getInfo();
+  }
+
+  isPersisted() {
+    return this.id && this.id > 0;
   }
 
   isMoving() {
@@ -132,7 +140,7 @@ export default class Box {
 
   _click(evt) {
     if (!this.layer.creating && !this.isMoving() && !this.isGrouping() && !this.isResizing()) {
-      // console.log("box click", evt);
+      console.log("box click", evt, this);
       evt.stopPropagation();
       this.onClick(evt);
       window.addEventListener("click", this._blur.bind(this), { once: true });
@@ -195,7 +203,7 @@ export default class Box {
 
   // Not using getNodes because groups can span across layers
   focusGroup() {
-    document.querySelectorAll(".polygon-ready .box").forEach((div) => div.dataset.section === this.div.dataset.section && div.classList.add("focus"));
+    document.querySelectorAll(".polygon-ready .box").forEach((div) => div.dataset.sectionNumber === this.div.dataset.sectionNumber && div.classList.add("focus"));
   }
 
   blurGroup() {

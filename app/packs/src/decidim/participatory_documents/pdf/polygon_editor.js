@@ -9,21 +9,15 @@ export default class PolygonEditor extends PolygonViewer {
     this.creating = false;
     this.top = 0;
     this.left = 0;
-    this.mouseDownHandler = this._mouseDown.bind(this);
-    this.mouseMoveHandler = this._mouseMove.bind(this);
-    this.mouseUpHandler = this._mouseUp.bind(this);
   }
 
   init() {
     super.init();
     // add controls to existing boxes
     this.getBoxes().map((box) => box.createControls());
-    this.div.removeEventListener("mousedown", this.mouseDownHandler);
-    this.div.removeEventListener("mousemove", this.mouseMoveHandler);
-    this.div.removeEventListener("mouseup", this.mouseUpHandler);
-    this.div.addEventListener("mousedown", this.mouseDownHandler);
-    this.div.addEventListener("mousemove", this.mouseMoveHandler);
-    this.div.addEventListener("mouseup", this.mouseUpHandler);
+    this.div.addEventListener("mousedown", this._mouseDown.bind(this));
+    this.div.addEventListener("mousemove", this._mouseMove.bind(this));
+    this.div.addEventListener("mouseup", this._mouseUp.bind(this));
   }
 
   isBlocked() {
@@ -85,6 +79,7 @@ export default class PolygonEditor extends PolygonViewer {
   }
 
   _initBox() {
+    console.log("init box", this.box)
     if (!this.boxes[this.box.id]) {
       this.box.createControls();
       this.bindBoxEvents(this.box);

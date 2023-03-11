@@ -94,7 +94,7 @@ export default class PdfModalManager {
 
     if (confirm(this.i18n.removeBoxConfirm)) {
       // Do not call ajax if not persisted
-      if (box.id) {
+      if (box.isPersisted()) {
         fetch(`${this.annotationsPath}/${box.id}`, {
           method: "DELETE",
           headers: {
