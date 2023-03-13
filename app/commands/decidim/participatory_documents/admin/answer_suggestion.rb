@@ -17,9 +17,10 @@ module Decidim
 
           store_initial_suggestion_state
 
-          transaction do
-            answer_suggestion
-            # notify_suggestion_answer
+          suggestion.assign_attributes(attributes)
+          if (%w(state answer answer_is_published) & suggestion.changed).any?
+            transaction { answer_suggestion }
+            notify_suggestion_answer
           end
 
           broadcast(:ok)
@@ -27,32 +28,26 @@ module Decidim
 
         private
 
-        attr_reader :form, :suggestion, :initial_state
+        attr_reader :form, :suggestion, :initial_state, :signature
+
+        def attributes
+          {
+            state: form.state,
+            answer: form.answer,
+            answer_is_published: form.answer_is_published,
+            answered_at: %w(not_answered withdrawn).include?(form.state) ? nil : Time.current
+          }
+        end
 
         def answer_suggestion
-          Decidim.traceability.perform_action!(
-            "answer",
-            suggestion,
-            form.current_user
-          ) do
-            attributes = {
-              state: form.state,
-              answer: form.answer,
-              answer_is_published: form.answer_is_published
-            }
-
-            attributes[:answered_at] = if %w(not_answered withdrawn).include?(form.state)
-                                         nil
-                                       else
-                                         Time.current
-                                       end
-
-            suggestion.update!(attributes)
+          Decidim.traceability.perform_action!("answer", suggestion, form.current_user) do
+            suggestion.save!
             suggestion
           end
         end
 
         def notify_suggestion_answer
+          suggestion.reload
           return unless suggestion.answered? && suggestion.answer_is_published?
 
           NotifySuggestionAnswer.call(suggestion, initial_state)

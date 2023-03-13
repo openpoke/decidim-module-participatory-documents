@@ -11,6 +11,7 @@ describe Decidim::ParticipatoryDocuments::AcceptedSuggestionEvent do
   let(:resource_title) { translated(document.title["en"]) }
 
   include_context "when a simple event" do
+    let(:user_role) { :affected_user }
     let(:resource_title) { translated(document.title["en"]) }
     let(:resource_path) { main_component_path(document.component) }
   end
@@ -19,28 +20,28 @@ describe Decidim::ParticipatoryDocuments::AcceptedSuggestionEvent do
 
   describe "email_subject" do
     it "is generated correctly" do
-      expect(subject.email_subject).to eq("A suggestion you're following has been accepted")
+      expect(subject.email_subject).to eq("A suggestion you have submitted has been accepted")
     end
   end
 
   describe "email_intro" do
     it "is generated correctly" do
       expect(subject.email_intro)
-        .to eq("A suggestion for \"<a href=\"#{resource_path}\">#{resource_title}</a>\" document has been accepted. You can read the answer in this page:")
+        .to eq("A suggestion you submitted on \"<a href=\"#{resource_path}\">#{resource_title}</a>\" document has been accepted. You can read the answer in this page:")
     end
   end
 
   describe "email_outro" do
     it "is generated correctly" do
       expect(subject.email_outro)
-        .to eq("You have received this notification because you are following \"<a href=\"#{resource_path}\">#{resource_title}</a>\". You can unfollow it from the previous link.")
+        .to eq("You have received this notification because you have submitted a suggestion for \"<a href=\"#{resource_path}\">#{resource_title}</a>\" document.")
     end
   end
 
   describe "notification_title" do
     it "is generated correctly" do
       expect(subject.notification_title)
-        .to include("A suggestion for <a href=\"#{resource_path}\">#{resource_title}</a> document has been accepted")
+        .to include("A suggestion you submitted on \"<a href=\"#{resource_path}\">#{resource_title}</a>\" document has been accepted")
     end
   end
 

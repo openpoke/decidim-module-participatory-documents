@@ -8,7 +8,7 @@ describe "Admin manages suggestion valuators", type: :system do
   let!(:user) { create :user, :admin, :confirmed, organization: organization }
 
   let(:component) { create :participatory_documents_component, participatory_space: participatory_process }
-  let(:document) { create :participatory_documents_document, component: component }
+  let(:document) { create :participatory_documents_document, :with_file, component: component }
   let(:section1) { create(:participatory_documents_section, document: document) }
   let!(:suggestion) { create(:participatory_documents_suggestion, suggestable: section1) }
 
@@ -27,10 +27,6 @@ describe "Admin manages suggestion valuators", type: :system do
     let(:valuator_role2) { create :participatory_process_user_role, role: :valuator, user: valuator2, participatory_process: participatory_process }
 
     let!(:assignment) { create :suggestion_valuation_assignment, suggestion: suggestion, valuator_role: valuator_role }
-
-    before do
-      document.file.attach(io: File.open(Decidim::Dev.asset("Exampledocument.pdf")), filename: "Exampledocument.pdf")
-    end
 
     it "shows the valuator name" do
       visit current_path
@@ -53,7 +49,6 @@ describe "Admin manages suggestion valuators", type: :system do
 
   context "when assigning to a valuator" do
     before do
-      document.file.attach(io: File.open(Decidim::Dev.asset("Exampledocument.pdf")), filename: "Exampledocument.pdf")
       visit current_path
 
       within find("tr", text: suggestion.id) do
@@ -95,8 +90,6 @@ describe "Admin manages suggestion valuators", type: :system do
     let(:assigned_suggestion) { suggestion }
 
     before do
-      document.file.attach(io: File.open(Decidim::Dev.asset("Exampledocument.pdf")), filename: "Exampledocument.pdf")
-
       create :suggestion_valuation_assignment, suggestion: suggestion, valuator_role: valuator_role
 
       visit current_path
@@ -121,8 +114,6 @@ describe "Admin manages suggestion valuators", type: :system do
     let(:assigned_suggestion) { suggestion }
 
     before do
-      document.file.attach(io: File.open(Decidim::Dev.asset("Exampledocument.pdf")), filename: "Exampledocument.pdf")
-
       create :suggestion_valuation_assignment, suggestion: suggestion, valuator_role: valuator_role
 
       visit current_path
@@ -165,8 +156,6 @@ describe "Admin manages suggestion valuators", type: :system do
     let(:assigned_suggestion) { suggestion }
 
     before do
-      document.file.attach(io: File.open(Decidim::Dev.asset("Exampledocument.pdf")), filename: "Exampledocument.pdf")
-
       create :suggestion_valuation_assignment, suggestion: suggestion, valuator_role: valuator_role
 
       visit current_path
@@ -192,8 +181,6 @@ describe "Admin manages suggestion valuators", type: :system do
 
   context "when admin to assign a validator" do
     before do
-      document.file.attach(io: File.open(Decidim::Dev.asset("Exampledocument.pdf")), filename: "Exampledocument.pdf")
-
       visit current_path
       within find("tr", text: suggestion.id) do
         click_link "Answer"
@@ -225,8 +212,6 @@ describe "Admin manages suggestion valuators", type: :system do
       login_as valuator, scope: :user
 
       create :suggestion_valuation_assignment, suggestion: suggestion, valuator_role: valuator_role
-
-      document.file.attach(io: File.open(Decidim::Dev.asset("Exampledocument.pdf")), filename: "Exampledocument.pdf")
 
       visit current_path
       within find("tr", text: suggestion.id) do

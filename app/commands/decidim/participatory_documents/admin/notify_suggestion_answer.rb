@@ -20,12 +20,7 @@ module Decidim
         #
         # Returns nothing.
         def call
-          if suggestion.answer_is_published? && state_changed?
-            transaction do
-              # increment_score
-              notify_followers
-            end
-          end
+          notify_followers if suggestion.answer_is_published?
 
           broadcast(:ok)
         end
@@ -58,8 +53,7 @@ module Decidim
             event: event,
             event_class: event_class,
             resource: suggestion,
-            affected_users: [author],
-            followers: []
+            affected_users: [suggestion.author]
           )
         end
 
