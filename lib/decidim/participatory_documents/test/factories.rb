@@ -75,8 +75,6 @@ FactoryBot.define do
 
     trait :evaluating do
       state { :evaluating }
-      answered_at { Time.zone.now }
-      answer_is_published { true }
     end
 
     trait :withdrawn do
@@ -85,19 +83,14 @@ FactoryBot.define do
 
     trait :rejected do
       state { :rejected }
-      answered_at { Time.zone.now }
-      answer_is_published { true }
     end
 
     trait :accepted do
       state { :accepted }
-      answered_at { Time.zone.now }
     end
+
     trait :with_answer do
-      state { "accepted" }
       answer { generate_localized_title }
-      answered_at { Time.current }
-      answer_is_published { true }
     end
   end
 

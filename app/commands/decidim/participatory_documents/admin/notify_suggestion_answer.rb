@@ -20,7 +20,9 @@ module Decidim
         #
         # Returns nothing.
         def call
-          notify_followers if suggestion.answer_is_published?
+          broadcast(:invalid) unless suggestion.has_answer? && suggestion.answered? && suggestion.answer_is_published?
+
+          notify_followers
 
           broadcast(:ok)
         end
@@ -55,10 +57,6 @@ module Decidim
             resource: suggestion,
             affected_users: [suggestion.author]
           )
-        end
-
-        def state_changed?
-          initial_state != suggestion.state.to_s
         end
       end
     end

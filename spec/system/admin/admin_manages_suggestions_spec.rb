@@ -101,7 +101,7 @@ describe "Admin manages participatory documents", type: :system do
         click_link("Published Answer")
 
         within(".table-list") do
-          expect(page).not_to have_content(document_suggestion.body["en"].first(10))
+          expect(page).not_to have_content(document_suggestion.body["en"].first(20))
         end
       end
     end
@@ -119,7 +119,7 @@ describe "Admin manages participatory documents", type: :system do
         click_link("Published Answer")
 
         within(".table-list") do
-          expect(page).to have_content(document_suggestion.body["en"].first(10))
+          expect(page).to have_content(document_suggestion.body["en"].first(20))
         end
       end
     end
@@ -227,8 +227,8 @@ describe "Admin manages participatory documents", type: :system do
 
     it "sorts descendent" do
       expect(page).to have_content(translated_attribute(section1.title))
-      click_link "Author"
-      click_link "Author"
+      click_link "Section"
+      click_link "Section"
       expect(page).to have_content(translated_attribute(section1.title))
     end
   end

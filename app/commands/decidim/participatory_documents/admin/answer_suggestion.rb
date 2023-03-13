@@ -48,7 +48,7 @@ module Decidim
 
         def notify_suggestion_answer
           suggestion.reload
-          return unless suggestion.answered? && suggestion.answer_is_published?
+          return unless suggestion.has_answer? && suggestion.answered? && suggestion.answer_is_published?
 
           NotifySuggestionAnswer.call(suggestion, initial_state)
         end

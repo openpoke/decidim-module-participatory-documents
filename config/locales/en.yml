@@ -1,6 +1,5 @@
 ---
 en:
-
   activemodel:
     errors:
       models:
@@ -59,8 +58,9 @@ en:
           affected_user:
             email_intro: 'A suggestion you submitted on "<a href="%{resource_path}">%{resource_title}</a>"
               document has been accepted. You can read the answer in this page:'
-            email_outro: You have received this notification because you have submitted a suggestion for 
-              "<a href="%{resource_path}">%{resource_title}</a>" document.
+            email_outro: You have received this notification because you have submitted
+              a suggestion for "<a href="%{resource_path}">%{resource_title}</a>"
+              document.
             email_subject: A suggestion you have submitted has been accepted
             notification_title: A suggestion you submitted on "<a href="%{resource_path}">%{resource_title}</a>"
               document has been accepted
@@ -69,8 +69,9 @@ en:
             email_intro: 'A suggestion you submitted on "<a href="%{resource_path}">%{resource_title}</a>"
               document is currently being evaluated. You can check the answer in this
               page:'
-            email_outro: You have received this notification because you have submitted a suggestion for
-              "<a href="%{resource_path}">%{resource_title}</a>" document.
+            email_outro: You have received this notification because you have submitted
+              a suggestion for "<a href="%{resource_path}">%{resource_title}</a>"
+              document.
             email_subject: A suggestion you have submitted is being evaluated
             notification_title: A suggestion you submitted on "<a href="%{resource_path}">%{resource_title}</a>"
               document is currently being evaluated
@@ -78,8 +79,9 @@ en:
           affected_user:
             email_intro: 'A suggestion you submitted on "<a href="%{resource_path}">%{resource_title}</a>"
               document has been rejected. You can read the answer in this page:'
-            email_outro: You have received this notification because you have submitted a suggestion for
-              "<a href="%{resource_path}">%{resource_title}</a>" document.
+            email_outro: You have received this notification because you have submitted
+              a suggestion for "<a href="%{resource_path}">%{resource_title}</a>"
+              document.
             email_subject: A suggestion you have submitted has been rejected
             notification_title: A suggestion you submitted on "<a href="%{resource_path}">%{resource_title}</a>"
               document has been rejected

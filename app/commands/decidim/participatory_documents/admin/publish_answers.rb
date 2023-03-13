@@ -25,9 +25,11 @@ module Decidim
           return broadcast(:invalid) unless suggestions.any?
 
           suggestions.each do |suggestion|
-            transaction do
-              mark_suggestion_as_answered(suggestion)
-              # notify_suggestion_answer(suggestion)
+            suggestion.assign_attributes(answered_at: Time.current, answer_is_published: true)
+
+            if suggestion.answer_is_published_changed?
+              Decidim.traceability.perform_action!("publish_answer", suggestion, user) { suggestion.save! }
+              notify_user(suggestion)
             end
           end
 
@@ -36,27 +38,20 @@ module Decidim
 
         private
 
+        def notify_user(suggestion)
+          suggestion.reload
+          return unless suggestion.has_answer?
+
+          NotifySuggestionAnswer.call(suggestion, nil)
+        end
+
         attr_reader :component, :user, :suggestion_ids
 
         def suggestions
           @suggestions || Decidim::ParticipatoryDocuments::Suggestion
-            .not_published
-            .having_text_answer
+            # .not_published
+            # .having_text_answer
             .where(id: suggestion_ids)
-        end
-
-        def mark_suggestion_as_answered(suggestion)
-          Decidim.traceability.perform_action!(
-            "publish_answer",
-            suggestion,
-            user
-          ) do
-            suggestion.update!(answered_at: Time.current, answer_is_published: true)
-          end
-        end
-
-        def notify_suggestion_answer(suggestion)
-          NotifySuggestionAnswer.call(suggestion, nil)
         end
       end
     end
