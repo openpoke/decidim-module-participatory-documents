@@ -154,16 +154,16 @@ describe "User interaction with PDF viewer", type: :system do
 
       page.visit Decidim::EngineRouter.main_proxy(component).pdf_viewer_documents_path(file: document.attached_uploader(:file).path)
       annotation = section.annotations.last
-      find("##{annotation.id}").click
+      find("#box-#{annotation.id}").click
     end
-
-    it_behaves_like "interacts with drawer"
 
     it "displays boxes in page" do
       section.annotations.each do |annotation|
-        expect(page).to have_selector(:id, annotation.id)
+        expect(page).to have_selector(:id, "box-#{annotation.id}")
       end
     end
+
+    it_behaves_like "interacts with drawer"
   end
 
   context "when providing document feedback" do
@@ -184,8 +184,9 @@ describe "User interaction with PDF viewer", type: :system do
       login_as document.author, scope: :user
 
       page.visit Decidim::EngineRouter.main_proxy(component).pdf_viewer_documents_path(file: document.attached_uploader(:file).path)
-      annotation = section.annotations.last
-      find("##{annotation.id}").click
+      annotation = section.annotations.first
+
+      find("#box-#{annotation.id}").click
     end
 
     it "submits the content" do
@@ -193,12 +194,14 @@ describe "User interaction with PDF viewer", type: :system do
       raise "Pending"
       # expect(page).to have_selector("#participation-modal", count: 1)
       # expect(page).to have_css("#participation-modal.active")
-      # within "#new_suggestion_" do
-      #   fill_in :suggestion_body, with: "Some random string longer than 15 chrs", wait: 10
-      #   # click_button("Save", wait: 10)
       #
-      #   expect(page).to have_content("Some random string longer than 15 chrs")
+      # within "#new_suggestion_" do
+      #   fill_in :suggestion_body, with: "Some random string longer than 15 chrs"
+      #   click_button("Send suggestion")
       # end
+      #
+      # page.find("#box-#{section.annotations.first.id}").click
+      # expect(page).to have_content("Some random string longer than 15 chrs")
     end
   end
 end
