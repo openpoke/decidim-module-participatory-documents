@@ -28,7 +28,7 @@ module Decidim
 
         private
 
-        attr_reader :form, :suggestion, :initial_state, :signature
+        attr_reader :form, :suggestion, :initial_state
 
         def attributes
           {

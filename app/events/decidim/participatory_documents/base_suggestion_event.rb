@@ -34,6 +34,10 @@ module Decidim
       def event_has_roles?
         true
       end
+
+      def resource_text
+        translated_attribute(resource.answer)
+      end
     end
   end
 end
