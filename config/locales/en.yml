@@ -9,6 +9,10 @@ en:
               inclusion: It's not possible to publish with status "not answered"
   decidim:
     admin:
+      actions:
+        export: Export
+      exports:
+        export_as: "%{name} as %{export_format}"
       filters:
         search_placeholder:
           body_cont: Body Contains
@@ -75,7 +79,7 @@ en:
           sections:
             empty: "(empty)"
           update:
-            error: 
+            error:
             invalid: There was a problem updating Document
             success: Document has been successfully updated
         exports:

@@ -30,16 +30,13 @@ Decidim.register_component(:participatory_documents) do |component|
 
   component.exports :suggestions do |exports|
     exports.collection do |component_instance|
-      suggestion_ids = Decidim::ParticipatoryDocuments::Suggestion.joins(
-        "INNER JOIN decidim_participatory_documents_documents ON decidim_participatory_documents_documents.id = decidim_participatory_documents_suggestions.suggestable_id " \
-        "INNER JOIN decidim_components ON decidim_components.id = decidim_participatory_documents_documents.decidim_component_id"
-      )
+      document = Decidim::ParticipatoryDocuments::Document.find_by(component: component_instance)
       Decidim::ParticipatoryDocuments::Suggestion
-        .where(id: suggestion_ids).uniq
-        .filter { |suggestion| suggestion.component == component_instance }
+        .where(suggestable: document)
+        .or(Decidim::ParticipatoryDocuments::Suggestion.where(suggestable: document.sections)).order(:id)
     end
 
-    exports.include_in_open_data = true
+    exports.include_in_open_data = false
     exports.serializer Decidim::ParticipatoryDocuments::SuggestionSerializer
   end
 
