@@ -21,8 +21,16 @@ window.InitPolygonViewer = function(layer, boxes, options) {
 
   viewer.onBoxBlur = (box, evt) => {
     console.log("click ouside box", box, evt);
-    options.participationLayout.classList.remove("active");
+    if (!evt.target.closest("#participation-modal") && !evt.target.closest("#close-suggestions")) {
+      options.participationLayout.classList.remove("active");
+    }
   };
+  const modal = document.getElementById("participation-modal");
 
+  document.addEventListener('click', function(event) {
+    if (event.target.closest('#participation-modal') === null && modal.classList.contains('active')) {
+      modal.classList.remove('active');
+    }
+  });
   return viewer;
 };
