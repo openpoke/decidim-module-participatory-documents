@@ -14,6 +14,7 @@ module Decidim
 
         def call
           return broadcast(:invalid) if form.invalid?
+          return broadcast(:invalid) if document.nil?
 
           begin
             @old_section = annotation.section

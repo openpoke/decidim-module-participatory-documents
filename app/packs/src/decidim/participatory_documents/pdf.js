@@ -20,7 +20,7 @@ window.InitPolygonViewer = function(layer, boxes, options) {
   }
 
   viewer.onBoxBlur = (box, evt) => {
-    console.log("click ouside box", box, evt);
+    console.log("click outside box", box, evt);
     if (!evt.target.closest("#participation-modal") && !evt.target.closest("#close-suggestions")) {
       options.participationLayout.classList.remove("active");
     }

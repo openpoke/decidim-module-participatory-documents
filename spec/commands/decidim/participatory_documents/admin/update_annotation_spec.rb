@@ -5,7 +5,7 @@ require "spec_helper"
 module Decidim
   module ParticipatoryDocuments
     module Admin
-      describe UpdateAnnotation do
+      describe UpdateOrCreateAnnotation do
         subject { described_class.new(form, document) }
 
         let!(:annotation) { create(:participatory_documents_annotation) }
