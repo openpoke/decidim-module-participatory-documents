@@ -27,9 +27,9 @@ window.InitPolygonViewer = function(layer, boxes, options) {
   };
   const modal = document.getElementById("participation-modal");
 
-  document.addEventListener('click', function(event) {
-    if (event.target.closest('#participation-modal') === null && modal.classList.contains('active')) {
-      modal.classList.remove('active');
+  document.addEventListener("click", function(event) {
+    if (event.target.closest("#participation-modal") === null && modal.classList.contains("active")) {
+      modal.classList.remove("active");
     }
   });
   return viewer;
