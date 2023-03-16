@@ -79,9 +79,9 @@
   line-height: 1;
   text-align: center;
   cursor: pointer;
-  background-color: var(--secondary);
+  background-color: var(--box-color);
   border: transparent solid 1px;
-  color: white;
+  color: var(--box-text-color);
   text-shadow: 0 0 0 #fff;
 }
 
