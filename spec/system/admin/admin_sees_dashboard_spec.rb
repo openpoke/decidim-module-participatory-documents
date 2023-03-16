@@ -73,7 +73,7 @@ describe "Admin sees the action logs on homepage", type: :system do
         )
       end
 
-      let(:command) { Decidim::ParticipatoryDocuments::Admin::CreateAnnotation.new(form, document) }
+      let(:command) { Decidim::ParticipatoryDocuments::Admin::UpdateOrCreateAnnotation.new(form, document) }
 
       it "saves the created log" do
         expect { command.call }.to broadcast(:ok)
@@ -84,18 +84,17 @@ describe "Admin sees the action logs on homepage", type: :system do
     end
 
     context "when is updated" do
-      let(:command) { Decidim::ParticipatoryDocuments::Admin::UpdateAnnotation.new(form, document) }
-      let(:section) { create(:participatory_documents_section, document: document) }
-
-      let(:annotation) { create(:participatory_documents_annotation, section: section) }
+      let(:command) { Decidim::ParticipatoryDocuments::Admin::UpdateOrCreateAnnotation.new(form, document) }
+      let(:annotation) { create(:participatory_documents_annotation) }
+      let(:document) { annotation.section.document }
 
       let(:form) do
         double(
           invalid?: false,
           page_number: 1,
-          rect: [50, 50, 100, 100],
+          rect: [0, 50, 100, 100],
           id: annotation.id,
-          group: "groupid",
+          section: annotation.section.id,
           current_user: current_user
         )
       end
@@ -132,8 +131,6 @@ describe "Admin sees the action logs on homepage", type: :system do
   end
 
   context "when sees section related logs" do
-    let(:document) { create(:participatory_documents_document, component: component) }
-
     context "when is created" do
       let(:form) do
         double(
@@ -155,6 +152,7 @@ describe "Admin sees the action logs on homepage", type: :system do
 
     context "when is updated" do
       let(:command) { Decidim::ParticipatoryDocuments::Admin::UpdateSection.new(form, document) }
+      let(:document) { create(:participatory_documents_document) }
       let!(:section) { create(:participatory_documents_section, document: document) }
 
       let(:form) do
@@ -175,13 +173,15 @@ describe "Admin sees the action logs on homepage", type: :system do
     end
 
     context "when is deleted" do
-      let(:command) { Decidim::ParticipatoryDocuments::Admin::DestroySection.new(form, document) }
+      let(:command) { Decidim::ParticipatoryDocuments::Admin::DestroyAnnotation.new(form, document) }
+      let(:document) { create(:participatory_documents_document) }
       let!(:section) { create(:participatory_documents_section, document: document) }
+      let!(:annotation) { create(:participatory_documents_annotation, section: section) }
 
       let(:form) do
         double(
           invalid?: false,
-          id: section.id,
+          id: annotation.id,
           current_user: current_user
         )
       end
@@ -198,6 +198,7 @@ describe "Admin sees the action logs on homepage", type: :system do
   context "when sees suggestion note related logs" do
     let(:document) { create(:participatory_documents_document, component: component) }
     let!(:suggestion) { create(:participatory_documents_suggestion, suggestable: document) }
+    let(:section) { create(:participatory_documents_section, document: document) }
 
     context "when is created" do
       let(:form) do
@@ -205,7 +206,8 @@ describe "Admin sees the action logs on homepage", type: :system do
           invalid?: false,
           body: { en: "Title test Section" },
           suggestion: suggestion.id,
-          current_user: current_user
+          current_user: current_user,
+          section_id: section.id
         )
       end
 
