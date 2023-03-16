@@ -18,8 +18,10 @@ module Decidim
         attribute :file
         attribute :remove_file, Boolean, default: false
 
-        def box_color
-          @box_color ||= attributes[:box_color] || "#1e98d7"
+        # ensure color and opacity are present
+        def map_model(doc)
+          self.box_color = doc.box_color.presence || "#1e98d7"
+          self.box_opacity = doc.box_opacity.presence || 12
         end
       end
     end
