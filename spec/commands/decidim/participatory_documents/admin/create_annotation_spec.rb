@@ -52,6 +52,7 @@ module Decidim
         context "when everything is ok" do
           it "creates a section" do
             expect { subject.call }.to change(Decidim::ParticipatoryDocuments::Annotation, :count).by(1)
+            expect(Decidim::ParticipatoryDocuments::Section.count).to eq(1)
           end
         end
       end
