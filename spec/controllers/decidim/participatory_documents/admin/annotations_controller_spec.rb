@@ -25,7 +25,8 @@ module Decidim
 
         describe ".create" do
           let(:params) do
-            { "document_id": document.id,
+            {
+              "document_id": document.id,
               "page_number": 1,
               "rect": [50, 50, 100, 100]
             }

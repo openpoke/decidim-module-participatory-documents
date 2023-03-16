@@ -49,7 +49,7 @@ module Decidim
             let!(:after_section) { create_list(:participatory_documents_section, section_count, document: section.document) }
 
             it "returns computed value" do
-              expect(translated(subject.title)).to eq("Section #{expected_position}")
+              expect(translated(subject.document.sections[5].title)).to eq("Section #{expected_position}")
               expect(subject.document.sections.size).to eq(expected_position + section_count)
             end
           end
@@ -62,7 +62,7 @@ module Decidim
             let(:section) { create(:participatory_documents_section, document: precedent_section.first.document, title: nil) }
 
             it "returns computed value" do
-              expect(translated(subject.title)).to eq("Section #{expected_position}")
+              expect(translated(subject.document.sections.last.title)).to eq("Section #{expected_position}")
               expect(subject.document.sections.size).to eq(expected_position)
             end
           end
