@@ -40,6 +40,11 @@ export default class BoxControlGroup {
       div.dataset.groupBoxNumber = this.box.div.dataset.sectionNumber;
     });
     window.addEventListener("click", this._stopGrouping.bind(this), { once: true });
+    window.addEventListener("keydown", (keyEvent) => {
+      if (keyEvent.key === "Escape" || keyEvent.keyCode === 27) {
+        this._stopGrouping(keyEvent);
+      }
+    }, { once: true });
     console.log("start grouping", evt, this);
   }
 

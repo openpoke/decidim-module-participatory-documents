@@ -38,7 +38,6 @@ window.InitPolygonEditor = function(layer, boxes, options) {
   let editor = new PolygonEditor(layer, boxes, { i18n: options.i18n });
   // Open the global box modal settings when a box is clicked
   editor.onBoxClick = (box) => {
-    console.log("BOX click", box)
     if (box.isPersisted()) {
       window.PdfModalManager.loadBoxModal(box);
     } else {

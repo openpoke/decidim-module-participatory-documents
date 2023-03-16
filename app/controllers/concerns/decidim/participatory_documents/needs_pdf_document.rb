@@ -33,7 +33,7 @@ module Decidim
                 .annotationEditorLayer .box::before {
                   background-color: #{document.box_color};
                 }
-                .annotationEditorLayer.polygon-ready.admin .box .box-controls .control {
+                .annotationEditorLayer.polygon-ready.admin .box .box-controls .control:after {
                   background-color: #{document.box_color};
                 }
                 #notifications {
