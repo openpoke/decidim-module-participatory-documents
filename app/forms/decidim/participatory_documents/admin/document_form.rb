@@ -17,6 +17,10 @@ module Decidim
 
         attribute :file
         attribute :remove_file, Boolean, default: false
+
+        def box_color
+          @box_color ||= attributes[:box_color] || "#1e98d7"
+        end
       end
     end
   end

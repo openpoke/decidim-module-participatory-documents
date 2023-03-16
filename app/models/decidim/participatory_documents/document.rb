@@ -23,10 +23,6 @@ module Decidim
 
       attr_accessor :remove_file
 
-      def box_color
-        @box_color ||= attributes[:box_color] || "#1e98d7"
-      end
-
       def self.log_presenter_class_for(_log)
         Decidim::ParticipatoryDocuments::AdminLog::DocumentPresenter
       end
