@@ -1,23 +1,26 @@
 .box {
+  // Make the resize a little bit more visible
+  // Note: hidden until "hover" class is set
+  &::after {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 32px;
+    height: 32px;
+    background: linear-gradient(135deg, transparent 0, transparent 45%, #fff 80%);
+  }
+
   &.hover {
     resize: both;
     // In order to resize to work, it needs to have overflow
     // but this clips the elements outside
     overflow: hidden;
 
-    // Make the resize a little bit more visible
     &::after {
       content: "";
-      position: absolute;
-      bottom: 0;
-      right: 0;
-      width: 32px;
-      height: 32px;
-      background: linear-gradient(135deg, transparent 0, transparent 25%, #fff 75%, #fff 100%);
     }
 
     &::before {
-      // display: none;
       left: 0;
     }
 
@@ -80,7 +83,7 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background: rgb(30, 152, 215);
+        background: var(--box-color);
         mask-repeat: no-repeat;
         mask-size: 37px 37px;
         mask-position: 4px 2px;

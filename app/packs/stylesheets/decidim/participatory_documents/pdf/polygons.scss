@@ -4,10 +4,10 @@
 
 .box {
   position: absolute;
-  background: rgba(30, 152, 215, .12);
+  background: var(--box-color-rgba);
   min-width: 1px;
   min-height: 1px;
-  border-color: #1e98d7;
+  border-color: var(--box-color);
   border-style: dotted;
   border-width: 2px;
   resize: none;
@@ -62,7 +62,7 @@
     right: 12px;
     font-size: 24px;
     text-shadow: 1px 1px 3px #000, 0 0 1em #000, 0 0 .3em #000;
-    color: #fff;
+    color: var(--box-text-color);
     font-weight: 600;
   }
 
@@ -75,10 +75,10 @@
     width: 32px;
     height: 42px;
     pointer-events: none;
-    background: rbg(30, 152, 215);
+    background: var(--box-color);
     -webkit-mask-image: url(../images/badge.svg);
     mask-image: url(../images/badge.svg);
-    color: #fff;
+    color: var(--box-text-color);
     text-align: center;
     line-height: 2.2;
     font-size: 15px;

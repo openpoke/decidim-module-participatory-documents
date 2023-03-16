@@ -1,5 +1,6 @@
 @use "sass:meta";
 
+@import "stylesheets/decidim/participatory_documents/pdf/defaults.scss";
 @import 'stylesheets/decidim/participatory_documents/pdf/tweaks.scss';
 @import "stylesheets/decidim/participatory_documents/pdf/modals.scss";
 @import 'stylesheets/decidim/participatory_documents/pdf/notifications.scss';

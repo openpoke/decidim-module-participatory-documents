@@ -47,13 +47,14 @@
     window.showInfo(I18n.startSuggesting, {delay: 5000});
 
     PDFViewerApplication.eventBus.on('annotationeditorlayerrendered', function (doc) {
-      if(!pages[doc.pageNumber]) {
-        var page = PDFViewerApplication.pdfViewer._pages[doc.pageNumber - 1];
+      var page = PDFViewerApplication.pdfViewer._pages[doc.pageNumber - 1];
+      var annotationsLayer = page.annotationEditorLayer && page.annotationEditorLayer.div;
+      var savedPage = pages[doc.pageNumber];
+      // Let's render the object only if not already existing.
+      // Note that the PDF library might redraw the annotation layer, if this happens we need to re-render the areas.
+      if(annotationsLayer && (!savedPage || savedPage.boxEditor.div !== annotationsLayer)) {
+        page.boxEditor = window.InitPolygonViewer(annotationsLayer, CurrentBoxes.filter(box => box.page_number === doc.pageNumber), options);
         pages[doc.pageNumber] = page;
-        var annotationsLayer = page.annotationEditorLayer && page.annotationEditorLayer.div;
-        if(annotationsLayer) {
-          page.boxEditor = window.InitPolygonViewer(annotationsLayer, CurrentBoxes.filter(box => box.page_number === doc.pageNumber), options);
-        }
       }
     });
   });

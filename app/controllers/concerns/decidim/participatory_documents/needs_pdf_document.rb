@@ -26,18 +26,10 @@ module Decidim
           @pdf_custom_style ||= begin
             css = <<~CSS
               <style media="all">
-                .annotationEditorLayer .box {
-                  background-color: #{box_color_as_rgba(document)};
-                  border-color: #{document.box_color};
-                }
-                .annotationEditorLayer .box::before {
-                  background-color: #{document.box_color};
-                }
-                .annotationEditorLayer.polygon-ready.admin .box .box-controls .control:after {
-                  background-color: #{document.box_color};
-                }
-                #notifications {
-                  background-color: #{box_color_as_rgba(document, opacity: 60)};
+                :root {
+                  --box-color: #{document.box_color};
+                  --box-color-rgba: #{box_color_as_rgba(document)};
+                  --notifications-color-rgba: #{box_color_as_rgba(document, opacity: 60)};
                 }
               </style>
             CSS
