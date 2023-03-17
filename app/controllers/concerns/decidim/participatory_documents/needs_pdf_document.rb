@@ -23,6 +23,8 @@ module Decidim
         end
 
         def pdf_custom_style
+          return unless document.present?
+
           @pdf_custom_style ||= begin
             css = <<~CSS
               <style media="all">
