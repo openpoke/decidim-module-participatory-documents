@@ -23,7 +23,7 @@ module Decidim
         end
 
         def pdf_custom_style
-          return unless document.present?
+          return if document.blank?
 
           @pdf_custom_style ||= begin
             css = <<~CSS
