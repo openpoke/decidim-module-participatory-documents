@@ -1,7 +1,7 @@
 <div class="comment">
   <%#= cell "decidim/author", present(suggestion.author), has_action: false, from: suggestion %>
-  <%= author_cell %>
   <div class="comment__content">
+    <%= author_cell %>
     <%= translated_attribute(model.body) %>
   </div>
   <%= render :admin_answer if has_answer? %>

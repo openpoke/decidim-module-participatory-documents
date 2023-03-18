@@ -22,21 +22,34 @@ module Decidim
           document.box_color + (opacity * 2.55).round.to_s(16).rjust(2, "0")
         end
 
+        def modal_suggestions_color(document, opacity: 0.95)
+          return "hsla(205, 77%, 90%, #{opacity});" unless document.box_color.present?
+
+          hex_string = document.box_color
+
+          r, g, b = hex_to_rgb(hex_string)
+          h, s, l = rgb_to_hsl(r, g, b)
+
+          return "hsla(#{h}, #{s}%, 90%, #{opacity})"
+        end
+
+
         def pdf_custom_style
           return if document.blank?
 
           @pdf_custom_style ||= begin
-            css = <<~CSS
-              <style media="all">
-                :root {
-                  --box-color: #{document.box_color};
-                  --box-color-rgba: #{box_color_as_rgba(document)};
-                  --notifications-color-rgba: #{box_color_as_rgba(document, opacity: 60)};
-                }
-              </style>
-            CSS
-            css.html_safe
-          end
+                                  css = <<~CSS
+                                    <style media="all">
+                                      :root {
+                                        --box-color: #{document.box_color};
+                                        --box-color-rgba: #{box_color_as_rgba(document)};
+                                        --notifications-color-rgba: #{box_color_as_rgba(document, opacity: 60)};
+                                        --modal-suggestions-color: #{modal_suggestions_color(document, opacity: 0.95)};
+                                      }
+                                    </style>
+                                  CSS
+                                  css.html_safe
+                                end
         end
 
         def pdf_i18n
@@ -55,6 +68,48 @@ module Decidim
             group: "Group",
             startEditing: "Start creating areas for participation by clicking and dragging. Once created, boxes can be resized, moved or grouped."
           }
+        end
+
+        private
+
+        def hex_to_rgb(hex_string)
+          hex_string = hex_string.delete('#')
+          r = hex_string[0..1].to_i(16)
+          g = hex_string[2..3].to_i(16)
+          b = hex_string[4..5].to_i(16)
+          [r, g, b]
+        end
+
+        def rgb_to_hsl(r, g, b)
+          r /= 255.0
+          g /= 255.0
+          b /= 255.0
+          cmax = [r, g, b].max
+          cmin = [r, g, b].min
+          delta = cmax - cmin
+
+          h = 0
+          s = 0
+          l = (cmax + cmin) / 2.0
+
+          if delta > 0
+            if cmax == r
+              h = ((g - b) / delta) % 6
+            elsif cmax == g
+              h = (b - r) / delta + 2
+            else
+              h = (r - g) / delta + 4
+            end
+
+            s = delta / (1 - (2 * l - 1).abs)
+
+          end
+
+          h = (h * 60).round
+          s = (s * 100).round
+          l = (l * 100).round
+
+          [h, s, l]
         end
       end
     end
