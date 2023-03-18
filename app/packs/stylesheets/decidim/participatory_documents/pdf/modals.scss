@@ -50,11 +50,38 @@
     float: right;
   }
 
+  .suggestion__bottom-line {
+    margin: 1em 0;
+    height: 1px;
+  }
+
   #suggestions-list {
     padding: 1em;
   }
 
   #participation-modal-form {
     padding: 1em;
+  }
+
+  #suggestions__title {
+    padding: 0 1rem 1rem 1rem;
+  }
+
+  .author__info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2em;
+    padding: 0 1rem;
+
+    & .author__avatar {
+      margin-right: 1em;
+    }
+
+    & .author__avatar img {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+    }
   }
 }

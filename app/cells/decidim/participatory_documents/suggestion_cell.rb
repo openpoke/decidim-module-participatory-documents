@@ -15,6 +15,10 @@ module Decidim
         I18n.t(model.state, scope: "decidim.participatory_documents.suggestions.answers")
       end
 
+      def author_cell
+        cell("decidim/participatory_documents/suggestion_author", model)
+      end
+
       protected
 
       def has_answer?
