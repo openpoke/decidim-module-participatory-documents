@@ -11,13 +11,13 @@
   width: 0;
   height: 0;
   position: absolute;
-  background: rgba(255, 2550, 255, .95);
   top: 0;
   right: 0;
   margin: 0;
   overflow: hidden;
   z-index: 100000;
   background: var(--modal-suggestions-color);
+  box-shadow: -2px -2px 10px #cbcbcb;
 
   &.active {
     overflow: auto;
@@ -54,7 +54,7 @@
   .suggestion__bottom-line {
     margin: 1em -1em;
     height: 2px;
-    background-color: #ffffff;
+    background-color: #fff;
   }
 
   #suggestions-list {
@@ -67,6 +67,15 @@
 
   #suggestions__title {
     padding: 0 1rem 1rem;
+  }
+
+  .author__data {
+    display: flex;
+    align-items: center;
+
+    .author__name {
+      margin: 0 1rem;
+    }
   }
 
   .author__info {
@@ -87,24 +96,26 @@
     display: block;
     position: relative;
     max-width: 80%;
+    width: fit-content;
     height: auto;
     min-height: 3rem;
     padding: 1rem;
+    text-align: left;
     background-color: #fff;
-    box-shadow: 2px 2px 4px #cbcbcb;
   }
 
   .comment__footer {
-    text-align: right;
     border-radius: 30px 0 0 30px;
     margin-left: auto;
     margin-top: 1rem;
     border-right: 10px solid var(--box-color);
+    box-shadow: -2px 2px 4px #cbcbcb;
   }
 
   .comment__content {
     text-align: left;
     border-radius: 0 30px 30px 0;
     border-left: 10px solid var(--box-color);
+    box-shadow: 2px 2px 4px #cbcbcb;
   }
 }
