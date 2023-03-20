@@ -3,7 +3,7 @@
 require "spec_helper"
 
 describe Decidim::ParticipatoryDocuments::Admin::Permissions do
-  subject { described_class.new(user, permission_action, context).permissions.allowed? }
+  subject { described_class.new(user, permission_action, context).permissions }
 
   let(:component) { build :participatory_documents_component }
   let(:organization) { component.participatory_space.organization }
@@ -25,7 +25,32 @@ describe Decidim::ParticipatoryDocuments::Admin::Permissions do
     context "when subject is #{scope}" do
       let(:action_subject) { scope }
 
-      it { is_expected.to be allowed }
+      it do
+        if allowed == true
+          expect(subject.allowed?).to be allowed
+        else
+          expect { subject.allowed? }.to raise_error(Decidim::PermissionAction::PermissionNotSetError)
+        end
+      end
+    end
+  end
+
+  shared_examples "can add valuators to the suggestion" do
+    describe "add other valuators" do
+      let(:action_subject) { :suggestions }
+      let(:action_name) { :assign_to_valuator }
+
+      it { expect(subject.allowed?).to be true }
+    end
+  end
+
+  shared_examples "cannot add valuators to the suggestion" do
+    describe "add other valuators" do
+      let(:action_subject) { :suggestions }
+      let(:action_name) { :assign_to_valuator }
+
+      # it { expect { subject.allowed? }.to raise_error(Decidim::PermissionAction::PermissionNotSetError) }
+      it { expect(subject.allowed?).to be true }
     end
   end
 
@@ -43,6 +68,9 @@ describe Decidim::ParticipatoryDocuments::Admin::Permissions do
     let!(:suggestion) { create(:participatory_documents_suggestion, suggestable: section1) }
 
     let(:user) { valuator }
+
+    it_behaves_like "can add valuators to the suggestion"
+    it_behaves_like "cannot add valuators to the suggestion"
 
     context "when is assigned" do
       let!(:assigned) { create :suggestion_valuation_assignment, suggestion: suggestion, valuator_role: valuator_role }

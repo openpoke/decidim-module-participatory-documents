@@ -86,15 +86,6 @@ module Decidim
           it_behaves_like "published an answer for suggestion", selection: "evaluating"
           it_behaves_like "saves a draft answer for suggestion", selection: "evaluating"
         end
-
-        # context "when everything is ok" do
-        #   context "when saving a draft" do
-        #     context "when not_answered"
-        #   end
-        #   context "when providing the answer" do
-        #
-        #   end
-        # end
       end
     end
   end

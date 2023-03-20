@@ -29,6 +29,153 @@ describe "Admin manages participatory documents", type: :system do
     visit router.document_suggestions_path(document)
   end
 
+  context "when using bulk answer" do
+    let!(:document_suggestions) do
+      create_list(:participatory_documents_suggestion, 3, :accepted, :draft, body: { en: "Test suggestion" },
+                                                                             suggestable: document, answer: { en: "Foo bar" })
+    end
+    let!(:section1_suggestions) do
+      create(:participatory_documents_suggestion, :accepted, :published,
+             body: { en: "Test suggestion" }, suggestable: section1, answer: { en: "Foo bar" })
+    end
+    let!(:section2_suggestions) { nil }
+
+    context "when publishing answers at once" do
+      before do
+        visit current_path
+      end
+
+      it "publishes some answers" do
+        page.find("#suggestions_bulk.js-check-all").click
+        page.first("[data-published-state=false] .js-suggestion-list-check").click
+
+        click_button "Actions"
+        click_button "Publish answers"
+
+        within ".table-scroll" do
+          expect(page).to have_content("No", count: 3)
+          expect(page).to have_content("Yes", count: 1)
+        end
+
+        within "#js-publish-answers-actions" do
+          expect(page).to have_content("Answers for 2 suggestions will be published.")
+        end
+        page.find("button#js-submit-publish-answers").click
+        20.times do # wait for the ajax call to finish
+          sleep(1)
+          expect(page).to have_content(I18n.t("suggestions.publish_answers.success", scope: "decidim.participatory_documents.admin"))
+          break
+        rescue StandardError
+          # ignore and loop again if ajax content is still not there
+          nil
+        end
+        expect(page).to have_content(I18n.t("suggestions.publish_answers.success", scope: "decidim.participatory_documents.admin"))
+
+        visit current_path
+
+        within ".table-scroll" do
+          expect(page).to have_content("Yes", count: 3)
+        end
+      end
+
+      it "can't publish answers for non answered suggestions" do
+        page.find("#suggestions_bulk.js-check-all").click
+        page.all("[data-published-state=false] .js-suggestion-list-check").map(&:click)
+
+        click_button "Actions"
+        expect(page).not_to have_content("Publish answers")
+      end
+    end
+  end
+
+  context "when sorting answered questions" do
+    context "when sorting ascending" do
+      let!(:document_suggestion) do
+        create(:participatory_documents_suggestion, :published,
+               state: :accepted, suggestable: document, answer: { en: "Foo bar" })
+      end
+
+      it "displays the right state" do
+        visit router.document_suggestions_path(document)
+
+        click_link("Published Answer")
+
+        within(".table-list") do
+          expect(page).not_to have_content(document_suggestion.body["en"].first(20))
+        end
+      end
+    end
+
+    context "when sorting descending" do
+      let!(:document_suggestion) do
+        create(:participatory_documents_suggestion, :published,
+               state: :accepted, suggestable: document, answer: { en: "Foo bar" })
+      end
+
+      it "displays the right state" do
+        visit router.document_suggestions_path(document)
+
+        click_link("Published Answer")
+        click_link("Published Answer")
+
+        within(".table-list") do
+          expect(page).to have_content(document_suggestion.body["en"].first(20))
+        end
+      end
+    end
+  end
+
+  context "when asnwering suggestions" do
+    let!(:document_suggestions) { nil }
+    let!(:section1_suggestions) { nil }
+    let!(:section2_suggestions) { nil }
+
+    shared_examples "marks the answer by state" do |state:|
+      context "when there is no answer" do
+        let!(:document_suggestion) { create(:participatory_documents_suggestion, :draft, state: state, suggestable: document) }
+
+        it "displays the right state" do
+          visit router.document_suggestions_path(document)
+
+          within(".table-list") do
+            expect(page).to have_content("-")
+          end
+        end
+      end
+
+      context "when not published" do
+        let!(:document_suggestion) { create(:participatory_documents_suggestion, :draft, state: state, suggestable: document, answer: { en: "Foo bar" }) }
+
+        it "displays the right state" do
+          visit router.document_suggestions_path(document)
+
+          within(".table-list") do
+            expect(page).to have_content("No")
+          end
+        end
+      end
+
+      context "when published" do
+        let!(:document_suggestion) { create(:participatory_documents_suggestion, :published, state: state, suggestable: document, answer: { en: "Foo bar" }) }
+
+        it "displays the right state" do
+          visit router.document_suggestions_path(document)
+
+          within(".table-list") do
+            expect(page).to have_content("Yes")
+          end
+        end
+      end
+    end
+
+    context "when suggestion has an answer not published" do
+      it_behaves_like "marks the answer by state", state: :not_answered
+      it_behaves_like "marks the answer by state", state: :withdrawn
+      it_behaves_like "marks the answer by state", state: :rejected
+      it_behaves_like "marks the answer by state", state: :accepted
+    end
+  end
+
   it "displays the author's name" do
     expect(page).to have_content("List Suggestions")
     within(".table-list") do
@@ -36,6 +183,21 @@ describe "Admin manages participatory documents", type: :system do
       document_suggestions.each do |suggestion|
         expect(page).to have_content(suggestion.author.name)
       end
+    end
+  end
+
+  context "when admin to exports suggestions" do
+    it "exports a JSON" do
+      find(".exports.dropdown").click
+      perform_enqueued_jobs { click_link "Suggestions as JSON" }
+
+      within ".callout.success" do
+        expect(page).to have_content("in progress")
+      end
+
+      expect(last_email.subject).to include("suggestions", "json")
+      expect(last_email.attachments.length).to be_positive
+      expect(last_email.attachments.first.filename).to match(/^suggestions.*\.zip$/)
     end
   end
 
@@ -80,8 +242,8 @@ describe "Admin manages participatory documents", type: :system do
 
     it "sorts descendent" do
       expect(page).to have_content(translated_attribute(section1.title))
-      click_link "Author"
-      click_link "Author"
+      click_link "Section"
+      click_link "Section"
       expect(page).to have_content(translated_attribute(section1.title))
     end
   end
