@@ -52,7 +52,7 @@ module Decidim
             end
 
             on(:invalid) do
-              flash.now[:alert] = t("documents.update.invalid", scope: "decidim.participatory_documents.admin")
+              flash.now[:alert] = t("documents.update.error", scope: "decidim.participatory_documents.admin")
               render :edit
             end
           end

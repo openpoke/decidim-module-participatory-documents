@@ -79,8 +79,7 @@ en:
           sections:
             empty: "(empty)"
           update:
-            error: 
-            invalid: There was a problem updating Document
+            error: There was a problem updating Document
             success: Document has been successfully updated
         exports:
           suggestions: Suggestions
