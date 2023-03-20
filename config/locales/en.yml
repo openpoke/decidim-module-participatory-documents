@@ -144,7 +144,7 @@ en:
         global_suggestions: Global suggestions
         save_changes: Save changes!
         send_suggestion: Send suggestion
-        suggestion_state: This suggestion is %{suggestion_state}
+        suggestion_answer: Official answer
       documents:
         missing: There is no document uploaded
       models:
