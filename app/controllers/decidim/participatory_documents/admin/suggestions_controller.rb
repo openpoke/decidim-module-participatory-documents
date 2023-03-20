@@ -9,10 +9,9 @@ module Decidim
         helper Decidim::ParticipatoryDocuments::Admin::SuggestionHelper
         helper Decidim::Messaging::ConversationHelper
 
-        helper_method :suggestions, :suggestion, :notes_form, :find_valuators_for_select
+        helper_method :suggestions, :suggestion, :notes_form, :find_valuators_for_select, :suggestion_ids, :suggestion_find
 
         def show
-          enforce_permission_to :update, :suggestion_answer, suggestion: suggestion
           @form = form(Decidim::ParticipatoryDocuments::Admin::AnswerSuggestionForm).from_model(suggestion)
         end
 
@@ -33,7 +32,36 @@ module Decidim
           end
         end
 
+        def publish_answers
+          enforce_permission_to :publish_answers, :suggestion_answer
+
+          Decidim::ParticipatoryDocuments::Admin::PublishAnswers.call(current_component, current_user, suggestion_ids) do
+            on(:invalid) do
+              flash.now[:alert] = t(
+                "suggestions.publish_answers.select_a_suggestion",
+                scope: "decidim.participatory_documents.admin"
+              )
+            end
+
+            on(:ok) do
+              flash.now[:notice] = I18n.t("suggestions.publish_answers.success", scope: "decidim.participatory_documents.admin")
+            end
+          end
+
+          respond_to do |format|
+            format.js
+          end
+        end
+
         private
+
+        def suggestion_find(id)
+          base_query.find(id)
+        end
+
+        def suggestion_ids
+          @suggestion_ids ||= params[:suggestion_ids]
+        end
 
         def notes_form
           @notes_form ||= form(Decidim::ParticipatoryDocuments::Admin::SuggestionNoteForm).from_params({})

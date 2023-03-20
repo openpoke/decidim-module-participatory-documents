@@ -2,6 +2,13 @@ const selectedSuggestionsCount = function() {
   return document.querySelectorAll(".table-list .js-check-all-suggestion:checked").length
 }
 
+// const showOtherActionsButtons = function(){
+//   document.getElementById("js-other-actions-wrapper").classList.remove("hide");
+// }
+// const hideOtherActionsButtons = function () {
+//   document.getElementById("js-other-actions-wrapper").classList.add("hide");
+// }
+
 const showBulkActionsButton = function() {
   if (selectedSuggestionsCount() > 0) {
     document.getElementById("js-bulk-actions-button").classList.remove("hide");
@@ -14,12 +21,25 @@ const hideBulkActionsButton = function(force = false) {
   }
 }
 
+
+const selectedSuggestionsNotPublishedAnswerCount = function() {
+  return document.querySelectorAll(".table-list [data-published-state=false] .js-check-all-suggestion:checked").length;
+}
+
 const selectedSugestionsCountUpdate = function() {
   const selectedSuggestions = selectedSuggestionsCount();
+  const selectedSuggestionsNotPublishedCount = selectedSuggestionsNotPublishedAnswerCount();
   if (selectedSuggestions === 0) {
     document.getElementById("js-selected-suggestions-count").innerHTML = "";
   } else {
     document.getElementById("js-selected-suggestions-count").innerHTML = selectedSuggestions;
+  }
+
+  if (selectedSuggestionsNotPublishedCount > 0) {
+    document.querySelector("button[data-action=\"publish-answers\"]").parentElement.classList.remove("hide");
+    document.getElementById("js-form-publish-answers-number").innerText = selectedSuggestionsNotPublishedCount;
+  } else {
+    document.querySelector("button[data-action=\"publish-answers\"]").parentElement.classList.add("hide");
   }
 }
 
@@ -47,15 +67,18 @@ window.addEventListener("load", () => {
         if (action) {
           document.getElementById(`js-${action}-actions`).classList.remove("hide");
           hideBulkActionsButton(true);
+          // hideOtherActionsButtons();
         }
 
       })
     });
 
-    const checkAll = document.getElementById("js-check-all");
+    const checkAll = document.getElementById("suggestions_bulk");
     checkAll.addEventListener("change", () => {
+      document.querySelectorAll(".js-check-all-suggestion").forEach((suggestion) => {
+        suggestion.checked = checkAll.checked;
+      });
       document.querySelectorAll(".table-list .js-check-all-suggestion").forEach((suggestion) => {
-        console.log(suggestion);
         suggestion.checked = checkAll.checked;
         suggestion.closest("tr").classList.toggle("selected");
       });
@@ -75,7 +98,7 @@ window.addEventListener("load", () => {
         let checked = e.target.checked;
 
         let selector = ".table-list .js-check-all-suggestion"
-        document.getElementById("js-check-all").checked =
+        document.getElementById("suggestions_bulk").checked =
                     document.querySelectorAll(`${selector}:checked`).length === document.querySelectorAll(selector).length;
 
         if (checked) {
@@ -90,6 +113,7 @@ window.addEventListener("load", () => {
           hideBulkActionsButton();
         }
 
+        console.log(`.js-bulk-action-form .js-suggestion-id-${suggestionId}`);
         document.querySelectorAll(`.js-bulk-action-form .js-suggestion-id-${suggestionId}`).forEach((element) => {
           element.checked = checked;
         })
@@ -102,6 +126,7 @@ window.addEventListener("load", () => {
       cancel.addEventListener("click", () => {
         hideBulkActionForms()
         showBulkActionsButton();
+        // showOtherActionsButtons();
       })
     })
   }

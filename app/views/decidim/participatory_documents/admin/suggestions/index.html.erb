@@ -21,11 +21,12 @@
       <table class="table-list">
         <thead>
         <tr>
-          <th><%= check_box_tag "suggestions_bulk", "all", false, id: "js-check-all" %></th>
+          <th><%= check_box_tag "suggestions_bulk", "all", false, id: "suggestions_bulk", class: "js-check-all" %></th>
           <th><%= sort_link(query, :id, t(".id"), default_order: :desc ) %></th>
           <th><%= sort_link(query, :translated_body, t(".suggestion") ) %></th>
           <th><%= sort_link(query, :author, t(".author")) %></th>
           <th><%= sort_link(query, :suggestable, t(".section")) %></th>
+          <th><%= sort_link(query, :published, t(".published_answer")) %></th>
           <th><%= sort_link(query, :state, t(".state")) %></th>
           <th><%= sort_link(query, :valuation_assignments_count, t("models.suggestion.fields.valuators", scope: "decidim.participatory_documents") ) %></th>
           <th><%= sort_link(query, :created_at, t(".created_at")) %></th>
@@ -33,27 +34,7 @@
         </tr>
         </thead>
           <% suggestions.each do |suggestion| %>
-          <tr>
-            <td>
-              <%= check_box_tag "suggestions_ids_s[]", suggestion.id, false, class: "js-check-all-suggestion js-suggestion-list-check  js-suggestion-id-#{suggestion.id}" %><br>
-            </td>
-            <td><%= suggestion.id %></td>
-            <td><%= truncate(translated_attribute(suggestion.body), length: 50) %></td>
-            <td><%= suggestion.try(:normalized_author).try(:name) %></td>
-            <td><%= suggestion.suggestable.is_a?(Decidim::ParticipatoryDocuments::Document) ? t(".global") : translated_attribute(suggestion.suggestable.title) %></td>
-            <td><%= humanize_suggestion_state(suggestion.state) %></td>
-            <td class="valuators-count">
-              <% count = suggestion.valuation_assignments.size %>
-              <% if count.zero? %>
-              0
-              <% else %>
-                <%= suggestion.valuation_assignments.first&.valuator_role&.user&.name %>
-                <%= "(+#{(count - 1)})" if count > 1 %>
-              <% end %>
-            </td>
-            <td><%= l suggestion.created_at, format: :decidim_short %></td>
-            <td><%= icon_with_link_to_suggestion(document, suggestion) %></td>
-          </tr>
+            <%= render "decidim/participatory_documents/admin/suggestions/suggestion",  suggestion: suggestion %>
           <% end %>
         <tbody>
         </tbody>

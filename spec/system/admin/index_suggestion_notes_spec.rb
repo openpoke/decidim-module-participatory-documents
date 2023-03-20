@@ -26,14 +26,10 @@ describe "Index Suggestion Notes", type: :system do
     switch_to_host(organization.host)
     login_as user, scope: :user
 
-    visit router.document_suggestions_path(document)
-
-    within(".table-scroll") do
-      click_link "Answer", match: :first
-    end
+    visit router.document_suggestion_path(document, suggestion)
   end
 
-  it "shows proposal notes for the current proposal" do
+  it "shows suggestion notes for the current proposal" do
     suggestion_notes.each do |suggestion_note|
       expect(page).to have_content(suggestion_note.author.name)
       expect(page).to have_content(suggestion_note.body)
