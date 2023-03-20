@@ -22,6 +22,7 @@ module Decidim
             can_create_suggestion_note?
             can_create_suggestion_answer?
           end
+
           allow! if permission_action.subject == :suggestion_note
           allow! if permission_action.subject == :suggestion_answer
           allow! if permission_action.subject == :document_section
@@ -60,17 +61,15 @@ module Decidim
 
         def valuator_can_unassign_valuator_from_suggestions?
           can_unassign_valuator_from_suggestions? if user == context.fetch(:valuator, nil)
+
+          return unless permission_action.action == :assign_to_valuator && permission_action.subject == :suggestions
+
+          allow!
         end
 
         def admin_suggestion_answering_is_enabled?
           current_settings.try(:suggestion_answering_enabled) &&
             component_settings.try(:suggestion_answering_enabled)
-        end
-
-        # There's no special condition to create proposal notes, only
-        # users with access to the admin section can do it.
-        def can_create_proposal_note?
-          allow! if permission_action.subject == :suggestion_note
         end
 
         def user_is_valuator?

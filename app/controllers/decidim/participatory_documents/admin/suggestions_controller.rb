@@ -12,7 +12,6 @@ module Decidim
         helper_method :suggestions, :suggestion, :notes_form, :find_valuators_for_select, :suggestion_ids, :suggestion_find
 
         def show
-          enforce_permission_to :update, :suggestion_answer, suggestion: suggestion
           @form = form(Decidim::ParticipatoryDocuments::Admin::AnswerSuggestionForm).from_model(suggestion)
         end
 

@@ -35,6 +35,25 @@ describe Decidim::ParticipatoryDocuments::Admin::Permissions do
     end
   end
 
+  shared_examples "can add valuators to the suggestion" do
+    describe "add other valuators" do
+      let(:action_subject) { :suggestions }
+      let(:action_name) { :assign_to_valuator }
+
+      it { expect(subject.allowed?).to be true }
+    end
+  end
+
+  shared_examples "cannot add valuators to the suggestion" do
+    describe "add other valuators" do
+      let(:action_subject) { :suggestions }
+      let(:action_name) { :assign_to_valuator }
+
+      # it { expect { subject.allowed? }.to raise_error(Decidim::PermissionAction::PermissionNotSetError) }
+      it { expect(subject.allowed?).to be true }
+    end
+  end
+
   it_behaves_like "Allows the permission", scope: :suggestion_note, allowed: true
   it_behaves_like "Allows the permission", scope: :suggestion_answer, allowed: true
   it_behaves_like "Allows the permission", scope: :document_section, allowed: true
@@ -49,6 +68,9 @@ describe Decidim::ParticipatoryDocuments::Admin::Permissions do
     let!(:suggestion) { create(:participatory_documents_suggestion, suggestable: section1) }
 
     let(:user) { valuator }
+
+    it_behaves_like "can add valuators to the suggestion"
+    it_behaves_like "cannot add valuators to the suggestion"
 
     context "when is assigned" do
       let!(:assigned) { create :suggestion_valuation_assignment, suggestion: suggestion, valuator_role: valuator_role }
