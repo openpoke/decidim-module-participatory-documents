@@ -108,6 +108,7 @@ en:
             created_at: Submitted on
             global: Global
             id: Id
+            published_answer: Published Answer
             section: Section
             selected: selected
             state: State

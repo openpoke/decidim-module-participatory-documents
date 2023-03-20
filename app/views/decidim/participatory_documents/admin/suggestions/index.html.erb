@@ -26,6 +26,7 @@
           <th><%= sort_link(query, :translated_body, t(".suggestion") ) %></th>
           <th><%= sort_link(query, :author, t(".author")) %></th>
           <th><%= sort_link(query, :suggestable, t(".section")) %></th>
+          <th><%= sort_link(query, :published, t(".published_answer")) %></th>
           <th><%= sort_link(query, :state, t(".state")) %></th>
           <th><%= sort_link(query, :valuation_assignments_count, t("models.suggestion.fields.valuators", scope: "decidim.participatory_documents") ) %></th>
           <th><%= sort_link(query, :created_at, t(".created_at")) %></th>
@@ -41,6 +42,13 @@
             <td><%= truncate(translated_attribute(suggestion.body), length: 50) %></td>
             <td><%= suggestion.try(:normalized_author).try(:name) %></td>
             <td><%= suggestion.suggestable.is_a?(Decidim::ParticipatoryDocuments::Document) ? t(".global") : translated_attribute(suggestion.suggestable.title) %></td>
+            <td>
+              <% if translated_attribute(suggestion.answer).present? %>
+                <%= humanize_boolean suggestion.answered? && suggestion.answer_is_published? %>
+              <% else %>
+                -
+              <% end %>
+            </td>
             <td><%= humanize_suggestion_state(suggestion.state) %></td>
             <td class="valuators-count">
               <% count = suggestion.valuation_assignments.size %>
