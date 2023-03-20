@@ -1,0 +1,14 @@
+<div id="js-publish-answers-actions" class="hide js-bulk-action-form">
+  <%= form_tag(publish_answers_document_suggestions_path(document), method: :post, remote: true, id: "js-form-publish-answers", class: "flex--cc flex-gap--1") do %>
+    <div class="checkboxes hide">
+      <% suggestions.each do |suggestion| %>
+        <%= check_box_tag "suggestion_ids[]", suggestion.id, false, class: "js-check-all-suggestion js-suggestion-id-#{suggestion.id}" %>
+      <% end %>
+    </div>
+    <p><%= t("decidim.participatory_documents.admin.suggestions.publish_answers.number_of_suggestions", number: '<span id="js-form-publish-answers-number"></span>').html_safe %></p>
+
+    <%= submit_tag(t("decidim.participatory_documents.admin.suggestions.index.actions.publish"), id: "js-submit-publish-answers", class: "button small button--simple float-left") %>
+
+    <button id="js-cancel-publish-answers" class="button tiny clear compact js-cancel-bulk-action" type="button"><%= t("decidim.participatory_documents.admin.suggestions.index.actions.cancel") %></button>
+  <% end %>
+</div>

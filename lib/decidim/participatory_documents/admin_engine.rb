@@ -20,6 +20,7 @@ module Decidim
           resources :suggestions, only: [:index, :show] do
             resources :valuation_assignments, only: [:destroy]
             collection do
+              post :publish_answers
               resource :valuation_assignment, only: [:create, :destroy]
             end
 
@@ -32,12 +33,6 @@ module Decidim
 
         root to: "documents#index"
       end
-
-      # initializer "decidim_reporting_proposals.admin_mount_routes" do
-      #   Decidim::Core::Engine.routes do
-      #     mount Decidim::ParticipatoryDocuments::AdminEngine, at: "/admin/participatory_documents", as: "decidim_admin_participatory_documents"
-      #   end
-      # end
 
       def load_seed
         nil
