@@ -23,7 +23,7 @@ module Decidim
         end
 
         def suggestions_modal_color_as_hsla(document, opacity: 0.95)
-          return "hsla(205, 77%, 90%, #{opacity});" if document.box_color.blank?
+          return "hsla(213, 48%, 90%, #{opacity});" if document.box_color.blank?
 
           hex_string = document.box_color
 
@@ -38,14 +38,14 @@ module Decidim
 
           @pdf_custom_style ||= begin
             css = <<~CSS
-                                    <style media="all">
-                                      :root {
-                                        --box-color: #{document.box_color};
-                                        --box-color-rgba: #{box_color_as_rgba(document)};
-                                        --notifications-color-rgba: #{box_color_as_rgba(document, opacity: 60)};
-                                        --suggestions-modal-color-as-hsla: #{suggestions_modal_color_as_hsla(document, opacity: 0.95)};
-                                      }
-                                    </style>
+              <style media="all">
+                :root {
+                  --box-color: #{document.box_color};
+                  --box-color-rgba: #{box_color_as_rgba(document)};
+                  --notifications-color-rgba: #{box_color_as_rgba(document, opacity: 60)};
+                  --suggestions-modal-color-as-hsla: #{suggestions_modal_color_as_hsla(document, opacity: 0.95)};
+                }
+              </style>
             CSS
             css.html_safe
           end
