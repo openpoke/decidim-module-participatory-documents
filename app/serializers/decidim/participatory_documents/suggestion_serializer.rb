@@ -34,7 +34,7 @@ module Decidim
 
       def section(suggestion)
         if suggestion.suggestable.is_a?(Decidim::ParticipatoryDocuments::Document)
-          I18n.t("global", scope: "decidim.participatory_documents.admin.suggestions.index")
+          I18n.t("global", scope: "decidim.participatory_documents.admin.suggestions.suggestion")
         else
           translated_attribute(suggestion.suggestable.title)
         end
