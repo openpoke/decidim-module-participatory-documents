@@ -16,7 +16,7 @@
   margin: 0;
   overflow: hidden;
   z-index: 100000;
-  background: var(--suggestions-modal-color-as-hsla);
+  background: var(--suggestions-modal-color-hsla);
   box-shadow: -2px -2px 10px #cbcbcb;
 
   &.active {
@@ -84,6 +84,10 @@
     }
   }
 
+  .answer__title {
+    margin-bottom: 1rem;
+  }
+
   .author__info {
     display: flex;
     justify-content: space-between;
@@ -116,6 +120,7 @@
     margin-top: 1rem;
     border-right: 10px solid var(--box-color);
     box-shadow: -2px 2px 4px #cbcbcb;
+    font-size: 1rem;
   }
 
   .comment__content {

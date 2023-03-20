@@ -1,20 +1,9 @@
 <div class="author__info flex--sbc">
-  <% if @reverse_order %>
-    <span class="author__data_date">
-      <%= render :date %>
-    </span>
-    <span class="author__data">
-      <strong>
-        <%= t("suggestion_answer", scope: "decidim.participatory_documents.document") %>
-      </strong>
-    </span>
-  <% else %>
-    <span class="author__data">
-      <%= render :avatar %>
-      <%= render :name %>
-    </span>
-    <span class="author__data_date">
-      <%= render :date %>
-    </span>
-  <% end %>
+  <span class="author__data">
+    <%= render :avatar %>
+    <%= render :name %>
+  </span>
+  <span class="author__data_date">
+    <%= render :date %>
+  </span>
 </div>

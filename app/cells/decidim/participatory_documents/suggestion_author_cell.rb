@@ -7,7 +7,6 @@ module Decidim
 
       def show
         @suggestion = options[:suggestion]
-        @reverse_order = options[:reverse_order]
         render
       end
 

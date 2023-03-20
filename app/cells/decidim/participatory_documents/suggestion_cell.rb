@@ -15,8 +15,8 @@ module Decidim
         I18n.t(model.state, scope: "decidim.participatory_documents.suggestions.answers")
       end
 
-      def author_cell(reverse_order: false)
-        cell("decidim/participatory_documents/suggestion_author", model, reverse_order: reverse_order)
+      def author_cell
+        cell("decidim/participatory_documents/suggestion_author", model)
       end
 
       protected

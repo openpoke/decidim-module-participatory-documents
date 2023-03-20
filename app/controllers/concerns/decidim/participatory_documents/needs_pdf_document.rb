@@ -22,7 +22,7 @@ module Decidim
           document.box_color + (opacity * 2.55).round.to_s(16).rjust(2, "0")
         end
 
-        def suggestions_modal_color_as_hsla(document, opacity: 0.95)
+        def box_color_as_hsla(document, opacity: 0.95)
           return "hsla(213, 48%, 90%, #{opacity});" if document.box_color.blank?
 
           hex_string = document.box_color
@@ -43,7 +43,7 @@ module Decidim
                   --box-color: #{document.box_color};
                   --box-color-rgba: #{box_color_as_rgba(document)};
                   --notifications-color-rgba: #{box_color_as_rgba(document, opacity: 60)};
-                  --suggestions-modal-color-as-hsla: #{suggestions_modal_color_as_hsla(document, opacity: 0.95)};
+                  --suggestions-modal-color-hsla: #{box_color_as_hsla(document, opacity: 0.95)};
                 }
               </style>
             CSS

@@ -1,4 +1,8 @@
 <div class="comment__footer">
-  <%= author_cell(reverse_order: true) %>
+    <div class="answer__title">
+      <strong>
+        <%= t("suggestion_answer", scope: "decidim.participatory_documents.document") %>
+      </strong>
+    </div>
   <%= translated_attribute(model.answer) %>
 </div>
