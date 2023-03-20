@@ -28,6 +28,18 @@ Decidim.register_component(:participatory_documents) do |component|
   component.settings(:step) do |settings|
   end
 
+  component.exports :suggestions do |exports|
+    exports.collection do |component_instance|
+      document = Decidim::ParticipatoryDocuments::Document.find_by(component: component_instance)
+      Decidim::ParticipatoryDocuments::Suggestion
+        .where(suggestable: document)
+        .or(Decidim::ParticipatoryDocuments::Suggestion.where(suggestable: document.sections)).order(:id)
+    end
+
+    exports.include_in_open_data = false
+    exports.serializer Decidim::ParticipatoryDocuments::SuggestionSerializer
+  end
+
   # component.register_resource(:participatory_document) do |resource|
   #   resource.model_class_name = "Decidim::ParticipatoryDocuments::Document"
   #   resource.template = "decidim/participatory_documents/documents/linked_participatory_documents"

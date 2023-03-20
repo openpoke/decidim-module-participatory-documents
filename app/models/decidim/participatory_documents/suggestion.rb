@@ -154,6 +154,10 @@ module Decidim
         user_ids = participatory_space.user_roles(:valuator).where(id: valuator_role_ids).pluck(:decidim_user_id)
         participatory_space.organization.users.where(id: user_ids)
       end
+
+      def self.export_serializer
+        Decidim::ParticipatoryDocuments::SuggestionSerializer
+      end
     end
   end
 end
