@@ -20,12 +20,9 @@ module Decidim
         #
         # Returns nothing.
         def call
-          if suggestion.answer_is_published? && state_changed?
-            transaction do
-              # increment_score
-              notify_followers
-            end
-          end
+          broadcast(:invalid) unless suggestion.has_answer? && suggestion.answered? && suggestion.answer_is_published?
+
+          notify_followers
 
           broadcast(:ok)
         end
@@ -35,17 +32,17 @@ module Decidim
         attr_reader :suggestion, :initial_state
 
         def notify_followers
-          if proposal.accepted?
+          if suggestion.accepted?
             publish_event(
               "decidim.events.participatory_documents.suggestion_accepted",
               Decidim::ParticipatoryDocuments::AcceptedSuggestionEvent
             )
-          elsif proposal.rejected?
+          elsif suggestion.rejected?
             publish_event(
               "decidim.events.participatory_documents.suggestion_rejected",
               Decidim::ParticipatoryDocuments::RejectedSuggestionEvent
             )
-          elsif proposal.evaluating?
+          elsif suggestion.evaluating?
             publish_event(
               "decidim.events.participatory_documents.suggestion_evaluating",
               Decidim::ParticipatoryDocuments::EvaluatingSuggestionEvent
@@ -58,13 +55,8 @@ module Decidim
             event: event,
             event_class: event_class,
             resource: suggestion,
-            affected_users: [author],
-            followers: []
+            affected_users: [suggestion.author]
           )
-        end
-
-        def state_changed?
-          initial_state != suggestion.state.to_s
         end
       end
     end

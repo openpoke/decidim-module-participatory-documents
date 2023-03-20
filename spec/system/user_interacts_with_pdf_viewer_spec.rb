@@ -22,6 +22,8 @@ describe "User interaction with PDF viewer", type: :system do
       let!(:my_suggestion) { create(:participatory_documents_suggestion, suggestable: sugested, author: user) }
       let!(:other_suggestion) { create(:participatory_documents_suggestion, suggestable: sugested, author: other_user) }
 
+      let(:attributes) { { suggestable: sugested, author: user, answer: answer, answered_at: Time.zone.now, answer_is_published: published } }
+
       it "displays only my suggestion" do
         within "#participation-modal" do
           expect(page).to have_content(my_suggestion.body["en"])
@@ -34,7 +36,7 @@ describe "User interaction with PDF viewer", type: :system do
         let(:published) { false }
 
         context "when admin saves a response with :not_answered state" do
-          let!(:my_suggestion) { create(:participatory_documents_suggestion, :not_answered, suggestable: sugested, author: user, answer: answer, answer_is_published: published) }
+          let!(:my_suggestion) { create(:participatory_documents_suggestion, :not_answered, **attributes) }
 
           context "when the answer is draft" do
             it "does not render admin note" do
@@ -56,7 +58,7 @@ describe "User interaction with PDF viewer", type: :system do
         end
 
         context "when admin saves a response with :evaluating state" do
-          let!(:my_suggestion) { create(:participatory_documents_suggestion, :evaluating, suggestable: sugested, author: user, answer: answer, answer_is_published: published) }
+          let!(:my_suggestion) { create(:participatory_documents_suggestion, :evaluating, **attributes) }
 
           context "when the answer is draft" do
             it "does not render admin note" do
@@ -78,7 +80,7 @@ describe "User interaction with PDF viewer", type: :system do
         end
 
         context "when admin saves a response with :withdrawn state" do
-          let!(:my_suggestion) { create(:participatory_documents_suggestion, :withdrawn, suggestable: sugested, author: user, answer: answer, answer_is_published: published) }
+          let!(:my_suggestion) { create(:participatory_documents_suggestion, :withdrawn, **attributes) }
 
           context "when the answer is draft" do
             it "does not render admin note" do
@@ -100,7 +102,7 @@ describe "User interaction with PDF viewer", type: :system do
         end
 
         context "when admin saves a response with :rejected state" do
-          let!(:my_suggestion) { create(:participatory_documents_suggestion, :rejected, suggestable: sugested, author: user, answer: answer, answer_is_published: published) }
+          let!(:my_suggestion) { create(:participatory_documents_suggestion, :rejected, **attributes) }
 
           context "when the answer is draft" do
             it "does not render admin note" do
@@ -122,7 +124,7 @@ describe "User interaction with PDF viewer", type: :system do
         end
 
         context "when admin saves a response with :accepted state" do
-          let!(:my_suggestion) { create(:participatory_documents_suggestion, :accepted, suggestable: sugested, author: user, answer: answer, answer_is_published: published) }
+          let!(:my_suggestion) { create(:participatory_documents_suggestion, :accepted, **attributes) }
 
           context "when the answer is draft" do
             it "does not render admin note" do
