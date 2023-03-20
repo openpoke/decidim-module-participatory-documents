@@ -4,8 +4,9 @@
       <%= render :date %>
     </span>
     <span class="author__data">
-      <%= render :name %>
-      <%= render :avatar %>
+      <strong>
+        <%= t("suggestion_state", scope: "decidim.participatory_documents.document" ,suggestion_state: suggestion_state) %>
+      </strong>
     </span>
   <% else %>
     <span class="author__data">

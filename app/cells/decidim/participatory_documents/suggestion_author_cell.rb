@@ -19,6 +19,10 @@ module Decidim
         model.author.name
       end
 
+      def suggestion_state
+        model.state
+      end
+
       def avatar
         model.author.avatar.attached? ? model.author.avatar : nil
       end
