@@ -208,6 +208,22 @@ en:
           fields:
             valuators: Valuators
       'no': 'No'
+      pdf_i18n:
+        allSaved: All the areas have been saved successfully
+        confirmExit: Are you sure you want to exit?
+        created: The area has been created
+        errorsSaving: Some errors have occurred while saving the areas
+        group: Group
+        modalTitle: Section %{section}, area %{box}
+        move: Move
+        needsSaving: You have to save the areas before editing them
+        operationFailed: The operation has failed
+        removeBoxConfirm: Are you sure you want to delete this area? This cannot be
+          undone.
+        removed: The area has been removed
+        startEditing: Start creating areas for participation by clicking and dragging.
+          Once created, boxes can be resized, moved, or grouped.
+        startSuggesting: Click on a marked area to participate!
       suggestions:
         answers:
           accepted: Accepted

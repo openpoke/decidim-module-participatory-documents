@@ -31,7 +31,7 @@
     var AnnotationsPath = '<%= document_annotations_path(document).split("?")[0] %>';
     var SectionPath = '<%= document_sections_path(document).split("?")[0] %>';
     var CurrentBoxes = <%= document.annotations.collect(&:serialize).to_json.html_safe %>;
-    var I18n = <%= pdf_i18n.to_json.html_safe %>;
+    var I18n = <%= I18n.t("decidim.participatory_documents.pdf_i18n").to_json.html_safe %>;
 
     var pages = {};
     PDFViewerApplication.initializedPromise.then(function() {

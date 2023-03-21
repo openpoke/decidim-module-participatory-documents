@@ -7,7 +7,7 @@ module Decidim
       extend ActiveSupport::Concern
 
       included do
-        helper_method :document, :box_color_as_rgba, :pdf_custom_style, :pdf_i18n
+        helper_method :document, :box_color_as_rgba, :pdf_custom_style
 
         protected
 
@@ -49,24 +49,6 @@ module Decidim
             CSS
             css.html_safe
           end
-        end
-
-        def pdf_i18n
-          {
-            modalTitle: "Section %{section}, area %{box}",
-            startSuggesting: "Click on a marked area to participate!",
-            confirmExit: "Are you sure you want to exit?",
-            operationFailed: "The Operation has failed",
-            allSaved: "All the areas have been saved succesfully",
-            errorsSaving: "Some errors have occurred while saving the areas",
-            needsSaving: "You have to save the areas before editing them",
-            removed: "The area has been removed",
-            removeBoxConfirm: "Are you sure you want to delete this area? This cannot be undone.",
-            created: "The area has been created",
-            move: "Move",
-            group: "Group",
-            startEditing: "Start creating areas for participation by clicking and dragging. Once created, boxes can be resized, moved or grouped."
-          }
         end
 
         private
