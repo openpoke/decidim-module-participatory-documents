@@ -84,12 +84,11 @@ describe "Admin manages participatory documents", type: :system do
   end
 
   context "when document needs update" do
-    let!(:document) { create :participatory_documents_document, component: component, box_color: default_color, box_opacity: 20 }
+    let!(:document) { create :participatory_documents_document, :with_file, component: component }
     let(:default_color) { "rgb(250, 170, 170)" }
-    let(:default_color_with_opacity) { "rgba(250, 170, 170, 0.2)" }
+    let!(:default_color_with_opacity) { "rgba(250, 170, 170, 0.2)" }
 
     before do
-      upload_file
       visit_component_admin
       click_on "Edit/upload document"
     end
