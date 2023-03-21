@@ -20,6 +20,8 @@ module Decidim
             @old_section = annotation.section
             transaction do
               annotation.assign_attributes(**attributes)
+              create_annotation! if annotation.new_record?
+              create_section!
               update_annotation! if annotation.changed?
             end
 
@@ -40,6 +42,22 @@ module Decidim
             annotation,
             form.current_user,
             **attributes
+          )
+        end
+
+        def create_annotation!
+          @annotation = Decidim.traceability.create!(
+            Decidim::ParticipatoryDocuments::Annotation,
+            form.current_user,
+            **attributes
+          )
+        end
+
+        def create_section!
+          @section = Decidim.traceability.create!(
+            Decidim::ParticipatoryDocuments::Section,
+            form.current_user,
+            document: document
           )
         end
 

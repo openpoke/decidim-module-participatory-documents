@@ -69,7 +69,8 @@ describe "Admin sees the action logs on homepage", type: :system do
           rect: [50, 50, 100, 100],
           id: "annotationid",
           group: "groupid",
-          current_user: current_user
+          current_user: current_user,
+          section: nil
         )
       end
 
@@ -131,16 +132,23 @@ describe "Admin sees the action logs on homepage", type: :system do
   end
 
   context "when sees section related logs" do
+    let(:document) { create(:participatory_documents_document, component: component) }
+
     context "when is created" do
       let(:form) do
         double(
-          invalid?: false,
           title: { en: "Title test Section" },
-          current_user: current_user
+          invalid?: false,
+          page_number: 1,
+          rect: [50, 50, 100, 100],
+          id: "annotationid",
+          group: "groupid",
+          current_user: current_user,
+          section: nil
         )
       end
 
-      let(:command) { Decidim::ParticipatoryDocuments::Admin::CreateSection.new(form, document) }
+      let(:command) { Decidim::ParticipatoryDocuments::Admin::UpdateOrCreateAnnotation.new(form, document) }
 
       it "saves the created log" do
         expect { command.call }.to broadcast(:ok)
