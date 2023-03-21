@@ -16,12 +16,13 @@ module Decidim
           return broadcast(:invalid) if form.invalid?
           return broadcast(:invalid) if document.nil?
 
+          create_section! if section.blank?
+          create_annotation! if annotation.blank?
+
           begin
             @old_section = annotation.section
             transaction do
               annotation.assign_attributes(**attributes)
-              create_annotation! if annotation.new_record?
-              create_section!
               update_annotation! if annotation.changed?
             end
 
@@ -84,11 +85,11 @@ module Decidim
         end
 
         def section
-          @section ||= document.sections.find_by(id: form.section) || Decidim::ParticipatoryDocuments::Section.new(document: document)
+          @section ||= document.sections.find_by(id: form.section)
         end
 
         def annotation
-          @annotation ||= document.annotations.find_by(id: form.id) || Decidim::ParticipatoryDocuments::Annotation.new
+          @annotation ||= document.annotations.find_by(id: form.id)
         end
       end
     end
