@@ -208,7 +208,15 @@ en:
           fields:
             valuators: Valuators
       'no': 'No'
-      pdf_i18n:
+      suggestions:
+        answers:
+          accepted: Accepted
+          evaluating: Evaluating
+          not_answered: Not Answered
+          published: Published
+          rejected: Rejected
+          withdrawn: Withdrawn
+      ui_messages:
         allSaved: All the areas have been saved successfully
         confirmExit: Are you sure you want to exit?
         created: The area has been created
@@ -224,12 +232,4 @@ en:
         startEditing: Start creating areas for participation by clicking and dragging.
           Once created, boxes can be resized, moved, or grouped.
         startSuggesting: Click on a marked area to participate!
-      suggestions:
-        answers:
-          accepted: Accepted
-          evaluating: Evaluating
-          not_answered: Not Answered
-          published: Published
-          rejected: Rejected
-          withdrawn: Withdrawn
       'yes': 'Yes'
