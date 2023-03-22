@@ -16,12 +16,12 @@ module Decidim
           return broadcast(:invalid) if form.invalid?
           return broadcast(:invalid) if document.nil?
 
-          create_section! if section.blank?
-          create_annotation! if annotation.blank?
-
           begin
-            @old_section = annotation.section
+            @old_section = annotation.present? ? annotation.section : nil
+
             transaction do
+              create_section! if section.blank?
+              create_annotation! if annotation.blank?
               annotation.assign_attributes(**attributes)
               update_annotation! if annotation.changed?
             end
