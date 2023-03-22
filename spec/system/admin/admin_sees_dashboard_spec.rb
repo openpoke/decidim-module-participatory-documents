@@ -229,4 +229,32 @@ describe "Admin sees the action logs on homepage", type: :system do
       end
     end
   end
+
+  context "when sees logs related to sections grouping" do
+    let(:command) { Decidim::ParticipatoryDocuments::Admin::UpdateOrCreateAnnotation.new(form, document) }
+    let!(:document) { create(:participatory_documents_document) }
+    let!(:section1) { create(:participatory_documents_section, document: document) }
+    let!(:section2) { create(:participatory_documents_section, document: document) }
+    let!(:annotation1) { create(:participatory_documents_annotation, section: section1) }
+    let!(:annotation2) { create(:participatory_documents_annotation, section: section2) }
+
+    let(:form) do
+      double(
+        invalid?: false,
+        page_number: 1,
+        rect: [50, 50, 100, 100],
+        id: annotation2.id,
+        section: section1.id,
+        current_user: current_user
+      )
+    end
+
+    it "saves the deleted and updated logs" do
+      expect { command.call }.to broadcast(:ok)
+      visit decidim_admin.root_path
+
+      expect(page).to have_content("has deleted a section")
+      expect(page).to have_content("has updated a participatory area")
+    end
+  end
 end
