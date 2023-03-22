@@ -1,1 +1,7 @@
-<%= translated_attribute(model.answer) %>
+<div class="comment__footer">
+    <div class="answer__title">
+      <strong><%= answered_at %></strong>
+      <strong><%= t("suggestion_answer", scope: "decidim.participatory_documents.document") %></strong>
+    </div>
+  <%= translated_attribute(model.answer) %>
+</div>

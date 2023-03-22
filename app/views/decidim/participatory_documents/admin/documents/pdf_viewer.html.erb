@@ -1,25 +1,4 @@
 <!DOCTYPE html>
-<!--
-Copyright 2012 Mozilla Foundation
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-
-Adobe CMap resources are covered by their own copyright but the same license:
-
-    Copyright 1990-2015 Adobe Systems Incorporated.
-
-See https://github.com/adobe-type-tools/cmap-resources
--->
 <html dir="ltr" mozdisallowselectionprint>
 <head>
   <meta charset="utf-8">
@@ -34,11 +13,11 @@ See https://github.com/adobe-type-tools/cmap-resources
   <!-- This snippet is used in production (included from viewer.html) -->
   <link rel="resource" type="application/l10n" href="/pdfjs/web/locale/locale.properties">
   <script src="/pdfjs/web/viewer.js"></script>
-  <%= csrf_meta_tags %>
-
   <%= javascript_pack_tag "decidim_participatory_documents_editor" %>
   <%= stylesheet_pack_tag "decidim_participatory_documents_editor" %>
-
+  <%= organization_colors %>
+  <%= pdf_custom_style %>
+  <%= csrf_meta_tags %>
 </head>
 
 <body tabindex="1">
@@ -49,235 +28,39 @@ See https://github.com/adobe-type-tools/cmap-resources
   <div id="notifications"></div>
 
   <script>
+    var AnnotationsPath = '<%= document_annotations_path(document).split("?")[0] %>';
+    var SectionPath = '<%= document_sections_path(document).split("?")[0] %>';
+    var CurrentBoxes = <%= document.annotations.collect(&:serialize).to_json.html_safe %>;
+    var I18n = <%= I18n.t("decidim.participatory_documents.ui_messages").to_json.html_safe %>;
 
-  var AnnotationsRootPath = '<%= document_annotations_path(document) %>';
-  var NewZonePath = '<%= document_sections_path(document) %>';
-
-  var I18n = {
-    operationFailed: "The Operation has failed",
-    allSaved: "All the boxes data has been saved to DB",
-    removed: "The box has been removed",
-    removeBoxConfirm: "Are you sure you want to delete?",
-    updated: "The box has been updated",
-    created: "The box has been created",
-    move: "Move",
-    group: "Group"
-  }
-
-class RegisterPDFActions {
-    constructor(options) {
-        this.i18n = options.i18n;
-
-        this.bindEvents();
-    }
-
-    bindEvents(){
-        document.getElementById("DecidimPDSaveButton").addEventListener("click", this.saveHandler.bind(this));
-    }
-
-    saveHandler(e){
-        e.stopPropagation();
-        let handler = this;
-
-        PDFViewerApplication.pdfViewer._pages
-            .filter((p) => p.boxEditor !== undefined)
-            .filter((p) => Object.keys(p.boxEditor.boxes).length > 0)
-            .forEach(function(page) {
-                Object.values(page.boxEditor.boxes).map((box) => {
-                    handler.updateOrCreateBox(box, page.id);
-                });
-            });
-    }
-
-    getCSRFToken() {
-        return document.getElementsByName("csrf-token")[0].content;
-    }
-
-    updateOrCreateBox(box, page){
-        let data = box.getInfo();
-        data.page_number = page;
-
-        let handler = this;
-        fetch(`${AnnotationsRootPath}/${box.id}`, {
-            method: "PUT",
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                "X-CSRF-Token": handler.getCSRFToken()
-            },
-            credentials: "include",
-            body: JSON.stringify(data)
-        })
-            .then((response) => {
-                if (response.ok) {
-                    return response.json();
-                }
-
-                throw new Error(" ");
-            })
-            .then((data) => {
-                box.setInfo();
-                box.layer.stateManager.remove(box);
-                showInfo(handler.i18n.allSaved);
-            })
-            .catch((error) => {
-                // console.error(error);
-                createBox(box, page);
-            });
-    }
-}
-
-new RegisterPDFActions({
-    i18n: I18n,
-});
-
-function createBox(box, page) {
-    const csrfToken = document.getElementsByName("csrf-token")[0].content;
-    let data = box.getInfo();
-    data.page_number = page;
-
-    fetch(AnnotationsRootPath, {
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            "X-CSRF-Token": csrfToken
-        },
-        credentials: "include",
-        body: JSON.stringify(data)
-    })
-    .then((response) => {
-        if (response.ok) {
-            return response.json();
-        }
-        throw new Error(" ");
-    })
-    .then((data) => {
-        box.setInfo();
-        box.layer.stateManager.remove(box);
-        showInfo(I18n.created);
-    })
-    .catch((error) => {
-        // console.log(error);
-        box.destroy();
-        showAlert(I18n.operationFailed, {});
-    });
-  }
-
-function registerSaveHandler(box){
-  const decidim = $("#decidim");
-
-  const save = document.getElementById("editor-modal-save");
-  save.addEventListener("click", (e) => {
-    e.stopPropagation();
-    var form = $("#decidim").find("form");
-    $.ajax({
-        type: form.attr("method"),
-        url: form.attr('action'),
-        data: form.serialize()
-    }).done(function(data) {
-      decidim.removeClass("show");
-      createBox(box, PDFViewerApplication.pdfViewer.currentPageNumber);
-    })
-    .fail(function(data) {
-      populateModal(data.responseText, box)
-    });
-    showInfo("Please, save me to the database for the group", box.group);
-  }, { once: true });
-}
-function displayModal(box) {
-  console.log("box,box",  box);
-  const decidim = $("#decidim");
-
-  const close = document.getElementById("editor-modal-close");
-  const title = document.getElementById("editor-modal-title");
-  const content = document.getElementById("editor-modal-content");
-  const remove = document.getElementById("editor-modal-remove");
-
-  const uid_field = document.getElementById("section_uid");
-  uid_field.value = box.group
-
-  title.innerHTML = `Edit box ${box.id}, group ${box.group}`;
-
-  decidim.addClass("show");
-  decidim.foundation();
-
-  registerSaveHandler(box);
-
-  close.addEventListener("click", (e) => {
-    e.stopPropagation();
-    decidim.removeClass("show");
-  }, { once: true });
-
-  remove.addEventListener("click", (e) => {
-    e.stopPropagation();
-
-    if ( confirm(I18n.removeBoxConfirm) ) {
-
-        $.ajax({
-            url: NewZonePath + "/" + box.group,
-            type: "DELETE",
-        }).done(function(data) {
-
-            PDFViewerApplication.pdfViewer._pages
-                .filter((p) => p.boxEditor !== undefined)
-                .filter((p) => Object.keys(p.boxEditor.boxes).length > 0)
-                .forEach(function(p) {
-                    Object.values(p.boxEditor.boxes).filter((p) => p.group === box.group).map((p) => {
-                        delete p.layer.boxes[p.id];
-                        p.destroy();
-
-                    });
-                });
-        })
-            .fail(function() { box.destroy(); })
-            .always(function() {});
-        decidim.removeClass("show");
-
-    }
-  }, { once: true });
-}
-
-function populateModal(data, box)
-{
-  $('#decidim').html(data);
-  displayModal(box);
-}
-
-function loadNewGroupModal(box) {
-  $.ajax({
-    url: NewZonePath + "/new",
-    type: "GET",
-  }).done(function(data) {
-    populateModal(data, box);
-  });
-}
-
-function loadBoxModal(box) {
-  $.ajax({
-    url: NewZonePath + "/" + box.group + "/edit",
-    type: "GET",
-  }).done(function(data) {
-    populateModal(data, box);
-  })
-  .fail(function() {
-     loadNewGroupModal(box);
-  })
-  .always(function() {});
-};
-
-    var currentBoxes = <%= document.annotations.collect(&:serialize).to_json.html_safe %>;
     var pages = {};
     PDFViewerApplication.initializedPromise.then(function() {
-      showInfo("Start creating boxes for participation by clicking and dragging. Once created, boxes can be resized, moved or grouped.", {delay: 5000});
+      var options = {
+        i18n: I18n,
+        editSectionPath: (group) => SectionPath + `/${group}/edit`,
+        sectionPath: (group) => SectionPath + `/${group}`,
+        newSectionPath: SectionPath + "/new",
+        annotationsPath: AnnotationsPath,
+        pdfViewer: PDFViewerApplication.pdfViewer,
+        saveButton: document.getElementById("DecidimPDSaveButton"),
+        csrfToken: document.getElementsByName("csrf-token")[0].content,
+        showInfo: window.showInfo,
+        showAlert: window.showAlert
+      };
+      window.InitDocumentManagers(options);
+
+      window.showInfo(I18n.startEditing, {delay: 5000});
+
       PDFViewerApplication.eventBus.on('annotationeditorlayerrendered', function (doc) {
-        if(!pages[doc.pageNumber]) {
-          var page = PDFViewerApplication.pdfViewer._pages[doc.pageNumber - 1];
+        console.log("rendered", doc)
+        var page = PDFViewerApplication.pdfViewer._pages[doc.pageNumber - 1];
+        var annotationsLayer = page.annotationEditorLayer && page.annotationEditorLayer.div;
+        var savedPage = pages[doc.pageNumber];
+        // Let's render the object only if not already existing.
+        // Note that the PDF library might redraw the annotation layer, if this happens we need to re-render the areas.
+        if(annotationsLayer && (!savedPage || savedPage.boxEditor.div !== annotationsLayer)) {
+          page.boxEditor = window.InitPolygonEditor(annotationsLayer, CurrentBoxes.filter(box => box.page_number === doc.pageNumber), options);
           pages[doc.pageNumber] = page;
-          var annotationsLayer = page.annotationEditorLayer && page.annotationEditorLayer.div;
-          if(annotationsLayer) {
-            page.boxEditor = InitPolygonEditor(I18n, annotationsLayer, currentBoxes.filter(box => box.page_number === doc.pageNumber));
-          }
         }
       });
     });

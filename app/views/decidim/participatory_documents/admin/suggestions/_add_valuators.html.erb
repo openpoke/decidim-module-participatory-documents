@@ -1,5 +1,5 @@
 <% if allowed_to? :assign_to_valuator, :suggestions %>
-  <div id="js-assign-suggestion-to-valuator-actions" class="js-bulk-action-form form-single-suggestion"
+  <div id="js-assign-suggestion-to-valuator-actions" class="form-single-suggestion"
        style="max-width:400px">
     <%= form_tag(document_valuation_assignment_path(document), method: :post, id: "js-form-assign-suggestion-to-valuator",
                  class: "flex--lc flex-gap--1") do %>

@@ -16,9 +16,13 @@ module Decidim
           return broadcast(:invalid) if form.invalid?
 
           begin
+            @old_section = annotation.section
             transaction do
-              destroy_annotation
+              destroy_annotation!
             end
+
+            destroy_old_section!
+
             broadcast(:ok)
           rescue ActiveRecord::RecordInvalid
             broadcast(:invalid)
@@ -29,7 +33,7 @@ module Decidim
 
         attr_reader :form, :document
 
-        def destroy_annotation
+        def destroy_annotation!
           Decidim.traceability.perform_action!(
             :delete,
             annotation,
@@ -39,8 +43,22 @@ module Decidim
           end
         end
 
+        # Destroys the old section if has no more annotations
+        def destroy_old_section!
+          return unless @old_section
+          return if @old_section.annotations.reload.any?
+
+          Decidim.traceability.perform_action!(
+            :delete,
+            @old_section,
+            form.current_user
+          ) do
+            @old_section.destroy!
+          end
+        end
+
         def annotation
-          @annotation ||= document.annotations.find_by!(uid: form.id)
+          @annotation ||= document.annotations.find(form.id)
         end
       end
     end

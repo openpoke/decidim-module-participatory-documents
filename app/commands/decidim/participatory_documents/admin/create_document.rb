@@ -36,7 +36,9 @@ module Decidim
             component: form.current_component,
             author: form.current_user,
             title: form.title,
-            description: form.description
+            description: form.description,
+            box_color: form.box_color,
+            box_opacity: form.box_opacity
           }.merge(attachment_attributes(:file))
         end
 

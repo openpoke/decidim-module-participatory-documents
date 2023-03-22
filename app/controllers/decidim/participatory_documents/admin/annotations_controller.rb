@@ -20,22 +20,7 @@ module Decidim
             end
 
             on(:invalid) do
-              render(json: {}, status: :bad_request) && return
-            end
-          end
-        end
-
-        def update
-          enforce_permission_to :update, :document_annotations
-          @form = form(Decidim::ParticipatoryDocuments::Admin::AnnotationForm).from_params(params)
-
-          Admin::UpdateAnnotation.call(@form, document) do
-            on(:ok) do |annotation|
-              render(json: { data: annotation.serialize }, status: :accepted) && return
-            end
-
-            on(:invalid) do
-              render(json: @form.errors, status: :bad_request) && return
+              render(json: {}, status: :unprocessable_entity) && return
             end
           end
         end
@@ -44,13 +29,13 @@ module Decidim
           enforce_permission_to :create, :document_annotations
           @form = form(Decidim::ParticipatoryDocuments::Admin::AnnotationForm).from_params(params)
 
-          Admin::CreateAnnotation.call(@form, document) do
+          Admin::UpdateOrCreateAnnotation.call(@form, document) do
             on(:ok) do |annotation|
               render(json: { data: annotation.serialize }, status: :created) && return
             end
 
             on(:invalid) do
-              render(json: @form.errors, status: :bad_request) && return
+              render(json: @form.errors, status: :unprocessable_entity) && return
             end
           end
         end

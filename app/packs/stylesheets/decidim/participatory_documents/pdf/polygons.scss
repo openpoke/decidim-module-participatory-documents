@@ -1,0 +1,88 @@
+@import "stylesheets/decidim/admin/variables";
+@import "stylesheets/decidim/utils/fontface";
+@import "stylesheets/decidim/admin/utils/settings";
+
+.box {
+  position: absolute;
+  background: var(--box-color-rgba);
+  min-width: 1px;
+  min-height: 1px;
+  border-color: var(--box-color);
+  border-style: dotted;
+  border-width: 2px;
+  resize: none;
+  box-sizing: content-box;
+  font-family: $body-font-family;
+  font-weight: 400;
+  font-size: 13px;
+
+  &.creating,
+  &.moving,
+  &.resizing {
+    border-style: dashed;
+  }
+
+  &.hover {
+    border-style: solid;
+    z-index: 10000;
+    cursor: pointer;
+
+    & > span {
+      display: block;
+    }
+  }
+
+  &.focus,
+  &.mark-group {
+    border-style: solid;
+    opacity: 1;
+  }
+
+  &.blocked {
+    pointer-events: none;
+    opacity: .4;
+
+    & > span {
+      display: block;
+    }
+
+    &.grouping,
+    &.focus {
+      opacity: 1;
+      // Same as "hover"
+      border-style: solid;
+    }
+  }
+
+  // Box number info
+  & > span {
+    display: none;
+    position: absolute;
+    top: 2px;
+    right: 12px;
+    font-size: 24px;
+    text-shadow: 1px 1px 3px #000, 0 0 1em #000, 0 0 .3em #000;
+    color: var(--box-text-color);
+    font-weight: 600;
+  }
+
+  // Box number badge
+  &::before {
+    content: attr(data-section-number);
+    position: absolute;
+    top: -2px;
+    left: -17px;
+    width: 32px;
+    height: 42px;
+    pointer-events: none;
+    background: var(--box-color);
+    -webkit-mask-image: url(../images/badge.svg);
+    mask-image: url(../images/badge.svg);
+    color: var(--box-text-color);
+    text-align: center;
+    line-height: 2.2;
+    font-size: 15px;
+    font-weight: 600;
+    text-shadow: 0 0 8px #fff;
+  }
+}

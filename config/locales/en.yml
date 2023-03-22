@@ -1,6 +1,12 @@
 ---
 en:
   activemodel:
+    attributes:
+      document:
+        box_color: Color of the boxes
+        box_opacity: Opacity applied at the color of the boxes (%)
+        description: Helper description
+        title: Helper title
     errors:
       models:
         answer_suggestion:
@@ -104,6 +110,8 @@ en:
           edit:
             title: Edit Participatory document
             update: Update
+          form:
+            box_style_preview: 'Box style preview:'
           index:
             start: Please upload a PDF to start
           new:
@@ -177,6 +185,12 @@ en:
           delete:
             invalid: There was an error unassigning suggestions from a valuator
             success: Valuator unassigned from suggestions successfully
+      document:
+        close: Close
+        global_suggestions: Global suggestions
+        save_changes: Save changes!
+        send_suggestion: Send suggestion
+        suggestion_answer: Official answer
       documents:
         missing: There is no document uploaded
       models:
@@ -202,4 +216,20 @@ en:
           published: Published
           rejected: Rejected
           withdrawn: Withdrawn
+      ui_messages:
+        allSaved: All the areas have been saved successfully
+        confirmExit: Are you sure you want to exit?
+        created: The area has been created
+        errorsSaving: Some errors have occurred while saving the areas
+        group: Group
+        modalTitle: Section %{section}, area %{box}
+        move: Move
+        needsSaving: You have to save the areas before editing them
+        operationFailed: The operation has failed
+        removeBoxConfirm: Are you sure you want to delete this area? This cannot be
+          undone.
+        removed: The area has been removed
+        startEditing: Start creating areas for participation by clicking and dragging.
+          Once created, boxes can be resized, moved, or grouped.
+        startSuggesting: Click on a marked area to participate!
       'yes': 'Yes'

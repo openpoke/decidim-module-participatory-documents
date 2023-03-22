@@ -1,10 +1,6 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  sequence(:pdf_uid) do |n|
-    "randomstring-#{n}"
-  end
-
   factory :participatory_documents_component, parent: :component do
     name { Decidim::Components::Namer.new(participatory_space.organization.available_locales, :participatory_documents).i18n_name }
     manifest_name { :participatory_documents }
@@ -15,6 +11,8 @@ FactoryBot.define do
     description { Decidim::Faker::Localized.wrapped("<p>", "</p>") { generate_localized_title } }
     component { create(:participatory_documents_component) }
     author { build(:user, :confirmed, organization: component.organization) }
+    box_color { "#faaaaa" }
+    box_opacity { 20 }
 
     trait :with_file do
       file { Decidim::Dev.test_file("Exampledocument.pdf", "application/pdf") }
@@ -24,7 +22,6 @@ FactoryBot.define do
   factory :participatory_documents_section, class: "Decidim::ParticipatoryDocuments::Section" do
     document { create :participatory_documents_document }
     title { generate_localized_title }
-    uid { generate(:pdf_uid) }
 
     trait :with_annotation do
       after :create do |section|
@@ -42,7 +39,6 @@ FactoryBot.define do
   factory :participatory_documents_annotation, class: "Decidim::ParticipatoryDocuments::Annotation" do
     section { create(:participatory_documents_section) }
     page_number { 1 }
-    uid { generate(:pdf_uid) }
 
     after(:build) do |annotation|
       top = rand(1.0..60.0)

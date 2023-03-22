@@ -22,41 +22,13 @@ module Decidim
           sign_in user
         end
 
-        describe ".destroy" do
-          let!(:section) { create(:participatory_documents_section, document: document, uid: "randomstring") }
-
-          let(:params) { { document_id: document.id, id: section.uid } }
-
-          it "removes the entry from database" do
-            expect(model.count).to eq(1)
-            expect { delete(:destroy, params: params) }.to change(model, :count).by(-1)
-            expect(model.count).to eq(0)
-          end
-        end
-
-        describe ".create" do
-          let(:params) do
-            {
-              "uid": "randomstring",
-              "document_id": document.id,
-              "title_en" => "Title"
-            }
-          end
-
-          it "Adds a new entry to database" do
-            expect(model.count).to eq(0)
-            expect { post :create, params: params }.to change(model, :count).by(1)
-          end
-        end
-
         describe ".update" do
-          let!(:section) { create(:participatory_documents_section, document: document, uid: "randomstring", title: nil) }
+          let!(:section) { create(:participatory_documents_section, document: document, title: nil) }
 
           let(:params) do
             {
               "document_id": document.id,
-              "id": section.uid,
-              "uid": section.uid,
+              "id": section.id,
               "title_en" => "Title"
             }
           end

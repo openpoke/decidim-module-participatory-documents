@@ -1,3 +1,24 @@
+<!--
+Copyright 2012 Mozilla Foundation
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+Adobe CMap resources are covered by their own copyright but the same license:
+
+    Copyright 1990-2015 Adobe Systems Incorporated.
+
+See https://github.com/adobe-type-tools/cmap-resources
+-->
 <div id="outerContainer">
 
   <div id="sidebarContainer">
@@ -282,13 +303,13 @@
           </div>
           <div id="toolbarViewerMiddle">
             <% if defined?(displaySave) && displaySave == true %>
-              <button id="DecidimPDSaveButton" class="toolbarButton" title="Text" tabindex="34" data-l10n-id="editor_free_text2">
-                Save Changes!
+              <button id="DecidimPDSaveButton" class="decidimButton" title="Text" tabindex="34" data-l10n-id="editor_free_text2">
+                <%= t "save_changes", scope: "decidim.participatory_documents.document" %>
               </button>
             <% end %>
             <% if defined?(globalSuggestions) && globalSuggestions == true %>
-              <button id="globalSuggestionTrigger" class="toolbarButton" title="Add Global Suggestion" tabindex="34">
-                Global suggestions
+              <button id="globalSuggestionTrigger" class="decidimButton" title="Add Global Suggestion" tabindex="34" data-l10n-id="Global suggestions">
+                <%= t "global_suggestions", scope: "decidim.participatory_documents.document" %>
               </button>
             <% end %>
           </div>

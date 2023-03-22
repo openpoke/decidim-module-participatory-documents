@@ -15,7 +15,7 @@ module Decidim
         let(:form) do
           double(
             invalid?: invalid,
-            id: annotation.uid,
+            id: annotation.id,
             current_user: user
           )
         end
@@ -31,6 +31,10 @@ module Decidim
         context "when everything is ok" do
           it "Removes a annotation" do
             expect { subject.call }.to change(Decidim::ParticipatoryDocuments::Annotation, :count).by(-1)
+          end
+
+          it "Removes a section" do
+            expect { subject.call }.to change(Decidim::ParticipatoryDocuments::Section, :count).by(-1)
           end
         end
       end

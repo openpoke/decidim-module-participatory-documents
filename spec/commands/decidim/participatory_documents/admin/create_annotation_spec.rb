@@ -5,7 +5,7 @@ require "spec_helper"
 module Decidim
   module ParticipatoryDocuments
     module Admin
-      describe CreateAnnotation do
+      describe UpdateOrCreateAnnotation do
         subject { described_class.new(form, document) }
 
         let(:document) { create(:participatory_documents_document) }
@@ -19,7 +19,8 @@ module Decidim
             rect: [50, 50, 100, 100],
             id: "annotationid",
             group: "groupid",
-            current_user: current_user
+            current_user: current_user,
+            section: nil
           )
         end
 
@@ -51,6 +52,7 @@ module Decidim
         context "when everything is ok" do
           it "creates a section" do
             expect { subject.call }.to change(Decidim::ParticipatoryDocuments::Annotation, :count).by(1)
+            expect(Decidim::ParticipatoryDocuments::Section.count).to eq(1)
           end
         end
       end

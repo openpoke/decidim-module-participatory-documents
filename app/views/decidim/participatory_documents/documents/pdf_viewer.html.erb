@@ -1,25 +1,4 @@
 <!DOCTYPE html>
-<!--
-Copyright 2012 Mozilla Foundation
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-
-Adobe CMap resources are covered by their own copyright but the same license:
-
-    Copyright 1990-2015 Adobe Systems Incorporated.
-
-See https://github.com/adobe-type-tools/cmap-resources
--->
 <html dir="ltr" mozdisallowselectionprint>
 <head>
   <meta charset="utf-8">
@@ -36,8 +15,9 @@ See https://github.com/adobe-type-tools/cmap-resources
   <script src="/pdfjs/web/viewer.js"></script>
   <%= javascript_pack_tag "decidim_participatory_documents_viewer" %>
   <%= stylesheet_pack_tag "decidim_participatory_documents_viewer" %>
+  <%= organization_colors %>
+  <%= pdf_custom_style %>
   <%= csrf_meta_tags %>
-
 </head>
 
 <body tabindex="1">
@@ -45,132 +25,36 @@ See https://github.com/adobe-type-tools/cmap-resources
 
   <div id="notifications"></div>
 
-  <div id="participation-modal">Comments here</div>
+  <div id="participation-modal"></div>
 
 <script>
 
-  function blurBoxContainer(box, e) {
-    e.preventDefault();
-  }
-
-  class SuggestionForm {
-      constructor(path, group = null) {
-          this.path = path;
-          this.group = group;
-      }
-
-      getCSRFToken() {
-          return document.getElementsByName("csrf-token")[0].content;
-      }
-
-      // Sanitize internal path
-      getPath() {
-        return this.path.split('?')[0];
-      }
-
-      getQueryString() {
-        return this.path.indexOf('?') !== -1 ? "?" + this.path.split('?')[1] : '';
-      }
-
-      getGroupUrl(){
-          if (this.group === null ) {
-              return this.getPath() + "/suggestions" + this.getQueryString();
-          } else {
-              return this.getPath() + "/sections/" + this.group + '/suggestions' + this.getQueryString();
-          }
-      }
-
-      populateArea(data) {
-          let div = document.getElementById("participation-modal");
-          div.innerHTML = data;
-          div.classList.add("active");
-          this.addFormHandler();
-      }
-
-      addFormHandler(){
-
-          let handler = this;
-          let form = document.getElementById( 'new_suggestion_' );
-          if ( form){
-
-              form.addEventListener("submit", function(event){
-                  event.preventDefault();
-                  fetch(event.target.action, {
-                      method: event.target.method,
-                      body: new URLSearchParams(new FormData(event.target)),
-                      headers: {
-                          'Content-Type': 'application/x-www-form-urlencoded',
-                          'Accept': 'text/html',
-                          "X-CSRF-Token": handler.getCSRFToken()
-                      },
-                      credentials: "include"
-                  }).then((response) => {
-                      if (response.ok === false && response.status === 400) { // validation
-                          return response.text();
-                      }
-                      return response.text();
-                  }).then((data)=>{
-                      let div = document.getElementById("participation-modal");
-                      div.innerHTML = data;
-                      handler.addFormHandler();
-                  }).catch((error) => {
-                      let div = document.getElementById("participation-modal-form");
-                      div.innerHTML = response.text();
-                  });
-              }, {once: true});
-          }
-      }
-
-      fetchGroup(){
-          let handler = this;
-          fetch(handler.getGroupUrl(), {
-              headers: {
-                  'Content-Type': 'text/html; charset=utf-8',
-                  'Accept': 'text/html',
-              },
-              credentials: "include",
-              // body: JSON.stringify(data)
-          }).then((response) => {
-              if (response.ok) {
-                  return response.text();
-              }
-              throw new Error(" ");
-          })
-          .then((data) => {
-              handler.populateArea(data);
-          })
-          .catch((error) => {
-              console.error(error);
-          });
-      }
-  }
-
-  document.getElementById("globalSuggestionTrigger").addEventListener("click", (e) => {
-      let div = document.getElementById("participation-modal");
-      div.classList.add("document");
-      (new SuggestionForm(sectionsPath, null)).fetchGroup();
-  });
-
-  var I18n = { };
-  var sectionsPath = '<%= document_path(document) %>';
-  var currentBoxes = <%= document.annotations.collect(&:serialize).to_json.html_safe %>;
+  var I18n = <%= I18n.t("decidim.participatory_documents.ui_messages").to_json.html_safe %>;
+  var DocumentPath = '<%= document_path(document).split("?")[0] %>';
+  var CurrentBoxes = <%= document.annotations.collect(&:serialize).to_json.html_safe %>;
   var pages = {};
+
   PDFViewerApplication.initializedPromise.then(function() {
-    showInfo("Click on a marked area to participate!", {delay: 5000});
+    var options = {
+      i18n: I18n,
+      documentPath: DocumentPath,
+      globalSuggestionsButton: document.getElementById("globalSuggestionTrigger"),
+      participationLayout: document.getElementById("participation-modal")
+    };
+
+    window.InitDocumentManagers(options);
+
+    window.showInfo(I18n.startSuggesting, {delay: 5000});
 
     PDFViewerApplication.eventBus.on('annotationeditorlayerrendered', function (doc) {
-      if(!pages[doc.pageNumber]) {
-        var page = PDFViewerApplication.pdfViewer._pages[doc.pageNumber - 1];
+      var page = PDFViewerApplication.pdfViewer._pages[doc.pageNumber - 1];
+      var annotationsLayer = page.annotationEditorLayer && page.annotationEditorLayer.div;
+      var savedPage = pages[doc.pageNumber];
+      // Let's render the object only if not already existing.
+      // Note that the PDF library might redraw the annotation layer, if this happens we need to re-render the areas.
+      if(annotationsLayer && (!savedPage || savedPage.boxEditor.div !== annotationsLayer)) {
+        page.boxEditor = window.InitPolygonViewer(annotationsLayer, CurrentBoxes.filter(box => box.page_number === doc.pageNumber), options);
         pages[doc.pageNumber] = page;
-        var annotationsLayer = page.annotationEditorLayer && page.annotationEditorLayer.div;
-        if(annotationsLayer) {
-            var viewer = InitPolygonViewer(I18n, annotationsLayer, currentBoxes.filter(box => box.page_number === doc.pageNumber));
-            viewer.onBoxClick = function(box, e){
-                (new SuggestionForm(sectionsPath, box.group)).fetchGroup();
-            }
-            viewer.onBoxBlur = blurBoxContainer
-            page.boxEditor = viewer;
-        }
       }
     });
   });

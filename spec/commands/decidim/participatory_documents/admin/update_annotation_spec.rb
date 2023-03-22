@@ -5,7 +5,7 @@ require "spec_helper"
 module Decidim
   module ParticipatoryDocuments
     module Admin
-      describe UpdateAnnotation do
+      describe UpdateOrCreateAnnotation do
         subject { described_class.new(form, document) }
 
         let!(:annotation) { create(:participatory_documents_annotation) }
@@ -19,8 +19,8 @@ module Decidim
             invalid?: invalid,
             page_number: 1,
             rect: rect,
-            id: annotation.uid,
-            group: "groupid",
+            id: annotation.id,
+            section: annotation.section.id,
             current_user: current_user
           )
         end

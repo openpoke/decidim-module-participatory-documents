@@ -6,10 +6,6 @@
     </h2>
   </div>
   <div class="card-section">
-    <% if document.present? && document.file.attached? %>
-      <%= render partial: "table" %>
-    <% else %>
-      <p class="text-large text-center mt-s"><%= t(".start") %></p>
-    <% end %>
+    <p class="text-large text-center mt-s"><%= t(".start") %></p>
   </div>
 </div>

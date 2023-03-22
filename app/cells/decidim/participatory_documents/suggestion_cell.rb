@@ -11,8 +11,18 @@ module Decidim
         render
       end
 
+      def answered_at
+        return unless has_answer?
+
+        l(model.answered_at, format: :decidim_short)
+      end
+
       def humanize_suggestion_state
         I18n.t(model.state, scope: "decidim.participatory_documents.suggestions.answers")
+      end
+
+      def author_cell
+        cell("decidim/participatory_documents/suggestion_author", model)
       end
 
       protected

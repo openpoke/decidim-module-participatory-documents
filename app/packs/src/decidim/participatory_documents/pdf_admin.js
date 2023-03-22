@@ -1,27 +1,56 @@
 import "src/decidim/participatory_documents/global";
-import PolygonEditor from "src/decidim/participatory_documents/polygon_editor";
-import PdfStateManager from "src/decidim/participatory_documents/pdf_state_manager";
-
 import "src/decidim/participatory_documents/pdf_notifications";
-window.PdfDocStateManager = new PdfStateManager();
+import PolygonEditor from "src/decidim/participatory_documents/pdf/polygon_editor";
+import PdfStateManager from "src/decidim/participatory_documents/pdf/pdf_state_manager";
+import PdfModalManager from "src/decidim/participatory_documents/pdf/pdf_modal_manager";
+
+
+window.InitDocumentManagers = function(options) {
+  window.PdfDocStateManager = new PdfStateManager(options);
+  // show message when saving
+  window.PdfDocStateManager.onSave = () => {
+    window.showInfo(options.i18n.allSaved);
+  };
+  window.PdfDocStateManager.onError = (errors) => {
+    window.showAlert(options.i18n.errorsSaving);
+    console.error("State Manager Errors:", errors);
+  };
+
+  window.PdfModalManager = new PdfModalManager(options);
+
+  // remove box from the global state manager if edited though the modal
+  window.PdfModalManager.onSave = (box) => {
+    window.PdfDocStateManager.remove(box);
+    window.showInfo(options.i18n.created);
+  };
+  window.PdfModalManager.onDestroy = (box) => {
+    window.PdfDocStateManager.remove(box);
+    window.showInfo(options.i18n.removed);
+  };
+  window.PdfModalManager.onError = (box, error) => {
+    window.showAlert(options.i18n.operationFailed);
+    console.error("Modal Manager Error:", error);
+  };
+};
 
 // Call this on an annotation layer to initialize the polygon editor (admin side)
-window.InitPolygonEditor = function(i18n, layer, boxes) {
-  let editor = new PolygonEditor(layer, boxes, { i18n: i18n, stateManager: window.PdfDocStateManager});
-  editor.onBoxClick = (box, e) => {
-    showInfo("click on box", box, e);
-    loadBoxModal(box);
-  };
-  editor.onBoxChange = (box) => {
-    // e.stopPropagation();
-    box.setModified();
-  };
-  editor.onBoxLeave = (box) => {
-    // e.stopPropagation();
-    if (box.hasChanged()) {
-      box.setModified()
+window.InitPolygonEditor = function(layer, boxes, options) {    
+  let editor = new PolygonEditor(layer, boxes, { i18n: options.i18n });
+  // Open the global box modal settings when a box is clicked
+  editor.onBoxClick = (box) => {
+    if (box.isPersisted()) {
+      window.PdfModalManager.loadBoxModal(box);
+    } else {
+      window.showAlert(options.i18n.needsSaving);
     }
-  }
+  };
+  // update the global state manager when a box is edited or destroyed using the polygon editor (mouse interaction)
+  editor.onBoxChange = (box) => {
+    window.PdfDocStateManager.add(box);
+  };
+  editor.onBoxDestroy = (box) => {
+    window.PdfDocStateManager.remove(box);
+  };
 
   return editor;
 };

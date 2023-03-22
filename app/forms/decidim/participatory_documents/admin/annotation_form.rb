@@ -6,10 +6,10 @@ module Decidim
       class AnnotationForm < Decidim::Form
         mimic :annotation
 
-        attribute :id
+        attribute :id, Integer
         attribute :rect
-        attribute :page_number
-        attribute :group
+        attribute :page_number, Integer
+        attribute :section, Integer
       end
     end
   end

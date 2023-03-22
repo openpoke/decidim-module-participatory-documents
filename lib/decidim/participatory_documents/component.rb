@@ -100,8 +100,7 @@ Decidim.register_component(:participatory_documents) do |component|
       {
         document: document,
         title: Decidim::Faker::Localized.sentence(word_count: 2),
-        state: :draft,
-        uid: "group-1"
+        state: :draft
       },
       visibility: "admin-only"
     )
@@ -111,8 +110,7 @@ Decidim.register_component(:participatory_documents) do |component|
       {
         document: document,
         title: Decidim::Faker::Localized.sentence(word_count: 2),
-        state: :draft,
-        uid: "group-2"
+        state: :draft
       },
       visibility: "admin-only"
     )
@@ -122,15 +120,13 @@ Decidim.register_component(:participatory_documents) do |component|
       {
         document: document,
         title: Decidim::Faker::Localized.sentence(word_count: 2),
-        state: :draft,
-        uid: "group-3"
+        state: :draft
       },
       visibility: "admin-only"
     )
 
     annotations = [
       {
-        uid: "box-1",
         page_number: 1,
         section: group1,
         rect: {
@@ -141,7 +137,6 @@ Decidim.register_component(:participatory_documents) do |component|
         }
       },
       {
-        uid: "box-2",
         page_number: 1,
         section: group2,
         rect: {
@@ -152,7 +147,6 @@ Decidim.register_component(:participatory_documents) do |component|
         }
       },
       {
-        uid: "box-3",
         page_number: 1,
         section: group2,
         rect: {
@@ -163,7 +157,6 @@ Decidim.register_component(:participatory_documents) do |component|
         }
       },
       {
-        uid: "box-4",
         page_number: 1,
         section: group3,
         rect: {
@@ -174,7 +167,6 @@ Decidim.register_component(:participatory_documents) do |component|
         }
       },
       {
-        uid: "box-5",
         page_number: 2,
         section: group3,
         rect: {
