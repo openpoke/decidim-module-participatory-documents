@@ -192,7 +192,8 @@ en:
         send_suggestion: Send suggestion
         suggestion_answer: Official answer
       documents:
-        missing: There is no document uploaded
+        component_not_published: The component is not published yet
+        missing: There is no document uploaded yet
       models:
         document:
           fields:
