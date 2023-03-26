@@ -21,7 +21,7 @@
                   </div>
                 </div>
                 <div class="comment__content">
-                  <%= simple_format note.body %>
+                  <%= simple_format Decidim::ContentRenderers::LinkRenderer.new(note.body).render.html_safe %>
                 </div>
               </div>
             </div>
