@@ -2,9 +2,9 @@
 
 require "spec_helper"
 
-describe Decidim::ParticipatoryDocuments::RejectedSuggestionEvent do
+describe Decidim::ParticipatoryDocuments::SuggestionAnswerEvent do
   shared_examples "sends the rejected suggestion notification" do
-    let(:event_name) { "decidim.events.participatory_documents.suggestion_rejected" }
+    let(:event_name) { "decidim.events.participatory_documents.suggestion_answered" }
 
     let(:resource_path) { main_component_path(document.component) }
     let(:resource_title) { translated(document.title["en"]) }
@@ -18,14 +18,14 @@ describe Decidim::ParticipatoryDocuments::RejectedSuggestionEvent do
 
     describe "email_subject" do
       it "is generated correctly" do
-        expect(subject.email_subject).to eq("A suggestion you have submitted has been rejected")
+        expect(subject.email_subject).to eq("A suggestion you have submitted has been answered by an administrator")
       end
     end
 
     describe "email_intro" do
       it "is generated correctly" do
         expect(subject.email_intro)
-          .to eq("A suggestion you submitted on \"<a href=\"#{resource_path}\">#{resource_title}</a>\" document has been rejected. You can read the answer in this page:")
+          .to eq("A suggestion you submitted on \"<a href=\"#{resource_path}\">#{resource_title}</a>\" document has been answered by an administrator. You can read the answer in this page:")
       end
     end
 
@@ -39,7 +39,7 @@ describe Decidim::ParticipatoryDocuments::RejectedSuggestionEvent do
     describe "notification_title" do
       it "is generated correctly" do
         expect(subject.notification_title)
-          .to include("A suggestion you submitted on \"<a href=\"#{resource_path}\">#{resource_title}</a>\" document has been rejected")
+          .to include("A suggestion you submitted on \"<a href=\"#{resource_path}\">#{resource_title}</a>\" document has been answered by an administrator")
       end
     end
 

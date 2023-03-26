@@ -2,7 +2,7 @@
 
 module Decidim
   module ParticipatoryDocuments
-    class BaseSuggestionEvent < Decidim::Events::SimpleEvent
+    class SuggestionAnswerEvent < Decidim::Events::SimpleEvent
       include Decidim::Events::AuthorEvent
 
       def resource_path
