@@ -64,7 +64,7 @@ describe Decidim::ParticipatoryDocuments::Admin::Permissions do
       let(:another_user) { create :user, :admin, :confirmed, organization: organization }
 
       context "when author edits his own note" do
-        let!(:suggestion_note) { create(:participatory_documents_suggestion_note, suggestion: suggestion, author: user)  }
+        let!(:suggestion_note) { create(:participatory_documents_suggestion_note, suggestion: suggestion, author: user) }
 
         it { expect(subject.allowed?).to be true }
       end
@@ -72,7 +72,7 @@ describe Decidim::ParticipatoryDocuments::Admin::Permissions do
       context "when the author of the note is a different user" do
         let!(:suggestion_note) { create(:participatory_documents_suggestion_note, suggestion: suggestion, author: another_user) }
 
-        it { expect(subject.allowed?).to be false  }
+        it { expect(subject.allowed?).to be false }
       end
     end
   end
