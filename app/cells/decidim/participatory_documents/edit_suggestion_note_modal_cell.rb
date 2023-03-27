@@ -5,6 +5,7 @@ module Decidim
     class EditSuggestionNoteModalCell < Decidim::ViewModel
       include ActionView::Helpers::FormOptionsHelper
       include Decidim::ParticipatoryDocuments::AdminEngine.routes.url_helpers
+
       def show
         @suggestion = options[:suggestion]
         render if note

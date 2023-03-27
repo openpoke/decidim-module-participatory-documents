@@ -11,12 +11,14 @@ describe Decidim::ParticipatoryDocuments::Admin::Permissions do
   let(:user) { create :user, :admin, :confirmed, organization: component.organization }
   let(:permission_action) { Decidim::PermissionAction.new(scope: :admin, action: action_name, subject: action_subject) }
   let(:suggestion) { nil }
+  let(:suggestion_note) { create(:participatory_documents_suggestion_note) }
   let(:context) do
     {
       current_component: component,
       current_settings: double(suggestion_answering_enabled: true),
       component_settings: double(suggestion_answering_enabled: true),
-      suggestion: suggestion
+      suggestion: suggestion,
+      suggestion_note: suggestion_note
     }
   end
   let(:action_name) { :create }
@@ -53,6 +55,29 @@ describe Decidim::ParticipatoryDocuments::Admin::Permissions do
       it { expect(subject.allowed?).to be true }
     end
   end
+
+  shared_examples "edit suggestion note" do
+    describe "edit suggestion note" do
+      let(:action_subject) { :suggestion_note }
+      let(:action_name) { :edit_note }
+      let(:suggestion) { create(:participatory_documents_suggestion, suggestable: document) }
+      let(:another_user) { create :user, :admin, :confirmed, organization: organization }
+
+      context "when author edits his own note" do
+        let!(:suggestion_note) { create(:participatory_documents_suggestion_note, suggestion: suggestion, author: user)  }
+
+        it { expect(subject.allowed?).to be true }
+      end
+
+      context "when the author of the note is a different user" do
+        let!(:suggestion_note) { create(:participatory_documents_suggestion_note, suggestion: suggestion, author: another_user) }
+
+        it { expect(subject.allowed?).to be false  }
+      end
+    end
+  end
+
+  it_behaves_like "edit suggestion note"
 
   it_behaves_like "Allows the permission", scope: :suggestion_note, allowed: true
   it_behaves_like "Allows the permission", scope: :suggestion_answer, allowed: true

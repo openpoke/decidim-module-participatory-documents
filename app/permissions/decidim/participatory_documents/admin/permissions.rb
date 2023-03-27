@@ -25,7 +25,7 @@ module Decidim
 
           edit_suggestion_note?
 
-          allow! if permission_action.subject == :suggestion_note
+          allow! if permission_action.subject == :suggestion_note && permission_action.action == :create
           allow! if permission_action.subject == :suggestion_answer
           allow! if permission_action.subject == :document_section
           allow! if permission_action.subject == :document_annotations
@@ -92,7 +92,7 @@ module Decidim
         end
 
         def edit_suggestion_note?
-          return unless permission_action.action == :edit && permission_action.subject == :suggestion_note
+          return unless permission_action.action == :edit_note && permission_action.subject == :suggestion_note
 
           toggle_allow(suggestion_note_author?)
         end
