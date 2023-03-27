@@ -1,4 +1,4 @@
-<% if document.present? && document.file.attached? && document.component.published? %>
+<% if document.present? && document.file.attached? %>
   <div class="row">
     <%= content_tag(:h3, translated_attribute(document.title), class: "title") if translated_attribute(document.title).present? %>
     <%= content_tag(:p, translated_attribute(document.description).html_safe, class: "description") if translated_attribute(document.description).present? %>
@@ -10,10 +10,6 @@
     </iframe>
   </div>
   <%= stylesheet_pack_tag "decidim_participatory_documents" %>
-<% elsif document.present? && !document.component.published? %>
-  <div class="row">
-    <p><%= t("decidim.participatory_documents.documents.component_not_published") %></p>
-  </div>
 <% else %>
   <div class="row">
     <p><%= t("decidim.participatory_documents.documents.missing") %></p>

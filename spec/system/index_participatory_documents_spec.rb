@@ -28,11 +28,12 @@ describe "Index participatory_documents", type: :system do
     end
   end
 
-  context "when component not published" do
+  context "when component not published and document is uploaded" do
     let!(:component) { component_unpublished }
 
     it "shows a message" do
-      expect(page).to have_content("The component is not published yet")
+      expect(page).not_to have_content("There is no document uploaded yet")
+      expect(page).to have_content(document.title["en"])
     end
   end
 
