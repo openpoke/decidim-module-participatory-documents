@@ -22,6 +22,7 @@ module Decidim
           body: suggestion_body(suggestion),
           author: suggestion.try(:normalized_author).try(:name),
           state: humanize_suggestion_state(suggestion.state),
+          answer: answer_text(suggestion),
           section: section(suggestion),
           valuators: suggestion.valuation_assignments.count,
           submitted_on: submitted_on(suggestion)
@@ -46,6 +47,10 @@ module Decidim
 
       def suggestion_body(suggestion)
         truncate(translated_attribute(suggestion.body), length: 50)
+      end
+
+      def answer_text(suggestion)
+        truncate(translated_attribute(suggestion.answer), length: 50)
       end
     end
   end
