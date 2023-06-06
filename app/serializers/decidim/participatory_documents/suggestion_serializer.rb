@@ -45,18 +45,22 @@ module Decidim
         I18n.l(suggestion.created_at, format: :decidim_short)
       end
 
-      def suggestion_body(suggestion)
-        truncate(translated_attribute(suggestion.body), length: 50)
-      end
-
-      def answer_text(suggestion)
+      def prepare_text(suggestion, attribute)
         text_length = Decidim::ParticipatoryDocuments.max_export_text_length
 
         if text_length.positive?
-          truncate(translated_attribute(suggestion.answer), length: text_length)
+          truncate(translated_attribute(suggestion.public_send(attribute)), length: text_length)
         else
-          translated_attribute(suggestion.answer)
+          translated_attribute(suggestion.public_send(attribute))
         end
+      end
+
+      def suggestion_body(suggestion)
+        prepare_text(suggestion, :body)
+      end
+
+      def answer_text(suggestion)
+        prepare_text(suggestion, :answer)
       end
     end
   end

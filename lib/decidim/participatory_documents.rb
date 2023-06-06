@@ -5,7 +5,7 @@ module Decidim
   module ParticipatoryDocuments
     include ActiveSupport::Configurable
 
-    # Public: The maximum length of the answer_text fields to export.
+    # Public: The maximum length of any text field (body, answers, etc) to export.
     # Defaults to 50. Set to 0 to export the full text.
     config_accessor :max_export_text_length do
       50
