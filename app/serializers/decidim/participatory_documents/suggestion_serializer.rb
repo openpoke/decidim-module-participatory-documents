@@ -50,7 +50,8 @@ module Decidim
       end
 
       def answer_text(suggestion)
-        truncate(translated_attribute(suggestion.answer), length: 50)
+        text_length = Decidim::ParticipatoryDocuments.max_export_text_length
+        text_length > 0 ? truncate(translated_attribute(suggestion.answer), length: text_length) : translated_attribute(suggestion.answer)
       end
     end
   end
