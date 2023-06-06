@@ -59,7 +59,7 @@ describe "Admin manages participatory documents", type: :system do
         expect(page).to have_content("Document has been successfully created")
         # redirect to edit page
         expect(page).to have_content("Back")
-         expect(page).to have_css(".pdf-viewer-container")
+        expect(page).to have_css(".pdf-viewer-container")
       else
         expect(page).to have_content("Document has been successfully updated")
       end
