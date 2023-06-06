@@ -9,14 +9,12 @@ module Decidim
     include ActionView::Helpers::TextHelper
 
     let(:subject) { described_class.new(suggestion) }
-    let(:suggestion) { create(:participatory_documents_suggestion, answer: { en: answer }) }
+    let(:suggestion) { create(:participatory_documents_suggestion, :with_answer) }
     let(:serialized) { subject.serialize }
-    let(:answer) { "This is a very long answer" }
 
     describe "serialize" do
       it "returns a hash with the serialized data for the suggestion" do
         expect(serialized).to include(id: suggestion.id)
-        expect(serialized).to include(body: truncate(translated_attribute(suggestion.body), length: 50))
         expect(serialized).to include(author: suggestion.try(:normalized_author).try(:name))
         expect(serialized).to include(state: humanize_suggestion_state(suggestion.state))
         expect(serialized).to include(section: translated_attribute(suggestion.suggestable.title))
@@ -31,6 +29,7 @@ module Decidim
 
         it "returns an answer that is 10 characters long " do
           expect(serialized).to include(answer: truncate(translated_attribute(suggestion.answer), length: 10))
+          expect(serialized).to include(body: truncate(translated_attribute(suggestion.body), length: 10))
         end
       end
 
@@ -41,6 +40,7 @@ module Decidim
 
         it "returns the full answer" do
           expect(serialized).to include(answer: translated_attribute(suggestion.answer))
+          expect(serialized).to include(body: translated_attribute(suggestion.body))
         end
       end
     end
