@@ -8,7 +8,7 @@ window.toggleFullscreen = function() {
   }
 }
 
-document.addEventListener("fullscreenchange", (event) => {
+document.addEventListener("fullscreenchange", () => {
   let fsElement = document.fullscreenElement;
 
   const button = document.getElementById("fullscreenButton");
