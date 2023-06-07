@@ -1,4 +1,3 @@
-
 window.toggleFullscreen = function() {
   let viewer = document.getElementById("outerContainer");
   
@@ -8,3 +7,16 @@ window.toggleFullscreen = function() {
     viewer.requestFullscreen();
   }
 }
+
+document.addEventListener("fullscreenchange", (event) => {
+  let fsElement = document.fullscreenElement;
+
+  const button = document.getElementById("fullscreenButton");
+  if (fsElement) {
+    button.classList.add("exit");
+    button.textContent = "Exit Fullscreen";
+  } else {
+    button.classList.remove("exit");
+    button.textContent = "Fullscreen";
+  }
+});
