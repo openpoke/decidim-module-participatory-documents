@@ -44,4 +44,26 @@ describe "Index participatory_documents", type: :system do
       expect(page).to have_content("Test description")
     end
   end
+
+  # TODO: Fix this test
+  # context "when user goes to fullscreen mode" do
+  #   it "changes button text and class" do
+  #     within_frame("pdf-iframe") do
+  #       button = find("#fullscreenButton")
+  #
+  #       expect(button.text).to eq("Fullscreen")
+  #       expect(button[:class]).not_to include("exit")
+  #
+  #       button.click
+  #
+  #       expect(button).to have_text("Exit Fullscreen")
+  #       expect(button[:class]).to include("exit")
+  #
+  #       button.click
+  #
+  #       expect(button.text).to eq("Fullscreen")
+  #       expect(button[:class]).not_to include("exit")
+  #     end
+  #   end
+  # end
 end
