@@ -1,8 +1,27 @@
-<%= decidim_form_for(@form, url: document_suggestions_path(document), html: { class: "form" }) do |form| %>
-  <div class="column">
-    <%= form.text_area :body %>
-  </div>
-  <div class="button--double form-general-submit">
-    <button class="button" id="editor-modal-save"><%= t "send_suggestion", scope: "decidim.participatory_documents.document" %></button>
-  </div>
-<% end %>
+<div style="margin-bottom: 15px">
+  <b><%= t("suggestion_form.title", scope: "decidim.participatory_documents.ui_messages") %></b>
+</div>
+<div class="collection-input">
+  <input type="radio" id="messageOption" name="inputOption" value="message">
+  <label for="messageOption">Add a message</label><br>
+  <input type="radio" id="fileOption" name="inputOption" value="file">
+  <label for="fileOption">Upload a file</label>
+</div>
+
+<div id="formContainer">
+  <%= decidim_form_for(@form, url: document_suggestions_path(document), html: { class: "form", multipart: true }) do |form| %>
+    <div id="messageForm" class="form-section" style="display: none" data-form-state="message">
+      <div class="column">
+        <%= form.text_area :body %>
+      </div>
+    </div>
+    <div id="fileForm" class="form-section" style="display: none" data-form-state="file">
+      <div class="column">
+        <%= form.upload :file %>
+      </div>
+    </div>
+    <div class="button--double form-general-submit">
+      <button class="button" id="editor-modal-save"><%= t "send_suggestion", scope: "decidim.participatory_documents.document" %></button>
+    </div>
+  <% end %>
+</div>

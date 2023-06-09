@@ -3,7 +3,15 @@
     <%= check_box_tag "suggestions_ids_s[]", suggestion.id, false, class: "js-check-all-suggestion js-suggestion-list-check  js-suggestion-id-#{suggestion.id}" %><br>
   </td>
   <td><%= suggestion.id %></td>
-  <td><%= truncate(translated_attribute(suggestion.body), length: 50) %></td>
+  <td>
+    <% if suggestion.file.attached? %>
+      <%= link_to truncate(File.basename(suggestion.file.blob.filename.to_s, ".*"), length: 10) + File.extname(suggestion.file.blob.filename.to_s),
+                  Rails.application.routes.url_helpers.rails_blob_url(suggestion.file.blob, only_path: true),
+                  target: "_blank" %>
+    <% else %>
+      <%= truncate(translated_attribute(suggestion.body), length: 50) %>
+    <% end %>
+  </td>
   <td><%= suggestion.try(:normalized_author).try(:name) %></td>
   <td><%= suggestion.suggestable.is_a?(Decidim::ParticipatoryDocuments::Document) ? t(".global") : translated_attribute(suggestion.suggestable.title) %></td>
   <td>

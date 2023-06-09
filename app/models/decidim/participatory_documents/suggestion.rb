@@ -6,12 +6,16 @@ module Decidim
       include Decidim::Authorable
       include Decidim::TranslatableResource
       include Decidim::TranslatableAttributes
-
+      include Decidim::HasUploadValidations
       include Decidim::Traceable
       include Decidim::Loggable
+      include Decidim::AttachmentMethods
 
       translatable_fields :body, :answer
-      validates :body, presence: true
+
+      has_one_attached :file
+
+      delegate :attached?, to: :file
 
       delegate :organization, to: :suggestable, allow_nil: true
       belongs_to :suggestable, polymorphic: true

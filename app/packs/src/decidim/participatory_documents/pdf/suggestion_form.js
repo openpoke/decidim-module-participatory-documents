@@ -16,6 +16,39 @@ export default class SuggestionForm {
     return document.getElementsByName("csrf-token")[0].content;
   }
 
+  setupFormToggle() {
+    const options = document.getElementsByName("inputOption");
+    const formContainer = document.getElementById("formContainer");
+    const messageForm = document.getElementById("messageForm");
+    const fileForm = document.getElementById("fileForm");
+
+    options.forEach((option) => {
+      option.addEventListener("change", function() {
+        if (this.value === "message") {
+          messageForm.style.display = "block";
+          fileForm.style.display = "none";
+          scrollToForm(messageForm);
+        } else if (this.value === "file") {
+          messageForm.style.display = "none";
+          fileForm.style.display = "block";
+          scrollToForm(fileForm);
+        }
+      });
+    });
+
+    // Reset radio button selection on form open
+    formContainer.addEventListener("click", function() {
+      options.forEach((option) => {
+        option.checked = false;
+      });
+    });
+
+    function scrollToForm(form) {
+      form.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }
+
+
   // Sanitize internal path
   getPath() {
     return this.path.split("?")[0];
@@ -35,11 +68,17 @@ export default class SuggestionForm {
     
   }
 
+  scrollToEnd() {
+    this.div.scrollTop = this.div.scrollHeight;
+  }
+
   populateArea(data) {
     this.div.innerHTML = data;
     this.div.classList.add("active");
     this.addCloseHandler();
     this.addFormHandler();
+    this.setupFormToggle();
+    this.scrollToEnd();
   }
 
   addCloseHandler() {
@@ -57,32 +96,33 @@ export default class SuggestionForm {
     if (form) {
       form.addEventListener("submit", (event) => {
         event.preventDefault();
+
+        let formData = new FormData(event.target);
+        let fileInput = document.getElementById("suggestion_file");
+
+        if (fileInput.files.length > 0) {
+          formData.set("suggestion[file]", fileInput.files[0]);
+        }
+
         fetch(event.target.action, {
           method: event.target.method,
-          body: new URLSearchParams(new FormData(event.target)),
+          body: formData,
           headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-            "Accept": "text/html",
             "X-CSRF-Token": this.getCSRFToken()
           },
           credentials: "include"
         }).then((response) => {
-          // if (response.ok === false && response.status === 400) { // validation
-          //   return response.text();
-          // }
           return response.text();
         }).then((data) => {
           console.log("data", data);
           this.div.innerHTML = data;
           this.addFormHandler();
           this.addCloseHandler();
+          this.setupFormToggle();
         }).catch((error) => {
           console.error(error);
-          // if(this.form && this.form[0]) {
-          //   this.form.innerHTML = error.text();
-          // }
         });
-      }, {once: true});
+      }, { once: true });
     }
   }
 
