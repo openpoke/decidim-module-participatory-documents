@@ -89,12 +89,15 @@ export default class SuggestionForm {
   }
 
   addCloseHandler() {
-    let close = document.getElementById("close-suggestions")
-    if (close) {
+    let close = document.getElementById("close-suggestions");
+    let modal = document.getElementById("participation-modal");
+
+    if (close && modal) {
       close.addEventListener("click", () => {
         console.log("close");
-        this.div.classList.remove("active");
-      }, {once: true});
+        modal.classList.remove("active");
+        close.style.display = "none";
+      }, { once: true });
     }
   }
 
