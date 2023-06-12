@@ -22,13 +22,23 @@ export default class SuggestionForm {
     const messageForm = document.getElementById("messageForm");
     const fileForm = document.getElementById("fileForm");
 
-    options.forEach((option) => {
-      option.addEventListener("change", function() {
-        if (this.value === "message") {
+    /**
+     * Scroll to the specified form
+     * @param {HTMLElement} form - The form to scroll to
+     * @returns {void}
+     */
+    const scrollToForm = (form) => {
+      form.scrollIntoView({ behavior: "smooth", block: "start" });
+    };
+
+    Array.from(options).forEach(function(option) {
+      option.addEventListener("change", function(event) {
+        const value = event.target.value;
+        if (value === "message") {
           messageForm.style.display = "block";
           fileForm.style.display = "none";
           scrollToForm(messageForm);
-        } else if (this.value === "file") {
+        } else if (value === "file") {
           messageForm.style.display = "none";
           fileForm.style.display = "block";
           scrollToForm(fileForm);
@@ -37,17 +47,14 @@ export default class SuggestionForm {
     });
 
     // Reset radio button selection on form open
-    formContainer.addEventListener("click", function() {
-      options.forEach((option) => {
-        option.checked = false;
-      });
+    formContainer.addEventListener("click", (event) => {
+      if (event.target === formContainer) {
+        Array.from(options).forEach((option) => {
+          option.checked = false;
+        });
+      }
     });
-
-    function scrollToForm(form) {
-      form.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-  }
-
+  };
 
   // Sanitize internal path
   getPath() {
@@ -63,9 +70,9 @@ export default class SuggestionForm {
   getGroupUrl() {
     if (this.group === null) {
       return `${this.getPath()}/suggestions${this.getQueryString()}`;
-    } 
+    }
     return `${this.getPath()}/sections/${this.group}/suggestions${this.getQueryString()}`;
-    
+
   }
 
   scrollToEnd() {
