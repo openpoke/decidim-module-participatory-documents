@@ -30,9 +30,9 @@ module Decidim
           @form = form(Decidim::ParticipatoryDocuments::Admin::DocumentForm).from_params(params)
 
           Admin::CreateDocument.call(@form) do
-            on(:ok) do
+            on(:ok) do |document|
               flash[:notice] = I18n.t("documents.create.success", scope: "decidim.participatory_documents.admin")
-              redirect_to documents_path
+              redirect_to edit_pdf_documents_path(id: document.id)
             end
 
             on(:invalid) do
