@@ -176,6 +176,7 @@ en:
             authors: Authors
             body: Body
             created_at: Creation date
+            file: File
             update: Update
           suggestion:
             global: Global

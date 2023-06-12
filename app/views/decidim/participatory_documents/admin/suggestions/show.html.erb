@@ -32,8 +32,19 @@
     </div>
 
     <div class="row column">
-      <strong><%= t ".body" %>:</strong>
-      <p><%= translated_attribute(suggestion.body) %></p>
+      <% if suggestion.file.attached? %>
+        <strong><%= t ".file" %>:</strong>
+        <p>
+          <%= link_to Rails.application.routes.url_helpers.rails_blob_url(suggestion.file.blob, only_path: true), target: "_blank", class: "flex--fsc" do %>
+            <%= icon "file", class: "mr-xs" %>
+            <%= truncate(File.basename(suggestion.file.blob.filename.to_s, ".*"), length: 10) + File.extname(suggestion.file.blob.filename.to_s) %>
+            <%= icon "data-transfer-download", class: "ml-s" %>
+          <% end %>
+        </p>
+      <% else %>
+        <strong><%= t ".body" %>:</strong>
+        <p><%= translated_attribute(suggestion.body) %></p>
+      <% end %>
     </div>
 
     <div class="row column">
