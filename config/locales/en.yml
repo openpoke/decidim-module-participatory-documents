@@ -162,6 +162,7 @@ en:
             author: Author
             created_at: Submitted on
             id: Id
+            no_text: "(no text)"
             published_answer: Published Answer
             section: Section
             selected: selected
@@ -199,6 +200,7 @@ en:
         save_changes: Save changes!
         send_suggestion: Send suggestion
         suggestion_answer: Official answer
+        upload_file: Attach a document
       documents:
         missing: There is no document uploaded
       models:

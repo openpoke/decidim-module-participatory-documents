@@ -1,13 +1,7 @@
 <div class="comment">
   <div class="comment__content">
     <%= author_cell %>
-    <% if model.file.attached? %>
-      <%= link_to truncate(File.basename(model.file.blob.filename.to_s, ".*"), length: 10) + File.extname(model.file.blob.filename.to_s),
-                  Rails.application.routes.url_helpers.rails_blob_url(model.file.blob, only_path: true),
-                  target: "_blank" %>
-    <% else %>
-      <%= translated_attribute(model.body) %>
-    <% end %>
+    <%= suggestion_content(model) %>
   </div>
   <%= render :admin_answer if has_answer? %>
 </div>

@@ -16,46 +16,6 @@ export default class SuggestionForm {
     return document.getElementsByName("csrf-token")[0].content;
   }
 
-  setupFormToggle() {
-    const options = document.getElementsByName("inputOption");
-    const formContainer = document.getElementById("formContainer");
-    const messageForm = document.getElementById("messageForm");
-    const fileForm = document.getElementById("fileForm");
-
-    /**
-     * Scroll to the specified form
-     * @param {HTMLElement} form - The form to scroll to
-     * @returns {void}
-     */
-    const scrollToForm = (form) => {
-      form.scrollIntoView({ behavior: "smooth", block: "start" });
-    };
-
-    Array.from(options).forEach(function(option) {
-      option.addEventListener("change", function(event) {
-        const value = event.target.value;
-        if (value === "message") {
-          messageForm.style.display = "block";
-          fileForm.style.display = "none";
-          scrollToForm(messageForm);
-        } else if (value === "file") {
-          messageForm.style.display = "none";
-          fileForm.style.display = "block";
-          scrollToForm(fileForm);
-        }
-      });
-    });
-
-    // Reset radio button selection on form open
-    formContainer.addEventListener("click", (event) => {
-      if (event.target === formContainer) {
-        Array.from(options).forEach((option) => {
-          option.checked = false;
-        });
-      }
-    });
-  };
-
   // Sanitize internal path
   getPath() {
     return this.path.split("?")[0];
@@ -84,7 +44,6 @@ export default class SuggestionForm {
     this.div.classList.add("active");
     this.addCloseHandler();
     this.addFormHandler();
-    this.setupFormToggle();
     this.scrollToEnd();
   }
 
@@ -104,15 +63,21 @@ export default class SuggestionForm {
   addFormHandler() {
     let form = document.getElementById("new_suggestion_");
     if (form) {
+      let fileInput = document.getElementById("file-upload-field");
+      let fileNameContainer = document.getElementById("fileNameContainer");
+
+      fileInput.addEventListener("change", () => {
+        if (fileInput.files.length > 0) {
+          fileNameContainer.textContent = fileInput.files[0].name;
+        } else {
+          fileNameContainer.textContent = "";
+        }
+      });
+
       form.addEventListener("submit", (event) => {
         event.preventDefault();
 
         let formData = new FormData(event.target);
-        let fileInput = document.getElementById("suggestion_file");
-
-        if (fileInput.files.length > 0) {
-          formData.set("suggestion[file]", fileInput.files[0]);
-        }
 
         fetch(event.target.action, {
           method: event.target.method,
@@ -128,11 +93,10 @@ export default class SuggestionForm {
           this.div.innerHTML = data;
           this.addFormHandler();
           this.addCloseHandler();
-          this.setupFormToggle();
         }).catch((error) => {
           console.error(error);
         });
-      }, { once: true });
+      });
     }
   }
 

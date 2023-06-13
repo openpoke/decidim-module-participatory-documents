@@ -2,7 +2,8 @@
 @import "stylesheets/decidim/utils/fontface";
 @import "stylesheets/decidim/utils/settings";
 @import "foundation-sites/scss/foundation";
-
+@import "stylesheets/decidim/modules/icons";
+@import "stylesheets/decidim/utils/helpers";
 @include foundation-everything();
 
 @import "stylesheets/decidim/modules/comments";

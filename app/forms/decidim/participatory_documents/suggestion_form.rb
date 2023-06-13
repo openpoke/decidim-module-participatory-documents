@@ -11,7 +11,6 @@ module Decidim
 
       attribute :body, String
       attribute :file
-      attribute :delete_file, Boolean
 
       validate :validate_single_field_presence
       validate :validate_body_length
@@ -19,11 +18,7 @@ module Decidim
       private
 
       def validate_single_field_presence
-        if body.blank? && file.blank?
-          errors.add(:base, I18n.t("activemodel.errors.models.suggestion.attributes.not_blank"))
-        elsif body.present? && file.present?
-          errors.add(:base, I18n.t("activemodel.errors.models.suggestion.attributes.not_both"))
-        end
+        errors.add(:base, I18n.t("activemodel.errors.models.suggestion.attributes.not_blank")) if body.blank? && file.blank?
       end
 
       def validate_body_length

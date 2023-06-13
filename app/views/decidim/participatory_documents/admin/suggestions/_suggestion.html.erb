@@ -4,15 +4,7 @@
   </td>
   <td><%= suggestion.id %></td>
   <td>
-    <% if suggestion.file.attached? %>
-      <%= link_to Rails.application.routes.url_helpers.rails_blob_url(suggestion.file.blob, only_path: true), target: "_blank" do %>
-        <%= icon "file", class: "ml-s" %>
-        <%= truncate(File.basename(suggestion.file.blob.filename.to_s, ".*"), length: 10) + File.extname(suggestion.file.blob.filename.to_s) %>
-        <%= icon "data-transfer-download", class: "ml-s" %>
-      <% end %>
-    <% else %>
-      <%= truncate(translated_attribute(suggestion.body), length: 50) %>
-    <% end %>
+    <%= suggestion_content(suggestion) %>
   </td>
   <td><%= suggestion.try(:normalized_author).try(:name) %></td>
   <td><%= suggestion.suggestable.is_a?(Decidim::ParticipatoryDocuments::Document) ? t(".global") : translated_attribute(suggestion.suggestable.title) %></td>

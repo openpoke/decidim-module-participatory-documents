@@ -21,6 +21,26 @@ module Decidim
           options_for_select = find_valuators_for_select(participatory_space)
           select(:valuator_role, :id, options_for_select, prompt: prompt)
         end
+
+        def suggestion_content(suggestion)
+          body = suggestion.body[I18n.locale.to_s]
+
+          if body.present? || suggestion.file.attached?
+            content = body.presence || t("decidim.participatory_documents.admin.suggestions.index.no_text")
+            file_content = file_link(suggestion) if suggestion.file.attached?
+            content_tag(:span, class: body.blank? ? "muted" : nil) do
+              safe_join([content, file_content].compact)
+            end
+          end
+        end
+
+        private
+
+        def file_link(suggestion)
+          link_to Rails.application.routes.url_helpers.rails_blob_url(suggestion.file.blob, only_path: true), target: "_blank", rel: "noopener" do
+            safe_join([icon("data-transfer-download", class: "ml-s")])
+          end
+        end
       end
     end
   end
