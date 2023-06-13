@@ -38,7 +38,7 @@ module Decidim
 
         def file_link(suggestion)
           link_to Rails.application.routes.url_helpers.rails_blob_url(suggestion.file.blob, only_path: true), target: "_blank", rel: "noopener" do
-            safe_join([icon("data-transfer-download", class: "ml-s")])
+            safe_join([icon("data-transfer-download", class: "ml-s", title: t("decidim.participatory_documents.admin.suggestions.index.actions.download"))])
           end
         end
       end

@@ -16,8 +16,6 @@ en:
         suggestion:
           attributes:
             not_blank: 'Validation failed: Please provide a message or upload a file.'
-            not_both: 'Validation failed: Please provide either a body or a file,
-              not both.'
             too_long: 'Validation failed: is too long (over %{max_length} characters)'
             too_short: 'Validation failed: is too short (under %{min_length} characters)'
   decidim:
@@ -154,6 +152,7 @@ en:
               assign_to_valuator: Assign to valuator
               assign_to_valuator_button: Assign
               cancel: Cancel
+              download: Download
               publish: Publish
               publish_answers: Publish answers
               title: Actions
