@@ -134,6 +134,10 @@
     background-color: var(--button-hover-color);
     color: var(--toggled-btn-color);
   }
+
+  &.exit {
+    background-image: url(../images/fullscreen_exit.svg);
+  }
 }
 
 #documentProperties.secondaryToolbarButton {

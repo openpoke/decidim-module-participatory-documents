@@ -216,6 +216,9 @@ en:
           published: Published
           rejected: Rejected
           withdrawn: Withdrawn
+        modal:
+          exit_full_screen: Exit fullscreen
+          full_screen: Fullscreen
       ui_messages:
         allSaved: All the areas have been saved successfully
         confirmExit: Are you sure you want to exit?
