@@ -66,6 +66,8 @@ en:
         name: Participatory Document
         settings:
           global:
+            max_suggestion_length: Max length of the suggestion text
+            min_suggestion_length: Min length of the suggestion text
             suggestion_answering_enabled: Enable suggestion answering from admin
     events:
       participatory_documents:

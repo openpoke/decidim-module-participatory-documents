@@ -10,6 +10,16 @@ module Decidim
     config_accessor :max_export_text_length do
       50
     end
+
+    # Public: The minimum length of a suggestion to be considered valid.
+    config_accessor :min_suggestion_length do
+      15
+    end
+
+    # Public: The maximum length of a suggestion to be considered valid.
+    config_accessor :max_suggestion_length do
+      150
+    end
   end
 end
 
