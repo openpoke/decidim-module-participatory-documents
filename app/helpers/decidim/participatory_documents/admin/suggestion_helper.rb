@@ -28,9 +28,7 @@ module Decidim
           if body.present? || suggestion.file.attached?
             content = body.presence || t("decidim.participatory_documents.admin.suggestions.index.no_text")
             file_content = file_link(suggestion) if suggestion.file.attached?
-            content_tag(:span, class: body.blank? ? "muted" : nil) do
-              safe_join([content, file_content].compact)
-            end
+            content_tag(:span, [content, file_content].compact.join(" ").html_safe, class: body.blank? ? "muted" : nil)
           end
         end
 
