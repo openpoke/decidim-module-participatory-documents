@@ -23,8 +23,8 @@ Decidim.register_component(:participatory_documents) do |component|
 
   component.settings(:global) do |settings|
     settings.attribute :suggestion_answering_enabled, type: :boolean, default: true
-    settings.attribute :max_suggestion_length, type: :integer, default: 500
-    settings.attribute :min_suggestion_length, type: :integer, default: 5
+    settings.attribute :max_suggestion_length, type: :integer, default: Decidim::ParticipatoryDocuments.max_suggestion_length
+    settings.attribute :min_suggestion_length, type: :integer, default: Decidim::ParticipatoryDocuments.min_suggestion_length
   end
 
   component.settings(:step) do |settings|

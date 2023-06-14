@@ -13,12 +13,12 @@ module Decidim
 
     # Public: The minimum length of a suggestion to be considered valid.
     config_accessor :min_suggestion_length do
-      15
+      5
     end
 
     # Public: The maximum length of a suggestion to be considered valid.
     config_accessor :max_suggestion_length do
-      150
+      500
     end
   end
 end

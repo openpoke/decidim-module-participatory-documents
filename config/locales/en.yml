@@ -16,8 +16,8 @@ en:
         suggestion:
           attributes:
             not_blank: 'Validation failed: Please provide a message or upload a file.'
-            too_long: 'Validation failed: is too long (over %{max_length} characters)'
-            too_short: 'Validation failed: is too short (under %{min_length} characters)'
+            too_long: is too long (over %{max_length} characters)
+            too_short: is too short (under %{min_length} characters)
   decidim:
     admin:
       actions:
@@ -66,8 +66,8 @@ en:
         name: Participatory Document
         settings:
           global:
-            max_suggestion_length: Max length of the suggestion text
-            min_suggestion_length: Min length of the suggestion text
+            max_suggestion_length: Maximum suggestion length (characters)
+            min_suggestion_length: Minimum suggestion length (characters)
             suggestion_answering_enabled: Enable suggestion answering from admin
     events:
       participatory_documents:

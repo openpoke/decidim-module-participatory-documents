@@ -5,7 +5,7 @@
   <%= decidim_form_for(@form, url: document_suggestions_path(document), html: { class: "form", multipart: true }) do |form| %>
     <div id="messageForm" class="form-section">
       <div class="column">
-        <%= form.text_area :body, maxlength: Decidim::ParticipatoryDocuments::SuggestionForm::MAX_BODY_LENGTH %>
+        <%= form.text_area :body %>
       </div>
     </div>
     <div id="fileForm" class="form-section">
