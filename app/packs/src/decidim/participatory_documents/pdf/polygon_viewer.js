@@ -23,7 +23,7 @@ export default class PolygonViewer {
       this.bindBoxEvents(this.boxes[box.id]);
     });
 
-    if (document.body.classList.contains('admin-pdf')) {
+    if (document.body.classList.contains("admin-pdf")) {
       this.div.style.pointerEvents = "all";
     } else {
       this.div.style.pointerEvents = "none";
