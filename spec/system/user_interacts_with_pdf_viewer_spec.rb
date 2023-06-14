@@ -206,40 +206,4 @@ describe "User interaction with PDF viewer", type: :system do
       # expect(page).to have_content("Some random string longer than 15 chrs")
     end
   end
-
-  context "when adding a global suggestion" do
-    before do
-      login_as document.author, scope: :user
-      page.visit Decidim::EngineRouter.main_proxy(component).pdf_viewer_documents_path(file: document.attached_uploader(:file).path)
-      click_button("Global suggestions")
-    end
-
-    context "when a user adds a message" do
-      it "submits the content" do
-        find("#messageOption").click
-        pending "There for some reason Capybara does not handle this"
-        raise "Pending"
-        # expect(page).to have_selector("#suggestion_body")
-        # expect(page).not_to have_css("#suggestion_file")
-        #
-        # fill_in(:suggestion_body, "Some random string longer than 15 chrs")
-        # click_button("Send suggestion")
-        # expect(page).to have_content("Some random string longer than 15 chrs")
-      end
-    end
-
-    context "when a user adds a file" do
-      it "submits the file" do
-        find("#fileOption").click
-        pending "There for some reason Capybara does not handle this"
-        raise "Pending"
-        # expect(page).to have_selector("#suggestion_file")
-        # expect(page).not_to have_css("#suggestion_body")
-        #
-        # attach_file :attachment_file, Decidim::Dev.asset("Exampledocument.pdf")
-        # click_button("Send suggestion")
-        # expect(page).to have_content(".pdf")
-      end
-    end
-  end
 end
