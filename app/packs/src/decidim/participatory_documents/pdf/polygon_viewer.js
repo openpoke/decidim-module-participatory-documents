@@ -17,12 +17,21 @@ export default class PolygonViewer {
   }
 
   init() {
-    this.div.style.pointerEvents = "all";
     this.div.classList.add("polygon-ready");
     this.json.forEach((box) => {
       this.boxes[box.id] = new Box(this, box);
       this.bindBoxEvents(this.boxes[box.id]);
     });
+
+    if (document.body.classList.contains('admin-pdf')) {
+      this.div.style.pointerEvents = "all";
+    } else {
+      this.div.style.pointerEvents = "none";
+
+      this.div.querySelectorAll(".box").forEach((box) => {
+        box.style.pointerEvents = "auto";
+      });
+    }
   }
 
   // return all boxes in this layer
