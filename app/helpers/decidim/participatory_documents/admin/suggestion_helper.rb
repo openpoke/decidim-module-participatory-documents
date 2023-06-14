@@ -26,11 +26,10 @@ module Decidim
         end
 
         def suggestion_content(suggestion)
-          body = suggestion.body[I18n.locale.to_s]
-          content = body.presence || t("decidim.participatory_documents.admin.suggestions.index.no_text")
-          file_link = suggestion.file.attached? ? file_link(suggestion) : nil
-
-          { text: content, file_link: file_link }
+          {
+            text: suggestion_body(suggestion),
+            file_link: suggestion.file.attached? && file_link(suggestion)
+          }
         end
 
         private
@@ -40,6 +39,14 @@ module Decidim
                        Rails.application.routes.url_helpers.rails_blob_url(suggestion.file.blob, only_path: true, target: "_blank", rel: "noopener"),
                        t("decidim.participatory_documents.admin.suggestions.index.actions.download", filename: suggestion.file.filename.to_s),
                        class: "icon--small ml-xs")
+        end
+
+        def content_with_class(content, css_class)
+          content_tag(:span, content, class: css_class)
+        end
+
+        def suggestion_body(suggestion)
+          suggestion.body[I18n.locale.to_s].presence || content_with_class(t("decidim.participatory_documents.admin.suggestions.index.no_text"), "muted")
         end
       end
     end

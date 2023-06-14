@@ -11,14 +11,14 @@ describe Decidim::ParticipatoryDocuments::Admin::SuggestionHelper, type: :helper
       allow(suggestion).to receive(:attachment).and_return(nil)
 
       expect(helper.suggestion_content(suggestion)[:text]).to include(suggestion.body["en"])
-      expect(helper.suggestion_content(suggestion)[:file_link]).to be_nil
+      expect(helper.suggestion_content(suggestion)[:file_link]).to be_falsey
     end
 
     it "returns '(no text)' and file link if suggestion body is blank and file attached" do
       allow(suggestion).to receive(:body).and_return({ "en" => "" })
       suggestion.file.attach(file)
 
-      expect(helper.suggestion_content(suggestion)[:text]).to eq("(no text)")
+      expect(helper.suggestion_content(suggestion)[:text]).to eq(content_tag(:span, "(no text)", class: "muted"))
       expect(helper.suggestion_content(suggestion)[:file_link]).to include("download Exampledocument.pdf")
     end
 
