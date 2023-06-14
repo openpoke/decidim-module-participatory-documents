@@ -3,7 +3,12 @@
     <%= check_box_tag "suggestions_ids_s[]", suggestion.id, false, class: "js-check-all-suggestion js-suggestion-list-check  js-suggestion-id-#{suggestion.id}" %><br>
   </td>
   <td><%= suggestion.id %></td>
-  <td><%= truncate(translated_attribute(suggestion.body), length: 50) %></td>
+  <td>
+    <%= truncate(suggestion_content(suggestion)[:text], length: 50) %>
+    <% if suggestion_content(suggestion)[:file_link] %>
+      <%= suggestion_content(suggestion)[:file_link] %>
+    <% end %>
+  </td>
   <td><%= suggestion.try(:normalized_author).try(:name) %></td>
   <td><%= suggestion.suggestable.is_a?(Decidim::ParticipatoryDocuments::Document) ? t(".global") : translated_attribute(suggestion.suggestable.title) %></td>
   <td>

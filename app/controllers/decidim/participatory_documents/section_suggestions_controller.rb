@@ -29,7 +29,7 @@ module Decidim
       private
 
       def suggestions
-        @suggestions ||= section.suggestions.where(author: current_user)
+        @suggestions ||= section.suggestions.where(author: current_user).order(created_at: :asc)
       end
 
       def section

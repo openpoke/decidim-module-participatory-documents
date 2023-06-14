@@ -3,6 +3,10 @@
 module Decidim
   module ParticipatoryDocuments
     class SuggestionCell < Decidim::ViewModel
+      include Decidim::ParticipatoryDocuments::Admin::SuggestionHelper
+      include Decidim::IconHelper
+      include Decidim::Admin::IconLinkHelper
+
       def show
         render
       end

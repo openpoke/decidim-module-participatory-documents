@@ -31,8 +31,7 @@ describe "Admin manages participatory documents", type: :system do
 
   context "when using bulk answer" do
     let!(:document_suggestions) do
-      create_list(:participatory_documents_suggestion, 3, :accepted, :draft, body: { en: "Test suggestion" },
-                                                                             suggestable: document, answer: { en: "Foo bar" })
+      create_list(:participatory_documents_suggestion, 3, :accepted, :draft, body: { en: "Test suggestion" }, suggestable: document, answer: { en: "Foo bar" })
     end
     let!(:section1_suggestions) do
       create(:participatory_documents_suggestion, :accepted, :published,
@@ -61,7 +60,8 @@ describe "Admin manages participatory documents", type: :system do
           expect(page).to have_content("Answers for 2 suggestions will be published.")
         end
         page.find("button#js-submit-publish-answers").click
-        20.times do # wait for the ajax call to finish
+        20.times do
+          # wait for the ajax call to finish
           sleep(1)
           expect(page).to have_content(I18n.t("suggestions.publish_answers.success", scope: "decidim.participatory_documents.admin"))
           break
@@ -278,6 +278,34 @@ describe "Admin manages participatory documents", type: :system do
       expect(page).not_to have_content("Global")
       expect(page).to have_content(section1.title["en"])
       expect(page).to have_content(section2.title["en"])
+    end
+  end
+
+  context "when the global suggestion includes a file" do
+    let!(:document_suggestion) do
+      create(:participatory_documents_suggestion,
+             suggestable: document,
+             body: { en: "" },
+             answer: { en: "This is a test answer" },
+             file: attachment)
+    end
+
+    let(:attachment) { Decidim::Dev.test_file("Exampledocument.pdf", "application/pdf") }
+
+    it "displays the file" do
+      within(".table-scroll") do
+        find("a.sort_link", text: "Id").click
+        expect(page).to have_css(".icon--data-transfer-download", count: 1)
+      end
+    end
+
+    it "displays the file an the show page" do
+      within(".table-scroll") do
+        find("a.sort_link", text: "Id").click
+        target_row = find("tr", text: document_suggestion.id.to_s)
+        target_row.find("a.action-icon[title='Answer']").click
+      end
+      expect(page).to have_css(".icon--data-transfer-download", count: 1)
     end
   end
 

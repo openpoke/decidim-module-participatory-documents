@@ -13,6 +13,11 @@ en:
           attributes:
             state:
               inclusion: It's not possible to publish with status "not answered"
+        suggestion:
+          attributes:
+            not_blank: 'Validation failed: Please provide a message or upload a file.'
+            too_long: 'Validation failed: is too long (over %{max_length} characters)'
+            too_short: 'Validation failed: is too short (under %{min_length} characters)'
   decidim:
     admin:
       actions:
@@ -136,6 +141,7 @@ en:
               assign_to_valuator: Assign to valuator
               assign_to_valuator_button: Assign
               cancel: Cancel
+              download: download %{filename}
               publish: Publish
               publish_answers: Publish answers
               title: Actions
@@ -144,6 +150,7 @@ en:
             author: Author
             created_at: Submitted on
             id: Id
+            no_text: "(no text)"
             published_answer: Published Answer
             section: Section
             selected: selected
@@ -158,6 +165,7 @@ en:
             authors: Authors
             body: Body
             created_at: Creation date
+            file: File
             update: Update
           suggestion:
             global: Global
@@ -180,6 +188,7 @@ en:
         save_changes: Save changes!
         send_suggestion: Send suggestion
         suggestion_answer: Official answer
+        upload_file: Attach a document
       documents:
         missing: There is no document uploaded yet
       models:
@@ -224,4 +233,8 @@ en:
         startEditing: Start creating areas for participation by clicking and dragging.
           Once created, boxes can be resized, moved, or grouped.
         startSuggesting: Click on a marked area to participate!
+        suggestion_form:
+          blank: There was an error creating the suggestion. Upload the valid  file
+            or add a text message with the suggestion.
+          title: Write your suggestion or upload a file with your suggestions
       'yes': 'Yes'

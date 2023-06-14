@@ -30,9 +30,13 @@ export default class SuggestionForm {
   getGroupUrl() {
     if (this.group === null) {
       return `${this.getPath()}/suggestions${this.getQueryString()}`;
-    } 
+    }
     return `${this.getPath()}/sections/${this.group}/suggestions${this.getQueryString()}`;
-    
+
+  }
+
+  scrollToEnd() {
+    this.div.scrollTop = this.div.scrollHeight;
   }
 
   populateArea(data) {
@@ -40,36 +44,51 @@ export default class SuggestionForm {
     this.div.classList.add("active");
     this.addCloseHandler();
     this.addFormHandler();
+    this.scrollToEnd();
   }
 
   addCloseHandler() {
-    let close = document.getElementById("close-suggestions")
-    if (close) {
+    let close = document.getElementById("close-suggestions");
+    let modal = document.getElementById("participation-modal");
+
+    if (close && modal) {
       close.addEventListener("click", () => {
         console.log("close");
-        this.div.classList.remove("active");
-      }, {once: true});
+        modal.classList.remove("active");
+        close.style.display = "none";
+      }, { once: true });
     }
   }
 
   addFormHandler() {
     let form = document.getElementById("new_suggestion_");
     if (form) {
+      let fileInput = document.getElementById("file-upload-field");
+      let fileNameContainer = document.getElementById("fileNameContainer");
+
+      if (fileInput) {
+        fileInput.addEventListener("change", () => {
+          if (fileInput.files.length > 0) {
+            fileNameContainer.textContent = fileInput.files[0].name;
+          } else {
+            fileNameContainer.textContent = "";
+          }
+        });
+      }
+
       form.addEventListener("submit", (event) => {
         event.preventDefault();
+
+        let formData = new FormData(event.target);
+
         fetch(event.target.action, {
           method: event.target.method,
-          body: new URLSearchParams(new FormData(event.target)),
+          body: formData,
           headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-            "Accept": "text/html",
             "X-CSRF-Token": this.getCSRFToken()
           },
           credentials: "include"
         }).then((response) => {
-          // if (response.ok === false && response.status === 400) { // validation
-          //   return response.text();
-          // }
           return response.text();
         }).then((data) => {
           console.log("data", data);
@@ -78,11 +97,8 @@ export default class SuggestionForm {
           this.addCloseHandler();
         }).catch((error) => {
           console.error(error);
-          // if(this.form && this.form[0]) {
-          //   this.form.innerHTML = error.text();
-          // }
         });
-      }, {once: true});
+      });
     }
   }
 
