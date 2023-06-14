@@ -6,7 +6,7 @@
       <%#= decidim_html_escape(present(proposal).title).html_safe %>
 
       <%# if allowed_to? :edit, :proposal, proposal: proposal %>
-        <%#= icon_link_to "pencil", edit_proposal_path(proposal), t("actions.edit_proposal", scope: "decidim.proposals"), class: "action-icon--edit-proposal" %>
+      <%#= icon_link_to "pencil", edit_proposal_path(proposal), t("actions.edit_proposal", scope: "decidim.proposals"), class: "action-icon--edit-proposal" %>
       <%# end %>
     </h2>
   </div>
@@ -15,42 +15,34 @@
     <div class="row column">
       <strong><%= t ".authors" %>:</strong>
       <ul id="proposal-authors-list">
-          <li>
-            <% presented_author = present(suggestion.author) %>
-            <%= link_to_if(
-                  presented_author.profile_path.present?,
-                  presented_author.name,
-                  presented_author.profile_path,
-                  target: :blank
-                ) %>
-            <% if presented_author.can_be_contacted? && presented_author.nickname != present(current_user).nickname %>
-              <%= icon_link_to "envelope-closed", current_or_new_conversation_path_with(presented_author), t("decidim.contact"), class:"action-icon--new" %>
-            <% end %>
-          </li>
+        <li>
+          <% presented_author = present(suggestion.author) %>
+          <%= link_to_if(
+                presented_author.profile_path.present?,
+                presented_author.name,
+                presented_author.profile_path,
+                target: :blank
+              ) %>
+          <% if presented_author.can_be_contacted? && presented_author.nickname != present(current_user).nickname %>
+            <%= icon_link_to "envelope-closed", current_or_new_conversation_path_with(presented_author), t("decidim.contact"), class: "action-icon--new" %>
+          <% end %>
+        </li>
         <%# end %>
       </ul>
     </div>
 
     <div class="row column">
-      <% if suggestion.file.attached? %>
-        <strong><%= t ".file" %>:</strong>
-        <p>
-          <%= link_to Rails.application.routes.url_helpers.rails_blob_url(suggestion.file.blob, only_path: true), target: "_blank", class: "flex--fsc" do %>
-            <%= icon "file", class: "mr-xs" %>
-            <%= truncate(File.basename(suggestion.file.blob.filename.to_s, ".*"), length: 10) + File.extname(suggestion.file.blob.filename.to_s) %>
-            <%= icon "data-transfer-download", class: "ml-s" %>
-          <% end %>
-        </p>
-      <% else %>
-        <strong><%= t ".body" %>:</strong>
-        <p><%= translated_attribute(suggestion.body) %></p>
-      <% end %>
+      <strong><%= t ".body" %>:</strong>
+      <p><%= suggestion_content(suggestion)[:text] %>
+        <% if suggestion_content(suggestion)[:file_link] %>
+          <%= suggestion_content(suggestion)[:file_link] %>
+        <% end %>
+      </p>
     </div>
 
     <div class="row column">
       <strong><%= t ".created_at" %>:</strong> <%= l suggestion.created_at, format: :decidim_short %>
     </div>
-
   </div>
 </div>
 

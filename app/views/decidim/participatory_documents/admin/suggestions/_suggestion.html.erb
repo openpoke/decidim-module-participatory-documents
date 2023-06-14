@@ -4,7 +4,10 @@
   </td>
   <td><%= suggestion.id %></td>
   <td>
-    <%= suggestion_content(suggestion) %>
+    <%= truncate(suggestion_content(suggestion)[:text], length: 50) %>
+    <% if suggestion_content(suggestion)[:file_link] %>
+      <%= suggestion_content(suggestion)[:file_link] %>
+    <% end %>
   </td>
   <td><%= suggestion.try(:normalized_author).try(:name) %></td>
   <td><%= suggestion.suggestable.is_a?(Decidim::ParticipatoryDocuments::Document) ? t(".global") : translated_attribute(suggestion.suggestable.title) %></td>

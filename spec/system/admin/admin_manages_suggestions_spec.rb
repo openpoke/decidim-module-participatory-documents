@@ -295,8 +295,7 @@ describe "Admin manages participatory documents", type: :system do
     it "displays the file" do
       within(".table-scroll") do
         find("a.sort_link", text: "Id").click
-        expect(page).to have_css(".icon--file", count: 1)
-        expect(page).to have_content(".pdf")
+        expect(page).to have_css(".icon--data-transfer-download", count: 1)
       end
     end
 
@@ -306,8 +305,7 @@ describe "Admin manages participatory documents", type: :system do
         target_row = find("tr", text: document_suggestion.id.to_s)
         target_row.find("a.action-icon[title='Answer']").click
       end
-      expect(page).to have_css(".icon--file", count: 1)
-      expect(page).to have_content(".pdf")
+      expect(page).to have_css(".icon--data-transfer-download", count: 1)
     end
   end
 

@@ -152,7 +152,7 @@ en:
               assign_to_valuator: Assign to valuator
               assign_to_valuator_button: Assign
               cancel: Cancel
-              download: Download
+              download: download %{filename}
               publish: Publish
               publish_answers: Publish answers
               title: Actions

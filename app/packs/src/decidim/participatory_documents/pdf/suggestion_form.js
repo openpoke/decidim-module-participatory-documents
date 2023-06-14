@@ -66,13 +66,15 @@ export default class SuggestionForm {
       let fileInput = document.getElementById("file-upload-field");
       let fileNameContainer = document.getElementById("fileNameContainer");
 
-      fileInput.addEventListener("change", () => {
-        if (fileInput.files.length > 0) {
-          fileNameContainer.textContent = fileInput.files[0].name;
-        } else {
-          fileNameContainer.textContent = "";
-        }
-      });
+      if (fileInput) {
+        fileInput.addEventListener("change", () => {
+          if (fileInput.files.length > 0) {
+            fileNameContainer.textContent = fileInput.files[0].name;
+          } else {
+            fileNameContainer.textContent = "";
+          }
+        });
+      }
 
       form.addEventListener("submit", (event) => {
         event.preventDefault();

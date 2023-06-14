@@ -5,6 +5,8 @@ module Decidim
     module Admin
       module SuggestionHelper
         include ActionView::Helpers::TextHelper
+        include Decidim::Admin::IconLinkHelper
+
         def humanize_suggestion_state(state)
           I18n.t(state, scope: "decidim.participatory_documents.suggestions.answers", default: :not_answered)
         end
@@ -25,20 +27,19 @@ module Decidim
 
         def suggestion_content(suggestion)
           body = suggestion.body[I18n.locale.to_s]
+          content = body.presence || t("decidim.participatory_documents.admin.suggestions.index.no_text")
+          file_link = suggestion.file.attached? ? file_link(suggestion) : nil
 
-          if body.present? || suggestion.file.attached?
-            content = truncate(body.presence, length: 50) || t("decidim.participatory_documents.admin.suggestions.index.no_text")
-            file_content = file_link(suggestion) if suggestion.file.attached?
-            content_tag(:span, [content, file_content].compact.join(" ").html_safe, class: body.blank? ? "muted" : nil)
-          end
+          { text: content, file_link: file_link }
         end
 
         private
 
         def file_link(suggestion)
-          link_to Rails.application.routes.url_helpers.rails_blob_url(suggestion.file.blob, only_path: true), target: "_blank", rel: "noopener" do
-            safe_join([icon("data-transfer-download", class: "ml-s", title: t("decidim.participatory_documents.admin.suggestions.index.actions.download"))])
-          end
+          icon_link_to("data-transfer-download",
+                       Rails.application.routes.url_helpers.rails_blob_url(suggestion.file.blob, only_path: true, target: "_blank", rel: "noopener"),
+                       t("decidim.participatory_documents.admin.suggestions.index.actions.download", filename: suggestion.file.filename.to_s),
+                       class: "icon--small ml-xs")
         end
       end
     end
