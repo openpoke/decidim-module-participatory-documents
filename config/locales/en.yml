@@ -192,7 +192,7 @@ en:
         send_suggestion: Send suggestion
         suggestion_answer: Official answer
       documents:
-        missing: There is no document uploaded
+        missing: There is no document uploaded yet
       models:
         document:
           fields:
