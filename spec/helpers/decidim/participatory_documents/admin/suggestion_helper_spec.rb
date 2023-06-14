@@ -10,7 +10,7 @@ describe Decidim::ParticipatoryDocuments::Admin::SuggestionHelper, type: :helper
     it "returns the suggestion body if present" do
       allow(suggestion).to receive(:attachment).and_return(nil)
 
-      expect(helper.suggestion_content(suggestion)).to include(suggestion.body["en"])
+      expect(helper.suggestion_content(suggestion)).to include(truncate(suggestion.body["en"], length: 50))
       expect(helper.suggestion_content(suggestion)).not_to include("Download")
     end
 
@@ -25,7 +25,7 @@ describe Decidim::ParticipatoryDocuments::Admin::SuggestionHelper, type: :helper
     it "returns the suggestion body and file link" do
       suggestion.file.attach(file)
 
-      expect(helper.suggestion_content(suggestion)).to include(suggestion.body["en"])
+      expect(helper.suggestion_content(suggestion)).to include(truncate(suggestion.body["en"], length: 50))
       expect(helper.suggestion_content(suggestion)).to include("Download")
     end
   end

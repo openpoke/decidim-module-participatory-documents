@@ -4,6 +4,7 @@ module Decidim
   module ParticipatoryDocuments
     module Admin
       module SuggestionHelper
+        include ActionView::Helpers::TextHelper
         def humanize_suggestion_state(state)
           I18n.t(state, scope: "decidim.participatory_documents.suggestions.answers", default: :not_answered)
         end
@@ -26,7 +27,7 @@ module Decidim
           body = suggestion.body[I18n.locale.to_s]
 
           if body.present? || suggestion.file.attached?
-            content = body.presence || t("decidim.participatory_documents.admin.suggestions.index.no_text")
+            content = truncate(body.presence, length: 50) || t("decidim.participatory_documents.admin.suggestions.index.no_text")
             file_content = file_link(suggestion) if suggestion.file.attached?
             content_tag(:span, [content, file_content].compact.join(" ").html_safe, class: body.blank? ? "muted" : nil)
           end
