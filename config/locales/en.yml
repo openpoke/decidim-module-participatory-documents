@@ -113,7 +113,15 @@ en:
             note: Note
             submit: Submit
           leave_your_note: Leave your note
+          modal:
+            body: Body
+            title: Edit note
+            update: Update
           title: Private notes
+          update:
+            edited: Edited
+            invalid: There was a problem updating this suggestion note
+            success: Suggestion note successfully updated
         suggestions:
           answer:
             invalid: There was an error adding the answer

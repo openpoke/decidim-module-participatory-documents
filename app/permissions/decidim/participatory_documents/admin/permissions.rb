@@ -23,7 +23,9 @@ module Decidim
             can_create_suggestion_answer?
           end
 
-          allow! if permission_action.subject == :suggestion_note
+          edit_suggestion_note?
+
+          allow! if permission_action.subject == :suggestion_note && permission_action.action == :create
           allow! if permission_action.subject == :suggestion_answer
           allow! if permission_action.subject == :document_section
           allow! if permission_action.subject == :document_annotations
@@ -87,6 +89,16 @@ module Decidim
 
         def user_valuator_role
           @user_valuator_role ||= space.user_roles(:valuator).find_by(user: user)
+        end
+
+        def edit_suggestion_note?
+          return unless permission_action.action == :edit_note && permission_action.subject == :suggestion_note
+
+          toggle_allow(suggestion_note_author?)
+        end
+
+        def suggestion_note_author?
+          context[:suggestion_note].try(:author) == user
         end
       end
     end

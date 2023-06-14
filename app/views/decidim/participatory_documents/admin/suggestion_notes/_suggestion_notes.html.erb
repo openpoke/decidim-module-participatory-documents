@@ -16,12 +16,13 @@
                       <div class="author author--inline">
                         <strong><span class="author__name"><%= note.author.name %></span></strong>
                         <span><%= l note.created_at, format: :decidim_short %></span>
+                        <%= render partial: "decidim/participatory_documents/admin/suggestion_notes/editing_suggestion_note", locals: { note: note } %>
                       </div>
                     </div>
                   </div>
                 </div>
                 <div class="comment__content">
-                  <%= simple_format note.body %>
+                  <%= simple_format Decidim::ContentRenderers::LinkRenderer.new(note.body).render.html_safe %>
                 </div>
               </div>
             </div>
