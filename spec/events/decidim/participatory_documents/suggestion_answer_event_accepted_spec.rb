@@ -2,10 +2,9 @@
 
 require "spec_helper"
 
-describe Decidim::ParticipatoryDocuments::EvaluatingSuggestionEvent do
-  shared_examples "sends the evaluated suggestion notification" do
-    let(:event_name) { "decidim.events.participatory_documents.suggestion_evaluating" }
-
+describe Decidim::ParticipatoryDocuments::SuggestionAnswerEvent do
+  shared_examples "sends the accept notification" do
+    let(:event_name) { "decidim.events.participatory_documents.suggestion_answered" }
     let(:resource_path) { main_component_path(document.component) }
     let(:resource_title) { translated(document.title["en"]) }
 
@@ -19,14 +18,14 @@ describe Decidim::ParticipatoryDocuments::EvaluatingSuggestionEvent do
 
     describe "email_subject" do
       it "is generated correctly" do
-        expect(subject.email_subject).to eq("A suggestion you have submitted is being evaluated")
+        expect(subject.email_subject).to eq("A suggestion you have submitted has been answered by an administrator")
       end
     end
 
     describe "email_intro" do
       it "is generated correctly" do
         expect(subject.email_intro)
-          .to eq("A suggestion you submitted on \"<a href=\"#{resource_path}\">#{resource_title}</a>\" document is currently being evaluated. You can check the answer in this page:")
+          .to eq("A suggestion you submitted on \"<a href=\"#{resource_path}\">#{resource_title}</a>\" document has been answered by an administrator. You can read the answer in this page:")
       end
     end
 
@@ -40,22 +39,29 @@ describe Decidim::ParticipatoryDocuments::EvaluatingSuggestionEvent do
     describe "notification_title" do
       it "is generated correctly" do
         expect(subject.notification_title)
-          .to include("A suggestion you submitted on \"<a href=\"#{resource_path}\">#{resource_title}</a>\" document is currently being evaluated")
+          .to include("A suggestion you submitted on \"<a href=\"#{resource_path}\">#{resource_title}</a>\" document has been answered by an administrator")
+      end
+    end
+
+    describe "resource_text" do
+      it "shows the proposal answer" do
+        expect(subject.resource_text).to eq translated(resource.answer)
       end
     end
   end
+
   context "when suggestion is added to a document" do
     let(:document) { create :participatory_documents_document }
-    let(:resource) { create(:participatory_documents_suggestion, :evaluating, :with_answer, suggestable: document) }
+    let(:resource) { create(:participatory_documents_suggestion, :accepted, :with_answer, suggestable: document) }
 
-    it_behaves_like "sends the evaluated suggestion notification"
+    it_behaves_like "sends the accept notification"
   end
 
   context "when suggestion is added to a section" do
     let(:document) { suggestion.document }
     let(:suggestion) { create(:participatory_documents_section) }
-    let(:resource) { create(:participatory_documents_suggestion, :evaluating, :with_answer, suggestable: suggestion) }
+    let(:resource) { create(:participatory_documents_suggestion, :accepted, :with_answer, suggestable: suggestion) }
 
-    it_behaves_like "sends the evaluated suggestion notification"
+    it_behaves_like "sends the accept notification"
   end
 end

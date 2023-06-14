@@ -32,22 +32,10 @@ module Decidim
         attr_reader :suggestion, :initial_state
 
         def notify_followers
-          if suggestion.accepted?
-            publish_event(
-              "decidim.events.participatory_documents.suggestion_accepted",
-              Decidim::ParticipatoryDocuments::AcceptedSuggestionEvent
-            )
-          elsif suggestion.rejected?
-            publish_event(
-              "decidim.events.participatory_documents.suggestion_rejected",
-              Decidim::ParticipatoryDocuments::RejectedSuggestionEvent
-            )
-          elsif suggestion.evaluating?
-            publish_event(
-              "decidim.events.participatory_documents.suggestion_evaluating",
-              Decidim::ParticipatoryDocuments::EvaluatingSuggestionEvent
-            )
-          end
+          publish_event(
+            "decidim.events.participatory_documents.suggestion_answered",
+            Decidim::ParticipatoryDocuments::SuggestionAnswerEvent
+          )
         end
 
         def publish_event(event, event_class)
