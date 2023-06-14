@@ -25,6 +25,18 @@ module Decidim
         expect(form).to be_valid
       end
 
+      it "is valid without a file" do
+        form.file = nil
+
+        expect(form).to be_valid
+      end
+
+      it "is valid without a body" do
+        form.body = nil
+
+        expect(form).to be_valid
+      end
+
       it "is invalid without a body and file" do
         form.body = nil
         form.file = nil

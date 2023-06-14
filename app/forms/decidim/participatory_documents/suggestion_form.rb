@@ -19,10 +19,12 @@ module Decidim
         maximum: max_length,
         too_short: I18n.t("activemodel.errors.models.suggestion.attributes.too_short", min_length: min_length),
         too_long: I18n.t("activemodel.errors.models.suggestion.attributes.too_long", max_length: max_length)
-      }
+      }, if: -> { body.present? }
 
       def validate_single_field_presence
-        errors.add(:base, I18n.t("activemodel.errors.models.suggestion.attributes.not_blank")) if body.blank? && file.blank?
+        return unless body.blank? && file.blank?
+
+        errors.add(:base, I18n.t("activemodel.errors.models.suggestion.attributes.not_blank"))
       end
     end
   end
