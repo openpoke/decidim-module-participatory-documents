@@ -17,10 +17,12 @@ module Decidim
       def finish_publish_btn
         btn_title = t("actions.finish_publishing", scope: "decidim.participatory_documents")
 
-        content_tag(:a,
-                    title: btn_title,
-                    href: Decidim::EngineRouter.admin_proxy(document.component).final_publish_document_path(document),
-                    class: "button small warning") do
+        link_to(
+          Decidim::EngineRouter.admin_proxy(document.component).final_publish_document_path(document),
+          method: :post,
+          data: { confirm: t("actions.confirm", scope: "decidim.participatory_documents") },
+          class: "button small warning"
+        ) do
           button_builder(btn_title, icon: "check")
         end
       end
