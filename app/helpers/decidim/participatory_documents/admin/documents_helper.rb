@@ -30,24 +30,18 @@ module Decidim
           end
         end
 
-        def preview_sections_btn
-          btn_title = t("actions.preview_publishing_sections", scope: "decidim.participatory_documents")
-
-          button_to(
-            final_publish_document_path(document),
-            method: :post,
-            class: "button small light success",
-            data: { confirm: t("actions.confirm", scope: "decidim.participatory_documents") },
-            style: "margin-bottom: 0;"
-          ) do
-            button_builder(btn_title, icon: "eye")
-          end
-        end
-
         private
 
         def button_builder(btn_title, icon: "document")
           btn_icon(icon, btn_title) + content_tag(:span, btn_title)
+        end
+
+        def preview_sections_btn
+          btn_title = t("actions.preview_publishing_sections", scope: "decidim.participatory_documents")
+
+          content_tag(:a, title: btn_title, href: main_component_path(document.component), class: "button small light success") do
+            button_builder(btn_title, icon: "eye")
+          end
         end
 
         def btn_icon(icon, label)
