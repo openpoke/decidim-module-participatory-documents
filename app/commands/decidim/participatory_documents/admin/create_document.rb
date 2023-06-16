@@ -38,7 +38,8 @@ module Decidim
             title: form.title,
             description: form.description,
             box_color: form.box_color,
-            box_opacity: form.box_opacity
+            box_opacity: form.box_opacity,
+            final_publish: false
           }.merge(attachment_attributes(:file))
         end
 

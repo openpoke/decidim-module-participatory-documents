@@ -8,9 +8,9 @@ module Decidim
           content_tag(:div, class: "flex--cc flex-gap--1") do
             if document.blank? && allowed_to?(:create, :participatory_document)
               new_pdf_btn
-            elsif document.file.attached? && allowed_to?(:update, :participatory_document)
-              edit_boxes_btn + edit_document_btn
-            else
+            elsif document.file.attached? && allowed_to?(:update, :participatory_document, document: document)
+              edit_boxes_btn + edit_document_btn + preview_sections_btn
+            elsif allowed_to?(:update, :participatory_document, document: document)
               edit_document_btn
             end
           end
@@ -27,6 +27,20 @@ module Decidim
         def boolean_label(active)
           content_tag(:span, class: "label #{active ? "success" : "alert"}") do
             t(active ? "yes" : "no", scope: "decidim.participatory_documents")
+          end
+        end
+
+        def preview_sections_btn
+          btn_title = t("actions.preview_publishing_sections", scope: "decidim.participatory_documents")
+
+          button_to(
+            final_publish_document_path(document),
+            method: :post,
+            class: "button small light success",
+            data: { confirm: t("actions.confirm", scope: "decidim.participatory_documents") },
+            style: "margin-bottom: 0;"
+          ) do
+            button_builder(btn_title, icon: "eye")
           end
         end
 
