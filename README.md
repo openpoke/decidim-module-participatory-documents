@@ -29,6 +29,30 @@ bundle exec rails decidim_participatory_documents:install:migrations
 
 TODO...
 
+
+Options such as `:max_suggestion_length`, `:min_suggestion_length` and etc. are configured at the component level in 
+the application. Defaults to the configured in the module:
+```ruby
+# lib/decidim/participatory_documents.rb
+
+module Decidim
+  # This namespace holds the logic of the `decidim-participatory_documents` module.
+  module ParticipatoryDocuments
+    include ActiveSupport::Configurable
+
+    # Public: The minimum length of a suggestion to be considered valid.
+    config_accessor :min_suggestion_length do
+      5
+    end
+    
+    # Public: The maximum length of a suggestion to be considered valid.
+    config_accessor :max_suggestion_length do
+      500
+    end
+  end
+end
+```
+
 ```ruby
 # config/initializers/participatory_documents.rb
 
