@@ -4,6 +4,8 @@ module Decidim
   module ParticipatoryDocuments
     module Admin
       module DocumentsHelper
+        include ButtonHelper
+
         def pdf_manage_button(document)
           content_tag(:div, class: "flex--cc flex-gap--1") do
             if document.blank? && allowed_to?(:create, :participatory_document)
@@ -32,20 +34,12 @@ module Decidim
 
         private
 
-        def button_builder(btn_title, icon: "document")
-          btn_icon(icon, btn_title) + content_tag(:span, btn_title)
-        end
-
         def preview_sections_btn
           btn_title = t("actions.preview_publishing_sections", scope: "decidim.participatory_documents")
 
           content_tag(:a, title: btn_title, href: main_component_path(document.component), class: "button small light success") do
             button_builder(btn_title, icon: "eye")
           end
-        end
-
-        def btn_icon(icon, label)
-          icon(icon, class: "icon--document icon icon icon-document mr-xs", aria_label: label, role: "img")
         end
 
         def new_pdf_btn

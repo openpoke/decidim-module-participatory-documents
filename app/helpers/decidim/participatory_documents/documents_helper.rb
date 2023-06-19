@@ -3,6 +3,8 @@
 module Decidim
   module ParticipatoryDocuments
     module DocumentsHelper
+      include Decidim::ParticipatoryDocuments::Admin::ButtonHelper
+
       def back_edit_pdf_btn
         btn_title = t("actions.back_edit", scope: "decidim.participatory_documents")
 
@@ -25,16 +27,6 @@ module Decidim
         ) do
           button_builder(btn_title, icon: "check")
         end
-      end
-
-      private
-
-      def button_builder(btn_title, icon: "document")
-        btn_icon(icon, btn_title) + content_tag(:span, btn_title)
-      end
-
-      def btn_icon(icon, label)
-        icon(icon, class: "icon--document icon icon icon-document mr-xs", aria_label: label, role: "img")
       end
     end
   end
