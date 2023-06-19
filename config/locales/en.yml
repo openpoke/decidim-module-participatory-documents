@@ -103,7 +103,7 @@ en:
             update: Update
           final_publish:
             error: There was an error publishing sections
-            success: Sections successfully published
+            success: Sections have been successfully published
           form:
             box_style_preview: 'Box style preview:'
           index:

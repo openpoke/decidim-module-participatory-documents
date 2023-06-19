@@ -3,7 +3,7 @@
 module Decidim
   module ParticipatoryDocuments
     module Admin
-      class FinalPublish < Rectify::Command
+      class FinalSectionsPublish < Rectify::Command
         # Public: Initializes the command.
         #
         # document - The document to publish.
