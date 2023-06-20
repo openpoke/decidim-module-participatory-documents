@@ -75,6 +75,8 @@ module Decidim
 
       context "when default min size is another" do
         let(:body) { "short" }
+        let(:component) { double(:participatory_documents_component, settings: settings) }
+        let(:settings) { double(:settings, min_suggestion_length: 7, max_suggestion_length: 100) }
 
         before do
           allow(Decidim::ParticipatoryDocuments).to receive(:min_suggestion_length).and_return(7)
@@ -83,6 +85,26 @@ module Decidim
         it { is_expected.to be_invalid }
 
         it_behaves_like "validate error message", "too_short", { min_length: 7 }
+
+        context "when body is ok" do
+          let(:body) { "enough body" }
+
+          it { is_expected.to be_valid }
+        end
+      end
+
+      context "when default max size is another" do
+        let(:body) { "Long body" * 300 }
+        let(:component) { double(:participatory_documents_component, settings: settings) }
+        let(:settings) { double(:settings, min_suggestion_length: 5, max_suggestion_length: 200) }
+
+        before do
+          allow(Decidim::ParticipatoryDocuments).to receive(:max_suggestion_length).and_return(200)
+        end
+
+        it { is_expected.to be_invalid }
+
+        it_behaves_like "validate error message", "too_long", { max_length: 200 }
 
         context "when body is ok" do
           let(:body) { "enough body" }
