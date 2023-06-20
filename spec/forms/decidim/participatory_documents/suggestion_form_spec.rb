@@ -94,7 +94,7 @@ module Decidim
       end
 
       context "when default max size is another" do
-        let(:body) { "Long body" * 300 }
+        let(:body) { "A" * 201 }
         let(:component) { double(:participatory_documents_component, settings: settings) }
         let(:settings) { double(:settings, min_suggestion_length: 5, max_suggestion_length: 200) }
 
