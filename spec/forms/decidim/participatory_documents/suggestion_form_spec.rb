@@ -7,56 +7,88 @@ module Decidim
     describe SuggestionForm do
       subject { form }
 
+      let(:context) { double(current_component: component) }
       let(:component) { create :participatory_documents_component }
       let(:document) { create(:participatory_documents_document, component: component) }
 
       let(:form) do
         described_class.from_params(
           {
-            body: "This is a suggestion body",
+            body: body,
             file: example_file
           }
+        ).with_context(
+          current_component: component
         )
       end
 
+      let(:body) { "This is a suggestion body" }
       let(:example_file) { Decidim::Dev.test_file("Exampledocument.pdf", "application/pdf") }
+
+      shared_examples "validate error message" do |error_key, params|
+        it "shows the correct error message" do
+          form.validate
+          expect(form.errors[:body]).to include(I18n.t("activemodel.errors.models.suggestion.attributes.#{error_key}", params))
+        end
+      end
 
       it "is valid with valid attributes" do
         expect(form).to be_valid
       end
 
-      it "is valid without a file" do
-        form.file = nil
+      context "when no body" do
+        let(:body) { nil }
 
-        expect(form).to be_valid
+        it { is_expected.to be_valid }
       end
 
-      it "is valid without a body" do
-        form.body = nil
+      context "when no file" do
+        let(:example_file) { nil }
 
-        expect(form).to be_valid
+        it { is_expected.to be_valid }
       end
 
-      it "is invalid without a body and file" do
-        form.body = nil
-        form.file = nil
+      context "when no body, no file" do
+        let(:body) { nil }
+        let(:example_file) { nil }
 
-        expect(form).to be_invalid
-        expect(form.errors[:base]).to include(I18n.t("activemodel.errors.models.suggestion.attributes.not_blank"))
+        it { is_expected.to be_invalid }
+
+        it_behaves_like "validate error message", "not_blank", {}
       end
 
-      it "is invalid with a body that is too short" do
-        form.body = "body"
+      context "when a body that is too short" do
+        let(:body) { "body" }
 
-        expect(form).to be_invalid
-        expect(form.errors[:body]).to include(I18n.t("activemodel.errors.models.suggestion.attributes.too_short", min_length: Decidim::ParticipatoryDocuments.config.min_suggestion_length))
+        it { is_expected.to be_invalid }
+
+        it_behaves_like "validate error message", "too_short", { min_length: 5 }
       end
 
-      it "is invalid with a body that is too long" do
-        form.body = "Long body" * 300
+      context "when a body that is too long" do
+        let(:body) { "Long body" * 300 }
 
-        expect(form).to be_invalid
-        expect(form.errors[:body]).to include(I18n.t("activemodel.errors.models.suggestion.attributes.too_long", max_length: Decidim::ParticipatoryDocuments.config.max_suggestion_length))
+        it { is_expected.to be_invalid }
+
+        it_behaves_like "validate error message", "too_long", { max_length: 500 }
+      end
+
+      context "when default min size is another" do
+        let(:body) { "short" }
+
+        before do
+          allow(Decidim::ParticipatoryDocuments).to receive(:min_suggestion_length).and_return(7)
+        end
+
+        it { is_expected.to be_invalid }
+
+        it_behaves_like "validate error message", "too_short", { min_length: 7 }
+
+        context "when body is ok" do
+          let(:body) { "enough body" }
+
+          it { is_expected.to be_valid }
+        end
       end
     end
   end

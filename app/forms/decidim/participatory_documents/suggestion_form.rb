@@ -9,22 +9,30 @@ module Decidim
       attribute :body, String
       attribute :file
 
-      min_length = Decidim::ParticipatoryDocuments.config.min_suggestion_length
-      max_length = Decidim::ParticipatoryDocuments.config.max_suggestion_length
-
       validate :validate_single_field_presence
+      validate :validate_body_length
 
-      validates :body, length: {
-        minimum: min_length,
-        maximum: max_length,
-        too_short: I18n.t("activemodel.errors.models.suggestion.attributes.too_short", min_length: min_length),
-        too_long: I18n.t("activemodel.errors.models.suggestion.attributes.too_long", max_length: max_length)
-      }, if: -> { body.present? }
+      private
+
+      def validate_body_length
+        return  if body.blank?
+
+        errors.add(:body, I18n.t("activemodel.errors.models.suggestion.attributes.too_short", min_length: min_length)) if body.length < min_length
+        errors.add(:body, I18n.t("activemodel.errors.models.suggestion.attributes.too_long", max_length: max_length)) if body.length > max_length
+      end
 
       def validate_single_field_presence
         return unless body.blank? && file.blank?
 
-        errors.add(:base, I18n.t("activemodel.errors.models.suggestion.attributes.not_blank"))
+        errors.add(:body, I18n.t("activemodel.errors.models.suggestion.attributes.not_blank"))
+      end
+
+      def min_length
+        current_component.settings.min_suggestion_length || Decidim::ParticipatoryDocuments.config.min_suggestion_length
+      end
+
+      def max_length
+        current_component.settings.max_suggestion_length || Decidim::ParticipatoryDocuments.config.max_suggestion_length
       end
     end
   end
