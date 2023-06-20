@@ -112,6 +112,62 @@ module Decidim
           it { is_expected.to be_valid }
         end
       end
+
+      context "when :min_suggestion_length  is modified in the component settings" do
+        let(:body) { "Hi" }
+        let(:component) { double(:participatory_documents_component, settings: settings) }
+        let(:settings) { double(:settings, min_suggestion_length: 3, max_suggestion_length: 100) }
+
+        it { is_expected.to be_invalid }
+
+        it_behaves_like "validate error message", "too_short", { min_length: 3 }
+
+        context "when body is ok" do
+          let(:body) { "enough body" }
+
+          it { is_expected.to be_valid }
+        end
+      end
+
+      context "when :max_suggestion_length is modified in the component settings" do
+        let(:body) { "A" * 201 }
+        let(:component) { double(:participatory_documents_component, settings: settings) }
+        let(:settings) { double(:settings, min_suggestion_length: 5, max_suggestion_length: 200) }
+
+        before do
+          allow(Decidim::ParticipatoryDocuments).to receive(:max_suggestion_length).and_return(300)
+        end
+
+        it { is_expected.to be_invalid }
+
+        it_behaves_like "validate error message", "too_long", { max_length: 200 }
+
+        context "when body is ok" do
+          let(:body) { "enough body" }
+
+          it { is_expected.to be_valid }
+        end
+      end
+
+      context "when :min_suggestion_length is modified in the component settings" do
+        let(:body) { "Hi" }
+        let(:component) { double(:participatory_documents_component, settings: settings) }
+        let(:settings) { double(:settings, min_suggestion_length: 3, max_suggestion_length: 100) }
+
+        before do
+          allow(Decidim::ParticipatoryDocuments).to receive(:min_suggestion_length).and_return(10)
+        end
+
+        it { is_expected.to be_invalid }
+
+        it_behaves_like "validate error message", "too_short", { min_length: 3 }
+
+        context "when body is ok" do
+          let(:body) { "enough body" }
+
+          it { is_expected.to be_valid }
+        end
+      end
     end
   end
 end
