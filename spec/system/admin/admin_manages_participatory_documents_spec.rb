@@ -50,7 +50,7 @@ describe "Admin manages participatory documents", type: :system do
         expect(page.execute_script("return window.getComputedStyle(document.querySelector('.box-preview .box')).borderColor")).to eq("rgb(240, 15, 0)")
 
         if create
-          click_button "Create Participatory document"
+          click_button "Create participatory document"
         else
           click_button "Update"
         end
@@ -72,6 +72,10 @@ describe "Admin manages participatory documents", type: :system do
     end
 
     it_behaves_like "creating a document", true
+
+    it "has no areas delete warning" do
+      expect(page).not_to have_content("all the participatory areas will be deleted!")
+    end
   end
 
   context "when a file is not uploaded" do
@@ -86,7 +90,7 @@ describe "Admin manages participatory documents", type: :system do
     end
   end
 
-  context "when document needs update" do
+  context "when document is updated" do
     let!(:document) { create :participatory_documents_document, :with_file, component: component }
     let(:default_color) { "rgb(250, 170, 170)" }
     let!(:default_color_with_opacity) { "rgba(250, 170, 170, 0.2)" }
@@ -97,6 +101,47 @@ describe "Admin manages participatory documents", type: :system do
     end
 
     it_behaves_like "creating a document", false
+
+    it "has no sections delete warning" do
+      expect(page).not_to have_content("all the participatory areas will be deleted!")
+    end
+
+    context "when document has areas" do
+      let!(:document) { create :participatory_documents_document, :with_file, :with_sections, component: component }
+
+      it "has sections delete warning" do
+        expect(page).to have_content("all the participatory areas will be deleted!")
+        expect(document.sections.count).to eq(2)
+        attach_file :document_file, Decidim::Dev.asset("Exampledocument.pdf")
+        click_button "Update"
+        expect(document.sections.reload.count).to eq(0)
+      end
+
+      context "and areas have suggestions" do
+        let!(:document) { create :participatory_documents_document, :with_file, :with_annotations, component: component }
+
+        it "do not remove the document" do
+          expect(page).not_to have_content("all the participatory areas will be deleted!")
+          expect(page).to have_content("This document cannot be changed or removed because it already has suggestions attached")
+          expect(document.sections.count).to eq(2)
+          attach_file :document_file, Decidim::Dev.asset("Exampledocument.pdf")
+          click_button "Update"
+          expect(document.sections.reload.count).to eq(2)
+          expect(page).to have_content("Cannot delete record because dependent annotations exist")
+        end
+
+        it "updates other parts of the document" do
+          fill_in_i18n_editor(
+            :document_description,
+            "#document-description-tabs",
+            en: "This is description of the file"
+          )
+          click_button "Update"
+          expect(page).to have_content("Document has been successfully updated")
+          expect(document.reload.description["en"]).to include("This is description of the file")
+        end
+      end
+    end
   end
 
   context "when a file is uploaded" do

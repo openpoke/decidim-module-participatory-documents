@@ -17,9 +17,13 @@ module Decidim
 
           begin
             transaction do
+              destroy_sections!
               update_document
             end
             broadcast(:ok, document)
+          rescue ActiveRecord::RecordNotDestroyed
+            # if sections contains annotations, cannot be deleted
+            broadcast(:error, document.sections.filter_map { |sec| sec.errors[:base].presence }.flatten)
           rescue ActiveRecord::RecordInvalid
             form.errors.add(:file, document.errors[:file]) if document.errors.include? :file
             broadcast(:invalid)
@@ -45,6 +49,21 @@ module Decidim
             form.current_user,
             **attributes
           )
+        end
+
+        def destroy_sections!
+          return if form.file.blank?
+          return unless document.sections.any?
+
+          document.sections.each do |section|
+            Decidim.traceability.perform_action!(
+              "delete",
+              section,
+              current_user
+            ) do
+              section.destroy!
+            end
+          end
         end
       end
     end

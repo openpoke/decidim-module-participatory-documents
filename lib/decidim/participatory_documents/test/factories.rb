@@ -17,6 +17,18 @@ FactoryBot.define do
     trait :with_file do
       file { Decidim::Dev.test_file("Exampledocument.pdf", "application/pdf") }
     end
+
+    trait :with_sections do
+      after :create do |document|
+        document.sections = create_list(:participatory_documents_section, 2, document: document)
+      end
+    end
+
+    trait :with_annotations do
+      after :create do |document|
+        document.sections = create_list(:participatory_documents_section, 2, :with_annotations, document: document)
+      end
+    end
   end
 
   factory :participatory_documents_section, class: "Decidim::ParticipatoryDocuments::Section" do
