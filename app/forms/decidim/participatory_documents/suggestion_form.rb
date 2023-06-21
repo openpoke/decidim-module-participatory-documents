@@ -6,9 +6,6 @@ module Decidim
       include Decidim::AttachmentAttributes
       include Decidim::HasUploadValidations
 
-      MIN_BODY_LENGTH = 15
-      MAX_BODY_LENGTH = 150
-
       attribute :body, String
       attribute :file
 
@@ -17,18 +14,25 @@ module Decidim
 
       private
 
-      def validate_single_field_presence
-        errors.add(:base, I18n.t("activemodel.errors.models.suggestion.attributes.not_blank")) if body.blank? && file.blank?
-      end
-
       def validate_body_length
         return if body.blank?
 
-        if body.length < MIN_BODY_LENGTH
-          errors.add(:base, I18n.t("activemodel.errors.models.suggestion.attributes.too_short", min_length: MIN_BODY_LENGTH))
-        elsif body.length > MAX_BODY_LENGTH
-          errors.add(:base, I18n.t("activemodel.errors.models.suggestion.attributes.too_long", max_length: MAX_BODY_LENGTH))
-        end
+        errors.add(:body, I18n.t("activemodel.errors.models.suggestion.attributes.too_short", min_length: min_length)) if body.length < min_length
+        errors.add(:body, I18n.t("activemodel.errors.models.suggestion.attributes.too_long", max_length: max_length)) if body.length > max_length
+      end
+
+      def validate_single_field_presence
+        return unless body.blank? && file.blank?
+
+        errors.add(:body, I18n.t("activemodel.errors.models.suggestion.attributes.not_blank"))
+      end
+
+      def min_length
+        current_component.settings.min_suggestion_length || Decidim::ParticipatoryDocuments.config.min_suggestion_length
+      end
+
+      def max_length
+        current_component.settings.max_suggestion_length || Decidim::ParticipatoryDocuments.config.max_suggestion_length
       end
     end
   end
