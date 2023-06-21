@@ -14,7 +14,7 @@ module Decidim
       end
 
       def create
-        @form = form(Decidim::ParticipatoryDocuments::SuggestionForm).from_params(params)
+        @form = form(Decidim::ParticipatoryDocuments::SuggestionForm).from_params(params).with_context(current_component: current_component)
 
         CreateSuggestion.call(@form, section) do
           on(:ok) do |_suggestion|
