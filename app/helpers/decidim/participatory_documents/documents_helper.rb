@@ -23,7 +23,7 @@ module Decidim
           Decidim::EngineRouter.admin_proxy(document.component).publish_document_path(document),
           method: :post,
           data: { confirm: t("actions.confirm", scope: "decidim.participatory_documents") },
-          class: "button small warning"
+          class: "button small light success"
         ) do
           button_builder(btn_title, icon: "check")
         end
