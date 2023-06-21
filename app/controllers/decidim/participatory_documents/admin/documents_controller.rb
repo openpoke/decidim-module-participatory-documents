@@ -74,10 +74,10 @@ module Decidim
           enforce_permission_to :update, :participatory_document, document: document
         end
 
-        def final_publish
+        def publish
           enforce_permission_to :update, :participatory_document, document: document
 
-          Admin::FinalSectionsPublish.call(document) do
+          Admin::PublishDocument.call(document) do
             on(:ok) do |_document|
               flash[:notice] = t("documents.final_publish.success", scope: "decidim.participatory_documents.admin")
               redirect_to document_suggestions_path(document)

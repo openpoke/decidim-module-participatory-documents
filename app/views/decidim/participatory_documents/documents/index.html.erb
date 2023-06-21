@@ -2,7 +2,7 @@
   <div class="row">
     <%= content_tag(:h3, translated_attribute(document.title), class: "title") if translated_attribute(document.title).present? %>
     <%= content_tag(:p, translated_attribute(document.description).html_safe, class: "description") if translated_attribute(document.description).present? %>
-    <% if session[:preview_mode] && !document.final_publish %>
+    <% if session[:preview_mode] && !document.published? %>
       <div class="callout announcement mb-sm warning cell-announcement">
         <p class="heading5"><%= t("decidim.participatory_documents.documents.preview_title") %></p>
         <p><%= t("decidim.participatory_documents.documents.publish_description") %></p>

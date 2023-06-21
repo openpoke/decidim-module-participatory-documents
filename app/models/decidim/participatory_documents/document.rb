@@ -11,6 +11,7 @@ module Decidim
       include Decidim::Loggable
       include Decidim::TranslatableResource
       include Decidim::HasUploadValidations
+      include Decidim::Publicable
 
       translatable_fields :title, :description
 

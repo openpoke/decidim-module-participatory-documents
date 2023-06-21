@@ -20,7 +20,7 @@ module Decidim
         btn_title = t("actions.finish_publishing", scope: "decidim.participatory_documents")
 
         link_to(
-          Decidim::EngineRouter.admin_proxy(document.component).final_publish_document_path(document),
+          Decidim::EngineRouter.admin_proxy(document.component).publish_document_path(document),
           method: :post,
           data: { confirm: t("actions.confirm", scope: "decidim.participatory_documents") },
           class: "button small warning"

@@ -56,7 +56,7 @@ module Decidim
         # Documents can only be edited and sections added to them
         # if they are not finally published.
         def can_edit_document_or_sections?
-          toggle_allow(!document.final_publish)
+          toggle_allow(!document.published?)
         end
 
         # Proposals can only be answered from the admin when the

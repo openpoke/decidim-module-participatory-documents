@@ -27,7 +27,7 @@ describe Decidim::ParticipatoryDocuments::DocumentsHelper, type: :helper do
       allow(helper).to receive(:document).and_return(document)
       result = helper.finish_publish_btn
       expect(result).to include("Publish participatory sections")
-      expect(result).to include("href=\"#{Decidim::EngineRouter.admin_proxy(document.component).final_publish_document_path(document)}\"")
+      expect(result).to include("href=\"#{Decidim::EngineRouter.admin_proxy(document.component).publish_document_path(document)}\"")
       expect(result).to include("data-confirm=\"#{t("actions.confirm", scope: "decidim.participatory_documents")}\"")
       expect(result).to include("class=\"button small warning\"")
     end

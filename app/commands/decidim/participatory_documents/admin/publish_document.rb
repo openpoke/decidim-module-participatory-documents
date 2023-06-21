@@ -3,7 +3,7 @@
 module Decidim
   module ParticipatoryDocuments
     module Admin
-      class FinalSectionsPublish < Rectify::Command
+      class PublishDocument < Rectify::Command
         # Public: Initializes the command.
         #
         # document - The document to publish.
@@ -16,18 +16,9 @@ module Decidim
         # - :ok when everything is valid.
         # Returns nothing.
         def call
-          final_publish
+          @document.publish!
 
           broadcast(:ok)
-        end
-
-        private
-
-        attr_reader :document
-
-        def final_publish
-          document.update!(final_publish: true)
-          document.save!
         end
       end
     end
