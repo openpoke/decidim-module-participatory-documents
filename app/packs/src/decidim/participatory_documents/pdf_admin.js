@@ -34,7 +34,7 @@ window.InitDocumentManagers = function(options) {
 };
 
 // Call this on an annotation layer to initialize the polygon editor (admin side)
-window.InitPolygonEditor = function(layer, boxes, options) {    
+window.InitPolygonEditor = function(layer, boxes, options, change_callback = () => {}) {
   let editor = new PolygonEditor(layer, boxes, { i18n: options.i18n });
   // Open the global box modal settings when a box is clicked
   editor.onBoxClick = (box) => {
@@ -47,9 +47,11 @@ window.InitPolygonEditor = function(layer, boxes, options) {
   // update the global state manager when a box is edited or destroyed using the polygon editor (mouse interaction)
   editor.onBoxChange = (box) => {
     window.PdfDocStateManager.add(box);
+    change_callback(box);
   };
   editor.onBoxDestroy = (box) => {
     window.PdfDocStateManager.remove(box);
+    change_callback(box);
   };
 
   return editor;
