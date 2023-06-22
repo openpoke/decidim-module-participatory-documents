@@ -8,6 +8,8 @@ module Decidim
       include Decidim::TranslatableResource
       include Decidim::TranslatableAttributes
       include Decidim::Publicable
+      include NeedsPositionsSorting
+
       belongs_to :document, class_name: "Decidim::ParticipatoryDocuments::Document"
       has_many :annotations, class_name: "Decidim::ParticipatoryDocuments::Annotation", dependent: :restrict_with_error
       has_many :suggestions, class_name: "Decidim::ParticipatoryDocuments::Suggestion", dependent: :restrict_with_error, as: :suggestable
@@ -15,6 +17,7 @@ module Decidim
       delegate :organization, :participatory_space, :component, to: :document, allow_nil: true
 
       translatable_fields :title
+
       def self.log_presenter_class_for(_log)
         Decidim::ParticipatoryDocuments::AdminLog::SectionPresenter
       end

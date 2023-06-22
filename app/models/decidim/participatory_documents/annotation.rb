@@ -3,6 +3,8 @@
 module Decidim
   module ParticipatoryDocuments
     class Annotation < ApplicationRecord
+      include NeedsPositionsSorting
+
       belongs_to :section, class_name: "Decidim::ParticipatoryDocuments::Section"
       has_many :suggestions, class_name: "Decidim::ParticipatoryDocuments::Suggestion", dependent: :restrict_with_error, as: :suggestable
 
