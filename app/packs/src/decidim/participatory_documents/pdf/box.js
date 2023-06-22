@@ -165,7 +165,7 @@ export default class Box {
 
   _mouseLeave(evt) {
     if (!this.layer.creating && !this.isGrouping()) {
-      this.div.classList.remove("hover");
+      this.div.classList.remove("hover", "resizing");
       this.blurGroup()
       this.unBlockSibilings();
       this.onLeave(evt);
