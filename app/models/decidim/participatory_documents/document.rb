@@ -26,6 +26,10 @@ module Decidim
       def self.log_presenter_class_for(_log)
         Decidim::ParticipatoryDocuments::AdminLog::DocumentPresenter
       end
+
+      def has_suggestions?
+        suggestions.any? || annotations.any? { |annotation| annotation.suggestions.any? }
+      end
     end
   end
 end

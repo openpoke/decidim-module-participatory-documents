@@ -29,6 +29,18 @@ FactoryBot.define do
         document.sections = create_list(:participatory_documents_section, 2, :with_annotations, document: document)
       end
     end
+
+    trait :with_global_suggestions do
+      after :create do |document|
+        document.suggestions = create_list(:participatory_documents_suggestion, 2, suggestable: document)
+      end
+    end
+
+    trait :with_suggestions do
+      after :create do |document|
+        document.sections = create_list(:participatory_documents_section, 2, :with_suggestions, document: document)
+      end
+    end
   end
 
   factory :participatory_documents_section, class: "Decidim::ParticipatoryDocuments::Section" do
@@ -46,6 +58,12 @@ FactoryBot.define do
         section.annotations = create_list(:participatory_documents_annotation, 2, section: section)
       end
     end
+
+    trait :with_suggestions do
+      after :create do |section|
+        section.annotations = create_list(:participatory_documents_annotation, 2, :with_suggestions, section: section)
+      end
+    end
   end
 
   factory :participatory_documents_annotation, class: "Decidim::ParticipatoryDocuments::Annotation" do
@@ -57,6 +75,12 @@ FactoryBot.define do
       left = rand(1.0..100.0)
 
       annotation.rect = { top: top, left: left, width: 15.9411, height: 18.0857 }
+    end
+
+    trait :with_suggestions do
+      after :create do |annotation|
+        annotation.suggestions = create_list(:participatory_documents_suggestion, 2, suggestable: annotation)
+      end
     end
   end
 

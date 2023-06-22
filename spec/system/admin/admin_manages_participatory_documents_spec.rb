@@ -106,9 +106,7 @@ describe "Admin manages participatory documents", type: :system do
       expect(page).not_to have_content("all the participatory areas will be deleted!")
     end
 
-    context "when document has areas" do
-      let!(:document) { create :participatory_documents_document, :with_file, :with_sections, component: component }
-
+    shared_examples "removes sections" do
       it "has sections delete warning" do
         expect(page).to have_content("all the participatory areas will be deleted!")
         expect(document.sections.count).to eq(2)
@@ -116,30 +114,52 @@ describe "Admin manages participatory documents", type: :system do
         click_button "Update"
         expect(document.sections.reload.count).to eq(0)
       end
+    end
 
-      context "and areas have suggestions" do
+    shared_examples "does not remove sections" do |with_sections|
+      it "do not remove the document" do
+        expect(page).not_to have_content("all the participatory areas will be deleted!")
+        expect(page).to have_content("This document cannot be changed or removed because it already has suggestions attached")
+        expect(document.sections.count).to eq(2) if with_sections
+        attach_file :document_file, Decidim::Dev.asset("Exampledocument.pdf")
+        click_button "Update"
+        expect(document.sections.reload.count).to eq(2) if with_sections
+        expect(page).to have_content("This document cannot be changed or removed because it has suggestions")
+      end
+
+      it "updates other parts of the document" do
+        fill_in_i18n_editor(
+          :document_description,
+          "#document-description-tabs",
+          en: "This is description of the file"
+        )
+        click_button "Update"
+        expect(page).to have_content("Document has been successfully updated")
+        expect(document.reload.description["en"]).to include("This is description of the file")
+      end
+    end
+
+    context "when document has sections" do
+      let!(:document) { create :participatory_documents_document, :with_file, :with_sections, component: component }
+
+      it_behaves_like "removes sections"
+
+      context "and have global suggestions" do
+        let!(:document) { create :participatory_documents_document, :with_file, :with_global_suggestions, component: component }
+
+        it_behaves_like "does not remove sections", false
+      end
+
+      context "and areas have annotations (boxes)" do
         let!(:document) { create :participatory_documents_document, :with_file, :with_annotations, component: component }
 
-        it "do not remove the document" do
-          expect(page).not_to have_content("all the participatory areas will be deleted!")
-          expect(page).to have_content("This document cannot be changed or removed because it already has suggestions attached")
-          expect(document.sections.count).to eq(2)
-          attach_file :document_file, Decidim::Dev.asset("Exampledocument.pdf")
-          click_button "Update"
-          expect(document.sections.reload.count).to eq(2)
-          expect(page).to have_content("Cannot delete record because dependent annotations exist")
-        end
+        it_behaves_like "removes sections"
+      end
 
-        it "updates other parts of the document" do
-          fill_in_i18n_editor(
-            :document_description,
-            "#document-description-tabs",
-            en: "This is description of the file"
-          )
-          click_button "Update"
-          expect(page).to have_content("Document has been successfully updated")
-          expect(document.reload.description["en"]).to include("This is description of the file")
-        end
+      context "and areas have suggestions" do
+        let!(:document) { create :participatory_documents_document, :with_file, :with_suggestions, component: component }
+
+        it_behaves_like "does not remove sections", true
       end
     end
   end

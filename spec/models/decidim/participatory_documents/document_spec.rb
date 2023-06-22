@@ -18,6 +18,10 @@ module Decidim
         it { expect(described_class.reflect_on_association(:annotations).macro).to eq(:has_many) }
       end
 
+      it "has not suggestions" do
+        expect(document).not_to be_has_suggestions
+      end
+
       include_examples "has component"
       include_examples "authorable" do
         subject { document }
@@ -31,6 +35,22 @@ module Decidim
 
       it { is_expected.to be_valid }
       it { is_expected.to be_versioned }
+
+      context "when has global suggestions" do
+        let(:document) { create(:participatory_documents_document, :with_global_suggestions, component: component) }
+
+        it "has suggestions" do
+          expect(document).to be_has_suggestions
+        end
+      end
+
+      context "when has section suggestions" do
+        let(:document) { create(:participatory_documents_document, :with_suggestions, component: component) }
+
+        it "has suggestions" do
+          expect(document).to be_has_suggestions
+        end
+      end
     end
   end
 end

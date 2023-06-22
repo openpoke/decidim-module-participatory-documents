@@ -4,16 +4,13 @@ module Decidim
   module ParticipatoryDocuments
     class Annotation < ApplicationRecord
       belongs_to :section, class_name: "Decidim::ParticipatoryDocuments::Section"
+      has_many :suggestions, class_name: "Decidim::ParticipatoryDocuments::Suggestion", dependent: :restrict_with_error, as: :suggestable
+
       delegate :document, to: :section
+      delegate :organization, :participatory_space, :component, to: :document, allow_nil: true
 
       def self.log_presenter_class_for(_log)
         Decidim::ParticipatoryDocuments::AdminLog::AnnotationPresenter
-      end
-
-      # to have a consecutive number of the boxes
-      # Suggestion: try to order by rect coordinates so number go according the UI in the document
-      def position
-        @position ||= document.annotations.where("decidim_participatory_documents_annotations.id < ?", id).count + 1
       end
 
       def serialize

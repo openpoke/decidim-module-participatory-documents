@@ -76,12 +76,6 @@ module Decidim
         def edit_pdf
           enforce_permission_to :update, :participatory_document, document: document
         end
-
-        private
-
-        def sections
-          @sections ||= document&.sections
-        end
       end
     end
   end

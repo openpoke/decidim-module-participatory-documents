@@ -25,10 +25,6 @@ module Decidim
         artificial_title.merge(super.reject { |_key, value| value.blank? })
       end
 
-      def position
-        @position ||= document.sections.where("id < ?", id).count + 1
-      end
-
       private
 
       def artificial_title

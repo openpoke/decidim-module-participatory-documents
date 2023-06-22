@@ -21,9 +21,10 @@ module Decidim
               update_document
             end
             broadcast(:ok, document)
-          rescue ActiveRecord::RecordNotDestroyed
-            # if sections contains annotations, cannot be deleted
-            broadcast(:error, document.sections.filter_map { |sec| sec.errors[:base].presence }.flatten)
+          rescue ActiveRecord::RecordNotDestroyed => e
+            # if sections contains annotations, can be deleted
+            # if sections contains suggestions, cannot be deleted
+            broadcast(:error, e.message)
           rescue ActiveRecord::RecordInvalid
             form.errors.add(:file, document.errors[:file]) if document.errors.include? :file
             broadcast(:invalid)
@@ -53,7 +54,20 @@ module Decidim
 
         def destroy_sections!
           return if form.file.blank?
+
+          raise ActiveRecord::RecordNotDestroyed, I18n.t("activemodel.errors.models.document.has_suggestions") if document.has_suggestions?
+
           return unless document.sections.any?
+
+          document.annotations.each do |annotation|
+            Decidim.traceability.perform_action!(
+              "delete",
+              annotation,
+              current_user
+            ) do
+              annotation.destroy!
+            end
+          end
 
           document.sections.each do |section|
             Decidim.traceability.perform_action!(
