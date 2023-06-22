@@ -242,7 +242,7 @@ describe "Admin sees the action logs on homepage", type: :system do
       double(
         invalid?: false,
         page_number: 1,
-        rect: [50, 50, 100, 100],
+        rect: { left: 50, top: 50, width: 100, height: 100 },
         id: annotation2.id,
         section: section1.id,
         current_user: current_user

@@ -48,9 +48,9 @@ module Decidim
           context "when other annotation is not in the same document" do
             let!(:another_section) { create(:participatory_documents_section) }
 
-            it "does not udpate the position" do
+            it "does not update the position" do
               subject.call
-              expect(Decidim::ParticipatoryDocuments::Annotation.last.position).to eq(1)
+              expect(Decidim::ParticipatoryDocuments::Annotation.last.position).to eq(0)
             end
           end
         end
