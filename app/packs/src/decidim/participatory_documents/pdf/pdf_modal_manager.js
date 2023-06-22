@@ -116,7 +116,6 @@ export default class PdfModalManager {
             this.onError(box, error);
           });
       } else {
-        Reflect.deleteProperty(box.layer.boxes, box.id);
         box.destroy();
       }
       this.modalLayout.classList.remove("show");

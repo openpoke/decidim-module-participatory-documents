@@ -24,6 +24,10 @@ export default class PolygonEditor extends PolygonViewer {
     return this.div.classList.contains("blocked");
   }
 
+  removeBox(box) {
+    Reflect.deleteProperty(this.boxes, box.id);
+  }
+
   _mouseDown(evt) {
     if (!this.creating && !this.isBlocked()) {
       this.blockBoxes();

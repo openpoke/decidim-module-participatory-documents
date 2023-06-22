@@ -20,7 +20,7 @@ export default class PolygonViewer {
     this.div.style.pointerEvents = "all";
     this.div.classList.add("polygon-ready");
     this.json.forEach((box) => {
-      this.boxes[box.id] = new Box(this, box);
+      this.addBox(new Box(this, box));
       this.bindBoxEvents(this.boxes[box.id]);
     });
   }
@@ -45,5 +45,9 @@ export default class PolygonViewer {
 
   unBlockBoxes() {
     this.div.querySelectorAll(".box").forEach((div) => div.classList.remove("blocked"));
+  }
+
+  addBox(box) {
+    this.boxes[box.id] = box;
   }
 }

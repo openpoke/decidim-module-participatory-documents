@@ -80,9 +80,9 @@ export default class Box {
   setInfo(data) {
     if (data) {
       if (data.id) {
-        Reflect.deleteProperty(this.layer.boxes, this.id);
+        this.layer.removeBox(this)
         this.id = data.id;
-        this.layer.boxes[this.id] = this;
+        this.layer.addBox(this)
       }
       this.section = data.section || this.section;
       this.div.dataset.section = this.section;
