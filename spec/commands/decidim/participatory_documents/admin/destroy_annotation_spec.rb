@@ -29,12 +29,29 @@ module Decidim
         end
 
         context "when everything is ok" do
+          let!(:another_annotation) { create(:participatory_documents_annotation, section: another_section) }
+          let(:another_section) { create(:participatory_documents_section, document: annotation.section.document) }
+
           it "Removes a annotation" do
             expect { subject.call }.to change(Decidim::ParticipatoryDocuments::Annotation, :count).by(-1)
           end
 
           it "Removes a section" do
             expect { subject.call }.to change(Decidim::ParticipatoryDocuments::Section, :count).by(-1)
+          end
+
+          it "updates the position" do
+            subject.call
+            expect(Decidim::ParticipatoryDocuments::Annotation.last.position).to eq(1)
+          end
+
+          context "when other annotation is not in the same document" do
+            let!(:another_section) { create(:participatory_documents_section) }
+
+            it "does not udpate the position" do
+              subject.call
+              expect(Decidim::ParticipatoryDocuments::Annotation.last.position).to eq(1)
+            end
           end
         end
       end

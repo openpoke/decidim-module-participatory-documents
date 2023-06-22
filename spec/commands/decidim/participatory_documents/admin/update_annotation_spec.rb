@@ -40,6 +40,11 @@ module Decidim
             annotation.reload
             expect(annotation.rect).to eq(rect)
           end
+
+          it "updates the position" do
+            subject.call
+            expect(Decidim::ParticipatoryDocuments::Annotation.last.position).to eq(1)
+          end
         end
       end
     end

@@ -69,12 +69,13 @@ FactoryBot.define do
   factory :participatory_documents_annotation, class: "Decidim::ParticipatoryDocuments::Annotation" do
     section { create(:participatory_documents_section) }
     page_number { 1 }
-
-    after(:build) do |annotation|
-      top = rand(1.0..60.0)
-      left = rand(1.0..100.0)
-
-      annotation.rect = { top: top, left: left, width: 15.9411, height: 18.0857 }
+    rect do
+      {
+        top: rand(1.0..60.0),
+        left: rand(1.0..100.0),
+        width: rand(1.0..15.0),
+        height: rand(1.0..20.0)
+      }
     end
 
     trait :with_suggestions do
