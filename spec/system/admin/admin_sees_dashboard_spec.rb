@@ -66,7 +66,7 @@ describe "Admin sees the action logs on homepage", type: :system do
         double(
           invalid?: false,
           page_number: 1,
-          rect: [50, 50, 100, 100],
+          rect: { left: 50, top: 50, width: 100, height: 100 },
           id: "annotationid",
           group: "groupid",
           current_user: current_user,
@@ -93,7 +93,7 @@ describe "Admin sees the action logs on homepage", type: :system do
         double(
           invalid?: false,
           page_number: 1,
-          rect: [0, 50, 100, 100],
+          rect: { left: 0, top: 50, width: 100, height: 100 },
           id: annotation.id,
           section: annotation.section.id,
           current_user: current_user
@@ -140,7 +140,7 @@ describe "Admin sees the action logs on homepage", type: :system do
           title: { en: "Title test Section" },
           invalid?: false,
           page_number: 1,
-          rect: [50, 50, 100, 100],
+          rect: { left: 50, top: 50, width: 100, height: 100 },
           id: "annotationid",
           group: "groupid",
           current_user: current_user,
