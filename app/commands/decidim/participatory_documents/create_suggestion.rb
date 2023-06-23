@@ -20,7 +20,7 @@ module Decidim
           broadcast(:ok, suggestion)
         rescue ActiveRecord::RecordInvalid => e
           Rails.logger.info e.message
-          broadcast(:invalid)
+          broadcast(:invalid, e.message)
         end
       end
 

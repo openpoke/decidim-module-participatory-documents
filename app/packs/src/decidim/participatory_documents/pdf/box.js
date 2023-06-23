@@ -140,7 +140,7 @@ export default class Box {
 
   _click(evt) {
     if (!this.layer.creating && !this.isMoving() && !this.isGrouping() && !this.isResizing()) {
-      console.log("box click", evt, this);
+      // console.log("box click", evt, this);
       evt.stopPropagation();
       this.onClick(evt);
       window.addEventListener("click", this._blur.bind(this), { once: true });

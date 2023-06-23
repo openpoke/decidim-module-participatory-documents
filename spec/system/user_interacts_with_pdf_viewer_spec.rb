@@ -186,24 +186,44 @@ describe "User interaction with PDF viewer", type: :system do
       login_as document.author, scope: :user
 
       page.visit Decidim::EngineRouter.main_proxy(component).pdf_viewer_documents_path(file: document.attached_uploader(:file).path)
-      annotation = section.annotations.first
-
-      find("#box-#{annotation.id}").click
     end
 
-    it "submits the content" do
-      pending "There for some reason Capybara does not handle this"
-      raise "Pending"
-      # expect(page).to have_selector("#participation-modal", count: 1)
-      # expect(page).to have_css("#participation-modal.active")
-      #
-      # within "#new_suggestion_" do
-      #   fill_in :suggestion_body, with: "Some random string longer than 15 chrs"
-      #   click_button("Send suggestion")
-      # end
-      #
-      # page.find("#box-#{section.annotations.first.id}").click
-      # expect(page).to have_content("Some random string longer than 15 chrs")
+    it "submits a box content" do
+      find("#box-#{section.annotations.first.id}").click
+      sleep 1
+      expect(page).to have_css("#participation-modal.active")
+      expect(page).not_to have_content("upload a file")
+
+      within "#new_suggestion_" do
+        fill_in :suggestion_body, with: "Some random string longer than 15 chrs"
+        click_button("Send suggestion")
+      end
+      expect(page).to have_content("Some random string longer than 15 chrs")
+      expect(Decidim::ParticipatoryDocuments::Suggestion.count).to eq(1)
+      # hide the modal
+      find("#close-suggestions").click
+      expect(page).not_to have_content("Some random string longer than 15 chrs")
+      page.find("#box-#{section.annotations.first.id}").click
+      expect(page).to have_content("Some random string longer than 15 chrs")
+    end
+
+    it "submits a global content" do
+      click_button "Global suggestions"
+      sleep 1
+      expect(page).to have_css("#participation-modal.active")
+      expect(page).to have_content("upload a file")
+
+      within "#new_suggestion_" do
+        fill_in :suggestion_body, with: "Some random string longer than 15 chrs"
+        click_button("Send suggestion")
+      end
+      expect(page).to have_content("Some random string longer than 15 chrs")
+      expect(Decidim::ParticipatoryDocuments::Suggestion.count).to eq(1)
+      # hide the modal
+      find("#close-suggestions").click
+      expect(page).not_to have_content("Some random string longer than 15 chrs")
+      click_button "Global suggestions"
+      expect(page).to have_content("Some random string longer than 15 chrs")
     end
   end
 end
