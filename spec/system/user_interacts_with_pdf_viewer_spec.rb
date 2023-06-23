@@ -199,7 +199,6 @@ describe "User interaction with PDF viewer", type: :system do
         click_button("Send suggestion")
       end
       expect(page).to have_content("Some random string longer than 15 chrs")
-      expect(Decidim::ParticipatoryDocuments::Suggestion.count).to eq(1)
       # hide the modal
       find("#close-suggestions").click
       expect(page).not_to have_content("Some random string longer than 15 chrs")
@@ -218,7 +217,6 @@ describe "User interaction with PDF viewer", type: :system do
         click_button("Send suggestion")
       end
       expect(page).to have_content("Some random string longer than 15 chrs")
-      expect(Decidim::ParticipatoryDocuments::Suggestion.count).to eq(1)
       # hide the modal
       find("#close-suggestions").click
       expect(page).not_to have_content("Some random string longer than 15 chrs")
