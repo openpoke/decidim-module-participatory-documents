@@ -76,6 +76,28 @@ module Decidim
         def edit_pdf
           enforce_permission_to :update, :participatory_document, document: document
         end
+
+        def publish
+          enforce_permission_to :update, :participatory_document, document: document
+
+          Admin::PublishDocument.call(document) do
+            on(:ok) do |_document|
+              flash[:notice] = t("documents.final_publish.success", scope: "decidim.participatory_documents.admin")
+              redirect_to document_suggestions_path(document)
+            end
+
+            on(:invalid) do
+              flash.now[:alert] = t("documents.final_publish.error", scope: "decidim.participatory_documents.admin")
+              render :edit
+            end
+          end
+        end
+
+        private
+
+        def sections
+          @sections ||= document.sections
+        end
       end
     end
   end

@@ -179,4 +179,49 @@ describe "Admin manages participatory documents", type: :system do
       expect(page).to have_content("List Suggestions")
     end
   end
+
+  context "when the admin wants to publish sections of the document" do
+    let!(:document) { create :participatory_documents_document, :with_file, component: component }
+    let!(:section) { create :participatory_documents_section, document: document }
+    let!(:section2) { create :participatory_documents_section, document: document }
+    let!(:section3) { create :participatory_documents_section, document: document }
+
+    before do
+      visit_component_admin
+    end
+
+    it "shows the preview button" do
+      expect(page).to have_link("Preview and publishing sections")
+    end
+
+    it "goes to the preview page" do
+      click_link "Preview and publishing sections"
+      expect(page).to have_content("you are previewing the participatory sections of the document")
+    end
+
+    it "can edit sections after previewing" do
+      click_link "Preview and publishing sections"
+      click_link "Go back to edit participatory sections"
+      expect(page).to have_selector("a[href='#{manage_component_path(component)}'][title='Back']")
+    end
+
+    it "can publish sections after previewing" do
+      click_link "Preview and publishing sections"
+      click_link "Publish participatory sections"
+      expect(page).to have_content("are you sure?")
+
+      click_link "OK"
+      expect(page).to have_content("Sections have been successfully published")
+    end
+
+    it "can't edit sections after publishing" do
+      click_link "Preview and publishing sections"
+      click_link "Publish participatory sections"
+      click_link "OK"
+
+      expect(page).not_to have_content("Edit/upload document")
+      expect(page).not_to have_content("Edit participatory areas")
+      expect(page).not_to have_content("Preview and publishing sections")
+    end
+  end
 end

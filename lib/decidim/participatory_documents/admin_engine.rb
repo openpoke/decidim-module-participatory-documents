@@ -15,6 +15,9 @@ module Decidim
             get :pdf_viewer
             get :edit_pdf
           end
+          member do
+            put :publish
+          end
           resources :annotations, except: [:show, :new, :edit]
           resources :sections, except: [:show, :index]
           resources :suggestions, only: [:index, :show] do

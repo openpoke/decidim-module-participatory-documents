@@ -25,11 +25,13 @@ module Decidim
 
           edit_suggestion_note?
 
+          can_edit_document_or_sections? if permission_action.subject == :participatory_document && permission_action.action == :update
+
           allow! if permission_action.subject == :suggestion_note && permission_action.action == :create
           allow! if permission_action.subject == :suggestion_answer
           allow! if permission_action.subject == :document_section
           allow! if permission_action.subject == :document_annotations
-          allow! if permission_action.subject == :participatory_document
+          allow! if permission_action.subject == :participatory_document && permission_action.action == :create
           allow! if permission_action.subject == :suggestions
 
           permission_action
@@ -41,10 +43,20 @@ module Decidim
           @suggestion ||= context.fetch(:suggestion, nil)
         end
 
+        def document
+          @document ||= context.fetch(:document, nil)
+        end
+
         # There's no special condition to create proposal notes, only
         # users with access to the admin section can do it.
         def can_create_suggestion_note?
           allow! if permission_action.subject == :suggestion_note
+        end
+
+        # Documents can only be edited and sections added to them
+        # if they are not finally published.
+        def can_edit_document_or_sections?
+          toggle_allow(!document.published?)
         end
 
         # Proposals can only be answered from the admin when the
