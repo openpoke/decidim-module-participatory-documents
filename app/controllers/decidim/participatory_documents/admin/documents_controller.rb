@@ -17,7 +17,6 @@ module Decidim
         end
 
         def index
-          session[:preview_mode] = true
           redirect_to(document_suggestions_path(document)) && return if document.present? && document.file.attached?
         end
 

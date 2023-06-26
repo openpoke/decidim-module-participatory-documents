@@ -16,7 +16,7 @@ module Decidim
             get :edit_pdf
           end
           member do
-            post :publish
+            put :publish
           end
           resources :annotations, except: [:show, :new, :edit]
           resources :sections, except: [:show, :index]

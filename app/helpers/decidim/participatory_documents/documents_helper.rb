@@ -4,6 +4,7 @@ module Decidim
   module ParticipatoryDocuments
     module DocumentsHelper
       include Decidim::ParticipatoryDocuments::Admin::ButtonHelper
+      include Decidim::Admin::UserRolesHelper
 
       def back_edit_pdf_btn
         btn_title = t("actions.back_edit", scope: "decidim.participatory_documents")
@@ -21,12 +22,18 @@ module Decidim
 
         link_to(
           Decidim::EngineRouter.admin_proxy(document.component).publish_document_path(document),
-          method: :post,
+          method: :put,
           data: { confirm: t("actions.confirm", scope: "decidim.participatory_documents") },
           class: "button small light success"
         ) do
           button_builder(btn_title, icon: "check")
         end
+      end
+
+      def preview_mode?
+        return if document.published?
+
+        current_component.manifest.admin_engine && user_role_config.component_is_accessible?(current_component.manifest_name)
       end
     end
   end
