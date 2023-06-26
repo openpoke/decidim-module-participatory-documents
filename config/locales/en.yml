@@ -86,9 +86,14 @@ en:
     participatory_documents:
       actions:
         back: Back
+        back_edit: Go back to edit participatory sections
+        confirm: This action means that you will not be able to edit the document
+          or create new sections, are you sure?
         edit_boxes: Edit participatory areas
         edit_document: Edit/upload document
+        finish_publishing: Publish participatory sections
         new: Upload PDF document
+        preview_publishing_sections: Preview and publishing sections
         title: Actions
       admin:
         documents:
@@ -98,6 +103,9 @@ en:
           edit:
             title: Edit Participatory document
             update: Update
+          final_publish:
+            error: There was an error publishing sections
+            success: Sections have been successfully published
           form:
             box_style_preview: 'Box style preview:'
           index:
@@ -193,6 +201,9 @@ en:
         upload_file: Attach a document
       documents:
         missing: There is no document uploaded yet
+        preview_title: Preview
+        publish_description: 'Admin options: you are previewing the participatory
+          sections of the document'
       models:
         document:
           fields:
