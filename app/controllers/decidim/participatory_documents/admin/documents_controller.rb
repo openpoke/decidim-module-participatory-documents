@@ -6,7 +6,7 @@ module Decidim
       # This controller allows admins to manage documents in a participatory process.
       class DocumentsController < Admin::ApplicationController
         include Decidim::ApplicationHelper
-        include Decidim::ParticipatoryDocuments::Admin::NeedsAdminSnippets
+        include NeedsAdminSnippets
 
         helper Decidim::LayoutHelper
         helper_method :sections
@@ -22,14 +22,14 @@ module Decidim
 
         def new
           enforce_permission_to :create, :participatory_document
-          @form = form(Decidim::ParticipatoryDocuments::Admin::DocumentForm).from_params(params)
+          @form = form(DocumentForm).from_params(params)
         end
 
         def create
           enforce_permission_to :create, :participatory_document
-          @form = form(Decidim::ParticipatoryDocuments::Admin::DocumentForm).from_params(params)
+          @form = form(DocumentForm).from_params(params)
 
-          Admin::CreateDocument.call(@form) do
+          CreateDocument.call(@form) do
             on(:ok) do |document|
               flash[:notice] = I18n.t("documents.create.success", scope: "decidim.participatory_documents.admin")
               redirect_to edit_pdf_documents_path(id: document.id)
@@ -43,17 +43,21 @@ module Decidim
         end
 
         def edit
-          # TODO: before uploading a new PDF, check no participation associated (no boxes/groups created)
           enforce_permission_to :update, :participatory_document, document: document
-          @form = form(Admin::DocumentForm).from_model(document)
+          @form = form(DocumentForm).from_model(document)
         end
 
         def update
           enforce_permission_to :update, :participatory_document, document: document
-          @form = form(Admin::DocumentForm).from_params(params)
-          Admin::UpdateDocument.call(@form, document) do
-            on(:ok) do |_proposal|
+          @form = form(DocumentForm).from_params(params)
+          UpdateDocument.call(@form, document) do
+            on(:ok) do
               flash[:notice] = t("documents.update.success", scope: "decidim.participatory_documents.admin")
+              redirect_to documents_path
+            end
+
+            on(:error) do |error|
+              flash[:alert] = t("documents.update.error", scope: "decidim.participatory_documents.admin") + " #{error}"
               redirect_to documents_path
             end
 
@@ -65,7 +69,7 @@ module Decidim
         end
 
         def pdf_viewer
-          @form = form(Decidim::ParticipatoryDocuments::Admin::SectionForm).from_params({})
+          @form = form(SectionForm).from_params({})
           render layout: false
         end
 

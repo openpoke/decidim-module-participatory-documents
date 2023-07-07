@@ -11,7 +11,7 @@ module Decidim
             if document.blank? && allowed_to?(:create, :participatory_document)
               new_pdf_btn
             elsif document.file.attached? && allowed_to?(:update, :participatory_document, document: document)
-              edit_boxes_btn + edit_document_btn + preview_sections_btn
+              edit_document_btn + edit_boxes_btn + preview_sections_btn
             elsif allowed_to?(:update, :participatory_document, document: document)
               edit_document_btn
             end
@@ -37,7 +37,7 @@ module Decidim
         def preview_sections_btn
           btn_title = t("actions.preview_publishing_sections", scope: "decidim.participatory_documents")
 
-          content_tag(:a, title: btn_title, href: main_component_path(document.component), class: "button small light success") do
+          content_tag(:a, title: btn_title, href: main_component_path(document.component), class: "button small success") do
             button_builder(btn_title, icon: "eye")
           end
         end
@@ -53,7 +53,7 @@ module Decidim
         def edit_boxes_btn
           btn_title = t("actions.edit_boxes", scope: "decidim.participatory_documents")
 
-          content_tag(:a, title: btn_title, href: edit_pdf_documents_path(id: document.id), class: "button small light") do
+          content_tag(:a, title: btn_title, href: edit_pdf_documents_path(id: document.id), class: "button small warning") do
             button_builder(btn_title, icon: "layers")
           end
         end
@@ -61,7 +61,7 @@ module Decidim
         def edit_document_btn
           btn_title = t("actions.edit_document", scope: "decidim.participatory_documents")
 
-          content_tag(:a, title: btn_title, href: edit_document_path(id: document.id), class: "button small light alert") do
+          content_tag(:a, title: btn_title, href: edit_document_path(id: document.id), class: "button small alert") do
             button_builder(btn_title)
           end
         end

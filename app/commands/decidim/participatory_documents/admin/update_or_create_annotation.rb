@@ -27,6 +27,7 @@ module Decidim
             end
 
             destroy_old_section!
+            document.update_positions!
 
             broadcast(:ok, annotation)
           rescue ActiveRecord::RecordInvalid

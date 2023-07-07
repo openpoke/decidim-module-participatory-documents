@@ -13,9 +13,12 @@ en:
           attributes:
             state:
               inclusion: It's not possible to publish with status "not answered"
+        document:
+          has_suggestions: This document cannot be changed or removed because it has
+            suggestions
         suggestion:
           attributes:
-            not_blank: 'Validation failed: Please provide a message or upload a file.'
+            not_blank: 'Validation failed: Please provide a message or upload a file'
             too_long: is too long (over %{max_length} characters)
             too_short: is too short (under %{min_length} characters)
   decidim:
@@ -83,6 +86,10 @@ en:
               administrator
             notification_title: A suggestion you submitted on "<a href="%{resource_path}">%{resource_title}</a>"
               document has been answered by an administrator
+    forms:
+      file_help:
+        file:
+          pdf_message: Only PDF files are allowed
     participatory_documents:
       actions:
         back: Back
@@ -107,12 +114,16 @@ en:
             error: There was an error publishing sections
             success: Sections have been successfully published
           form:
+            alert_suggestions_html: "<strong>IMPORTANT:</strong> This document cannot
+              be changed or removed because it already has suggestions attached"
             box_style_preview: 'Box style preview:'
+            warning_sections_html: "<strong>Warning:</strong> If you upload a new
+              document, all the participatory areas will be deleted!"
           index:
             start: Please upload a PDF to start
           new:
-            create: Create  Participatory document
-            title: New Participatory document
+            create: Create participatory document
+            title: New participatory document
           sections:
             empty: "(empty)"
           update:

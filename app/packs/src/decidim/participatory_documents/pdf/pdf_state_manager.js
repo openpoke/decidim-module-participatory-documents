@@ -32,6 +32,10 @@ export default class PdfStateManager {
         this.reset();
       }
     }
+    console.log(this.pdfViewer._pages)
+    this.pdfViewer._pages.
+      filter((page) => page.boxEditor).
+      filter((page) => page.boxEditor.removeBox(box));
   }
 
   isEmpty() {

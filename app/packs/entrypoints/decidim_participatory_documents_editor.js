@@ -6,7 +6,7 @@ import $ from "jquery"; // eslint-disable-line id-length
 import "foundation-sites";
 
 
-const csrfToken = document.getElementsByName("csrf-token")[0].content;
+const csrfToken = document.getElementsByName("csrf-token");
 $.ajaxSetup({
-  headers: { "X-CSRF-Token": csrfToken }
+  headers: { "X-CSRF-Token": csrfToken.length && csrfToken[0].content }
 });

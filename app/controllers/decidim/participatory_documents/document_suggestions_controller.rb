@@ -10,18 +10,18 @@ module Decidim
       layout false
 
       def index
-        @form = form(Decidim::ParticipatoryDocuments::SuggestionForm).from_params({})
+        @form = form(Decidim::ParticipatoryDocuments::SuggestionForm).instance
       end
 
       def create
-        @form = form(Decidim::ParticipatoryDocuments::SuggestionForm).from_params(params).with_context(current_component: current_component)
+        @form = form(Decidim::ParticipatoryDocuments::SuggestionForm).from_params(params)
 
         CreateSuggestion.call(@form, section) do
           on(:ok) do |_suggestion|
             redirect_to(document_suggestions_path(document)) && return
           end
-          on(:invalid) do
-            render template: "decidim/participatory_documents/document_suggestions/index", format: [:html], status: :bad_request
+          on(:invalid) do |error|
+            render template: "decidim/participatory_documents/document_suggestions/index", locals: { error_message: error }, format: [:html], status: :bad_request
           end
         end
       end

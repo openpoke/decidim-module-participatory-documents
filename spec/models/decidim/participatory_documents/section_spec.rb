@@ -30,40 +30,18 @@ module Decidim
         end
 
         context "when is not being provided" do
-          context "when is the first section" do
-            let!(:after_section) { create_list(:participatory_documents_section, 2, document: section.document) }
-            let(:section) { create(:participatory_documents_section, title: nil) }
+          let(:position) { 1 }
+          let(:section) { create(:participatory_documents_section, title: nil, position: position) }
 
-            it "returns computed value" do
-              expect(translated(subject.title)).to eq("Section 1")
-              expect(subject.document.sections.size).to eq(3)
-            end
+          it "returns computed value" do
+            expect(translated(subject.title)).to eq("Section 1")
           end
 
           context "when has an intermediary position" do
-            let(:section_count) { 5 }
-            let(:expected_position) { section_count + 1 }
-            let(:document) { create(:participatory_documents_document) }
-            let(:precedent_section) { create_list(:participatory_documents_section, section_count, document: document) }
-            let(:section) { create(:participatory_documents_section, document: precedent_section.first.document, title: nil) }
-            let!(:after_section) { create_list(:participatory_documents_section, section_count, document: section.document) }
+            let(:position) { 5 }
 
             it "returns computed value" do
-              expect(translated(subject.document.sections[section_count].title)).to eq("Section #{expected_position}")
-              expect(subject.document.sections.size).to eq(expected_position + section_count)
-            end
-          end
-
-          context "when is last" do
-            let(:section_count) { 5 }
-            let(:expected_position) { section_count + 1 }
-            let(:document) { create(:participatory_documents_document) }
-            let(:precedent_section) { create_list(:participatory_documents_section, section_count, document: document) }
-            let(:section) { create(:participatory_documents_section, document: precedent_section.first.document, title: nil) }
-
-            it "returns computed value" do
-              expect(translated(subject.document.sections.last.title)).to eq("Section #{expected_position}")
-              expect(subject.document.sections.size).to eq(expected_position)
+              expect(translated(subject.title)).to eq("Section 5")
             end
           end
         end

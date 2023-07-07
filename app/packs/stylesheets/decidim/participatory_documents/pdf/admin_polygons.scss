@@ -84,6 +84,9 @@
         width: 100%;
         height: 100%;
         background: var(--box-color);
+        -webkit-mask-repeat: no-repeat;
+        -webkit-mask-size: 37px 37px;
+        -webkit-mask-position: 4px 2px;
         mask-repeat: no-repeat;
         mask-size: 37px 37px;
         mask-position: 4px 2px;
@@ -94,6 +97,9 @@
         display: none;
 
         &::after {
+          -webkit-mask-image: url(../images/group.svg);
+          -webkit-mask-size: 30px 30px;
+          -webkit-mask-position: 7px 5px;
           mask-image: url(../images/group.svg);
           mask-size: 30px 30px;
           mask-position: 7px 5px;
@@ -104,6 +110,7 @@
         cursor: move;
 
         &::after {
+          -webkit-mask-image: url(../images/move.svg);
           mask-image: url(../images/move.svg);
         }
       }

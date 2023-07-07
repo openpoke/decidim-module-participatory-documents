@@ -80,9 +80,9 @@ export default class Box {
   setInfo(data) {
     if (data) {
       if (data.id) {
-        Reflect.deleteProperty(this.layer.boxes, this.id);
+        this.layer.removeBox(this)
         this.id = data.id;
-        this.layer.boxes[this.id] = this;
+        this.layer.addBox(this)
       }
       this.section = data.section || this.section;
       this.div.dataset.section = this.section;
@@ -140,7 +140,7 @@ export default class Box {
 
   _click(evt) {
     if (!this.layer.creating && !this.isMoving() && !this.isGrouping() && !this.isResizing()) {
-      console.log("box click", evt, this);
+      // console.log("box click", evt, this);
       evt.stopPropagation();
       this.onClick(evt);
       window.addEventListener("click", this._blur.bind(this), { once: true });
@@ -165,7 +165,7 @@ export default class Box {
 
   _mouseLeave(evt) {
     if (!this.layer.creating && !this.isGrouping()) {
-      this.div.classList.remove("hover");
+      this.div.classList.remove("hover", "resizing");
       this.blurGroup()
       this.unBlockSibilings();
       this.onLeave(evt);

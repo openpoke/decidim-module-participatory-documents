@@ -8,7 +8,10 @@
 
 <div class="row column">
   <fieldset class="fieldset">
-    <%= form.upload( :file, optional: !current_component.published?) %>
+    <% if document&.sections&.any? || document&.has_suggestions? %>
+      <div class="callout alert" style="margin:-1em -1em 1em -1em;"><%= t document&.has_suggestions? ? ".alert_suggestions_html" : ".warning_sections_html" %></div>
+    <% end %>
+    <%= form.upload :file, optional: !current_component.published?, help_i18n_messages: "pdf_message" %>
   </fieldset>
 </div>
 

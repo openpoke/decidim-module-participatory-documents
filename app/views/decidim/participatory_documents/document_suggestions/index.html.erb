@@ -9,5 +9,6 @@
 </div>
 
 <div id="participation-modal-form">
+  <div class="form-error is-visible"><%= error_message if defined?(error_message) %></div>
   <%= render "decidim/participatory_documents/document_suggestions/form" %>
 </div>

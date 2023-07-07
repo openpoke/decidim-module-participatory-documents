@@ -32,6 +32,7 @@ module Decidim
 
       def preview_mode?
         return if document.published?
+        return if current_user.blank?
 
         current_component.manifest.admin_engine && user_role_config.component_is_accessible?(current_component.manifest_name)
       end

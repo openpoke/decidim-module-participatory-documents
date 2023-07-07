@@ -8,6 +8,7 @@ module Decidim
       include Decidim::TranslatableResource
       include Decidim::TranslatableAttributes
       include Decidim::Publicable
+
       belongs_to :document, class_name: "Decidim::ParticipatoryDocuments::Document"
       has_many :annotations, class_name: "Decidim::ParticipatoryDocuments::Annotation", dependent: :restrict_with_error
       has_many :suggestions, class_name: "Decidim::ParticipatoryDocuments::Suggestion", dependent: :restrict_with_error, as: :suggestable
@@ -15,6 +16,7 @@ module Decidim
       delegate :organization, :participatory_space, :component, to: :document, allow_nil: true
 
       translatable_fields :title
+
       def self.log_presenter_class_for(_log)
         Decidim::ParticipatoryDocuments::AdminLog::SectionPresenter
       end
@@ -23,10 +25,6 @@ module Decidim
         return artificial_title if attributes["title"].nil?
 
         artificial_title.merge(super.reject { |_key, value| value.blank? })
-      end
-
-      def position
-        @position ||= document.sections.where("id < ?", id).count + 1
       end
 
       private

@@ -17,6 +17,30 @@ FactoryBot.define do
     trait :with_file do
       file { Decidim::Dev.test_file("Exampledocument.pdf", "application/pdf") }
     end
+
+    trait :with_sections do
+      after :create do |document|
+        document.sections = create_list(:participatory_documents_section, 2, document: document)
+      end
+    end
+
+    trait :with_annotations do
+      after :create do |document|
+        document.sections = create_list(:participatory_documents_section, 2, :with_annotations, document: document)
+      end
+    end
+
+    trait :with_global_suggestions do
+      after :create do |document|
+        document.suggestions = create_list(:participatory_documents_suggestion, 2, suggestable: document)
+      end
+    end
+
+    trait :with_suggestions do
+      after :create do |document|
+        document.sections = create_list(:participatory_documents_section, 2, :with_suggestions, document: document)
+      end
+    end
   end
 
   factory :participatory_documents_section, class: "Decidim::ParticipatoryDocuments::Section" do
@@ -34,17 +58,30 @@ FactoryBot.define do
         section.annotations = create_list(:participatory_documents_annotation, 2, section: section)
       end
     end
+
+    trait :with_suggestions do
+      after :create do |section|
+        section.annotations = create_list(:participatory_documents_annotation, 2, :with_suggestions, section: section)
+      end
+    end
   end
 
   factory :participatory_documents_annotation, class: "Decidim::ParticipatoryDocuments::Annotation" do
     section { create(:participatory_documents_section) }
     page_number { 1 }
+    rect do
+      {
+        top: rand(1.0..60.0),
+        left: rand(1.0..100.0),
+        width: rand(1.0..15.0),
+        height: rand(1.0..20.0)
+      }
+    end
 
-    after(:build) do |annotation|
-      top = rand(1.0..60.0)
-      left = rand(1.0..100.0)
-
-      annotation.rect = { top: top, left: left, width: 15.9411, height: 18.0857 }
+    trait :with_suggestions do
+      after :create do |annotation|
+        annotation.suggestions = create_list(:participatory_documents_suggestion, 2, suggestable: annotation)
+      end
     end
   end
 

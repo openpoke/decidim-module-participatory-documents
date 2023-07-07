@@ -54,6 +54,11 @@ module Decidim
             expect { subject.call }.to change(Decidim::ParticipatoryDocuments::Annotation, :count).by(1)
             expect(Decidim::ParticipatoryDocuments::Section.count).to eq(1)
           end
+
+          it "updates the position" do
+            subject.call
+            expect(Decidim::ParticipatoryDocuments::Annotation.last.position).to eq(1)
+          end
         end
       end
     end

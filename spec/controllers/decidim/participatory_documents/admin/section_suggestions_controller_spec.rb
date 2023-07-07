@@ -34,7 +34,7 @@ module Decidim
           end
 
           it "Changes the database record" do
-            expect(section.title["en"]).to eq("Section 1")
+            expect(section.title["en"]).to eq("Section 0")
             post(:update, params: params)
             section.reload
             expect(section.title["en"]).to eq("Title")

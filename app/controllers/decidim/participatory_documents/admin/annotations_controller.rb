@@ -12,7 +12,7 @@ module Decidim
 
         def destroy
           enforce_permission_to :create, :document_annotations
-          @form = form(Decidim::ParticipatoryDocuments::Admin::AnnotationForm).from_params(params)
+          @form = form(Decidim::ParticipatoryDocuments::Admin::AnnotationForm).from_model(annotation)
 
           Admin::DestroyAnnotation.call(@form, document) do
             on(:ok) do
@@ -38,6 +38,12 @@ module Decidim
               render(json: @form.errors, status: :unprocessable_entity) && return
             end
           end
+        end
+
+        private
+
+        def annotation
+          @annotation ||= document.annotations.find(params[:id])
         end
       end
     end

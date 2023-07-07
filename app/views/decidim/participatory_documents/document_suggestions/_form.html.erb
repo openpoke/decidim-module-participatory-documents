@@ -23,7 +23,7 @@
       </div>
     </div>
     <div class="button--double form-general-submit">
-      <button class="button" id="editor-modal-save"><%= t "send_suggestion", scope: "decidim.participatory_documents.document" %></button>
+      <%= form.submit t("send_suggestion", scope: "decidim.participatory_documents.document"), id: "editor-modal-save", name: "editor-modal-save" %>
     </div>
   <% end %>
 </div>

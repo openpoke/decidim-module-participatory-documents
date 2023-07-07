@@ -10,7 +10,7 @@ module Decidim
       layout false
 
       def index
-        @form = form(Decidim::ParticipatoryDocuments::SuggestionForm).from_params({})
+        @form = form(Decidim::ParticipatoryDocuments::SuggestionForm).instance
       end
 
       def create

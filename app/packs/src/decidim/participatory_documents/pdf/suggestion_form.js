@@ -4,7 +4,6 @@ export default class SuggestionForm {
     this.group = group;
     this.div = document.getElementById("participation-modal");
     this.div.classList.remove("section", "document", "active");
-    console.log(this.div.style, getComputedStyle(this.div))
     if (group) {
       this.div.classList.add("section");
     } else {
@@ -13,7 +12,9 @@ export default class SuggestionForm {
   }
 
   getCSRFToken() {
-    return document.getElementsByName("csrf-token")[0].content;
+    const token =  document.getElementsByName("csrf-token")
+
+    return token.length && token[0].content;
   }
 
   // Sanitize internal path
@@ -53,7 +54,6 @@ export default class SuggestionForm {
 
     if (close && modal) {
       close.addEventListener("click", () => {
-        console.log("close");
         modal.classList.remove("active");
         close.style.display = "none";
       }, { once: true });
@@ -91,7 +91,6 @@ export default class SuggestionForm {
         }).then((response) => {
           return response.text();
         }).then((data) => {
-          console.log("data", data);
           this.div.innerHTML = data;
           this.addFormHandler();
           this.addCloseHandler();
@@ -99,6 +98,7 @@ export default class SuggestionForm {
           console.error(error);
         });
       });
+      document.getElementById("suggestion_body").focus();
     }
   }
 
@@ -114,7 +114,7 @@ export default class SuggestionForm {
       if (response.ok) {
         return response.text();
       }
-      throw new Error(" ");
+      throw new Error(response);
     }).
       then((data) => {
         this.populateArea(data);
