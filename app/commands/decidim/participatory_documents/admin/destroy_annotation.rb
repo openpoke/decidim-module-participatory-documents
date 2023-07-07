@@ -3,7 +3,7 @@
 module Decidim
   module ParticipatoryDocuments
     module Admin
-      class DestroyAnnotation < Rectify::Command
+      class DestroyAnnotation < Decidim::Command
         # Public: Initializes the command.
         #
         # form - A form object with the params.

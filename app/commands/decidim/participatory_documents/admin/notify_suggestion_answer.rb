@@ -3,7 +3,7 @@
 module Decidim
   module ParticipatoryDocuments
     module Admin
-      class NotifySuggestionAnswer < Rectify::Command
+      class NotifySuggestionAnswer < Decidim::Command
         # Public: Initializes the command.
         #
         # suggestion - The suggestion to write the answer for.

@@ -3,7 +3,7 @@
 module Decidim
   module ParticipatoryDocuments
     module Admin
-      class AnswerSuggestion < Rectify::Command
+      class AnswerSuggestion < Decidim::Command
         # Public: Initializes the command.
         #
         # form - A form object with the params.
