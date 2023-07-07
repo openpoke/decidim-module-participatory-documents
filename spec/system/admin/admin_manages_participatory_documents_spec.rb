@@ -45,7 +45,7 @@ describe "Admin manages participatory documents", type: :system do
         fill_in :document_box_opacity, with: "50"
         fill_in :document_box_color, with: "#f00f00"
       end
-      dynamically_attach_file :document_file, Decidim::Dev.asset("Exampledocument.pdf")
+      dynamically_attach_file :document_file, Decidim::Dev.asset("Exampledocument.pdf"), remove_before: create.blank?
 
       expect(page.execute_script("return window.getComputedStyle(document.querySelector('.box-preview .box')).backgroundColor")).to eq("rgba(240, 15, 0, 0.498)")
       expect(page.execute_script("return window.getComputedStyle(document.querySelector('.box-preview .box')).borderColor")).to eq("rgb(240, 15, 0)")
@@ -111,7 +111,7 @@ describe "Admin manages participatory documents", type: :system do
       it "has sections delete warning" do
         expect(page).to have_content("all the participatory areas will be deleted!")
         expect(document.sections.count).to eq(2)
-        dynamically_attach_file :document_file, Decidim::Dev.asset("Exampledocument.pdf")
+        dynamically_attach_file :document_file, Decidim::Dev.asset("Exampledocument.pdf"), remove_before: true
         click_button "Update"
         expect(document.sections.reload.count).to eq(0)
       end
@@ -122,7 +122,7 @@ describe "Admin manages participatory documents", type: :system do
         expect(page).not_to have_content("all the participatory areas will be deleted!")
         expect(page).to have_content("This document cannot be changed or removed because it already has suggestions attached")
         expect(document.sections.count).to eq(2) if with_sections
-        dynamically_attach_file :document_file, Decidim::Dev.asset("Exampledocument.pdf")
+        dynamically_attach_file :document_file, Decidim::Dev.asset("Exampledocument.pdf"), remove_before: true
         click_button "Update"
         expect(document.sections.reload.count).to eq(2) if with_sections
         expect(page).to have_content("This document cannot be changed or removed because it has suggestions")
@@ -166,11 +166,7 @@ describe "Admin manages participatory documents", type: :system do
   end
 
   context "when a file is uploaded" do
-    let!(:document) { create :participatory_documents_document, component: component }
-
-    before do
-      upload_file
-    end
+    let!(:document) { create :participatory_documents_document, :with_file, component: component }
 
     it "shows the edit buttons" do
       visit_component_admin

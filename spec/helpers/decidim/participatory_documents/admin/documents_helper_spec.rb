@@ -4,7 +4,7 @@ describe Decidim::ParticipatoryDocuments::Admin::DocumentsHelper, type: :helper 
   let(:component) { create :participatory_documents_component }
   let(:document) { create(:participatory_documents_document, component: component) }
 
-  describe "#pdf_manage_button" do
+  describe "#pdf_manage_buttons" do
     before do
       allow(document.file).to receive(:attached?).and_return(document_attached)
     end
@@ -18,7 +18,7 @@ describe Decidim::ParticipatoryDocuments::Admin::DocumentsHelper, type: :helper 
       end
 
       it "returns the new_pdf_btn" do
-        result = helper.pdf_manage_button(nil)
+        result = helper.pdf_manage_buttons(nil)
         expect(result).to include("New PDF Button")
       end
     end
@@ -34,7 +34,7 @@ describe Decidim::ParticipatoryDocuments::Admin::DocumentsHelper, type: :helper 
       end
 
       it "returns the combination of edit_boxes_btn, edit_document_btn and preview_sections_btn" do
-        result = helper.pdf_manage_button(document)
+        result = helper.pdf_manage_buttons(document)
         expect(result).to include("Edit participatory areas", "Edit/upload document", "Preview and publishing sections")
       end
     end
@@ -48,7 +48,7 @@ describe Decidim::ParticipatoryDocuments::Admin::DocumentsHelper, type: :helper 
       end
 
       it "returns the edit_document_btn" do
-        result = helper.pdf_manage_button(document)
+        result = helper.pdf_manage_buttons(document)
         expect(result).to include("Edit/upload document")
       end
     end
