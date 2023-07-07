@@ -40,7 +40,7 @@ module Decidim
             css = <<~CSS
               <style media="all">
                 :root {
-                  --box-color: #{document.box_color};
+                  --box-color: #{document.box_color || "#1E98D7"};
                   --box-color-rgba: #{box_color_as_rgba(document)};
                   --notifications-color-rgba: #{box_color_as_rgba(document, opacity: 60)};
                   --suggestions-modal-color-hsla: #{box_color_as_hsla(document, opacity: 0.95)};
