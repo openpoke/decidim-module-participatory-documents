@@ -44,17 +44,18 @@ describe "Admin manages participatory documents", type: :system do
         )
         fill_in :document_box_opacity, with: "50"
         fill_in :document_box_color, with: "#f00f00"
-        attach_file :document_file, Decidim::Dev.asset("Exampledocument.pdf")
-
-        expect(page.execute_script("return window.getComputedStyle(document.querySelector('.box-preview .box')).backgroundColor")).to eq("rgba(240, 15, 0, 0.498)")
-        expect(page.execute_script("return window.getComputedStyle(document.querySelector('.box-preview .box')).borderColor")).to eq("rgb(240, 15, 0)")
-
-        if create
-          click_button "Create participatory document"
-        else
-          click_button "Update"
-        end
       end
+      dynamically_attach_file :document_file, Decidim::Dev.asset("Exampledocument.pdf")
+
+      expect(page.execute_script("return window.getComputedStyle(document.querySelector('.box-preview .box')).backgroundColor")).to eq("rgba(240, 15, 0, 0.498)")
+      expect(page.execute_script("return window.getComputedStyle(document.querySelector('.box-preview .box')).borderColor")).to eq("rgb(240, 15, 0)")
+
+      if create
+        click_button "Create participatory document"
+      else
+        click_button "Update"
+      end
+
       if create
         expect(page).to have_content("Document has been successfully created")
         # redirect to edit page
@@ -110,7 +111,7 @@ describe "Admin manages participatory documents", type: :system do
       it "has sections delete warning" do
         expect(page).to have_content("all the participatory areas will be deleted!")
         expect(document.sections.count).to eq(2)
-        attach_file :document_file, Decidim::Dev.asset("Exampledocument.pdf")
+        dynamically_attach_file :document_file, Decidim::Dev.asset("Exampledocument.pdf")
         click_button "Update"
         expect(document.sections.reload.count).to eq(0)
       end
@@ -121,7 +122,7 @@ describe "Admin manages participatory documents", type: :system do
         expect(page).not_to have_content("all the participatory areas will be deleted!")
         expect(page).to have_content("This document cannot be changed or removed because it already has suggestions attached")
         expect(document.sections.count).to eq(2) if with_sections
-        attach_file :document_file, Decidim::Dev.asset("Exampledocument.pdf")
+        dynamically_attach_file :document_file, Decidim::Dev.asset("Exampledocument.pdf")
         click_button "Update"
         expect(document.sections.reload.count).to eq(2) if with_sections
         expect(page).to have_content("This document cannot be changed or removed because it has suggestions")
@@ -191,22 +192,22 @@ describe "Admin manages participatory documents", type: :system do
     end
 
     it "shows the preview button" do
-      expect(page).to have_link("Preview and publishing sections")
+      expect(page).to have_link("Preview and publish sections")
     end
 
     it "goes to the preview page" do
-      click_link "Preview and publishing sections"
+      click_link "Preview and publish sections"
       expect(page).to have_content("you are previewing the participatory sections of the document")
     end
 
     it "can edit sections after previewing" do
-      click_link "Preview and publishing sections"
+      click_link "Preview and publish sections"
       click_link "Go back to edit participatory sections"
       expect(page).to have_selector("a[href='#{manage_component_path(component)}'][title='Back']")
     end
 
     it "can publish sections after previewing" do
-      click_link "Preview and publishing sections"
+      click_link "Preview and publish sections"
       click_link "Publish participatory sections"
       expect(page).to have_content("are you sure?")
 
@@ -215,13 +216,13 @@ describe "Admin manages participatory documents", type: :system do
     end
 
     it "can't edit sections after publishing" do
-      click_link "Preview and publishing sections"
+      click_link "Preview and publish sections"
       click_link "Publish participatory sections"
       click_link "OK"
 
       expect(page).not_to have_content("Edit/upload document")
       expect(page).not_to have_content("Edit participatory areas")
-      expect(page).not_to have_content("Preview and publishing sections")
+      expect(page).not_to have_content("Preview and publish sections")
     end
   end
 end
