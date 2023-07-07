@@ -18,6 +18,7 @@ class AddDecidimParticipatoryDocumentsBoxPositions < ActiveRecord::Migration[6.0
     belongs_to :section
   end
 
+  # rubocop:disable Rails/SkipsModelValidations:
   def change
     add_column :decidim_participatory_documents_annotations, :position, :integer, null: false, default: 0
     add_index :decidim_participatory_documents_annotations, :position
@@ -32,4 +33,5 @@ class AddDecidimParticipatoryDocumentsBoxPositions < ActiveRecord::Migration[6.0
       annotation.update_column(:position, annotation.section.document.annotations.where("decidim_participatory_documents_annotations.id < ?", annotation.id).count + 1)
     end
   end
+  # rubocop:enable Rails/SkipsModelValidations:
 end

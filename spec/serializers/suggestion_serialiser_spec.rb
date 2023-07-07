@@ -8,7 +8,7 @@ module Decidim
     include Decidim::ParticipatoryDocuments::Admin::SuggestionHelper
     include ActionView::Helpers::TextHelper
 
-    let(:subject) { described_class.new(suggestion) }
+    subject { described_class.new(suggestion) }
     let(:suggestion) { create(:participatory_documents_suggestion, :with_answer) }
     let(:serialized) { subject.serialize }
 
@@ -27,7 +27,7 @@ module Decidim
           Decidim::ParticipatoryDocuments.max_export_text_length = 10
         end
 
-        it "returns an answer that is 10 characters long " do
+        it "returns an answer that is 10 characters long" do
           expect(serialized).to include(answer: truncate(translated_attribute(suggestion.answer), length: 10))
           expect(serialized).to include(body: truncate(translated_attribute(suggestion.body), length: 10))
         end

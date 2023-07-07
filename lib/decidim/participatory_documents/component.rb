@@ -27,8 +27,8 @@ Decidim.register_component(:participatory_documents) do |component|
     settings.attribute :min_suggestion_length, type: :integer, default: Decidim::ParticipatoryDocuments.min_suggestion_length
   end
 
-  component.settings(:step) do |settings|
-  end
+  # component.settings(:step) do |settings|
+  # end
 
   component.exports :suggestions do |exports|
     exports.collection do |component_instance|
@@ -132,50 +132,50 @@ Decidim.register_component(:participatory_documents) do |component|
         page_number: 1,
         section: group1,
         rect: {
-          "left": 25.5,
-          "top": 22.123,
-          "width": 30.1,
-          "height": 10.2
+          left: 25.5,
+          top: 22.123,
+          width: 30.1,
+          height: 10.2
         }
       },
       {
         page_number: 1,
         section: group2,
         rect: {
-          "left": 5.5,
-          "top": 2.123,
-          "width": 10.1,
-          "height": 10.2
+          left: 5.5,
+          top: 2.123,
+          width: 10.1,
+          height: 10.2
         }
       },
       {
         page_number: 1,
         section: group2,
         rect: {
-          "left": 15.5,
-          "top": 12.123,
-          "width": 10.1,
-          "height": 10.2
+          left: 15.5,
+          top: 12.123,
+          width: 10.1,
+          height: 10.2
         }
       },
       {
         page_number: 1,
         section: group3,
         rect: {
-          "left": 75.5,
-          "top": 82.123,
-          "width": 10.1,
-          "height": 10.2
+          left: 75.5,
+          top: 82.123,
+          width: 10.1,
+          height: 10.2
         }
       },
       {
         page_number: 2,
         section: group3,
         rect: {
-          "left": 15.5,
-          "top": 12.123,
-          "width": 10.1,
-          "height": 10.2
+          left: 15.5,
+          top: 12.123,
+          width: 10.1,
+          height: 10.2
         }
       }
     ]

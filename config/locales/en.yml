@@ -212,6 +212,7 @@ en:
         upload_file: Attach a document
       documents:
         missing: There is no document uploaded yet
+        not_supported: This page requires JavaScript to be enabled!
         preview_title: Preview
         publish_description: 'Admin options: you are previewing the participatory
           sections of the document'

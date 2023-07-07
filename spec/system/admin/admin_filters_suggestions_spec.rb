@@ -60,7 +60,7 @@ describe "Admin filters suggestions", type: :system do
     before { visit router.document_suggestions_path(document) }
 
     it "can be searched by title" do
-      search_by_text(suggestion2_body.split(" ").first(2).join(" "))
+      search_by_text(suggestion2_body.split.first(2).join(" "))
 
       expect(page).to have_content(suggestion2.id)
     end

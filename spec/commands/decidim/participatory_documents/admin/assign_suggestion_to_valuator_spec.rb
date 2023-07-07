@@ -33,7 +33,7 @@ module Decidim
         context "when the form is valid" do
           it "successfuly ignore the existing records" do
             create :suggestion_valuation_assignment, suggestion: suggestion, valuator_role: valuator_role
-            expect { subject.call }.to change(Decidim::ParticipatoryDocuments::ValuationAssignment, :count).by(0)
+            expect { subject.call }.not_to change(Decidim::ParticipatoryDocuments::ValuationAssignment, :count)
             expect { subject.call }.to broadcast(:ok)
           end
 

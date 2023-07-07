@@ -38,7 +38,7 @@ describe "Index Suggestion Notes", type: :system do
   end
 
   context "when the form has a text inside body" do
-    it "creates a suggestion note ", :slow do
+    it "creates a suggestion note", :slow do
       within ".new_suggestion_note" do
         fill_in :suggestion_note_body, with: body
 

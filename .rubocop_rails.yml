@@ -59,6 +59,7 @@ Rails/Output:
     - lib/**/*.rb
   Exclude:
     - db/seeds.rb
+
 Rails/OutputSafety:
   Enabled: false
 
@@ -85,3 +86,6 @@ Rails/SkipsModelValidations:
 Rails/Validation:
   Include:
     - app/models/**/*.rb
+
+Rails/CompactBlank:
+  Enabled: false
