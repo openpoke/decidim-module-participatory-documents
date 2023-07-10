@@ -1,0 +1,45 @@
+#DecidimPDSaveButton {
+  min-width: 110px;
+  height: 44px;
+
+  &::before {
+    display: none;
+  }
+
+  &.alert {
+    background-color: var(--primary);
+    animation: blinker 2s linear infinite;
+  }
+
+  &.loading {
+    &::before {
+      @include spinner(25px, #fff, var(--primary), 800ms);
+
+      margin: -4px 6px 0 -5px;
+      content: "";
+      vertical-align: middle;
+    }
+  }
+
+  @media(max-width: 900px) {
+    margin-top: 12px;
+  }
+}
+
+
+#fullscreenButton {
+  @media(max-width: 900px) {
+    width: 28px;
+    height: 28px;
+    margin-right:0;
+    padding-right:0;
+    overflow: hidden;
+    font-size: 0;
+  }
+}
+
+#scaleSelectContainer {
+  @media(max-width: 900px) {
+    display: none;
+  }
+}

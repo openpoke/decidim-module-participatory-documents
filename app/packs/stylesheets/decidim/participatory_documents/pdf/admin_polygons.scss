@@ -60,6 +60,8 @@
     left: 0;
     width: auto;
     height: auto;
+    max-height: 44px;
+    overflow: hidden;
 
     .control {
       background: #fffe;
