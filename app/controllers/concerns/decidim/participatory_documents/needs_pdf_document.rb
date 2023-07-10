@@ -11,6 +11,13 @@ module Decidim
 
         protected
 
+        def add_iframe_snippets
+          return unless respond_to?(:snippets)
+
+          snippets.add(:head, helpers.stylesheet_pack_tag("decidim_participatory_documents"))
+          snippets.add(:foot, helpers.javascript_pack_tag("decidim_participatory_documents"))
+        end
+
         def document
           @document ||= Decidim::ParticipatoryDocuments::Document.find_by(component: current_component)
         end
@@ -78,12 +85,12 @@ module Decidim
               if c_max == red
                 ((green - blue) / delta) % 6
               elsif c_max == green
-                (blue - red) / delta + 2
+                ((blue - red) / delta) + 2
               else
-                (red - green) / delta + 4
+                ((red - green) / delta) + 4
               end
 
-            s = delta / (1 - (2 * l - 1).abs)
+            s = delta / (1 - ((2 * l) - 1).abs)
           end
 
           h = (h * 60).round

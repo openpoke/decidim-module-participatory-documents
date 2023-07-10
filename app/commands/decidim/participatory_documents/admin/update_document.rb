@@ -3,7 +3,7 @@
 module Decidim
   module ParticipatoryDocuments
     module Admin
-      class UpdateDocument < Rectify::Command
+      class UpdateDocument < Decidim::Command
         include ::Decidim::AttachmentAttributesMethods
 
         def initialize(form, document)

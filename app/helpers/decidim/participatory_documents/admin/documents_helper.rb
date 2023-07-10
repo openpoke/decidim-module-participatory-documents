@@ -6,7 +6,7 @@ module Decidim
       module DocumentsHelper
         include ButtonHelper
 
-        def pdf_manage_button(document)
+        def pdf_manage_buttons(document)
           content_tag(:div, class: "flex--cc flex-gap--1") do
             if document.blank? && allowed_to?(:create, :participatory_document)
               new_pdf_btn

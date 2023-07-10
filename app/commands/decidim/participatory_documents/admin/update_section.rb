@@ -3,7 +3,7 @@
 module Decidim
   module ParticipatoryDocuments
     module Admin
-      class UpdateSection < Rectify::Command
+      class UpdateSection < Decidim::Command
         # Public: Initializes the command.
         #
         # form - A form object with the params.

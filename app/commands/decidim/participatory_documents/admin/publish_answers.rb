@@ -3,7 +3,7 @@
 module Decidim
   module ParticipatoryDocuments
     module Admin
-      class PublishAnswers < Rectify::Command
+      class PublishAnswers < Decidim::Command
         # Public: Initializes the command.
         #
         # component - The component that contains the answers.

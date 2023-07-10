@@ -21,7 +21,7 @@ module Decidim
 
         it "destroys valuation assignments when participatory_process_user_role is destroyed" do
           expect(Decidim::ParticipatoryDocuments::ValuationAssignment.count).to eq(1)
-          expect { valuator_role.destroy }.to change { Decidim::ParticipatoryDocuments::ValuationAssignment.count }.by(-1)
+          expect { valuator_role.destroy }.to change(Decidim::ParticipatoryDocuments::ValuationAssignment, :count).by(-1)
         end
       end
     end

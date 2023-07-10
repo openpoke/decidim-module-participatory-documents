@@ -46,7 +46,7 @@ describe "User interaction with PDF viewer", type: :system do
             end
           end
 
-          context "when the answer is published " do
+          context "when the answer is published" do
             let(:published) { true }
 
             it "does not render admin note" do
@@ -68,7 +68,7 @@ describe "User interaction with PDF viewer", type: :system do
             end
           end
 
-          context "when the answer is published " do
+          context "when the answer is published" do
             let(:published) { true }
 
             it "renders admin note" do
@@ -112,7 +112,7 @@ describe "User interaction with PDF viewer", type: :system do
             end
           end
 
-          context "when the answer is NOT draft " do
+          context "when the answer is NOT draft" do
             let(:published) { true }
 
             it "renders admin note" do
@@ -134,7 +134,7 @@ describe "User interaction with PDF viewer", type: :system do
             end
           end
 
-          context "when the answer is NOT draft " do
+          context "when the answer is NOT draft" do
             let(:published) { true }
 
             it "renders admin note" do

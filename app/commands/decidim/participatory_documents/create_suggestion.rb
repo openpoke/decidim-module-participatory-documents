@@ -2,7 +2,7 @@
 
 module Decidim
   module ParticipatoryDocuments
-    class CreateSuggestion < Rectify::Command
+    class CreateSuggestion < Decidim::Command
       include ::Decidim::AttachmentMethods
 
       def initialize(form, suggestable)

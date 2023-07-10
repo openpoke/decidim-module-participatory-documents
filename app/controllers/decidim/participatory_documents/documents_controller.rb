@@ -6,7 +6,9 @@ module Decidim
       include NeedsPdfDocument
       helper Decidim::LayoutHelper
 
-      def index; end
+      def index
+        add_iframe_snippets
+      end
 
       def pdf_viewer
         render layout: false

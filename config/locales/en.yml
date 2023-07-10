@@ -6,6 +6,7 @@ en:
         box_color: Color of the boxes
         box_opacity: Opacity applied at the color of the boxes (%)
         description: Helper description
+        file: PDF Document
         title: Helper title
     errors:
       models:
@@ -100,7 +101,7 @@ en:
         edit_document: Edit/upload document
         finish_publishing: Publish participatory sections
         new: Upload PDF document
-        preview_publishing_sections: Preview and publishing sections
+        preview_publishing_sections: Preview and publish sections
         title: Actions
       admin:
         documents:
@@ -212,6 +213,7 @@ en:
         upload_file: Attach a document
       documents:
         missing: There is no document uploaded yet
+        not_supported: This page requires JavaScript to be enabled!
         preview_title: Preview
         publish_description: 'Admin options: you are previewing the participatory
           sections of the document'

@@ -28,13 +28,11 @@ module Decidim
       shared_examples "validate error message" do |error_key, params|
         it "shows the correct error message" do
           form.validate
-          expect(form.errors[:body]).to include(I18n.t("activemodel.errors.models.suggestion.attributes.#{error_key}", params))
+          expect(form.errors[:body]).to include(I18n.t("activemodel.errors.models.suggestion.attributes.#{error_key}", **params))
         end
       end
 
-      it "is valid with valid attributes" do
-        expect(form).to be_valid
-      end
+      it { is_expected.to be_valid }
 
       context "when no body" do
         let(:body) { nil }
@@ -113,7 +111,7 @@ module Decidim
         end
       end
 
-      context "when :min_suggestion_length  is modified in the component settings" do
+      context "when min length is enough" do
         let(:body) { "Hi" }
         let(:component) { double(:participatory_documents_component, settings: settings) }
         let(:settings) { double(:settings, min_suggestion_length: 3, max_suggestion_length: 100) }

@@ -4,7 +4,7 @@ module Decidim
   module ParticipatoryDocuments
     module Admin
       # A command with all the business logic when a user updates a suggestion note.
-      class UpdateSuggestionNote < Rectify::Command
+      class UpdateSuggestionNote < Decidim::Command
         # Public: Initializes the command.
         #
         # form         - A form object with the params.

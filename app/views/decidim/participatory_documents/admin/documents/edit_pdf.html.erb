@@ -6,8 +6,8 @@
     </h2>
   </div>
   <div class="card-section pdf-viewer-container">
-    <iframe src="<%= pdf_viewer_documents_path(file: document.attached_uploader(:file).path) %>" width="100%" height="100%" id="iframe" frameborder="0" allowfullscreen_="" webkitallowfullscreen_="true" mozallowfullscreen_="true" oallowfullscreen_="true" msallowfullscreen_="true">
-        <p>This browser does not support PDF!</p>
+    <iframe src="<%= pdf_viewer_documents_path(file: document.attached_uploader(:file).path) %>" width="100%" height="100%" id="pdf-iframe" frameborder="0" allowfullscreen_="" webkitallowfullscreen_="true" mozallowfullscreen_="true" oallowfullscreen_="true" msallowfullscreen_="true">
+        <h3 class="text-center"><%= t("decidim.participatory_documents.documents.not_supported") %></h3>
       </iframe>
   </div>
 </div>

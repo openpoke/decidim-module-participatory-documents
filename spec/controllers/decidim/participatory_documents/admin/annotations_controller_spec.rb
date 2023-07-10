@@ -43,7 +43,7 @@ module Decidim
           let!(:annotation) { create(:participatory_documents_annotation) }
           let!(:section) { create(:participatory_documents_section, document: document, annotations: [annotation]) }
 
-          let(:params) { { document_id: document.id, id: annotation.id, page_number: 1, rect: { left: 50, top: 50, width: 100, height: 100 } } }
+          let(:params) { { document_id: document.id, id: annotation.id } }
 
           it "deletes the annotation and section" do
             expect { delete(:destroy, params: params) }.to change(model, :count).by(-1).and change(sections, :count).by(-1)
