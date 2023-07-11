@@ -33,6 +33,8 @@ export default class Box {
     // if width is not defined will use 15%
     this.div.style.width = `${this._sanitizePercent(width, 0, 100 - parseFloat(left)) || 15}%`;
     this.div.style.height = `${this._sanitizePercent(height, 0, 100 - parseFloat(top)) || 15}%`;
+    // as the parent layer might have pointerEvents disabled we make sure in the box are enabled
+    this.div.style.pointerEvents = "auto";
 
     // add the number of the box in the middle
     let span = document.createElement("span");

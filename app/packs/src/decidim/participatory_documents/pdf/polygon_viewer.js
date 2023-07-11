@@ -17,7 +17,9 @@ export default class PolygonViewer {
   }
 
   init() {
-    this.div.style.pointerEvents = "all";
+    // we don't handle pointer events here so links are clickable
+    // each box will handle its own evens
+    this.div.style.pointerEvents = "none";
     this.div.classList.add("polygon-ready");
     this.json.forEach((box) => {
       this.addBox(new Box(this, box));

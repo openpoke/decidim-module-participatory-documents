@@ -1,4 +1,4 @@
-window.showInfo = function (title, options = {}) {
+window.showInfo = (title, options = {}) => {
   const info = document.getElementById("notifications");
   info.innerHTML = title;
   info.classList.add("show");
@@ -14,7 +14,7 @@ window.showInfo = function (title, options = {}) {
   }, options && options.delay || 3000);
 };
 
-window.showAlert = function (title, options = {}) {
+window.showAlert = (title, options = {}) => {
   options.class = "alert"
   window.showInfo(title, options);
 };
