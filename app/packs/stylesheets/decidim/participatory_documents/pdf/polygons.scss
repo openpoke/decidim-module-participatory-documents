@@ -26,10 +26,6 @@
     border-style: solid;
     z-index: 10000;
     cursor: pointer;
-
-    & > span {
-      display: block;
-    }
   }
 
   &.focus,
@@ -41,10 +37,6 @@
   &.blocked {
     pointer-events: none;
     opacity: .4;
-
-    & > span {
-      display: block;
-    }
 
     &.grouping,
     &.focus {

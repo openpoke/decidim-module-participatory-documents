@@ -3,9 +3,17 @@ import SuggestionForm from "src/decidim/participatory_documents/pdf/suggestion_f
 import "src/decidim/participatory_documents/pdf_notifications";
 import "src/decidim/participatory_documents/global";
 
+window.currentSuggestionForm = null;
 window.InitDocumentManagers = (options) => {
-  options.globalSuggestionsButton.addEventListener("click", () => {
-    (new SuggestionForm(options.documentPath, null)).fetchGroup();
+  options.globalSuggestionsButton.addEventListener("click", (evt) => {
+    evt.stopPropagation();
+    if (window.currentSuggestionForm && !window.currentSuggestionForm.group && window.currentSuggestionForm.div.classList.contains("active")) {
+      window.currentSuggestionForm.close();
+    } else {
+      window.currentSuggestionForm = new SuggestionForm(options.participationLayout, options.documentPath, null);
+      window.currentSuggestionForm.fetchGroup();
+      window.currentSuggestionForm.open();
+    }
   });
 };
 
@@ -15,22 +23,15 @@ window.InitPolygonViewer = (layer, boxes, options) => {
 
   viewer.onBoxClick = (box, evt) => {
     console.log("click on box", box, evt);
-    options.participationLayout.classList.add("active");
-    (new SuggestionForm(options.documentPath, box.section)).fetchGroup();
+    window.currentSuggestionForm = new SuggestionForm(options.participationLayout, options.documentPath, box.section);
+    window.currentSuggestionForm.open();
+    window.currentSuggestionForm.fetchGroup();
   }
 
   viewer.onBoxBlur = (box, evt) => {
     console.log("click outside box", box, evt);
-    if (!evt.target.closest("#participation-modal") && !evt.target.closest("#close-suggestions")) {
-      options.participationLayout.classList.remove("active");
-    }
+    window.currentSuggestionForm.close();
   };
-  const modal = document.getElementById("participation-modal");
 
-  document.addEventListener("click", (event) => {
-    if (event.target.closest("#participation-modal") === null && modal.classList.contains("active")) {
-      modal.classList.remove("active");
-    }
-  });
   return viewer;
 };

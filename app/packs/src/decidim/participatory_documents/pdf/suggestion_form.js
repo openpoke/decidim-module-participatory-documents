@@ -1,14 +1,33 @@
 export default class SuggestionForm {
-  constructor(path, group = null) {
+  constructor(div, path, group = null) {
     this.path = path;
     this.group = group;
-    this.div = document.getElementById("participation-modal");
-    this.div.classList.remove("section", "document", "active");
-    if (group) {
-      this.div.classList.add("section");
+    this.div = div;
+  }
+
+  open() {
+    if (this.div.classList.contains("active")) {
+      this.close(() => this.open());
     } else {
-      this.div.classList.add("document");
+      // console.log("open!", "group:", this.group)
+      this.div.classList.add("active");
+      if (this.group) {
+        this.div.classList.add("section");
+      } else {
+        this.div.classList.add("document");
+      }
     }
+  }
+
+  close(callback = () => {}) {
+    this.div.classList.remove("active");
+    this.div.addEventListener("transitionend", () => {
+      this.div.classList.remove("section", "document");
+      // console.log("end transition", this.div.classList);
+      if (callback) {
+        setTimeout(() => callback());
+      }
+    }, { once: true });
   }
 
   getCSRFToken() {
@@ -42,7 +61,6 @@ export default class SuggestionForm {
 
   populateArea(data) {
     this.div.innerHTML = data;
-    this.div.classList.add("active");
     this.addCloseHandler();
     this.addFormHandler();
     this.scrollToEnd();
@@ -50,12 +68,10 @@ export default class SuggestionForm {
 
   addCloseHandler() {
     let close = document.getElementById("close-suggestions");
-    let modal = document.getElementById("participation-modal");
 
-    if (close && modal) {
+    if (close) {
       close.addEventListener("click", () => {
-        modal.classList.remove("active");
-        close.style.display = "none";
+        this.close();
       }, { once: true });
     }
   }
