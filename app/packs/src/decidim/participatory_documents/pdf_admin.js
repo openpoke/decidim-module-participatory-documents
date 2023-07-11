@@ -7,7 +7,7 @@ import PdfStateManager from "src/decidim/participatory_documents/pdf/pdf_state_m
 import PdfModalManager from "src/decidim/participatory_documents/pdf/pdf_modal_manager";
 
 
-window.InitDocumentManagers = function(options) {
+window.InitDocumentManagers = (options) => {
   window.PdfDocStateManager = new PdfStateManager(options);
   // show message when saving
   window.PdfDocStateManager.onSave = () => {
@@ -36,7 +36,7 @@ window.InitDocumentManagers = function(options) {
 };
 
 // Call this on an annotation layer to initialize the polygon editor (admin side)
-window.InitPolygonEditor = function(layer, boxes, options, changeCallback = () => {}) {
+window.InitPolygonEditor = (layer, boxes, options, changeCallback = () => {}) => {
   let editor = new PolygonEditor(layer, boxes, { i18n: options.i18n });
   // Open the global box modal settings when a box is clicked
   editor.onBoxClick = (box) => {

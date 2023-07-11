@@ -1,4 +1,4 @@
-window.toggleFullscreen = function() {
+window.toggleFullscreen = () => {
   let viewer = document.getElementById("outerContainer");
 
   if (document.fullscreenElement) {
