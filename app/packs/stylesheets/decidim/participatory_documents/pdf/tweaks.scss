@@ -19,6 +19,27 @@
   margin: 12px;
 }
 
+#toolbarViewerMiddle {
+  padding-left: 0;
+  padding-right: 0;
+
+  @media(min-width: 940px) {
+    transform: translateX(-75%);
+  }
+}
+
+#toolbarViewerLeft {
+  @media(max-width: 680px) {
+    display: none;
+  }
+}
+
+#toolbarViewerRight {
+  @media(max-width: 520px) {
+    display: none;
+  }
+}
+
 .secondaryToolbar,
 .findbar {
   top: 53px;
@@ -49,6 +70,18 @@
   margin-top: 8px;
 }
 
+.hiddenSmallView {
+  @media(max-width: 800px) {
+    display: none;
+  }
+}
+
+.toolbarButtonSpacer {
+  @media(max-width: 800px) {
+    width: 0;
+  }
+}
+
 .toolbarField {
   margin-top: 9px;
 }
@@ -64,13 +97,15 @@
     background: #fff;
     border: 1px solid #000;
   }
+
+  @media(max-width: 940px) {
+    display: none;
+  }
 }
 
 .decidimButton {
-  display: inline-block;
-  vertical-align: middle;
-  margin: 0 0 1rem;
-  padding: .85em 1em;
+  margin: 0 0 0 1rem;
+  padding: .65em;
   border-radius: 4px;
   transition: background-color .25s ease-out, color .25s ease-out;
   font-family: inherit;
@@ -83,11 +118,22 @@
   border: transparent solid 1px;
   color: var(--box-text-color);
   text-shadow: 0 0 0 #fff;
+
+  &:first-child {
+    margin-left: 0;
+  }
+
+  &.muted {
+    background: #ddd;
+    color: #333;
+  }
+
+  @media(max-width: 900px) {
+    margin-top: 12px;
+  }
 }
 
 #globalSuggestionTrigger {
-  min-width: 160px;
-
   &::before {
     display: none;
   }
@@ -115,7 +161,7 @@
     background-image: url(../images/fullscreen_exit.svg);
   }
 
-  @media(max-width: 560px) {
+  @media(max-width: 900px) {
     width: 28px;
     height: 28px;
     margin-right: 0;

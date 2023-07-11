@@ -206,6 +206,7 @@ en:
             success: Valuator unassigned from suggestions successfully
       document:
         close: Close
+        export_my_suggestions: Export my suggestions
         global_suggestions: Global suggestions
         save_changes: Save changes!
         send_suggestion: Send suggestion
