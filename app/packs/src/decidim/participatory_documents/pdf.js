@@ -15,6 +15,21 @@ window.InitDocumentManagers = (options) => {
       window.currentSuggestionForm.open();
     }
   });
+
+  const decidim = document.getElementById("decidim");
+  options.exportModal.addEventListener("click", (evt) => {
+    evt.stopPropagation();
+  });
+  options.exportButton.addEventListener("click", (evt) => {
+    evt.stopPropagation();
+    const uiClose = decidim.querySelector(".close-button");
+    uiClose.addEventListener("click", () => decidim.classList.remove("show"), { once: true });
+    decidim.addEventListener("click", () => decidim.classList.remove("show"), { once: true });
+
+    decidim.classList.add("show");
+    console.log("export button clicked", decidim);
+    // $(options.exportModal).foundation();
+  });
 };
 
 // Call this on an annotation layer to initialize the polygon viewer (public side)

@@ -26,6 +26,11 @@ module Decidim
         end
       end
 
+      def export
+        # TODO: ajax
+        redirect_to pdf_viewer_documents_path(document)
+      end
+
       private
 
       def suggestions

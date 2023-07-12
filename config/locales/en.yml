@@ -218,6 +218,10 @@ en:
         preview_title: Preview
         publish_description: 'Admin options: you are previewing the participatory
           sections of the document'
+        export_modal:
+          title: Export my suggestions
+          description_html: If you want to receive all the suggestions made in this document by email click on the button below.<br><br>You will receive an email at <b>%{email}</b>.
+          send: Send me my suggestions
       models:
         document:
           fields:

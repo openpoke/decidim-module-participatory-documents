@@ -1,3 +1,5 @@
+@use "sass:meta";
+
 @import "stylesheets/decidim/variables";
 @import "stylesheets/decidim/utils/fontface";
 @import "stylesheets/decidim/utils/settings";
@@ -10,6 +12,34 @@
 @include foundation-everything();
 
 @import "stylesheets/decidim/modules/comments";
+
+#decidim {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 100000;
+  display: none;
+  margin: 0;
+  padding: 0;
+  font-family: $body-font-family;
+  font-weight: $global-weight-normal;
+  line-height: $global-lineheight;
+  color: $body-font-color;
+
+  &.show {
+    display: block;
+
+    .reveal-overlay {
+      display: block;
+
+      .reveal {
+        display: block;
+      }
+    }
+  }
+}
 
 #participation-modal {
   width: 0;
