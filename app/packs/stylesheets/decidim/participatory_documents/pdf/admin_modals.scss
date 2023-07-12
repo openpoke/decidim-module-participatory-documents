@@ -4,6 +4,10 @@
 @import "stylesheets/decidim/utils/fontface";
 @import "stylesheets/decidim/admin/utils/settings";
 
+.reveal-overlay {
+  z-index: 100000;
+}
+
 #decidim {
   position: fixed;
   top: 0;

@@ -13,8 +13,9 @@
   <!-- This snippet is used in production (included from viewer.html) -->
   <link rel="resource" type="application/l10n" href="/pdfjs/web/locale/locale.properties">
   <script src="/pdfjs/web/viewer.js"></script>
-  <%= javascript_pack_tag "decidim_participatory_documents_viewer" %>
   <%= stylesheet_pack_tag "decidim_participatory_documents_viewer" %>
+  <%= javascript_pack_tag "decidim_participatory_documents_viewer" if current_user %>
+  <%= javascript_pack_tag "decidim_participatory_documents_viewer_off" unless current_user %>
   <%= organization_colors %>
   <%= pdf_custom_style %>
   <%= csrf_meta_tags %>
@@ -23,11 +24,11 @@
 <body tabindex="1">
   <%= render "decidim/participatory_documents/documents/pdfjs_base", display_suggestions: true %>
 
-  <%= render "modals" %>
-
   <div id="notifications"></div>
 
   <div id="participation-modal"></div>
+
+  <%= render "modals" %>
 
   <script>
 
