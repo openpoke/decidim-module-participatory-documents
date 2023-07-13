@@ -20,25 +20,4 @@
       vertical-align: middle;
     }
   }
-
-  @media(max-width: 900px) {
-    margin-top: 12px;
-  }
-}
-
-#fullscreenButton {
-  @media(max-width: 900px) {
-    width: 28px;
-    height: 28px;
-    margin-right: 0;
-    padding-right: 0;
-    overflow: hidden;
-    font-size: 0;
-  }
-}
-
-#scaleSelectContainer {
-  @media(max-width: 900px) {
-    display: none;
-  }
 }

@@ -31,11 +31,13 @@ Decidim.register_component(:participatory_documents) do |component|
   # end
 
   component.exports :suggestions do |exports|
-    exports.collection do |component_instance|
+    exports.collection do |component_instance, user|
       document = Decidim::ParticipatoryDocuments::Document.find_by(component: component_instance)
-      Decidim::ParticipatoryDocuments::Suggestion
-        .where(suggestable: document)
-        .or(Decidim::ParticipatoryDocuments::Suggestion.where(suggestable: document.sections)).order(:id)
+      suggestions = Decidim::ParticipatoryDocuments::Suggestion
+                    .where(suggestable: document)
+                    .or(Decidim::ParticipatoryDocuments::Suggestion.where(suggestable: document.sections))
+      suggestions = user ? suggestions.where(author: user) : suggestions
+      suggestions.order(:id)
     end
 
     exports.include_in_open_data = false

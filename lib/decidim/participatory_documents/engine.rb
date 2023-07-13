@@ -14,7 +14,11 @@ module Decidim
           collection do
             get :pdf_viewer
           end
-          resources :suggestions, only: [:index, :create], controller: :document_suggestions
+          resources :suggestions, only: [:index, :create], controller: :document_suggestions do
+            collection do
+              post :export
+            end
+          end
         end
 
         root to: "documents#index"

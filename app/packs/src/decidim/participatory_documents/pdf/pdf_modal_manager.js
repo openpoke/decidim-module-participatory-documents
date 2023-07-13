@@ -8,6 +8,7 @@ export default class PdfModalManager {
     this.csrfToken = options.csrfToken;
     // UI
     this.modalLayout = document.getElementById("decidim");
+    this.modalLayout.addEventListener("click", this._closeHandler.bind(this));
     // events
     this.onSave = () => {};
     this.onDestroy = () => {};
@@ -29,6 +30,7 @@ export default class PdfModalManager {
   }
 
   displayModal(box) {
+    const modal = document.getElementById("editor-modal");
     const uiSave = document.getElementById("editor-modal-save");
     const uiClose = document.getElementById("editor-modal-close");
     const uiTitle = document.getElementById("editor-modal-title");
@@ -38,6 +40,7 @@ export default class PdfModalManager {
     this.modalLayout.classList.add("show");
     $(this.modalLayout).foundation();
 
+    modal.addEventListener("click", (evt) => evt.stopPropagation(), { once: true });
     uiClose.addEventListener("click", this._closeHandler.bind(this), { once: true });
     uiRemove.addEventListener("click", (evt) => this._removeHandler(box, evt), { once: true });
     uiSave.addEventListener("click", (evt) => this._saveHandler(box, evt), { once: true });
@@ -61,7 +64,7 @@ export default class PdfModalManager {
         if (response.ok) {
           return response.json();
         }
-        throw new Error(" ");
+        throw new Error(response.statusText);
       }).
       then((resp) => {
         box.setInfo();

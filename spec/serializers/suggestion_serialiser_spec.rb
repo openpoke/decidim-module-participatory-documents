@@ -2,14 +2,15 @@
 
 require "spec_helper"
 
-module Decidim
-  describe ParticipatoryDocuments::SuggestionSerializer do
+module Decidim::ParticipatoryDocuments
+  describe SuggestionSerializer do
     include Decidim::TranslationsHelper
     include Decidim::ParticipatoryDocuments::Admin::SuggestionHelper
     include ActionView::Helpers::TextHelper
 
     subject { described_class.new(suggestion) }
     let(:suggestion) { create(:participatory_documents_suggestion, :with_answer) }
+    let!(:valuation_assignment) { create(:suggestion_valuation_assignment, suggestion: suggestion) }
     let(:serialized) { subject.serialize }
 
     describe "serialize" do
@@ -18,7 +19,7 @@ module Decidim
         expect(serialized).to include(author: suggestion.try(:normalized_author).try(:name))
         expect(serialized).to include(state: humanize_suggestion_state(suggestion.state))
         expect(serialized).to include(section: translated_attribute(suggestion.suggestable.title))
-        expect(serialized).to include(valuators: suggestion.valuation_assignments.count)
+        expect(serialized).to include(valuators: valuation_assignment.valuator.name)
         expect(serialized).to include(submitted_on: I18n.l(suggestion.created_at, format: :decidim_short))
       end
 

@@ -69,7 +69,7 @@ module Decidim
         end
 
         def pdf_viewer
-          @form = form(SectionForm).from_params({})
+          @form = form(SectionForm).instance
           render layout: false
         end
 

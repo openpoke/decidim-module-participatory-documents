@@ -7,7 +7,7 @@ module Decidim
       extend ActiveSupport::Concern
 
       included do
-        helper_method :document, :box_color_as_rgba, :pdf_custom_style
+        helper_method :document, :box_color_as_rgba, :pdf_custom_style, :all_suggestions
 
         protected
 
@@ -20,6 +20,13 @@ module Decidim
 
         def document
           @document ||= Decidim::ParticipatoryDocuments::Document.find_by(component: current_component)
+        end
+
+        def all_suggestions
+          @all_suggestions ||= begin
+            manifest = document.component.manifest.export_manifests.find { |man| man.name == :suggestions }
+            manifest.collection.call(document.component, current_user)
+          end
         end
 
         def box_color_as_rgba(document, opacity: nil)

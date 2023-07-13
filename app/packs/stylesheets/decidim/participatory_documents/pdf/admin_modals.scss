@@ -4,10 +4,8 @@
 @import "stylesheets/decidim/utils/fontface";
 @import "stylesheets/decidim/admin/utils/settings";
 
-@keyframes blinker {
-  50% {
-    background-color: rgba(var(--primary-rgb), .6);
-  }
+.reveal-overlay {
+  z-index: 100000;
 }
 
 #decidim {
@@ -25,7 +23,7 @@
   line-height: $global-lineheight;
   color: $body-font-color;
 
-  @include meta.load-css("stylesheets/decidim/participatory_documents/decidim_admin_classes.scss");
+  @include meta.load-css("stylesheets/decidim/participatory_documents/pdf/decidim_admin_styles.scss");
 
   &.show {
     display: block;
@@ -37,5 +35,11 @@
         display: block;
       }
     }
+  }
+}
+
+@keyframes blinker {
+  50% {
+    background-color: rgba(var(--primary-rgb), .6);
   }
 }

@@ -1,5 +1,5 @@
 ---
-en:
+ca:
   activemodel:
     attributes:
       document:
@@ -15,8 +15,7 @@ en:
             state:
               inclusion: It's not possible to publish with status "not answered"
         document:
-          has_suggestions: This document cannot be changed or removed because it has
-            suggestions
+          has_suggestions: This document cannot be changed or removed because it has suggestions
         suggestion:
           attributes:
             not_blank: 'Validation failed: Please provide a message or upload a file'
@@ -59,8 +58,7 @@ en:
         delete: "%{user_name} deleted a document named %{resource_name} in %{space_name}"
         update: "%{user_name} updated a document named %{resource_name} in %{space_name}"
       section:
-        create: "%{user_name} has created a new Section named %{resource_name} for
-          %{document_name}"
+        create: "%{user_name} has created a new Section named %{resource_name} for %{document_name}"
         delete: "%{user_name} has deleted a section"
         update: "%{user_name} has updated a section in %{document_name}"
       suggestion_note:
@@ -77,16 +75,10 @@ en:
       participatory_documents:
         suggestion_answered:
           affected_user:
-            email_intro: 'A suggestion you submitted on "<a href="%{resource_path}">%{resource_title}</a>"
-              document has been answered by an administrator. You can read the answer
-              in this page:'
-            email_outro: You have received this notification because you have submitted
-              a suggestion for "<a href="%{resource_path}">%{resource_title}</a>"
-              document.
-            email_subject: A suggestion you have submitted has been answered by an
-              administrator
-            notification_title: A suggestion you submitted on "<a href="%{resource_path}">%{resource_title}</a>"
-              document has been answered by an administrator
+            email_intro: 'A suggestion you submitted on "<a href="%{resource_path}">%{resource_title}</a>" document has been answered by an administrator. You can read the answer in this page:'
+            email_outro: You have received this notification because you have submitted a suggestion for "<a href="%{resource_path}">%{resource_title}</a>" document.
+            email_subject: A suggestion you have submitted has been answered by an administrator
+            notification_title: A suggestion you submitted on "<a href="%{resource_path}">%{resource_title}</a>" document has been answered by an administrator
     forms:
       file_help:
         file:
@@ -95,8 +87,7 @@ en:
       actions:
         back: Back
         back_edit: Go back to edit participatory sections
-        confirm: This action means that you will not be able to edit the document
-          or create new sections, are you sure?
+        confirm: This action means that you will not be able to edit the document or create new sections, are you sure?
         edit_boxes: Edit participatory areas
         edit_document: Edit/upload document
         finish_publishing: Publish participatory sections
@@ -115,11 +106,9 @@ en:
             error: There was an error publishing sections
             success: Sections have been successfully published
           form:
-            alert_suggestions_html: "<strong>IMPORTANT:</strong> This document cannot
-              be changed or removed because it already has suggestions attached"
+            alert_suggestions_html: "<strong>IMPORTANT:</strong> This document cannot be changed or removed because it already has suggestions attached"
             box_style_preview: 'Box style preview:'
-            warning_sections_html: "<strong>Warning:</strong> If you upload a new
-              document, all the participatory areas will be deleted!"
+            warning_sections_html: "<strong>Warning:</strong> If you upload a new document, all the participatory areas will be deleted!"
           index:
             start: Please upload a PDF to start
           new:
@@ -194,8 +183,7 @@ en:
           valuators:
             assigned_valuators: Assigned valuators
             remove_assignment: Remove assignment
-            remove_assignment_confirmation: Are you sure you want to remove the valuator
-              from this suggestion?
+            remove_assignment_confirmation: Are you sure you want to remove the valuator from this suggestion?
             valuators: Valuators
         valuation_assignments:
           create:
@@ -215,21 +203,16 @@ en:
       document_suggestions:
         export:
           empty: There are no suggestions to export.
-          success: "%{count} suggestions have been successfully exported. Please check
-            your email inbox at %{email}."
+          success: "%{count} suggestions have been successfully exported. Please check your email inbox at %{email}."
       documents:
         export_modal:
-          description_html: You have %{count} suggestions on this document. If you
-            want to export them, you will receive a ZIP file with and Excel document
-            in it with all your data and any possible answer the admins have given
-            to you. <br><br>You will receive an email at <b>%{email}</b>.
+          description_html: You have %{count} suggestions on this document. If you want to export them, you will receive a ZIP file with and Excel document in it with all your data and any possible answer the admins have given to you. <br><br>You will receive an email at <b>%{email}</b>.
           send: Send me my suggestions
           title: Export my suggestions
         missing: There is no document uploaded yet
         not_supported: This page requires JavaScript to be enabled!
         preview_title: Preview
-        publish_description: 'Admin options: you are previewing the participatory
-          sections of the document'
+        publish_description: 'Admin options: you are previewing the participatory sections of the document'
       models:
         document:
           fields:
@@ -266,14 +249,11 @@ en:
         move: Move
         needsSaving: You have to save the areas before editing them
         operationFailed: The operation has failed
-        removeBoxConfirm: Are you sure you want to delete this area? This cannot be
-          undone.
+        removeBoxConfirm: Are you sure you want to delete this area? This cannot be undone.
         removed: The area has been removed
-        startEditing: Start creating areas for participation by clicking and dragging.
-          Once created, boxes can be resized, moved, or grouped.
+        startEditing: Start creating areas for participation by clicking and dragging. Once created, boxes can be resized, moved, or grouped.
         startSuggesting: Click on a marked area to participate!
         suggestion_form:
-          blank: There was an error creating the suggestion. Upload the valid  file
-            or add a text message with the suggestion.
+          blank: There was an error creating the suggestion. Upload the valid  file or add a text message with the suggestion.
           title: Write your suggestion or upload a file with your suggestions
       'yes': 'Yes'

@@ -305,14 +305,17 @@ See https://github.com/adobe-type-tools/cmap-resources
             </button>
           </div>
           <div id="toolbarViewerMiddle">
-            <% if defined?(displaySave) && displaySave == true %>
+            <% if defined?(display_save) && display_save == true %>
               <button id="DecidimPDSaveButton" class="decidimButton" title="<%= t "save_changes", scope: "decidim.participatory_documents.document" %>">
                 <%= t "save_changes", scope: "decidim.participatory_documents.document" %>
               </button>
             <% end %>
-            <% if defined?(globalSuggestions) && globalSuggestions == true %>
+            <% if defined?(display_suggestions) && display_suggestions == true %>
               <button id="globalSuggestionTrigger" class="decidimButton" title="<%= t "global_suggestions", scope: "decidim.participatory_documents.document" %>">
                 <%= t "global_suggestions", scope: "decidim.participatory_documents.document" %>
+              </button>
+              <button id="exportSuggestionsTrigger" class="decidimButton muted" title="<%= t "export_my_suggestions", scope: "decidim.participatory_documents.document" %>">
+                <%= t "export_my_suggestions", scope: "decidim.participatory_documents.document" %>
               </button>
             <% end %>
           </div>

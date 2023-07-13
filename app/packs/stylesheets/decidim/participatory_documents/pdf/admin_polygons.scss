@@ -24,7 +24,17 @@
       left: 0;
     }
 
+    & > span {
+      display: block;
+    }
+
     .box-controls {
+      display: block;
+    }
+  }
+
+  &.blocked {
+    & > span {
       display: block;
     }
   }

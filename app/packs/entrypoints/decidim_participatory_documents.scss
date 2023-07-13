@@ -1,5 +1,26 @@
+/* stylelint-disable selector-type-no-unknown */
+@import "stylesheets/decidim/variables";
+@import "stylesheets/decidim/utils/mixins";
+
+#loginModal-label {
+  outline: none;
+}
+
 .pdf-viewer-container {
   height: calc(100vh - 30rem);
   min-height: 50em;
   padding: 0;
+
+  @media(max-width: 680px) {
+    margin-left: -1.6rem;
+  }
+}
+
+pdf-iframe {
+  &::before {
+    @include spinner(25px, #fff, var(--primary), 800ms);
+
+    content: "";
+    vertical-align: middle;
+  }
 }

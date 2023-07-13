@@ -13,51 +13,58 @@
   <!-- This snippet is used in production (included from viewer.html) -->
   <link rel="resource" type="application/l10n" href="/pdfjs/web/locale/locale.properties">
   <script src="/pdfjs/web/viewer.js"></script>
-  <%= javascript_pack_tag "decidim_participatory_documents_viewer" %>
   <%= stylesheet_pack_tag "decidim_participatory_documents_viewer" %>
+  <%= javascript_pack_tag "decidim_participatory_documents_viewer" if current_user %>
+  <%= javascript_pack_tag "decidim_participatory_documents_viewer_off" unless current_user %>
   <%= organization_colors %>
   <%= pdf_custom_style %>
   <%= csrf_meta_tags %>
 </head>
 
 <body tabindex="1">
-  <%= render "decidim/participatory_documents/documents/pdfjs_base", displaySave: false, globalSuggestions: true %>
+  <%= render "decidim/participatory_documents/documents/pdfjs_base", display_suggestions: true %>
 
   <div id="notifications"></div>
 
   <div id="participation-modal"></div>
 
-<script>
+  <%= render "export_modal" %>
 
-  var I18n = <%= I18n.t("decidim.participatory_documents.ui_messages").to_json.html_safe %>;
-  var DocumentPath = '<%= document_path(document).split("?")[0] %>';
-  var CurrentBoxes = <%= document.annotations.collect(&:serialize).to_json.html_safe %>;
-  var pages = {};
+  <script>
 
-  PDFViewerApplication.initializedPromise.then(function() {
-    var options = {
-      i18n: I18n,
-      documentPath: DocumentPath,
-      globalSuggestionsButton: document.getElementById("globalSuggestionTrigger"),
-      participationLayout: document.getElementById("participation-modal")
-    };
+    var I18n = <%= I18n.t("decidim.participatory_documents.ui_messages").to_json.html_safe %>;
+    var DocumentPath = '<%= document_path(document).split("?")[0] %>';
+    var CurrentBoxes = <%= document.annotations.collect(&:serialize).to_json.html_safe %>;
+    var pages = {};
 
-    window.InitDocumentManagers(options);
+    PDFViewerApplication.initializedPromise.then(function() {
+      var options = {
+        i18n: I18n,
+        documentPath: DocumentPath,
+        globalSuggestionsButton: document.getElementById("globalSuggestionTrigger"),
+        participationLayout: document.getElementById("participation-modal"),
+        exportButton: document.getElementById("exportSuggestionsTrigger"),
+        exportModal: document.getElementById("export-modal")
+      };
 
-    window.showInfo(I18n.startSuggesting, {delay: 5000});
+      window.InitDocumentManagers(options);
 
-    PDFViewerApplication.eventBus.on('annotationeditorlayerrendered', function (doc) {
-      var page = PDFViewerApplication.pdfViewer._pages[doc.pageNumber - 1];
-      var annotationsLayer = page.annotationEditorLayer && page.annotationEditorLayer.div;
-      var savedPage = pages[doc.pageNumber];
-      // Let's render the object only if not already existing.
-      // Note that the PDF library might redraw the annotation layer, if this happens we need to re-render the areas.
-      if(annotationsLayer && (!savedPage || savedPage.boxEditor.div !== annotationsLayer)) {
-        page.boxEditor = window.InitPolygonViewer(annotationsLayer, CurrentBoxes.filter(box => box.page_number === doc.pageNumber), options);
-        pages[doc.pageNumber] = page;
-      }
+      window.showInfo(I18n.startSuggesting, {delay: 5000});
+
+      PDFViewerApplication.eventBus.on('annotationeditorlayerrendered', function (doc) {
+        var page = PDFViewerApplication.pdfViewer._pages[doc.pageNumber - 1];
+        var annotationsLayer = page.annotationEditorLayer && page.annotationEditorLayer.div;
+        var savedPage = pages[doc.pageNumber];
+        // Let's render the object only if not already existing.
+        // Note that the PDF library might redraw the annotation layer, if this happens we need to re-render the areas.
+        if(annotationsLayer && (!savedPage || savedPage.boxEditor.div !== annotationsLayer)) {
+          page.boxEditor = window.InitPolygonViewer(annotationsLayer, CurrentBoxes.filter(box => box.page_number === doc.pageNumber), options);
+          pages[doc.pageNumber] = page;
+        }
+        // make all links with target blank to prevent open them inside the iframe
+        page.div.querySelectorAll("a[href]").forEach(anchor => anchor.target = "_blank")
+      });
     });
-  });
-</script>
+  </script>
 </body>
 </html>

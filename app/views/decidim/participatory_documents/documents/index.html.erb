@@ -15,7 +15,9 @@
   </div>
   <div class="row pdf-viewer-container">
     <pdf-iframe src="<%= pdf_viewer_documents_path(file: document.attached_uploader(:file).path) %>" width="100%" height="100%" id="pdf-iframe" frameborder="0" allowfullscreen_="" webkitallowfullscreen_="true" mozallowfullscreen_="true" oallowfullscreen_="true" msallowfullscreen_="true">
-      <h3 class="text-center"><%= t("decidim.participatory_documents.documents.not_supported") %></h3>
+      <noscript>
+        <h3 class="text-center"><%= t("decidim.participatory_documents.documents.not_supported") %></h3>
+      </noscript>
     </pdf-iframe>
   </div>
 <% else %>
