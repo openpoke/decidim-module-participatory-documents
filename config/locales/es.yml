@@ -3,50 +3,50 @@ es:
   decidim:
     admin_log:
       annotation:
-        create: "%{user_name} created a new participatory area for %{document_name}"
-        delete: "%{user_name} deleted a new participatory area for %{document_name}"
+        create: "%{user_name} creó una nueva área participativa para %{document_name}"
+        delete: "%{user_name} eliminó un nuevo área participativa para %{document_name}"
       document:
-        create: "%{user_name} created a document named %{resource_name} in %{space_name}"
-        delete: "%{user_name} deleted a document named %{resource_name} in %{space_name}"
-        update: "%{user_name} updated a document named %{resource_name} in %{space_name}"
+        create: "%{user_name} creó el documento llamado %{resource_name} en %{space_name}"
+        delete: "%{user_name} borro el documento llamado %{resource_name} en %{space_name}"
+        update: "%{user_name} actualizo el documento llamado %{resource_name} en %{space_name}"
       zone:
-        create: "%{user_name} has created a new Group named %{resource_name} for %{document_name}"
+        create: "%{user_name} ha creado un nuevo grupo llamado %{resource_name} para %{document_name}"
     components:
       participatory_documents:
-        name: Participatory Document
+        name: Documento participativo
     participatory_documents:
       actions:
-        back: Back
-        edit_boxes: Edit participatory areas
-        edit_document: Edit/upload document
-        new: Upload PDF document
-        title: Actions
+        back: Atrás
+        edit_boxes: Editar áreas participativas
+        edit_document: Editar/subir documento
+        new: Subir un documento PDF
+        title: Acciones
       admin:
         documents:
           create:
-            invalid: There was a problem creating Document
-            success: Document has been successfully created
+            invalid: Se ha producido un error al crear el documento
+            success: El documento ha sido creado con éxito
           edit:
-            title: Edit Participatory document
-            update: Update
+            title: Edita el documento participativo
+            update: Actualiza
           index:
-            start: Please upload a PDF to start
+            start: Por favor cargue un documento PDF para empezar
           new:
-            create: Create  Participatory document
-            title: New Participatory document
+            create: Crea el documento participativo
+            title: Nuevo documento participativo
           update:
             error:
-            invalid: There was a problem updating Document
-            success: Document has been successfully updated
+            invalid: Se ha producido un error al actualizar el documento
+            success: El documento ha sido actualizado con éxito
           zones:
-            empty: "(empty)"
+            empty: "(vacío)"
       models:
         document:
           fields:
-            document_pages: Page numbers
+            document_pages: Número de página
             id: Id
-            published: Published
-            state: State
-            title: Title
+            published: Publicado
+            state: Estado
+            title: Título
       'no': 'No'
-      'yes': 'Yes'
+      'yes': 'Sí'
