@@ -35,7 +35,7 @@ module Decidim
 
         return render json: { message: t(".empty") }, status: :unprocessable_entity unless all_suggestions.any?
 
-        Decidim::ExportJob.perform_later(current_user, current_component, :suggestions, "Excel", params[:resource_id].presence)
+        ExportMySuggestionsJob.perform_later(current_user, document, "Excel")
 
         render json: { message: t(".success", count: all_suggestions&.count, email: current_user&.email) }
       end

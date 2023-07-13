@@ -61,6 +61,8 @@
           page.boxEditor = window.InitPolygonViewer(annotationsLayer, CurrentBoxes.filter(box => box.page_number === doc.pageNumber), options);
           pages[doc.pageNumber] = page;
         }
+        // make all links with target blank to prevent open them inside the iframe
+        page.div.querySelectorAll("a[href]").forEach(anchor => anchor.target = "_blank")
       });
     });
   </script>

@@ -24,7 +24,7 @@ module Decidim
           state: humanize_suggestion_state(suggestion.state),
           answer: answer_text(suggestion),
           section: section(suggestion),
-          valuators: suggestion.valuation_assignments.count,
+          valuators: suggestion.valuation_assignments.map(&:valuator).map(&:name).join(", "),
           submitted_on: submitted_on(suggestion)
         }
       end
