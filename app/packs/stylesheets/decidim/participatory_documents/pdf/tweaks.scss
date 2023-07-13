@@ -26,6 +26,10 @@
   @media(min-width: 940px) {
     transform: translateX(-75%);
   }
+
+  @media(max-width: 680px) {
+    padding-left: 1em;
+  }
 }
 
 #toolbarViewerLeft {
@@ -35,7 +39,7 @@
 }
 
 #toolbarViewerRight {
-  @media(max-width: 400px) {
+  @media(max-width: 380px) {
     display: none;
   }
 }
