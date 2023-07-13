@@ -4,7 +4,7 @@
   </td>
   <td><%= suggestion.id %></td>
   <td>
-    <%= truncate(suggestion_content(suggestion)[:text], length: 50) %>
+    <%= link_to truncate(suggestion_content(suggestion)[:text], length: 50), document_suggestion_path(document, suggestion) %>
     <% if suggestion_content(suggestion)[:file_link] %>
       <%= suggestion_content(suggestion)[:file_link] %>
     <% end %>
