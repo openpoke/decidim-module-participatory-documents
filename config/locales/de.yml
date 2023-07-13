@@ -3,50 +3,50 @@ de:
   decidim:
     admin_log:
       annotation:
-        create: "%{user_name} created a new participatory area for %{document_name}"
-        delete: "%{user_name} deleted a new participatory area for %{document_name}"
+        create: "%{user_name} hat einen neuen partizipativen Abschnitt für %{document_name} erstellt"
+        delete: "%{user_name} hat einen neuen partizipativen Abschnitt für %{document_name} gelöscht"
       document:
-        create: "%{user_name} created a document named %{resource_name} in %{space_name}"
-        delete: "%{user_name} deleted a document named %{resource_name} in %{space_name}"
-        update: "%{user_name} updated a document named %{resource_name} in %{space_name}"
+        create: "%{user_name} hat ein Dokument namens %{resource_name} in %{space_name} erstellt"
+        delete: "%{user_name} hat ein Dokument namens %{resource_name} in %{space_name} gelöscht"
+        update: "%{user_name} hat ein Dokument namens %{resource_name} in %{space_name} aktualisiert"
       zone:
-        create: "%{user_name} has created a new Group named %{resource_name} for %{document_name}"
+        create: "%{user_name} hat einen neuen gruppierten Abschnitt namens %{resource_name} für %{document_name} erstellt,"
     components:
       participatory_documents:
-        name: Participatory Document
+        name: Bemerkungen zu PDF's
     participatory_documents:
       actions:
-        back: Back
-        edit_boxes: Edit participatory areas
-        edit_document: Edit/upload document
-        new: Upload PDF document
-        title: Actions
+        back: Zurück
+        edit_boxes: Partizipative Abschnitte bearbeiten
+        edit_document: Dokument bearbeiten / hochladen
+        new: PDF-Dokument hochladen
+        title: Aktivitäten
       admin:
         documents:
           create:
-            invalid: There was a problem creating Document
-            success: Document has been successfully created
+            invalid: Beim Erstellen des Dokuments ist ein Fehler aufgetreten
+            success: Das Dokument wurde erfolgreich angelegt
           edit:
-            title: Edit Participatory document
-            update: Update
+            title: Dokument/Abschnitte bearbeiten
+            update: Aktualisieren
           index:
-            start: Please upload a PDF to start
+            start: Bitte lade ein PDF hoch, um zu beginnen
           new:
-            create: Create  Participatory document
-            title: New Participatory document
+            create: Dokument aufbereiten
+            title: Neues Dokument
           update:
             error:
-            invalid: There was a problem updating Document
-            success: Document has been successfully updated
+            invalid: Beim Hochladen des Dokuments ist ein Fehler aufgetreten
+            success: Das Dokument wurde erfolgreich aktualisiert
           zones:
-            empty: "(empty)"
+            empty: "(leer)"
       models:
         document:
           fields:
-            document_pages: Page numbers
-            id: Id
-            published: Published
-            state: State
-            title: Title
-      'no': 'No'
-      'yes': 'Yes'
+            document_pages: Seitennummern
+            id: id
+            published: Veröffentlicht
+            state: Status
+            title: Titel
+      'no': 'Nein'
+      'yes': 'Ja'
