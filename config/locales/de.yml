@@ -92,77 +92,77 @@ de:
         edit_document: Dokument bearbeiten / hochladen
         finish_publishing: PDF und Abschnitte definitiv publizieren
         new: PDF-Dokument hochladen
-        preview_publishing_sections: Preview and publish sections
-        title: Actions
+        preview_publishing_sections: Vorschau und Veröffentlichung
+        title: Aktivitäten
       admin:
         documents:
           create:
-            invalid: There was a problem creating Document
-            success: Document has been successfully created
+            invalid: Beim Erstellen des Dokuments ist ein Fehler aufgetreten
+            success: Das Dokument wurde erfolgreich angelegt
           edit:
-            title: Edit Participatory document
-            update: Update
+            title: Dokument/Abschnitte bearbeiten
+            update: Aktualisieren
           final_publish:
-            error: There was an error publishing sections
-            success: Sections have been successfully published
+            error: Beim Veröffentlichen der Abschnitte ist ein Fehler aufgetreten
+            success: Das PDF mit den partizipativen Abschnitten wurden erfolgreich veröffentlicht
           form:
-            alert_suggestions_html: "<strong>IMPORTANT:</strong> This document cannot be changed or removed because it already has suggestions attached"
-            box_style_preview: 'Box style preview:'
-            warning_sections_html: "<strong>Warning:</strong> If you upload a new document, all the participatory areas will be deleted!"
+            alert_suggestions_html: "<strong>WICHTIG:</strong> Dieses Dokument kann nicht geändert oder entfernt werden, da es bereits Bemerkungen enthält"
+            box_style_preview: 'Vorschau für den Stil der Felder:'
+            warning_sections_html: "<strong>Warnung:</strong> Wenn du ein neues Dokument hochlädst, werden alle bisher erfassten Abschnitte gelöscht!"
           index:
-            start: Please upload a PDF to start
+            start: Bitte lade ein PDF hoch, um zu beginnen
           new:
-            create: Create participatory document
-            title: New participatory document
+            create: Dokument aufbereiten
+            title: Neues Dokument
           sections:
-            empty: "(empty)"
+            empty: "(leer)"
           update:
-            error: There was a problem updating Document
-            success: Document has been successfully updated
+            error: Beim Hochladen des Dokuments ist ein Fehler aufgetreten
+            success: Das Dokument wurde erfolgreich aktualisiert
         exports:
-          suggestions: Suggestions
+          suggestions: Bemerkungen
         suggestion_notes:
           create:
-            error: There was a problem creating this suggestion note
-            success: Suggestion note successfully created
+            error: Beim Erstellen dieser Notiz ist ein Problem aufgetreten
+            success: Notiz erfolgreich erstellt
           form:
-            note: Note
-            submit: Submit
-          leave_your_note: Leave your note
+            note: Notiz
+            submit: Notiz speichern
+          leave_your_note: Notiz hinterlassen
           modal:
-            body: Body
-            title: Edit note
-            update: Update
-          title: Private notes
+            body: Inhalt
+            title: Notiz bearbeiten
+            update: Aktualisieren
+          title: (interne) Notizen
           update:
-            edited: Edited
-            invalid: There was a problem updating this suggestion note
-            success: Suggestion note successfully updated
+            edited: Bearbeitet
+            invalid: Es gab ein Problem beim Aktualisieren der Notiz
+            success: Notiz erfolgreich erstellt
         suggestions:
           answer:
-            invalid: There was an error adding the answer
-            success: Successfully added the answer
+            invalid: Es gab einen Fehler beim Hinzufügen der Antwort
+            success: Antwort erfolgreich hinzugefügt
           form:
-            answer: Answer
-            answer_is_published: Published
-            title: Answer Suggestion
+            answer: Antwort
+            answer_is_published: Veröffentlicht
+            title: Antwort zur Bemerkung
           index:
             actions:
-              answer: Answer
-              assign_to_valuator: Assign to valuator
-              assign_to_valuator_button: Assign
-              cancel: Cancel
-              download: download %{filename}
-              publish: Publish
-              publish_answers: Publish answers
-              title: Actions
-              unassign_from_valuator: Unassign from valuator
-              unassign_from_valuator_button: Unassign
-            author: Author
-            created_at: Submitted on
-            id: Id
-            no_text: "(no text)"
-            published_answer: Published Answer
+              answer: Antworten
+              assign_to_valuator: Einem Experten zuweisen
+              assign_to_valuator_button: Zuweisen
+              cancel: Abbrechen
+              download: lade %{filename} herunter
+              publish: Veröffentlichen
+              publish_answers: Antworten senden
+              title: Aktivitäten
+              unassign_from_valuator: Zuweisung des Experten aufheben
+              unassign_from_valuator_button: Aufheben
+            author: Verfasser/in
+            created_at: Eingereicht am
+            id: id
+            no_text: "(kein Text)"
+            published_answer: Veröffentlichte Antwort
             section: Abschnitt
             selected: ausgewählt
             state: Status
@@ -208,52 +208,52 @@ de:
         export_modal:
           description_html: 'Du hast in diesem Dokument %{count} Bemerkungen eingebracht. Um diese übersichtlich für dich ablegen zu können, schicken wir dir ein E-Mail mit einem Anhang in Form einer ZIP-Datei mit darin enthaltenem Excel-Dokument. <br><br>Du erhälst die ZIP-Datei auf die folgende E-Mail Adresse: <b>%{email}</b>.'
           send: Meine Bemerkungen als Excel-Export erhalten
-          title: Export my suggestions
-        missing: There is no document uploaded yet
-        not_supported: This page requires JavaScript to be enabled!
-        preview_title: Preview
-        publish_description: 'Admin options: you are previewing the participatory sections of the document'
+          title: Meine Bemerkungen herunterladen
+        missing: Es gibt noch kein hochgeladenes Dokument
+        not_supported: Du brauchst JavaScript um diese Seite korrekt anzeigen zu lassen!
+        preview_title: Vorschau
+        publish_description: 'Admin-Ansicht: Du siehst die partizipativen Abschnitte des Dokuments als Vorschau'
       models:
         document:
           fields:
-            document_pages: Page numbers
-            id: Id
-            published: Published
-            state: State
-            title: Title
+            document_pages: Seitennummern
+            id: id
+            published: Veröffentlicht
+            state: Status
+            title: Titel
         section:
           fields:
-            artificial_tile: Section %{position}
+            artificial_tile: Abschnitt %{position}
         suggestion:
           fields:
-            valuators: Valuators
-      'no': 'No'
+            valuators: Expert/innen
+      'no': 'Keines'
       suggestions:
         answers:
-          accepted: Accepted
-          evaluating: Evaluating
-          not_answered: Not Answered
-          published: Published
-          rejected: Rejected
-          withdrawn: Withdrawn
+          accepted: Angenommen
+          evaluating: in Bewertung
+          not_answered: Unbeantwortet
+          published: Veröffentlicht
+          rejected: Abgelehnt
+          withdrawn: Zurückgezogen
         modal:
-          exit_full_screen: Exit fullscreen
-          full_screen: Fullscreen
+          exit_full_screen: Vollbildmodus verlassen
+          full_screen: Vollbildmodus
       ui_messages:
-        allSaved: All the areas have been saved successfully
-        confirmExit: Are you sure you want to exit?
-        created: The area has been created
-        errorsSaving: Some errors have occurred while saving the areas
-        group: Group
-        modalTitle: Section %{section}, area %{box}
-        move: Move
-        needsSaving: You have to save the areas before editing them
-        operationFailed: The operation has failed
-        removeBoxConfirm: Are you sure you want to delete this area? This cannot be undone.
-        removed: The area has been removed
-        startEditing: Start creating areas for participation by clicking and dragging. Once created, boxes can be resized, moved, or grouped.
-        startSuggesting: Click on a marked area to participate!
+        allSaved: Alle Abschnitte wurden erfolgreich gespeichert
+        confirmExit: Bist du sicher, dass du beenden möchtest?
+        created: Der Abschnitt wurde erstellt
+        errorsSaving: Beim Speichern der Abschnitte sind Fehler aufgetreten
+        group: Gruppe
+        modalTitle: Abschnitt %{section}, Bereich %{box}
+        move: Verschieben
+        needsSaving: Du musst die Bereiche speichern, bevor du sie bearbeitest
+        operationFailed: Vorgang fehlgeschlagen
+        removeBoxConfirm: Bist du sicher, dass du diesen Bereich löschen möchtest? Dies kann nicht rückgängig gemacht werden.
+        removed: Der Bereich wurde entfernt
+        startEditing: Durch klicken und ziehen kannst du Bereiche für die Eingabe von Bemerkungen definieren. Einmal erstellt, können die Abschnitte verändert, verschoben oder gruppiert werden.
+        startSuggesting: Klicke auf einen markierten Bereich, um eine Bemerkung einzubringen! Deine Bemerkungen sind nicht durch Drittpersonen einsehbar.
         suggestion_form:
-          blank: There was an error creating the suggestion. Upload the valid  file or add a text message with the suggestion.
-          title: Write your suggestion or upload a file with your suggestions
-      'yes': 'Yes'
+          blank: Beim Speichern der Bemerkung ist ein Fehler aufgetreten. Lade eine gültige Datei hoch oder schreibe eine Bemerkung.
+          title: Schreib eine Bemerkung oder lade eine Datei hoch
+      'yes': 'Ja'
