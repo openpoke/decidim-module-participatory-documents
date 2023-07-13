@@ -89,6 +89,14 @@
 
     &.active {
       width: 50vw;
+
+      @media(max-width: 900px) {
+        width: 75vw;
+      }
+
+      @media(max-width: 680px) {
+        width: 100vw;
+      }
     }
   }
 

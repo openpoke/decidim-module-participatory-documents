@@ -37,7 +37,7 @@ module Decidim
 
         Decidim::ExportJob.perform_later(current_user, current_component, :suggestions, "Excel", params[:resource_id].presence)
 
-        render json: { message: t(".success") }
+        render json: { message: t(".success", count: all_suggestions&.count, email: current_user&.email) }
       end
 
       private
