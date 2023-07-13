@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    decidim-participatory_documents (0.2.0)
+    decidim-participatory_documents (0.2.1)
       decidim-core (>= 0.27.0, < 0.28)
 
 GEM
