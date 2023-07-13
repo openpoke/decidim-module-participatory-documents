@@ -2,6 +2,10 @@
 @import "stylesheets/decidim/variables";
 @import "stylesheets/decidim/utils/mixins";
 
+#loginModal-label {
+  outline: none;
+}
+
 .pdf-viewer-container {
   height: calc(100vh - 30rem);
   min-height: 50em;

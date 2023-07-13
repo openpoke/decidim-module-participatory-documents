@@ -15,7 +15,7 @@ const openLogin = (evt) => {
   const loginForm = window.parent.document.getElementById("login_new_user");
   let parts = loginForm.action.split("?")
   let params = new URLSearchParams(parts[1]);
-  params.append("redirect_to", window.location.href);
+  params.append("redirect_url", window.parent.location.href);
   loginForm.action = `${parts[0]}?${params.toString()}`;
 
   window.parent.$("#loginModal").foundation("open")
