@@ -31,7 +31,7 @@ export default class SuggestionForm {
   }
 
   getCSRFToken() {
-    const token =  document.getElementsByName("csrf-token")
+    const token = document.getElementsByName("csrf-token");
 
     return token.length && token[0].content;
   }

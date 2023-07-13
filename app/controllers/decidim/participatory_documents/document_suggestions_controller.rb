@@ -14,6 +14,7 @@ module Decidim
       end
 
       def create
+        # TODO: permissions
         @form = form(Decidim::ParticipatoryDocuments::SuggestionForm).from_params(params)
 
         CreateSuggestion.call(@form, section) do
@@ -27,8 +28,12 @@ module Decidim
       end
 
       def export
-        # TODO: ajax
-        redirect_to pdf_viewer_documents_path(document)
+        # TODO: permissions
+        return render json: { message: t(".empty") }, status: :unprocessable_entity unless all_suggestions.any?
+
+        Decidim::ExportJob.perform_later(current_user, current_component, :suggestions, "Excel", params[:resource_id].presence)
+
+        render json: { message: t(".success") }
       end
 
       private

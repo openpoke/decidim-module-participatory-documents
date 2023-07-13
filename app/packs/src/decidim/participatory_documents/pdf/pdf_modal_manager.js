@@ -64,7 +64,7 @@ export default class PdfModalManager {
         if (response.ok) {
           return response.json();
         }
-        throw new Error(" ");
+        throw new Error(response.statusText);
       }).
       then((resp) => {
         box.setInfo();

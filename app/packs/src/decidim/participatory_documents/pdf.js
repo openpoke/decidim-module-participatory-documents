@@ -27,8 +27,34 @@ window.InitDocumentManagers = (options) => {
     decidim.addEventListener("click", () => decidim.classList.remove("show"), { once: true });
 
     decidim.classList.add("show");
-    console.log("export button clicked", decidim);
-    // $(options.exportModal).foundation();
+  });
+  options.exportModal.querySelector(".export-button").addEventListener("click", (evt) => {
+    evt.stopPropagation();
+    fetch(evt.target.dataset.url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        "X-CSRF-Token": document.getElementsByName("csrf-token").item(0).content
+      },
+      credentials: "include"
+    }).
+      then((response) => {
+        if (response.ok) {
+          return response.json();
+        }
+        return response.json().then((json) => { 
+          throw new Error(json.message) 
+        });
+      }).
+      then((resp) => {
+        // console.log("response ok", resp);
+        options.exportModal.querySelector(".content").innerHTML = `<div class="callout success">${resp.message}</div>`;
+      }).
+      catch((message) => {
+        options.exportModal.querySelector(".content").innerHTML = `<div class="callout alert">${message}</div>`;
+        // console.error("Error exporting", message);
+      });
   });
 };
 
