@@ -3,96 +3,96 @@ de:
   activemodel:
     attributes:
       document:
-        box_color: Color of the boxes
-        box_opacity: Opacity applied at the color of the boxes (%)
-        description: Helper description
-        file: PDF Document
-        title: Helper title
+        box_color: Farbe der Felder
+        box_opacity: Deckkraft angewendet auf die Farbe der Boxen (%)
+        description: Beschreibung
+        file: PDF Dokument
+        title: Titel
     errors:
       models:
         answer_suggestion:
           attributes:
             state:
-              inclusion: It's not possible to publish with status "not answered"
+              inclusion: Ändere den Status, um die Antwort zu veröffentlichen
         document:
-          has_suggestions: This document cannot be changed or removed because it has suggestions
+          has_suggestions: Das Dokument kann nicht geändert oder gelöscht werden, da es bereits Bemerkungen enthält
         suggestion:
           attributes:
-            not_blank: 'Validation failed: Please provide a message or upload a file'
-            too_long: is too long (over %{max_length} characters)
-            too_short: is too short (under %{min_length} characters)
+            not_blank: 'Bitte gib eine Nachricht ein oder lade eine Datei hoch'
+            too_long: Ist zu lang (max. %{max_length} Zeichen)
+            too_short: Ist zu kurz (min. %{min_length} Zeichen)
   decidim:
     admin:
       actions:
-        export: Export
+        export: Exportieren
       exports:
-        export_as: "%{name} as %{export_format}"
+        export_as: "%{name} als %{export_format}"
       filters:
         search_placeholder:
-          body_cont: Body Contains
+          body_cont: Beschreibung enthält
         suggestions:
           body_cont:
-            label: Body contains
+            label: Beschreibung enthält
           dummy_author_ids_has:
-            label: Author
+            label: Verfasser/in
           dummy_suggestable_id_has:
-            label: Section
+            label: Abschnitt
           state_eq:
-            label: State is
+            label: Status
             values:
-              accepted: Accepted
-              evaluating: Evaluating
-              not_answered: Not Answered
-              published: Published
-              rejected: Rejected
-              withdrawn: Withdrawn
+              accepted: Angenommen
+              evaluating: in Bewertung
+              not_answered: Unbeantwortet
+              published: Erhalten
+              rejected: Abgelehnt
+              withdrawn: Zurückgezogen
           valuator_role_ids_has:
-            label: Assigned to valuator
+            label: Zugewiesene Experten
     admin_log:
       annotation:
         create: "%{user_name} hat einen neuen partizipativen Abschnitt für %{document_name} erstellt"
-        delete: "%{user_name} deleted a participatory area for %{document_name}"
-        update: "%{user_name} has updated a participatory area for %{document_name}"
+        delete: "%{user_name} hat einen partizipativen Abschnitt aus %{document_name} gelöscht"
+        update: "%{user_name} hat einen partizipativen Abschnitt für %{document_name} aktualisiert"
       document:
         create: "%{user_name} hat ein Dokument namens %{resource_name} in %{space_name} erstellt"
         delete: "%{user_name} hat ein Dokument namens %{resource_name} in %{space_name} gelöscht"
         update: "%{user_name} hat ein Dokument namens %{resource_name} in %{space_name} aktualisiert"
       section:
-        create: "%{user_name} has created a new Section named %{resource_name} for %{document_name}"
-        delete: "%{user_name} has deleted a section"
-        update: "%{user_name} has updated a section in %{document_name}"
+        create: "%{user_name} hat einen neuen Abschnitt namens %{resource_name} für %{document_name} erstellt,"
+        delete: "%{user_name} hat einen Abschnitt gelöscht"
+        update: "%{user_name} hat einen Abschnitt in %{document_name} aktualisiert"
       suggestion_note:
-        create: "%{user_name} created a new suggestion note %{suggestion}"
+        create: "%{user_name} hat eine Notiz zur Bemerkung %{suggestion} hinterlassen"
     components:
       participatory_documents:
         name: Bemerkungen zu PDF's
         settings:
           global:
-            max_suggestion_length: Maximum suggestion length (characters)
-            min_suggestion_length: Minimum suggestion length (characters)
-            suggestion_answering_enabled: Enable suggestion answering from admin
+            max_suggestion_length: Maximale Länge der Bemerkungen (Zeichen)
+            min_suggestion_length: Minimale Länge der Bemerkungen (Zeichen)
+            suggestion_answering_enabled: Antworten zu Bemerkungen durch Admins ermöglichen
     events:
       participatory_documents:
         suggestion_answered:
           affected_user:
-            email_intro: 'A suggestion you submitted on "<a href="%{resource_path}">%{resource_title}</a>" document has been answered by an administrator. You can read the answer in this page:'
-            email_outro: You have received this notification because you have submitted a suggestion for "<a href="%{resource_path}">%{resource_title}</a>" document.
-            email_subject: A suggestion you have submitted has been answered by an administrator
-            notification_title: A suggestion you submitted on "<a href="%{resource_path}">%{resource_title}</a>" document has been answered by an administrator
+            email_intro: 'Eine Bemerkung, die du im Dokument "<a href="%{resource_path}">%{resource_title}</a>" eingebracht hast, wurde kommentiert. Die Antwort ist auf dieser Seite einsehbar:'
+            email_outro: Du hast diese Benachrichtigung erhalten, weil du eine Bemerkung für das Dokument "<a href="%{resource_path}">%{resource_title}</a>" eingebracht hast.
+            email_subject: Eine Bemerkung, die du eingebracht hast, wurde kommentiert
+            notification_title: Eine Bemerkung, die du im Dokument "<a href="%{resource_path}">%{resource_title}</a>" eingebracht hast, wurde kommentiert
     forms:
       file_help:
         file:
-          pdf_message: Only PDF files are allowed
+          pdf_message: Nur PDF-Dateien sind erlaubt
     participatory_documents:
       actions:
         back: Zurück
-        back_edit: Go back to edit participatory sections
-        confirm: This action means that you will not be able to edit the document or create new sections, are you sure?
+        back_edit: Zurück zum Bearbeiten der partizipativen Abschnitte
+        confirm: 'Wichtiger Hinweis: Das Dokument und die Abschnitte werden danach nicht mehr bearbeitbar sein. Bist du sicher?'
         edit_boxes: Partizipative Abschnitte bearbeiten
         edit_document: Dokument bearbeiten / hochladen
-        finish_publishing: Publish participatory sections
+        finish_publishing: PDF und Abschnitte definitiv publizieren
         new: PDF-Dokument hochladen
-        preview_publishing_sections: Preview and publish sections
+        preview_publishing_sections: Vorschau und Veröffentlichung
         title: Aktivitäten
       admin:
         documents:
@@ -103,116 +103,116 @@ de:
             title: Dokument/Abschnitte bearbeiten
             update: Aktualisieren
           final_publish:
-            error: There was an error publishing sections
-            success: Sections have been successfully published
+            error: Beim Veröffentlichen der Abschnitte ist ein Fehler aufgetreten
+            success: Das PDF mit den partizipativen Abschnitten wurden erfolgreich veröffentlicht
           form:
-            alert_suggestions_html: "<strong>IMPORTANT:</strong> This document cannot be changed or removed because it already has suggestions attached"
-            box_style_preview: 'Box style preview:'
-            warning_sections_html: "<strong>Warning:</strong> If you upload a new document, all the participatory areas will be deleted!"
+            alert_suggestions_html: "<strong>WICHTIG:</strong> Dieses Dokument kann nicht geändert oder entfernt werden, da es bereits Bemerkungen enthält"
+            box_style_preview: 'Vorschau für den Stil der Felder:'
+            warning_sections_html: "<strong>Warnung:</strong> Wenn du ein neues Dokument hochlädst, werden alle bisher erfassten Abschnitte gelöscht!"
           index:
             start: Bitte lade ein PDF hoch, um zu beginnen
           new:
-            create: Create participatory document
-            title: New participatory document
+            create: Dokument aufbereiten
+            title: Neues Dokument
           sections:
-            empty: "(empty)"
+            empty: "(leer)"
           update:
-            error: There was a problem updating Document
+            error: Beim Hochladen des Dokuments ist ein Fehler aufgetreten
             success: Das Dokument wurde erfolgreich aktualisiert
         exports:
-          suggestions: Suggestions
+          suggestions: Bemerkungen
         suggestion_notes:
           create:
-            error: There was a problem creating this suggestion note
-            success: Suggestion note successfully created
+            error: Beim Erstellen dieser Notiz ist ein Problem aufgetreten
+            success: Notiz erfolgreich erstellt
           form:
-            note: Note
-            submit: Submit
-          leave_your_note: Leave your note
+            note: Notiz
+            submit: Notiz speichern
+          leave_your_note: Notiz hinterlassen
           modal:
-            body: Body
-            title: Edit note
-            update: Update
-          title: Private notes
+            body: Inhalt
+            title: Notiz bearbeiten
+            update: Aktualisieren
+          title: (interne) Notizen
           update:
-            edited: Edited
-            invalid: There was a problem updating this suggestion note
-            success: Suggestion note successfully updated
+            edited: Bearbeitet
+            invalid: Es gab ein Problem beim Aktualisieren der Notiz
+            success: Notiz erfolgreich erstellt
         suggestions:
           answer:
-            invalid: There was an error adding the answer
-            success: Successfully added the answer
+            invalid: Es gab einen Fehler beim Hinzufügen der Antwort
+            success: Antwort erfolgreich hinzugefügt
           form:
-            answer: Answer
-            answer_is_published: Published
-            title: Answer Suggestion
+            answer: Antwort
+            answer_is_published: Veröffentlicht
+            title: Antwort zur Bemerkung
           index:
             actions:
-              answer: Answer
-              assign_to_valuator: Assign to valuator
-              assign_to_valuator_button: Assign
-              cancel: Cancel
-              download: download %{filename}
-              publish: Publish
-              publish_answers: Publish answers
-              title: Actions
-              unassign_from_valuator: Unassign from valuator
-              unassign_from_valuator_button: Unassign
-            author: Author
-            created_at: Submitted on
-            id: Id
-            no_text: "(no text)"
-            published_answer: Published Answer
-            section: Section
-            selected: selected
-            state: State
-            suggestion: Suggestion
-            title: List Suggestions
+              answer: Antworten
+              assign_to_valuator: Einem Experten zuweisen
+              assign_to_valuator_button: Zuweisen
+              cancel: Abbrechen
+              download: lade %{filename} herunter
+              publish: Veröffentlichen
+              publish_answers: Antworten senden
+              title: Aktivitäten
+              unassign_from_valuator: Zuweisung des Experten aufheben
+              unassign_from_valuator_button: Aufheben
+            author: Verfasser/in
+            created_at: Eingereicht am
+            id: id
+            no_text: "(kein Text)"
+            published_answer: Veröffentlichte Antwort
+            section: Abschnitt
+            selected: ausgewählt
+            state: Status
+            suggestion: Bemerkung
+            title: Titel
           publish_answers:
-            number_of_suggestions: Answers for %{number} suggestions will be published.
-            select_a_suggestion: Please select a suggestion
-            success: Suggestion answers successfully published.
+            number_of_suggestions: Die Antworten zu %{number} Bemerkungen werden veröffentlicht.
+            select_a_suggestion: Bitte wähle eine Bemerkung aus
+            success: Die Antworten zu den Bemerkungen wurden erfolgreich versendet.
           show:
-            authors: Authors
-            body: Body
-            created_at: Creation date
-            file: File
-            update: Update
+            authors: Verfasser/in
+            body: Bemerkung
+            created_at: Erstellungsdatum
+            file: Datei
+            update: Aktualisieren
           suggestion:
-            global: Global
+            global: Allgemeine Bemerkung
           valuators:
-            assigned_valuators: Assigned valuators
-            remove_assignment: Remove assignment
-            remove_assignment_confirmation: Are you sure you want to remove the valuator from this suggestion?
-            valuators: Valuators
+            assigned_valuators: Zugewiesene Experten
+            remove_assignment: Zuweisung entfernen
+            remove_assignment_confirmation: Bist du sicher, dass du die Zuweisung dieses Experten entfernen möchtest?
+            valuators: Expert/innen
         valuation_assignments:
           create:
-            invalid: There was an error assigning suggestions to a valuator
-            success: Suggestions assigned to a valuator successfully
+            invalid: Bei der Zuordnung der Bemerkung zu einem Experten ist ein Fehler aufgetreten
+            success: Die Bemerkungen wurden erfolgreich einem Experten zugeordnet
           delete:
-            invalid: There was an error unassigning suggestions from a valuator
-            success: Valuator unassigned from suggestions successfully
+            invalid: Beim Zurückziehen der Zuweisung von Bemerkungen an einen Experten ist ein Fehler aufgetreten
+            success: Die Zuordnung eines Experten zu Bemerkungen wurde erfolgreich aufgehoben
       document:
-        close: Close
-        export_my_suggestions: Export my suggestions
-        global_suggestions: Global suggestions
-        save_changes: Save changes!
-        send_suggestion: Send suggestion
-        suggestion_answer: Official answer
-        upload_file: Attach a document
+        close: Schliessen
+        export_my_suggestions: Meine Bemerkungen herunterladen
+        global_suggestions: Allgemeine Bemerkungen
+        save_changes: Änderungen speichern!
+        send_suggestion: Bemerkung absenden
+        suggestion_answer: Offizielle Antwort
+        upload_file: Ein Dokument anhängen
       document_suggestions:
         export:
-          empty: There are no suggestions to export.
-          success: "%{count} suggestions have been successfully exported. Please check your email inbox at %{email}."
+          empty: Es gibt keine zu exportierenden Bemerkungen.
+          success: "Deine %{count} Bemerkungen wurden erfolgreich exportiert. Bitte überprüfe deinen E-Mail-Posteingang unter %{email}."
       documents:
         export_modal:
-          description_html: You have %{count} suggestions on this document. If you want to export them, you will receive a ZIP file with and Excel document in it with all your data and any possible answer the admins have given to you. <br><br>You will receive an email at <b>%{email}</b>.
-          send: Send me my suggestions
-          title: Export my suggestions
-        missing: There is no document uploaded yet
-        not_supported: This page requires JavaScript to be enabled!
-        preview_title: Preview
-        publish_description: 'Admin options: you are previewing the participatory sections of the document'
+          description_html: 'Du hast in diesem Dokument %{count} Bemerkungen eingebracht. Um diese übersichtlich für dich ablegen zu können, schicken wir dir ein E-Mail mit einem Anhang in Form einer ZIP-Datei mit darin enthaltenem Excel-Dokument. <br><br>Du erhälst die ZIP-Datei auf die folgende E-Mail Adresse: <b>%{email}</b>.'
+          send: Meine Bemerkungen als Excel-Export erhalten
+          title: Meine Bemerkungen herunterladen
+        missing: Es gibt noch kein hochgeladenes Dokument
+        not_supported: Du brauchst JavaScript um diese Seite korrekt anzeigen zu lassen!
+        preview_title: Vorschau
+        publish_description: 'Admin-Ansicht: Du siehst die partizipativen Abschnitte des Dokuments als Vorschau'
       models:
         document:
           fields:
@@ -223,37 +223,37 @@ de:
             title: Titel
         section:
           fields:
-            artificial_tile: Section %{position}
+            artificial_tile: Abschnitt %{position}
         suggestion:
           fields:
-            valuators: Valuators
-      'no': 'Nein'
+            valuators: Expert/innen
+      'no': 'Keines'
       suggestions:
         answers:
-          accepted: Accepted
-          evaluating: Evaluating
-          not_answered: Not Answered
-          published: Published
-          rejected: Rejected
-          withdrawn: Withdrawn
+          accepted: Angenommen
+          evaluating: in Bewertung
+          not_answered: Unbeantwortet
+          published: Veröffentlicht
+          rejected: Abgelehnt
+          withdrawn: Zurückgezogen
         modal:
-          exit_full_screen: Exit fullscreen
-          full_screen: Fullscreen
+          exit_full_screen: Vollbildmodus verlassen
+          full_screen: Vollbildmodus
       ui_messages:
-        allSaved: All the areas have been saved successfully
-        confirmExit: Are you sure you want to exit?
-        created: The area has been created
-        errorsSaving: Some errors have occurred while saving the areas
-        group: Group
-        modalTitle: Section %{section}, area %{box}
-        move: Move
-        needsSaving: You have to save the areas before editing them
-        operationFailed: The operation has failed
-        removeBoxConfirm: Are you sure you want to delete this area? This cannot be undone.
-        removed: The area has been removed
-        startEditing: Start creating areas for participation by clicking and dragging. Once created, boxes can be resized, moved, or grouped.
-        startSuggesting: Click on a marked area to participate!
+        allSaved: Alle Abschnitte wurden erfolgreich gespeichert
+        confirmExit: Bist du sicher, dass du beenden möchtest?
+        created: Der Abschnitt wurde erstellt
+        errorsSaving: Beim Speichern der Abschnitte sind Fehler aufgetreten
+        group: Gruppe
+        modalTitle: Abschnitt %{section}, Bereich %{box}
+        move: Verschieben
+        needsSaving: Du musst die Bereiche speichern, bevor du sie bearbeitest
+        operationFailed: Vorgang fehlgeschlagen
+        removeBoxConfirm: Bist du sicher, dass du diesen Bereich löschen möchtest? Dies kann nicht rückgängig gemacht werden.
+        removed: Der Bereich wurde entfernt
+        startEditing: Durch klicken und ziehen kannst du Bereiche für die Eingabe von Bemerkungen definieren. Einmal erstellt, können die Abschnitte verändert, verschoben oder gruppiert werden.
+        startSuggesting: Klicke auf einen markierten Bereich, um eine Bemerkung einzubringen! Deine Bemerkungen sind nicht durch Drittpersonen einsehbar.
         suggestion_form:
-          blank: There was an error creating the suggestion. Upload the valid  file or add a text message with the suggestion.
-          title: Write your suggestion or upload a file with your suggestions
+          blank: Beim Speichern der Bemerkung ist ein Fehler aufgetreten. Lade eine gültige Datei hoch oder schreibe eine Bemerkung.
+          title: Schreib eine Bemerkung oder lade eine Datei hoch
       'yes': 'Ja'
