@@ -62,6 +62,11 @@ window.InitDocumentManagers = (options) => {
 window.InitPolygonViewer = (layer, boxes, options) => {
   let viewer = new PolygonViewer(layer, boxes, { i18n: options.i18n});
 
+  // prevent hiding the layout due onBoxBlur
+  options.participationLayout.addEventListener("click", (evt) => {
+    evt.stopPropagation();
+  });
+
   viewer.onBoxClick = (box, evt) => {
     console.log("click on box", box, evt);
     window.currentSuggestionForm = new SuggestionForm(options.participationLayout, options.documentPath, box.section);
