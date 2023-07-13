@@ -3,50 +3,50 @@ ca:
   decidim:
     admin_log:
       annotation:
-        create: "%{user_name} created a new participatory area for %{document_name}"
-        delete: "%{user_name} deleted a new participatory area for %{document_name}"
+        create: "%{user_name} ha creat una nova àrea de participació per a %{document_name}"
+        delete: "%{user_name} ha suprimit una nova àrea de participació per a %{document_name}"
       document:
-        create: "%{user_name} created a document named %{resource_name} in %{space_name}"
-        delete: "%{user_name} deleted a document named %{resource_name} in %{space_name}"
-        update: "%{user_name} updated a document named %{resource_name} in %{space_name}"
+        create: "%{user_name} ha creat un document anomenat %{resource_name} a %{space_name}"
+        delete: "%{user_name} ha suprimit un document anomenat %{resource_name} a %{space_name}"
+        update: "%{user_name} ha actualitzat un document anomenat %{resource_name} a %{space_name}"
       zone:
-        create: "%{user_name} has created a new Group named %{resource_name} for %{document_name}"
+        create: "%{user_name} ha creat un grup nou anomenat %{resource_name} per a %{document_name}"
     components:
       participatory_documents:
-        name: Participatory Document
+        name: Document participatiu
     participatory_documents:
       actions:
-        back: Back
-        edit_boxes: Edit participatory areas
-        edit_document: Edit/upload document
-        new: Upload PDF document
-        title: Actions
+        back: Enrere
+        edit_boxes: Edita les àrees de participació
+        edit_document: Edita/actualitza el document
+        new: Puja un document PDF
+        title: Accions
       admin:
         documents:
           create:
-            invalid: There was a problem creating Document
-            success: Document has been successfully created
+            invalid: Hi ha hagut un problema en crear el document
+            success: El document s'ha creat correctament
           edit:
-            title: Edit Participatory document
-            update: Update
+            title: Edita el document participatiu
+            update: Actualitza
           index:
-            start: Please upload a PDF to start
+            start: Pengeu un PDF per començar
           new:
-            create: Create  Participatory document
-            title: New Participatory document
+            create: Crea un document participatiu
+            title: Nou document participatiu
           update:
             error:
-            invalid: There was a problem updating Document
-            success: Document has been successfully updated
+            invalid: Hi ha hagut un problema en actualitzar el document
+            success: El document s'ha actualitzat correctament
           zones:
-            empty: "(empty)"
+            empty: "(buit)"
       models:
         document:
           fields:
-            document_pages: Page numbers
+            document_pages: Número de pàgina
             id: Id
-            published: Published
-            state: State
-            title: Title
+            published: Publicat
+            state: Estat
+            title: Títol
       'no': 'No'
-      'yes': 'Yes'
+      'yes': 'Sí'
