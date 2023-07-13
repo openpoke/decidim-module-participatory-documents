@@ -8,11 +8,16 @@
 
 This module allows to upload PDF (and possibilty other formats) and define areas on top of it that will become spaces for suggestions, improvements and other participative activities.
 
-> NOTE: in development, not ready for production.
-
 ## Installation
 
 Add this line to your application's Gemfile:
+
+```ruby
+gem 'decidim-participatory_documents
+```
+
+Or, if you want to stay up to date with the latest changes use this line instead:
+
 
 ```ruby
 gem 'decidim-participatory_documents', git: "https://github.com/openpoke/decidim-module-participatory-documents"
@@ -23,44 +28,43 @@ And then execute:
 ```
 bundle
 bundle exec rails decidim_participatory_documents:install:migrations
+bundle exec rails decidim_participatory_documents:install_pdf_js
+bundle exec rails db:migrate
 ```
+
+Depending on your Decidim version, you can choose the corresponding version to ensure compatibi
+lity:
+
+| Version | Compatible Decidim versions |
+|---|---|
+| 0.2.x | 0.27.x |
+
 
 ## Usage
 
 TODO...
 
+### Customization
 
-Options such as `:max_suggestion_length`, `:min_suggestion_length` and etc. are configured at the component level in 
-the application. Defaults to the configured in the module:
-```ruby
-# lib/decidim/participatory_documents.rb
+Almost all the features of this module can be customized/disabled through an initializer.
 
-module Decidim
-  # This namespace holds the logic of the `decidim-participatory_documents` module.
-  module ParticipatoryDocuments
-    include ActiveSupport::Configurable
-
-    # Public: The minimum length of a suggestion to be considered valid.
-    config_accessor :min_suggestion_length do
-      5
-    end
-    
-    # Public: The maximum length of a suggestion to be considered valid.
-    config_accessor :max_suggestion_length do
-      500
-    end
-  end
-end
-```
+For instance, you can create an initializer an change some of the available options as follows 
+(**This is optional, you don't need to do this, by default all options are enabled**):
 
 ```ruby
 # config/initializers/participatory_documents.rb
-
 Decidim::ParticipatoryDocuments.configure do |config|
+  # Public: The maximum length of any text field (body, answers, etc) to export.
+  # Defaults to 50. Set to 0 to export the full text.
+  config.max_export_text_length = 50
+
+  # Public: The minimum length of a suggestion to be considered valid.
+  config.min_suggestion_length = 5
+
+  # Public: The maximum length of a suggestion to be considered valid.
+  config.max_suggestion_length = 500
 end
 ```
-
-And, of course, having these values in your `config/secrets.yml` file.
 
 ## Contributing
 
