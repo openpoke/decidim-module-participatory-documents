@@ -36,7 +36,7 @@ Decidim.register_component(:participatory_documents) do |component|
       suggestions = Decidim::ParticipatoryDocuments::Suggestion
                     .where(suggestable: document)
                     .or(Decidim::ParticipatoryDocuments::Suggestion.where(suggestable: document.sections))
-      user ? suggestions.where(author: user) : suggestions
+      suggestions = user ? suggestions.where(author: user) : suggestions
       suggestions.order(:id)
     end
 

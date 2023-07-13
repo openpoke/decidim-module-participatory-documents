@@ -10,6 +10,8 @@ module Decidim
       layout false
 
       def index
+        enforce_permission_to :create, :suggestion
+
         @form = form(Decidim::ParticipatoryDocuments::SuggestionForm).instance
       end
 
