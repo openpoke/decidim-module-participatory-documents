@@ -14,7 +14,8 @@ module Decidim
       end
 
       def create
-        # TODO: permissions
+        enforce_permission_to :create, :suggestion
+
         @form = form(Decidim::ParticipatoryDocuments::SuggestionForm).from_params(params)
 
         CreateSuggestion.call(@form, section) do
@@ -28,7 +29,8 @@ module Decidim
       end
 
       def export
-        # TODO: permissions
+        enforce_permission_to :create, :suggestion
+
         return render json: { message: t(".empty") }, status: :unprocessable_entity unless all_suggestions.any?
 
         Decidim::ExportJob.perform_later(current_user, current_component, :suggestions, "Excel", params[:resource_id].presence)

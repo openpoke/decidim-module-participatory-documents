@@ -215,7 +215,7 @@ en:
       document_suggestions:
         export:
           empty: There are no suggestions to export.
-          success: "${count} suggestions have been successfully exported. Please check
+          success: "%{count} suggestions have been successfully exported. Please check
             your email inbox at %{email}."
       documents:
         export_modal:

@@ -14,6 +14,8 @@ module Decidim
       end
 
       def create
+        enforce_permission_to :create, :suggestion
+
         @form = form(Decidim::ParticipatoryDocuments::SuggestionForm).from_params(params)
 
         CreateSuggestion.call(@form, section) do
