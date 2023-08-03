@@ -1,0 +1,216 @@
+@import "stylesheets/decidim/variables";
+@import "stylesheets/decidim/properties";
+@import "stylesheets/decidim/utils/_mixins.scss";
+
+#toolbarViewer,
+#toolbarContainer {
+  box-shadow: none;
+  height: 66px;
+  border: none;
+}
+
+#viewerContainer {
+  top: 66px;
+}
+
+#toolbarViewerLeft,
+#toolbarViewerRight,
+#toolbarViewerMiddle {
+  margin: 12px;
+}
+
+#toolbarViewerMiddle {
+  padding-left: 0;
+  padding-right: 0;
+
+  @media(min-width: 940px) {
+    transform: translateX(-75%);
+  }
+
+  @media(max-width: 680px) {
+    padding-left: 1em;
+  }
+}
+
+#toolbarViewerLeft {
+  @media(max-width: 680px) {
+    display: none;
+  }
+}
+
+#toolbarViewerRight {
+  @media(max-width: 380px) {
+    display: none;
+  }
+}
+
+.secondaryToolbar,
+.findbar {
+  top: 53px;
+  // Orinal numbers
+  .toolbarField {
+    margin-top: 3px;
+  }
+
+  .toolbarLabel {
+    margin-top: 2px;
+  }
+
+  .splitToolbarButton {
+    margin-top: 2px;
+  }
+}
+
+.verticalToolbarSeparator {
+  height: 42px;
+  margin: 0 5px;
+}
+
+.toolbarButton {
+  margin-top: 8px;
+}
+
+.splitToolbarButton {
+  margin-top: 8px;
+}
+
+.hiddenSmallView {
+  @media(max-width: 800px) {
+    display: none;
+  }
+}
+
+.toolbarButtonSpacer {
+  @media(max-width: 980px) {
+    width: 0;
+  }
+}
+
+.toolbarField {
+  margin-top: 9px;
+}
+
+.toolbarLabel {
+  margin-top: 8px;
+}
+
+#scaleSelectContainer {
+  margin: 7px 5px;
+
+  #scaleSelect {
+    background: #fff;
+    border: 1px solid #000;
+  }
+
+  @media(max-width: 940px) {
+    display: none;
+  }
+
+  @media(min-width: 941px) {
+    display: block;
+  }
+}
+
+.decidimButton {
+  margin: 0 0 0 1rem;
+  padding: .65em;
+  border-radius: 4px;
+  transition: background-color .25s ease-out, color .25s ease-out;
+  font-family: inherit;
+  font-size: 1rem;
+  -webkit-appearance: none;
+  line-height: 1;
+  text-align: center;
+  cursor: pointer;
+  background-color: var(--box-color);
+  border: transparent solid 1px;
+  color: var(--box-text-color);
+  text-shadow: 0 0 0 #fff;
+
+  &:first-child {
+    margin-left: 0;
+  }
+
+  &.muted {
+    background: #ddd;
+    color: #333;
+  }
+
+  @media(max-width: 900px) {
+    margin-top: 12px;
+  }
+}
+
+#globalSuggestionTrigger {
+  &::before {
+    display: none;
+  }
+}
+
+#exportSuggestionsTrigger {
+  background-image: url(../images/export_suggestions.svg);
+  background-repeat: no-repeat;
+  background-size: 20px 20px;
+  background-position: 8px 9px;
+  padding-left: 34px;
+
+  @media(max-width: 900px) {
+    width: 28px;
+    height: 36px;
+    overflow: hidden;
+    font-size: 0;
+  }
+}
+
+#fullscreenButton {
+  background-image: url(../images/fullscreen.svg);
+  background-repeat: no-repeat;
+  background-size: 16px 16px;
+  background-color: transparent;
+  background-position: 5px 5px;
+  border: none;
+  padding: 5px 5px 5px 29px;
+  margin: 8px 5px;
+  font-weight: bold;
+  cursor: pointer;
+
+  &:hover,
+  &:focus-visible {
+    background-color: var(--button-hover-color);
+    color: var(--toggled-btn-color);
+  }
+
+  &.exit {
+    background-image: url(../images/fullscreen_exit.svg);
+  }
+
+  @media(max-width: 940px) {
+    width: 28px;
+    height: 28px;
+    margin-right: 0;
+    padding-right: 0;
+    overflow: hidden;
+    font-size: 0;
+  }
+}
+
+#documentProperties.secondaryToolbarButton {
+  display: none;
+}
+
+#print.toolbarButton,
+#openFile.toolbarButton {
+  display: none;
+}
+
+#download.toolbarButton {
+  display: none;
+
+  & + .verticalToolbarSeparator {
+    display: none;
+  }
+}
+
+#editorModeButtons.splitToolbarButton {
+  display: none;
+}

@@ -1,0 +1,14 @@
+<div id="suggestions-list">
+  <h3>
+    <%= t "global_suggestions", scope: "decidim.participatory_documents.document" %>
+    <a href="#" class="close" id="close-suggestions" title="<%= t "close", scope: "decidim.participatory_documents.document" %>">&times;</a>
+  </h3>
+  <% suggestions.each do |suggestion| %>
+    <%= cell("decidim/participatory_documents/suggestion", suggestion) %>
+  <% end %>
+</div>
+
+<div id="participation-modal-form">
+  <div class="form-error is-visible"><%= error_message if defined?(error_message) %></div>
+  <%= render "decidim/participatory_documents/document_suggestions/form" %>
+</div>

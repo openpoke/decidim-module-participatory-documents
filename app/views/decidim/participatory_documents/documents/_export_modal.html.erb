@@ -1,0 +1,25 @@
+<div id="decidim">
+  <div class="reveal-overlay">
+    <div class="reveal" id="export-modal" data-reveal>
+      <div class="reveal__header">
+        <h2 class="reveal__title"><%= t(".title") %></h2>
+        <button class="close-button" data-close aria-label="close"
+          type="button">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="content">
+        <div class="row">
+          <p><%= t(".description_html", email: current_user&.email, count: all_suggestions&.count) %></p>
+        </div>
+
+        <div class="row">
+          <div class="column flex-center">
+            <button type="button" class="export-button button primary expanded" data-url="<%= export_document_suggestions_path(document) %>"><%= t(".send") %></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

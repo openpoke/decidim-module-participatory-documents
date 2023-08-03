@@ -1,0 +1,11 @@
+<div class="comment">
+  <div class="comment__content">
+    <%= author_cell %>
+    <%= suggestion_content(model)[:text] %>
+    <% if suggestion_content(model)[:file_link] %>
+      <%= suggestion_content(model)[:file_link] %>
+    <% end %>
+  </div>
+  <%= render :admin_answer if has_answer? %>
+</div>
+<hr class="suggestion__bottom-line">

@@ -1,0 +1,17 @@
+<div class="card full-height">
+  <div class="card-divider">
+    <h2 class="card-title flex--sbc">
+      <%= translated_attribute(current_component.name) %>
+      <%= render "title", button: :back %>
+    </h2>
+  </div>
+  <div class="card-section">
+    <%= decidim_form_for(@form, html: { class: "form  documents_form new_document" }) do |f| %>
+      <%= render partial: "form", object: f, locals: { title: t(".title") } %>
+
+      <div class="button--double form-general-submit">
+        <%= f.submit t(".create") %>
+      </div>
+    <% end %>
+  </div>
+</div>

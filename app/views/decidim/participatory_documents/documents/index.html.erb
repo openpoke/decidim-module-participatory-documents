@@ -1,0 +1,27 @@
+<% if document.present? && document.file.attached? %>
+  <div class="row">
+    <%= content_tag(:h3, translated_attribute(document.title), class: "title") if translated_attribute(document.title).present? %>
+    <%= content_tag(:p, translated_attribute(document.description).html_safe, class: "description") if translated_attribute(document.description).present? %>
+    <% if preview_mode? %>
+      <div class="callout announcement mb-sm warning cell-announcement">
+        <p class="heading5"><%= t("decidim.participatory_documents.documents.preview_title") %></p>
+        <p><%= t("decidim.participatory_documents.documents.publish_description") %></p>
+        <div class="flex--fsc">
+          <%= back_edit_pdf_btn %>
+          <%= finish_publish_btn %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+  <div class="row pdf-viewer-container">
+    <pdf-iframe src="<%= pdf_viewer_documents_path(file: document.attached_uploader(:file).path) %>" width="100%" height="100%" id="pdf-iframe" frameborder="0" allowfullscreen_="" webkitallowfullscreen_="true" mozallowfullscreen_="true" oallowfullscreen_="true" msallowfullscreen_="true">
+      <noscript>
+        <h3 class="text-center"><%= t("decidim.participatory_documents.documents.not_supported") %></h3>
+      </noscript>
+    </pdf-iframe>
+  </div>
+<% else %>
+  <div class="row">
+    <p><%= t("decidim.participatory_documents.documents.missing") %></p>
+  </div>
+<% end %>

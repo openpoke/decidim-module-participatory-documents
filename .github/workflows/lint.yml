@@ -7,7 +7,8 @@ on:
   pull_request:
 
 env:
-  RUBY_VERSION: 2.7.6
+  RUBY_VERSION: 3.0.5
+  NODE_VERSION: 16.9.1
 
 jobs:
   lint-report:
@@ -17,6 +18,19 @@ jobs:
         with:
           fetch-depth: 1
 
+      - uses: actions/setup-node@master
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - run: npm ci
+        name: Install JS deps
+
+      - run: npm run lint
+        name: Lint JS files
+
+      - run: npm run stylelint
+        name: Lint SCSS files
+
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ env.RUBY_VERSION }}
@@ -24,3 +38,6 @@ jobs:
 
       - run: bundle exec rubocop -P
         name: Lint Ruby files
+
+      - run: bundle exec erblint app/**/*.erb
+        name: Lint ERB files

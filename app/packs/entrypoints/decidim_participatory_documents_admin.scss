@@ -1,0 +1,69 @@
+@use "sass:meta";
+
+@import "stylesheets/decidim/participatory_documents/pdf/defaults.scss";
+
+.process-content {
+  flex-direction: column;
+  display: flex;
+  flex-grow: 1;
+}
+
+.layout-content > .container {
+  height: 100%;
+}
+
+.container .full-height {
+  height: 100%;
+}
+
+.pdf-viewer-container {
+  height: calc(100vh - 30rem);
+  min-height: 50em;
+  margin: 0;
+  padding: 0;
+}
+
+.box-preview {
+  @include meta.load-css("stylesheets/decidim/participatory_documents/pdf/polygons.scss");
+  @include meta.load-css("stylesheets/decidim/participatory_documents/pdf/admin_polygons.scss");
+
+  .box {
+    border-style: dotted;
+    border-width: 2px;
+    position: absolute;
+    width: 50%;
+    height: 50%;
+    top: 25%;
+    left: 25%;
+
+    .box-controls {
+      display: block;
+
+      .control.group {
+        display: inline-block;
+      }
+    }
+
+    &::after {
+      content: "";
+    }
+
+    &:hover {
+      resize: both;
+      overflow: hidden;
+      border-style: solid;
+
+      &::before {
+        left: 0;
+      }
+    }
+  }
+
+  fieldset {
+    position: relative;
+
+    h4 {
+      font-weight: 600;
+    }
+  }
+}
