@@ -29,6 +29,8 @@ module Decidim
       scope :missing_answer, -> { where(answered_at: nil) }
       scope :not_published, -> { where(answer_is_published: false) }
 
+      validate :validate_file_type, if: :attached?
+
       POSSIBLE_STATES = %w(not_answered evaluating accepted rejected withdrawn).freeze
 
       POSSIBLE_STATES.each do |possible|
@@ -161,6 +163,16 @@ module Decidim
 
       def self.export_serializer
         Decidim::ParticipatoryDocuments::SuggestionSerializer
+      end
+
+      def validate_file_type
+        allowed_extensions = organization.file_upload_settings["allowed_file_extensions"]["default"]
+        allowed_content_types = organization.file_upload_settings["allowed_content_types"]["default"]
+
+        file_extension = File.extname(file.blob.filename.to_s)[1..]
+        file_content_type = file.blob.content_type
+
+        errors.add(:file, "Invalid file type") if allowed_extensions.exclude?(file_extension) || allowed_content_types.exclude?(file_content_type)
       end
     end
   end
