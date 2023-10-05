@@ -10,7 +10,8 @@ module Decidim::ParticipatoryDocuments::Admin
     let(:description) { "Test description" }
     let(:box_color) { "#f00f00" }
     let(:box_opacity) { 50 }
-    let(:document) { create(:participatory_documents_document, title: { en: title }, description: { en: description }, box_color: box_color, box_opacity: box_opacity) }
+    let(:file) { Decidim::Dev.test_file("Exampledocument.pdf", "application/pdf") }
+    let(:document) { create(:participatory_documents_document, title: { en: title }, description: { en: description }, file: file, box_color: box_color, box_opacity: box_opacity) }
 
     context "when the document has a title and a description" do
       it "is valid" do
@@ -37,6 +38,7 @@ module Decidim::ParticipatoryDocuments::Admin
       let(:params) do
         {
           title: { en: title },
+          file: file,
           description: { en: description },
           box_color: box_color,
           box_opacity: box_opacity
@@ -57,6 +59,22 @@ module Decidim::ParticipatoryDocuments::Admin
           expect(subject).to be_valid
           expect(subject.box_color).to be_nil
           expect(subject.box_opacity).to be_nil
+        end
+      end
+
+      context "when the document has no file" do
+        let(:file) { nil }
+
+        it "is invalid" do
+          expect(subject).to be_invalid
+        end
+      end
+
+      context "when the document has a file with an invalid extension" do
+        let(:file) { upload_test_file(Decidim::Dev.test_file("dummy-dummies-example.json", "application/pdf")) }
+
+        it "is invalid" do
+          expect(subject).to be_invalid
         end
       end
     end

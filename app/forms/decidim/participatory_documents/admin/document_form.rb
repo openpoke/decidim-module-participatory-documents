@@ -18,6 +18,8 @@ module Decidim
         attribute :file
         attribute :remove_file, Boolean, default: false
 
+        validates :file, presence: true, file_content_type: { allow: ["application/pdf"] }, unless: :remove_file
+
         # ensure color and opacity are present
         def map_model(doc)
           self.box_color = doc.box_color.presence || "#1e98d7"
