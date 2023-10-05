@@ -172,8 +172,7 @@ module Decidim
         file_extension = File.extname(file.blob.filename.to_s)[1..]
         file_content_type = file.blob.content_type
 
-        errors.add(:file, :invalid) if allowed_extensions.exclude?(file_extension) || allowed_content_types.exclude?
-        (file_content_type)
+        errors.add(:file, :invalid) if allowed_extensions.exclude?(file_extension) || allowed_content_types.exclude?(file_content_type)
       end
     end
   end
