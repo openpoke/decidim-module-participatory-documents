@@ -7,42 +7,52 @@ module Decidim
         def permissions
           return permission_action if permission_action.scope != :admin
 
-          allow! if permission_action.subject == :suggestion && permission_action.action == :show
+          handle_valuator_permissions if user_is_valuator?
+          handle_general_permissions unless user_is_valuator?
 
-          # Valuators can only perform these actions
-          if user_is_valuator?
-            if valuator_assigned_to_suggestion?
-              can_create_suggestion_note?
-              can_create_suggestion_answer?
-            elsif permission_action.subject == :suggestion && permission_action.action == :show
-              permission_action.disallow!
-            end
+          permission_action
+        end
 
-            valuator_can_unassign_valuator_from_suggestions?
+        private
 
-            return permission_action
+        def handle_valuator_permissions
+          if valuator_assigned_to_suggestion?
+            can_create_suggestion_note?
+            can_create_suggestion_answer?
+            allow! if action_is_show_on_suggestion?
+          elsif action_is_show_on_suggestion?
+            disallow!
           end
+          valuator_can_unassign_valuator_from_suggestions?
+        end
 
+        def handle_general_permissions
+          allow! if action_is_show_on_suggestion?
           if create_permission_action?
             can_create_suggestion_note?
             can_create_suggestion_answer?
           end
-
           edit_suggestion_note?
+          can_edit_document_or_sections? if action_is_update_on_document?
+          allow_default_admin_actions
+        end
 
-          can_edit_document_or_sections? if permission_action.subject == :participatory_document && permission_action.action == :update
+        def action_is_show_on_suggestion?
+          permission_action.subject == :suggestion && permission_action.action == :show
+        end
 
+        def action_is_update_on_document?
+          permission_action.subject == :participatory_document && permission_action.action == :update
+        end
+
+        def allow_default_admin_actions
           allow! if permission_action.subject == :suggestion_note && permission_action.action == :create
           allow! if permission_action.subject == :suggestion_answer
           allow! if permission_action.subject == :document_section
           allow! if permission_action.subject == :document_annotations
           allow! if permission_action.subject == :participatory_document && permission_action.action == :create
           allow! if permission_action.subject == :suggestions
-
-          permission_action
         end
-
-        private
 
         def suggestion
           @suggestion ||= context.fetch(:suggestion, nil)
