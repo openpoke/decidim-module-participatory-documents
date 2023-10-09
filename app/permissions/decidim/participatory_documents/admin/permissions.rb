@@ -7,12 +7,17 @@ module Decidim
         def permissions
           return permission_action if permission_action.scope != :admin
 
+          allow! if permission_action.subject == :suggestion && permission_action.action == :show
+
           # Valuators can only perform these actions
           if user_is_valuator?
             if valuator_assigned_to_suggestion?
               can_create_suggestion_note?
               can_create_suggestion_answer?
+            elsif permission_action.subject == :suggestion && permission_action.action == :show
+              permission_action.disallow!
             end
+
             valuator_can_unassign_valuator_from_suggestions?
 
             return permission_action
