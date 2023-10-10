@@ -65,7 +65,7 @@ module Decidim::ParticipatoryDocuments::Admin
       context "when the document has no file" do
         let(:file) { nil }
 
-        it "is invalid" do
+        it "is valid" do
           expect(subject).to be_valid
         end
       end
