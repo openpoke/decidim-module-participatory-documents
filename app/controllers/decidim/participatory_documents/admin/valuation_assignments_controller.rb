@@ -30,7 +30,11 @@ module Decidim
           Admin::UnassignSuggestionsFromValuator.call(@form) do
             on(:ok) do |_proposal|
               flash.keep[:notice] = I18n.t("valuation_assignments.delete.success", scope: "decidim.participatory_documents.admin")
-              redirect_to EngineRouter.admin_proxy(current_component).root_path
+              if current_user == @form.valuator_user
+                redirect_to EngineRouter.admin_proxy(current_component).root_path
+              else
+                redirect_back fallback_location: EngineRouter.admin_proxy(current_component).root_path
+              end
             end
 
             on(:invalid) do
