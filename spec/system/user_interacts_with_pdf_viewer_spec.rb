@@ -182,6 +182,8 @@ describe "User interaction with PDF viewer", type: :system do
   end
 
   context "when adding a suggestion" do
+    let!(:own_suggestions) { create_list(:participatory_documents_suggestion, 2, suggestable: document, author: user) }
+
     before do
       login_as document.author, scope: :user
 
@@ -222,6 +224,18 @@ describe "User interaction with PDF viewer", type: :system do
       expect(page).not_to have_content("Some random string longer than 15 chrs")
       click_button "Global suggestions"
       expect(page).to have_content("Some random string longer than 15 chrs")
+    end
+
+    context "when the user exports own suggestions" do
+      it "exports only his own suggestions" do
+        click_button "Export my suggestions"
+        expect(page).to have_content("You have 2 suggestions on this document")
+
+        # perform_enqueued_jobs { click_button "Send me my suggestions" }
+        # expect(page).to have_content("has been sent to your email")
+        # expect(last_email.subject).to include("suggestions", "xlsx")
+        # expect(last_email.attachments.length).to be_positive
+      end
     end
   end
 end

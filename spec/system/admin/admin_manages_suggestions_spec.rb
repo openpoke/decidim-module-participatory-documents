@@ -19,6 +19,7 @@ describe "Admin manages participatory documents", type: :system do
   let!(:document_suggestions) { create_list(:participatory_documents_suggestion, 9, suggestable: document) }
   let!(:section1_suggestions) { create_list(:participatory_documents_suggestion, 10, suggestable: section1) }
   let!(:section2_suggestions) { create_list(:participatory_documents_suggestion, 10, suggestable: section2) }
+  let(:all_suggestions_count) { document.suggestions.count + section1_suggestions.count + section2_suggestions.count }
 
   include_context "when managing a component as an admin"
 
@@ -198,6 +199,15 @@ describe "Admin manages participatory documents", type: :system do
       expect(last_email.subject).to include("suggestions", "json")
       expect(last_email.attachments.length).to be_positive
       expect(last_email.attachments.first.filename).to match(/^suggestions.*\.zip$/)
+
+      attachment = last_email.attachments.first
+
+      Zip::File.open_buffer(attachment.body.raw_source) do |zip_file|
+        json_file_entry = zip_file.glob("*.json").first
+        json_content = json_file_entry.get_input_stream.read
+        json_data = JSON.parse(json_content)
+        expect(json_data.length).to eq(all_suggestions_count)
+      end
     end
   end
 
