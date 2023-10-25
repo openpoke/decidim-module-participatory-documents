@@ -226,15 +226,14 @@ describe "User interaction with PDF viewer", type: :system do
       expect(page).to have_content("Some random string longer than 15 chrs")
     end
 
-    context "when the user exports own suggestions" do
+    context "when the user exports own suggestions", js: true do
       it "exports only his own suggestions" do
         click_button "Export my suggestions"
         expect(page).to have_content("You have 2 suggestions on this document")
 
-        # perform_enqueued_jobs { click_button "Send me my suggestions" }
-        # expect(page).to have_content("has been sent to your email")
-        # expect(last_email.subject).to include("suggestions", "xlsx")
-        # expect(last_email.attachments.length).to be_positive
+        perform_enqueued_jobs { click_button "Send me my suggestions" }
+
+        expect(page).to have_content("2 suggestions have been successfully exported")
       end
     end
   end
