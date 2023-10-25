@@ -227,6 +227,13 @@ describe "User interaction with PDF viewer", type: :system do
     end
 
     context "when the user exports own suggestions", js: true do
+      around do |example|
+        original_setting = ActionController::Base.allow_forgery_protection
+        ActionController::Base.allow_forgery_protection = true
+        example.run
+        ActionController::Base.allow_forgery_protection = original_setting
+      end
+
       it "exports only his own suggestions" do
         click_button "Export my suggestions"
         expect(page).to have_content("You have 2 suggestions on this document")
@@ -236,5 +243,6 @@ describe "User interaction with PDF viewer", type: :system do
         expect(page).to have_content("2 suggestions have been successfully exported")
       end
     end
+
   end
 end
