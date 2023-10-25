@@ -243,6 +243,5 @@ describe "User interaction with PDF viewer", type: :system do
         expect(page).to have_content("2 suggestions have been successfully exported")
       end
     end
-
   end
 end
