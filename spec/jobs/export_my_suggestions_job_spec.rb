@@ -51,5 +51,21 @@ module Decidim::ParticipatoryDocuments
         described_class.perform_now(user, document, "JSON")
       end
     end
+
+    describe "XLSX" do
+      it "uses the XLSX exporter" do
+        export_data = double
+
+        expect(Decidim::Exporters::Excel)
+          .to(receive(:new).with(anything, MySuggestionSerializer))
+          .and_return(double(export: export_data))
+
+        expect(Decidim::ExportMailer)
+          .to(receive(:export).with(user, anything, export_data))
+          .and_return(double(deliver_now: true))
+
+        described_class.perform_now(user, document, "Excel")
+      end
+    end
   end
 end

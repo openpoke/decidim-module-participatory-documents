@@ -239,7 +239,9 @@ describe "User interaction with PDF viewer", type: :system do
         click_button "Export my suggestions"
         expect(page).to have_content("You have 2 suggestions on this document")
 
-        perform_enqueued_jobs { click_button "Send me my suggestions" }
+        click_button "Send me my suggestions"
+        sleep 1
+        perform_enqueued_jobs
 
         expect(page).to have_content("2 suggestions have been successfully exported")
 
@@ -247,7 +249,7 @@ describe "User interaction with PDF viewer", type: :system do
         expect(last_email.attachments.length).to be_positive
         expect(last_email.attachments.first.filename).to match(/^suggestions.*\.zip$/)
 
-        attachment = last_email.attachments.first
+        attachment = last_email.attachments.last
 
         Zip::File.open_buffer(attachment.body.raw_source) do |zip_file|
           xlsx_file_entry = zip_file.glob("*.xlsx").first
