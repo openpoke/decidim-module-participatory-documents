@@ -8,7 +8,8 @@ describe "document component", type: :system do
   let(:another_suggestion) { create(:participatory_documents_suggestion, suggestable: document) }
   let(:component) { document.component }
   let(:manifest) { component.manifest.export_manifests.find { |manifest| manifest.name == :suggestions } }
-  let(:collection) { manifest.collection.call(component, user) }
+  let(:collection) { manifest.collection.call(component, user, context) }
+  let(:context) { nil }
   let(:user) { nil }
 
   it "export valuators and different users"	do
@@ -19,6 +20,7 @@ describe "document component", type: :system do
 
   context "when user is specified" do
     let(:user) { suggestion.author }
+    let(:context) { :my_suggestions }
 
     it "export only valuators from the user" do
       expect(collection).to include(suggestion)
