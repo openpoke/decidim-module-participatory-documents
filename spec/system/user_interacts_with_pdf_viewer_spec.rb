@@ -183,6 +183,7 @@ describe "User interaction with PDF viewer", type: :system do
 
   context "when adding a suggestion" do
     let!(:own_suggestions) { create_list(:participatory_documents_suggestion, 2, suggestable: document, author: user) }
+    let!(:other_suggestions) { create_list(:participatory_documents_suggestion, 2) }
 
     before do
       login_as document.author, scope: :user
