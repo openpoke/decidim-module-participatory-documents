@@ -68,7 +68,7 @@ module Decidim
 
         it { is_expected.to be_invalid }
 
-        it_behaves_like "validate error message", "too_long", { max_length: 500 }
+        it_behaves_like "validate error message", "too_long", { max_length: 1000 }
       end
 
       context "when default min size is another" do

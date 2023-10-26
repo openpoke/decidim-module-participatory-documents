@@ -5,7 +5,7 @@ require "spec_helper"
 describe "Admin manages suggestion valuators", type: :system do
   let(:manifest_name) { "participatory_documents" }
   let(:organization) { participatory_process.organization }
-  let!(:user) { create :user, :admin, :confirmed, organization: organization }
+  let!(:user) { create :user, :admin, :admin_terms_accepted, :confirmed, organization: organization }
 
   let(:component) { create :participatory_documents_component, participatory_space: participatory_process }
   let(:document) { create :participatory_documents_document, :with_file, component: component }
@@ -15,7 +15,7 @@ describe "Admin manages suggestion valuators", type: :system do
   let(:participatory_space_path) do
     decidim_admin_participatory_processes.edit_participatory_process_path(participatory_process)
   end
-  let(:valuator) { create :user, :confirmed, organization: organization }
+  let(:valuator) { create :user, :confirmed, :admin_terms_accepted, organization: organization }
   let!(:valuator_role) { create :participatory_process_user_role, role: :valuator, user: valuator, participatory_process: participatory_process }
 
   include Decidim::ComponentPathHelper
@@ -23,7 +23,7 @@ describe "Admin manages suggestion valuators", type: :system do
   include_context "when managing a component as an admin"
 
   context "when listing suggestions" do
-    let(:valuator2) { create :user, organization: organization }
+    let(:valuator2) { create :user, :confirmed, :admin_terms_accepted, organization: organization }
     let(:valuator_role2) { create :participatory_process_user_role, role: :valuator, user: valuator2, participatory_process: participatory_process }
 
     let!(:assignment) { create :suggestion_valuation_assignment, suggestion: suggestion, valuator_role: valuator_role }
@@ -204,7 +204,7 @@ describe "Admin manages suggestion valuators", type: :system do
   end
 
   context "when a valuator manages assignments" do
-    let(:valuator2) { create :user, organization: organization }
+    let(:valuator2) { create :user, :confirmed, :admin_terms_accepted, organization: organization }
     let!(:valuator_role2) { create :participatory_process_user_role, role: :valuator, user: valuator2, participatory_process: participatory_process }
 
     before do

@@ -32,8 +32,7 @@ bundle exec rails decidim_participatory_documents:install_pdf_js
 bundle exec rails db:migrate
 ```
 
-Depending on your Decidim version, you can choose the corresponding version to ensure compatibi
-lity:
+Depending on your Decidim version, you can choose the corresponding version to ensure compatibility:
 
 | Version | Compatible Decidim versions |
 |---|---|
@@ -44,25 +43,26 @@ lity:
 
 TODO...
 
-### Customization
 
-Almost all the features of this module can be customized/disabled through an initializer.
+## Configuration
 
-For instance, you can create an initializer an change some of the available options as follows 
-(**This is optional, you don't need to do this, by default all options are enabled**):
+By default, the module is configured to read the configuration from ENV variables.
+
+Currently, the following ENV variables are supported:
+
+| ENV variable | Description | Default value |
+| ------------ | ----------- |-------|
+| MAX_EXPORT_TEXT_LENGTH | If a positive number, it will truncate the exported suggestions before sending them by email | `0` |
+| MIN_SUGGESTION_LENGTH | Minimum characters in a suggestion to be valid (this setting can be configured in each component as well by the admins) | `5` |
+| MAX_SUGGESTION_LENGTH | Maximum characters in a suggestion to be valid (this setting can be configured in each component as well by the admins) | `1000` |
+
+It is also possible to configure the module using the `decidim-participatory_documents` initializer:
 
 ```ruby
-# config/initializers/participatory_documents.rb
 Decidim::ParticipatoryDocuments.configure do |config|
-  # Public: The maximum length of any text field (body, answers, etc) to export.
-  # Defaults to 50. Set to 0 to export the full text.
-  config.max_export_text_length = 50
-
-  # Public: The minimum length of a suggestion to be considered valid.
+  config.max_export_text_length = 0
   config.min_suggestion_length = 5
-
-  # Public: The maximum length of a suggestion to be considered valid.
-  config.max_suggestion_length = 500
+  config.max_suggestion_length = 1000
 end
 ```
 
