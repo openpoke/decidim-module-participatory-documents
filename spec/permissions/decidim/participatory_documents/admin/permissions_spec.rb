@@ -77,6 +77,32 @@ describe Decidim::ParticipatoryDocuments::Admin::Permissions do
     end
   end
 
+  shared_examples "can create a suggestion note" do |allowed|
+    let(:action_subject) { :suggestion_note }
+    let(:action_name) { :create }
+
+    it do
+      if allowed
+        expect(subject.allowed?).to be true
+      else
+        expect { subject.allowed? }.to raise_error(Decidim::PermissionAction::PermissionNotSetError)
+      end
+    end
+  end
+
+  shared_examples "can create a suggestion answer" do |allowed|
+    let(:action_subject) { :suggestion_answer }
+    let(:action_name) { :create }
+
+    it do
+      if allowed
+        expect(subject.allowed?).to be true
+      else
+        expect { subject.allowed? }.to raise_error(Decidim::PermissionAction::PermissionNotSetError)
+      end
+    end
+  end
+
   it_behaves_like "edit suggestion note"
 
   it_behaves_like "Allows the permission", scope: :suggestion_note, allowed: true
@@ -106,6 +132,9 @@ describe Decidim::ParticipatoryDocuments::Admin::Permissions do
       it_behaves_like "Allows the permission", scope: :document_annotations, allowed: false
       it_behaves_like "Allows the permission", scope: :participatory_document, allowed: false
       it_behaves_like "Allows the permission", scope: :suggestions, allowed: false
+
+      it_behaves_like "can create a suggestion note", true
+      it_behaves_like "can create a suggestion answer", true
     end
 
     context "when is not assigned" do
@@ -115,6 +144,9 @@ describe Decidim::ParticipatoryDocuments::Admin::Permissions do
       it_behaves_like "Allows the permission", scope: :document_annotations, allowed: false
       it_behaves_like "Allows the permission", scope: :participatory_document, allowed: false
       it_behaves_like "Allows the permission", scope: :suggestions, allowed: false
+
+      it_behaves_like "can create a suggestion note", false
+      it_behaves_like "can create a suggestion answer", false
     end
   end
 end

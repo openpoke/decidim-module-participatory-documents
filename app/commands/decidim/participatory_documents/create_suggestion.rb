@@ -29,10 +29,12 @@ module Decidim
       attr_reader :form, :suggestion, :suggestable
 
       def create_suggestion
+        sanitized_body = Decidim::ContentProcessor.sanitize(form.body)
+
         @suggestion = Decidim.traceability.create!(
           Decidim::ParticipatoryDocuments::Suggestion,
           form.current_user,
-          { body: { I18n.locale => form.body },
+          { body: { I18n.locale => sanitized_body },
             suggestable: suggestable,
             author: form.current_user },
           visibility: "public-only"

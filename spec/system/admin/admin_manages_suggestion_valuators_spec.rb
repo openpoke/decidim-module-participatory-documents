@@ -220,6 +220,10 @@ describe "Admin manages suggestion valuators", type: :system do
     end
 
     context "when a valuator assigns other valuators" do
+      let(:suggestion_path) do
+        Decidim::EngineRouter.admin_proxy(document.component).document_suggestion_path(document_id: document.id, id: suggestion.id)
+      end
+
       before do
         within "#js-form-assign-suggestion-to-valuator" do
           find("#valuator_role_id").click
@@ -229,7 +233,6 @@ describe "Admin manages suggestion valuators", type: :system do
 
       it "assigns the suggestion to the valuator" do
         click_button "Assign"
-
         expect(page).to have_content("Suggestions assigned to a valuator successfully")
 
         within find("tr", text: suggestion.id) do
@@ -237,18 +240,28 @@ describe "Admin manages suggestion valuators", type: :system do
         end
       end
 
-      it "can remove only himself from the evaluators" do
-        accept_confirm do
-          within find("#valuators li", text: valuator.name) do
-            find("a.red-icon").click
+      context "when the valuator is removed" do
+        before do
+          accept_confirm do
+            within find("#valuators li", text: valuator.name) do
+              find("a.red-icon").click
+            end
           end
         end
 
-        expect(page).to have_content("Valuator unassigned from suggestions successfully")
+        it "shows the valuator is unassigned successfully" do
+          expect(page).to have_content("Valuator unassigned from suggestions successfully")
+          expect(page).not_to have_selector("#valuators")
+        end
 
-        # within find("#valuators") do
-        expect(page).not_to have_selector("#valuators")
-        # end
+        it "does not show the suggestion content" do
+          expect(page).not_to have_content(translated(suggestion.body).first(20))
+        end
+
+        it "disallows access to the suggestion page" do
+          visit suggestion_path
+          expect(page).to have_content("You are not authorized to perform this action")
+        end
       end
     end
   end

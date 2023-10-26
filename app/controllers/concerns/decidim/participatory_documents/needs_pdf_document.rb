@@ -25,7 +25,7 @@ module Decidim
         def all_suggestions
           @all_suggestions ||= begin
             manifest = document.component.manifest.export_manifests.find { |man| man.name == :suggestions }
-            manifest.collection.call(document.component, current_user)
+            manifest.collection.call(document.component, current_user, :my_suggestions)
           end
         end
 

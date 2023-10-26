@@ -14,6 +14,8 @@ module Decidim
         helper_method :suggestions, :suggestion, :notes_form, :find_valuators_for_select, :suggestion_ids, :suggestion_find
 
         def show
+          enforce_permission_to :show, :suggestion, suggestion: suggestion
+
           @form = form(Decidim::ParticipatoryDocuments::Admin::AnswerSuggestionForm).from_model(suggestion)
         end
 
@@ -133,11 +135,29 @@ module Decidim
         end
 
         def base_query
+          valuator_roles_exist? ? suggestions_for_valuator : all_document_suggestions
+        end
+
+        def all_document_suggestions
           Suggestion.where(suggestable: document).or(Suggestion.where(suggestable: document.sections))
         end
 
+        def suggestions_for_valuator
+          valuator_suggestions_ids = Decidim::ParticipatoryDocuments::ValuationAssignment
+                                     .where(valuator_role: valuator_roles).pluck(:decidim_participatory_documents_suggestion_id)
+          Suggestion.where(id: valuator_suggestions_ids)
+        end
+
+        def valuator_roles
+          current_participatory_space.user_roles(:valuator).where(user: current_user)
+        end
+
+        def valuator_roles_exist?
+          valuator_roles.exists?
+        end
+
         def suggestion
-          base_query.find(params[:id])
+          base_query.find_by(id: params[:id])
         end
 
         # Internal: A method to cache to queries to find the valuators for the

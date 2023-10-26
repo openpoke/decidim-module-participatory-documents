@@ -31,12 +31,12 @@ Decidim.register_component(:participatory_documents) do |component|
   # end
 
   component.exports :suggestions do |exports|
-    exports.collection do |component_instance, user|
+    exports.collection do |component_instance, user, context|
       document = Decidim::ParticipatoryDocuments::Document.find_by(component: component_instance)
       suggestions = Decidim::ParticipatoryDocuments::Suggestion
                     .where(suggestable: document)
                     .or(Decidim::ParticipatoryDocuments::Suggestion.where(suggestable: document.sections))
-      suggestions = user ? suggestions.where(author: user) : suggestions
+      suggestions = suggestions.where(author: user) if context == :my_suggestions && user
       suggestions.order(:id)
     end
 

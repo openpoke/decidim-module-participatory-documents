@@ -6,6 +6,10 @@ module Decidim
       def content_type_allowlist
         %w(application/pdf)
       end
+
+      def extension_allowlist
+        %w(pdf)
+      end
     end
   end
 end

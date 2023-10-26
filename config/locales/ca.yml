@@ -50,13 +50,13 @@ ca:
             label: Assigned to valuator
     admin_log:
       annotation:
-        create: "%{user_name} created a new participatory area for %{document_name}"
+        create: "%{user_name} ha creat una nova àrea de participació per a %{document_name}"
         delete: "%{user_name} deleted a participatory area for %{document_name}"
         update: "%{user_name} has updated a participatory area for %{document_name}"
       document:
-        create: "%{user_name} created a document named %{resource_name} in %{space_name}"
-        delete: "%{user_name} deleted a document named %{resource_name} in %{space_name}"
-        update: "%{user_name} updated a document named %{resource_name} in %{space_name}"
+        create: "%{user_name} ha creat un document anomenat %{resource_name} a %{space_name}"
+        delete: "%{user_name} ha suprimit un document anomenat %{resource_name} a %{space_name}"
+        update: "%{user_name} ha actualitzat un document anomenat %{resource_name} a %{space_name}"
       section:
         create: "%{user_name} has created a new Section named %{resource_name} for %{document_name}"
         delete: "%{user_name} has deleted a section"
@@ -65,7 +65,7 @@ ca:
         create: "%{user_name} created a new suggestion note %{suggestion}"
     components:
       participatory_documents:
-        name: Participatory Document
+        name: Document participatiu
         settings:
           global:
             max_suggestion_length: Maximum suggestion length (characters)
@@ -85,23 +85,23 @@ ca:
           pdf_message: Only PDF files are allowed
     participatory_documents:
       actions:
-        back: Back
+        back: Enrere
         back_edit: Go back to edit participatory sections
         confirm: This action means that you will not be able to edit the document or create new sections, are you sure?
-        edit_boxes: Edit participatory areas
-        edit_document: Edit/upload document
+        edit_boxes: Edita les àrees de participació
+        edit_document: Edita/actualitza el document
         finish_publishing: Publish participatory sections
-        new: Upload PDF document
+        new: Puja un document PDF
         preview_publishing_sections: Preview and publish sections
-        title: Actions
+        title: Accions
       admin:
         documents:
           create:
-            invalid: There was a problem creating Document
-            success: Document has been successfully created
+            invalid: Hi ha hagut un problema en crear el document
+            success: El document s'ha creat correctament
           edit:
-            title: Edit Participatory document
-            update: Update
+            title: Edita el document participatiu
+            update: Actualitza
           final_publish:
             error: There was an error publishing sections
             success: Sections have been successfully published
@@ -110,7 +110,7 @@ ca:
             box_style_preview: 'Box style preview:'
             warning_sections_html: "<strong>Warning:</strong> If you upload a new document, all the participatory areas will be deleted!"
           index:
-            start: Please upload a PDF to start
+            start: Pengeu un PDF per començar
           new:
             create: Create participatory document
             title: New participatory document
@@ -118,7 +118,7 @@ ca:
             empty: "(empty)"
           update:
             error: There was a problem updating Document
-            success: Document has been successfully updated
+            success: El document s'ha actualitzat correctament
         exports:
           suggestions: Suggestions
         suggestion_notes:
@@ -216,11 +216,11 @@ ca:
       models:
         document:
           fields:
-            document_pages: Page numbers
+            document_pages: Número de pàgina
             id: Id
-            published: Published
-            state: State
-            title: Title
+            published: Publicat
+            state: Estat
+            title: Títol
         section:
           fields:
             artificial_tile: Section %{position}
@@ -256,4 +256,4 @@ ca:
         suggestion_form:
           blank: There was an error creating the suggestion. Upload the valid  file or add a text message with the suggestion.
           title: Write your suggestion or upload a file with your suggestions
-      'yes': 'Yes'
+      'yes': 'Sí'

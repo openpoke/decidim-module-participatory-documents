@@ -7,7 +7,9 @@ on:
   pull_request:
 
 env:
-  RUBY_VERSION: 3.0.5
+  RUBY_VERSION: 3.0.6
+  SIMPLECOV: 1
+  CI: 1
   NODE_VERSION: 16.9.1
 
 jobs:
@@ -31,7 +33,7 @@ jobs:
       DATABASE_HOST: localhost
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 1
 
@@ -49,9 +51,10 @@ jobs:
 
       - name: Run RSpec
         run: bundle exec rspec
-        env:
-          SIMPLECOV: 1
-          CODECOV: 1
+
+
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v3
 
       - uses: actions/upload-artifact@v2-preview
         if: always()

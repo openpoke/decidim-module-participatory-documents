@@ -72,6 +72,21 @@ module Decidim
             expect(document.box_opacity).to eq(box_opacity)
           end
         end
+
+        context "when the file is invalid" do
+          let(:file) do
+            Rack::Test::UploadedFile.new(
+              Decidim::Dev.test_file("dummy-dummies-example.json", "application/pdf")
+            )
+          end
+
+          it "broadcasts :invalid and adds an error to the form" do
+            expect { subject.call }.to broadcast(:invalid)
+            expect(form.errors[:file]).to include("is invalid")
+            document.reload
+            expect(document.file.attached?).to be false
+          end
+        end
       end
     end
   end
