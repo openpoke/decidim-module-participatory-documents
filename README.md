@@ -32,8 +32,7 @@ bundle exec rails decidim_participatory_documents:install_pdf_js
 bundle exec rails db:migrate
 ```
 
-Depending on your Decidim version, you can choose the corresponding version to ensure compatibi
-lity:
+Depending on your Decidim version, you can choose the corresponding version to ensure compatibility:
 
 | Version | Compatible Decidim versions |
 |---|---|
