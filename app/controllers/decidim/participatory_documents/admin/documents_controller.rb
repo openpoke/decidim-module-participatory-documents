@@ -6,6 +6,7 @@ module Decidim
       # This controller allows admins to manage documents in a participatory process.
       class DocumentsController < Admin::ApplicationController
         include Decidim::ApplicationHelper
+        include Decidim::ComponentPathHelper
         include NeedsAdminSnippets
 
         helper Decidim::LayoutHelper
@@ -13,7 +14,6 @@ module Decidim
 
         before_action except: [:index, :new, :create] do
           redirect_to(documents_path) if document.blank?
-          redirect_to(edit_document_path(document)) unless document.file.attached?
         end
 
         def index
@@ -32,7 +32,9 @@ module Decidim
           CreateDocument.call(@form) do
             on(:ok) do |document|
               flash[:notice] = I18n.t("documents.create.success", scope: "decidim.participatory_documents.admin")
-              redirect_to edit_pdf_documents_path(id: document.id)
+
+              redirect_to(edit_pdf_documents_path(id: document.id)) && return if document.file.attached?
+              redirect_to(manage_component_path(document.component)) && return unless document.file.attached?
             end
 
             on(:invalid) do
