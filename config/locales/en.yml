@@ -8,6 +8,8 @@ en:
         description: Helper description
         file: PDF Document
         title: Helper title
+      suggestion:
+        body: Bodyy
     errors:
       models:
         answer_suggestion:
@@ -230,6 +232,9 @@ en:
         preview_title: Preview
         publish_description: 'Admin options: you are previewing the participatory
           sections of the document'
+      forms:
+        suggestion_form:
+          body_text: Add your comment
       models:
         document:
           fields:
