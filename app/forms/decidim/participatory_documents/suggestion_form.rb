@@ -6,7 +6,7 @@ module Decidim
       include Decidim::AttachmentAttributes
       include Decidim::HasUploadValidations
 
-      attribute :body, String, default: I18n.t("body_text", scope: "decidim.participatory_documents.forms.suggestion_form")
+      attribute :body, String
       attribute :file
 
       validate :validate_single_field_presence
