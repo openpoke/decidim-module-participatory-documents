@@ -191,34 +191,55 @@ describe "Admin manages participatory documents", type: :system do
       expect(page).to have_link("Preview and publish sections")
     end
 
-    it "goes to the preview page" do
-      click_link "Preview and publish sections"
-      expect(page).to have_content("you are previewing the participatory sections of the document")
+    context "when in the editor" do
+      before do
+        click_link "Edit participatory areas"
+      end
+
+      it "shows the preview button" do
+        expect(page).to have_link("Preview and publish sections")
+      end
+
+      it "goes to the preview page" do
+        click_link "Preview and publish sections"
+        expect(page).to have_content("you are previewing the participatory sections of the document")
+      end
     end
 
-    it "can edit sections after previewing" do
-      click_link "Preview and publish sections"
-      click_link "Go back to edit participatory sections"
-      expect(page).to have_selector("a[href='#{manage_component_path(component)}'][title='Back']")
+    context "when previewing the document" do
+      before do
+        click_link "Preview and publish sections"
+      end
+
+      it "displays the preview content" do
+        expect(page).to have_content("you are previewing the participatory sections of the document")
+      end
+
+      it "can edit sections after previewing" do
+        click_link "Go back to edit participatory sections"
+        expect(page).to have_selector("a[href='#{manage_component_path(component)}'][title='Back']")
+      end
+
+      it "can publish sections" do
+        click_link "Publish participatory sections"
+        expect(page).to have_content("are you sure?")
+        click_link "OK"
+        expect(page).to have_content("Sections have been successfully published")
+      end
     end
 
-    it "can publish sections after previewing" do
-      click_link "Preview and publish sections"
-      click_link "Publish participatory sections"
-      expect(page).to have_content("are you sure?")
+    context "when the document has been published" do
+      before do
+        click_link "Preview and publish sections"
+        click_link "Publish participatory sections"
+        click_link "OK"
+      end
 
-      click_link "OK"
-      expect(page).to have_content("Sections have been successfully published")
-    end
-
-    it "can't edit sections after publishing" do
-      click_link "Preview and publish sections"
-      click_link "Publish participatory sections"
-      click_link "OK"
-
-      expect(page).not_to have_content("Edit/upload document")
-      expect(page).not_to have_content("Edit participatory areas")
-      expect(page).not_to have_content("Preview and publish sections")
+      it "restricts editing sections" do
+        expect(page).not_to have_content("Edit/upload document")
+        expect(page).not_to have_content("Edit participatory areas")
+        expect(page).not_to have_content("Preview and publish sections")
+      end
     end
   end
 end
