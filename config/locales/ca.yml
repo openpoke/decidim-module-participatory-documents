@@ -8,6 +8,8 @@ ca:
         description: Helper description
         file: PDF Document
         title: Helper title
+      suggestion:
+        body: Add your comment
     errors:
       models:
         answer_suggestion:
