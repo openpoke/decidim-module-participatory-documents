@@ -196,6 +196,7 @@ describe "User interaction with PDF viewer", type: :system do
       sleep 1
       expect(page).to have_css("#participation-modal.active")
       expect(page).not_to have_content("upload a file")
+      expect(page).to have_content(t("activemodel.attributes.suggestion.body"))
 
       within "#new_suggestion_" do
         fill_in :suggestion_body, with: "Some random string longer than 15 chrs"
@@ -214,6 +215,7 @@ describe "User interaction with PDF viewer", type: :system do
       sleep 1
       expect(page).to have_css("#participation-modal.active")
       expect(page).to have_content("upload a file")
+      expect(page).to have_content(t("activemodel.attributes.suggestion.body"))
 
       within "#new_suggestion_" do
         fill_in :suggestion_body, with: "Some random string longer than 15 chrs"
