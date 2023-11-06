@@ -3,81 +3,81 @@ ca:
   activemodel:
     attributes:
       document:
-        box_color: Color of the boxes
-        box_opacity: Opacity applied at the color of the boxes (%)
-        description: Helper description
-        file: PDF Document
-        title: Helper title
+        box_color: Color de les caixes
+        box_opacity: Opacitat aplicada al color de les caixes (%)
+        description: Descripció d'ajuda
+        file: Document PDF
+        title: Títol d'ajuda
       suggestion:
-        body: Add your comment
+        body: Afegeix el teu comentari
     errors:
       models:
         answer_suggestion:
           attributes:
             state:
-              inclusion: It's not possible to publish with status "not answered"
+              inclusion: No és possible publicar amb l'estat "no contestat"
         document:
-          has_suggestions: This document cannot be changed or removed because it has suggestions
+          has_suggestions: Aquest document no pot ser modificat o eliminat perquè ja té suggeriments
         suggestion:
           attributes:
-            not_blank: 'Validation failed: Please provide a message or upload a file'
-            too_long: is too long (over %{max_length} characters)
-            too_short: is too short (under %{min_length} characters)
+            not_blank: 'Validació fallida: Si us plau, proporciona un missatge o puja un fitxer'
+            too_long: és massa llarg (més de %{max_length} caràcters)
+            too_short: és massa curt (menys de %{min_length} caràcters)
   decidim:
     admin:
       actions:
-        export: Export
+        export: Exporta
       exports:
-        export_as: "%{name} as %{export_format}"
+        export_as: "%{name} com a %{export_format}"
       filters:
         search_placeholder:
-          body_cont: Body Contains
+          body_cont: El cos conté
         suggestions:
           body_cont:
-            label: Body contains
+            label: El cos conté
           dummy_author_ids_has:
-            label: Author
+            label: Autor
           dummy_suggestable_id_has:
-            label: Section
+            label: Secció
           state_eq:
-            label: State is
+            label: L'estat és
             values:
-              accepted: Accepted
-              evaluating: Evaluating
-              not_answered: Not Answered
-              published: Published
-              rejected: Rejected
-              withdrawn: Withdrawn
+              accepted: Acceptada
+              evaluating: En avaluació
+              not_answered: No contestat
+              published: Publicat
+              rejected: Rebutjat
+              withdrawn: Retirada
           valuator_role_ids_has:
-            label: Assigned to valuator
+            label: Assignada a avaluadora
     admin_log:
       annotation:
         create: "%{user_name} ha creat una nova àrea de participació per a %{document_name}"
-        delete: "%{user_name} deleted a participatory area for %{document_name}"
-        update: "%{user_name} has updated a participatory area for %{document_name}"
+        delete: "%{user_name} ha suprimit una nova àrea de participació per a %{document_name}"
+        update: "%{user_name} ha actualitzat una nova àrea de participació per a %{document_name}"
       document:
         create: "%{user_name} ha creat un document anomenat %{resource_name} a %{space_name}"
         delete: "%{user_name} ha suprimit un document anomenat %{resource_name} a %{space_name}"
         update: "%{user_name} ha actualitzat un document anomenat %{resource_name} a %{space_name}"
       section:
-        create: "%{user_name} has created a new Section named %{resource_name} for %{document_name}"
-        delete: "%{user_name} has deleted a section"
-        update: "%{user_name} has updated a section in %{document_name}"
+        create: "%{user_name} ha creat un Grup nou anomenat %{resource_name} per a %{document_name}"
+        delete: "%{user_name} ha suprimit un grup"
+        update: "%{user_name} ha actualitzat un nou grup de participació per a %{document_name}"
       suggestion_note:
-        create: "%{user_name} created a new suggestion note %{suggestion}"
+        create: "%{user_name} ha creat una nova nota de suggeriment %{suggestion}"
     components:
       participatory_documents:
         name: Document participatiu
         settings:
           global:
-            max_suggestion_length: Maximum suggestion length (characters)
-            min_suggestion_length: Minimum suggestion length (characters)
-            suggestion_answering_enabled: Enable suggestion answering from admin
+            max_suggestion_length: Longitud màxima de la suggerència (caràcters)
+            min_suggestion_length: Longitud mínima de la suggerència (caràcters)
+            suggestion_answering_enabled: Habilitar la resposta de suggerències des de l'administrador
     events:
       participatory_documents:
         suggestion_answered:
           affected_user:
-            email_intro: 'A suggestion you submitted on "<a href="%{resource_path}">%{resource_title}</a>" document has been answered by an administrator. You can read the answer in this page:'
+            email_intro: 'La suggerència que vas enviar pel document "<a href="%{resource_path}">%{resource_title}</a>" a estat respost per una administradora. Pots llegir la respost en aquesta pàgina:'
             email_outro: You have received this notification because you have submitted a suggestion for "<a href="%{resource_path}">%{resource_title}</a>" document.
             email_subject: A suggestion you have submitted has been answered by an administrator
             notification_title: A suggestion you submitted on "<a href="%{resource_path}">%{resource_title}</a>" document has been answered by an administrator
