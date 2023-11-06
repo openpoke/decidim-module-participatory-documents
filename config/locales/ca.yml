@@ -78,23 +78,23 @@ ca:
         suggestion_answered:
           affected_user:
             email_intro: 'La suggerència que vas enviar pel document "<a href="%{resource_path}">%{resource_title}</a>" a estat respost per una administradora. Pots llegir la respost en aquesta pàgina:'
-            email_outro: You have received this notification because you have submitted a suggestion for "<a href="%{resource_path}">%{resource_title}</a>" document.
-            email_subject: A suggestion you have submitted has been answered by an administrator
-            notification_title: A suggestion you submitted on "<a href="%{resource_path}">%{resource_title}</a>" document has been answered by an administrator
+            email_outro: Has rebut aquesta notificació perquè vas enviar una suggerència en "<a href="%{resource_path}">%{resource_title}</a>" document.
+            email_subject: El suggeriment que has enviat s'ha respost per part d'un administrador
+            notification_title: La suggerència que vas enviar en el document "<a href="%{resource_path}">%{resource_title}</a>" ha estat respost per una administradora
     forms:
       file_help:
         file:
-          pdf_message: Only PDF files are allowed
+          pdf_message: Només estan permesos els fitxers PDF
     participatory_documents:
       actions:
         back: Enrere
-        back_edit: Go back to edit participatory sections
-        confirm: This action means that you will not be able to edit the document or create new sections, are you sure?
+        back_edit: Torna enrere per editar els grups de participació
+        confirm: Aquesta acció significa que no podràs editar el document ni crear nous grups de participació, n'estàs segur?
         edit_boxes: Edita les àrees de participació
         edit_document: Edita/actualitza el document
-        finish_publishing: Publish participatory sections
+        finish_publishing: Publica els grups de participació
         new: Puja un document PDF
-        preview_publishing_sections: Preview and publish sections
+        preview_publishing_sections: Previsualitza i publica els grups
         title: Accions
       admin:
         documents:
@@ -105,17 +105,17 @@ ca:
             title: Edita el document participatiu
             update: Actualitza
           final_publish:
-            error: There was an error publishing sections
-            success: Sections have been successfully published
+            error: Hi ha hagut un error en publicar els grups de participació
+            success: Els grups s'han publicat correctament
           form:
-            alert_suggestions_html: "<strong>IMPORTANT:</strong> This document cannot be changed or removed because it already has suggestions attached"
-            box_style_preview: 'Box style preview:'
-            warning_sections_html: "<strong>Warning:</strong> If you upload a new document, all the participatory areas will be deleted!"
+            alert_suggestions_html: "<strong>IMPORTANT:</strong> Aquest document no es pot canviar ni eliminar perquè ja té suggeriments"
+            box_style_preview: 'Previsualització de l''estil de la caixa:'
+            warning_sections_html: "<strong>Advertiment:</strong> Si carregues un nou document, totes les àrees (caixes) de participació seran eliminades!"
           index:
             start: Pengeu un PDF per començar
           new:
-            create: Create participatory document
-            title: New participatory document
+            create: Crea un document participatiu
+            title: Nou document participatiu
           sections:
             empty: "(empty)"
           update:
@@ -184,37 +184,37 @@ ca:
             global: Global
           valuators:
             assigned_valuators: Assigned valuators
-            remove_assignment: Remove assignment
-            remove_assignment_confirmation: Are you sure you want to remove the valuator from this suggestion?
-            valuators: Valuators
+            remove_assignment: Desfer assignació
+            remove_assignment_confirmation: Segur que vols desfer l'assignació a l'avaluadora d'aquest suggeriment?
+            valuators: Avaluadores
         valuation_assignments:
           create:
-            invalid: There was an error assigning suggestions to a valuator
-            success: Suggestions assigned to a valuator successfully
+            invalid: S'ha produït un error en assignar suggeriments a una avaluadora
+            success: Suggeriments assignats a l'avaluadora correctament
           delete:
-            invalid: There was an error unassigning suggestions from a valuator
-            success: Valuator unassigned from suggestions successfully
+            invalid: S'ha produït un error en desassignar suggeriments a una avaluadora
+            success: Avaluadora desassignada correctament
       document:
-        close: Close
-        export_my_suggestions: Export my suggestions
-        global_suggestions: Global suggestions
-        save_changes: Save changes!
-        send_suggestion: Send suggestion
-        suggestion_answer: Official answer
-        upload_file: Attach a document
+        close: Tancar
+        export_my_suggestions: Exporta els meus suggeriments
+        global_suggestions: Suggeriment global
+        save_changes: Desa els canvis!
+        send_suggestion: Enviar suggeriment
+        suggestion_answer: Resposta oficial
+        upload_file: Adjunta un document
       document_suggestions:
         export:
-          empty: There are no suggestions to export.
-          success: "%{count} suggestions have been successfully exported. Please check your email inbox at %{email}."
+          empty: No hi ha suggeriments per exportar.
+          success: "%{count} suggeriments han estat exportats amb èxit. Si us plau, revisa el teu email a %{email}."
       documents:
         export_modal:
-          description_html: You have %{count} suggestions on this document. If you want to export them, you will receive a ZIP file with and Excel document in it with all your data and any possible answer the admins have given to you. <br><br>You will receive an email at <b>%{email}</b>.
-          send: Send me my suggestions
-          title: Export my suggestions
-        missing: There is no document uploaded yet
-        not_supported: This page requires JavaScript to be enabled!
-        preview_title: Preview
-        publish_description: 'Admin options: you are previewing the participatory sections of the document'
+          description_html: Tens %{count} suggeriments en aquest document. Si vols exportar-los, rebràs un fitxer ZIP amb un document Excel que conté totes les teves dades i les possibles respostes que els administradors t'hagin donat. <br><br>Rebràs un correu electrònic a <b>%{email}</b>.
+          send: Envia els meus suggeriments
+          title: Exporta els meus suggeriments
+        missing: No hi ha cap document pujat encara
+        not_supported: Aquesta pàgina requereix l'habilitació de JavaScript!
+        preview_title: Vista prèvia
+        publish_description: 'Opcions de l''administrador: estàs previsualitzant els grups de participació del document'
       models:
         document:
           fields:
@@ -225,37 +225,37 @@ ca:
             title: Títol
         section:
           fields:
-            artificial_tile: Section %{position}
+            artificial_tile: Grup de participació %{position}
         suggestion:
           fields:
-            valuators: Valuators
+            valuators: Avaluadores
       'no': 'No'
       suggestions:
         answers:
-          accepted: Accepted
-          evaluating: Evaluating
-          not_answered: Not Answered
-          published: Published
-          rejected: Rejected
-          withdrawn: Withdrawn
+          accepted: Acceptada
+          evaluating: En avaluació
+          not_answered: No contestat
+          published: Publicat
+          rejected: Rebutjat
+          withdrawn: Retirada
         modal:
-          exit_full_screen: Exit fullscreen
-          full_screen: Fullscreen
+          exit_full_screen: Surt de pantalla completa
+          full_screen: Pantalla completa
       ui_messages:
-        allSaved: All the areas have been saved successfully
-        confirmExit: Are you sure you want to exit?
-        created: The area has been created
-        errorsSaving: Some errors have occurred while saving the areas
-        group: Group
-        modalTitle: Section %{section}, area %{box}
-        move: Move
-        needsSaving: You have to save the areas before editing them
-        operationFailed: The operation has failed
-        removeBoxConfirm: Are you sure you want to delete this area? This cannot be undone.
-        removed: The area has been removed
-        startEditing: Start creating areas for participation by clicking and dragging. Once created, boxes can be resized, moved, or grouped.
-        startSuggesting: Click on a marked area to participate!
+        allSaved: Totes les àrees (caixes) han estat guardades amb èxit
+        confirmExit: Estàs segur que vols sortir?
+        created: L'àrea ha estat creada
+        errorsSaving: Alguns errors han ocorregut mentre es desava les àrees
+        group: Grup
+        modalTitle: Grup %{section}, àrea %{box}
+        move: Mou
+        needsSaving: Has de desar les àrees abans de modificar-les
+        operationFailed: L'operació ha fallat
+        removeBoxConfirm: Esteu segur que voleu suprimir aquesta àrea (caixa)? Aquesta acció no es pot desfer.
+        removed: L'àrea ha estat eliminada
+        startEditing: Comença a crear àrees de participació (caixes) fent clic i arrossegant. Un cop creats, les caixes es poden redimensionar, moure o agrupar.
+        startSuggesting: Clica a l'àrea marcada per participar!
         suggestion_form:
-          blank: There was an error creating the suggestion. Upload the valid  file or add a text message with the suggestion.
-          title: Write your suggestion or upload a file with your suggestions
+          blank: S'ha produït un error en crear el suggeriment. Pujar un fitxer vàlid o afegeix un missatge de text amb el suggeriment.
+          title: Escriu el teu suggeriment o puja un fitxer amb els teus suggeriments
       'yes': 'Sí'
