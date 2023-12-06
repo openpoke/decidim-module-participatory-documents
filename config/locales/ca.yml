@@ -117,12 +117,12 @@ ca:
             create: Crea un document participatiu
             title: Nou document participatiu
           sections:
-            empty: "(empty)"
+            empty: "(buit)"
           update:
-            error: There was a problem updating Document
+            error: Hi ha hagut un problema en actualitzar el document
             success: El document s'ha actualitzat correctament
         exports:
-          suggestions: Suggestions
+          suggestions: Suggeriments
         suggestion_notes:
           create:
             error: There was a problem creating this suggestion note
