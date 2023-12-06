@@ -9,7 +9,7 @@ ca:
         file: Document PDF
         title: Títol d'ajuda
       suggestion:
-        body: Afegeix el teu comentari
+        body: Afegeix el teu suggeriment
     errors:
       models:
         answer_suggestion:
@@ -64,23 +64,23 @@ ca:
         delete: "%{user_name} ha suprimit un grup"
         update: "%{user_name} ha actualitzat un nou grup de participació per a %{document_name}"
       suggestion_note:
-        create: "%{user_name} ha creat una nova nota de suggeriment %{suggestion}"
+        create: "%{user_name} ha creat una nova nota privada a %{suggestion}"
     components:
       participatory_documents:
         name: Document participatiu
         settings:
           global:
-            max_suggestion_length: Longitud màxima de la suggerència (caràcters)
-            min_suggestion_length: Longitud mínima de la suggerència (caràcters)
+            max_suggestion_length: Longitud màxima del suggeriment (caràcters)
+            min_suggestion_length: Longitud mínima del suggeriment (caràcters)
             suggestion_answering_enabled: Habilitar la resposta de suggerències des de l'administrador
     events:
       participatory_documents:
         suggestion_answered:
           affected_user:
-            email_intro: 'La suggerència que vas enviar pel document "<a href="%{resource_path}">%{resource_title}</a>" a estat respost per una administradora. Pots llegir la respost en aquesta pàgina:'
-            email_outro: Has rebut aquesta notificació perquè vas enviar una suggerència en "<a href="%{resource_path}">%{resource_title}</a>" document.
+            email_intro: 'El suggeriment que vas enviar pel document "<a href="%{resource_path}">%{resource_title}</a>" a estat respost per una administradora. Pots llegir la respost en aquesta pàgina:'
+            email_outro: Has rebut aquesta notificació perquè vas enviar un suggeriment al document "<a href="%{resource_path}">%{resource_title}</a>".
             email_subject: El suggeriment que has enviat s'ha respost per part d'un administrador
-            notification_title: La suggerència que vas enviar en el document "<a href="%{resource_path}">%{resource_title}</a>" ha estat respost per una administradora
+            notification_title: El suggeriment que vas enviar en el document "<a href="%{resource_path}">%{resource_title}</a>" ha estat respost per una administradora
     forms:
       file_help:
         file:
@@ -125,65 +125,65 @@ ca:
           suggestions: Suggeriments
         suggestion_notes:
           create:
-            error: There was a problem creating this suggestion note
-            success: Suggestion note successfully created
+            error: S'ha produït un error en crear la nota privada
+            success: La nota privada s'ha creat correctament
           form:
-            note: Note
-            submit: Submit
-          leave_your_note: Leave your note
+            note: Nota privada
+            submit: Enviar
+          leave_your_note: Deixa la teva nota
           modal:
-            body: Body
-            title: Edit note
-            update: Update
-          title: Private notes
+            body: Cos
+            title: Edita la nota
+            update: Actualitza
+          title: Notes privades
           update:
-            edited: Edited
-            invalid: There was a problem updating this suggestion note
-            success: Suggestion note successfully updated
+            edited: Editada
+            invalid: S'ha produït un error en actualitzar la nota privada
+            success: La nota privada s'ha creat correctament
         suggestions:
           answer:
-            invalid: There was an error adding the answer
-            success: Successfully added the answer
+            invalid: S'ha produït un error en afegir la resposta
+            success: La resposta s'ha afegit correctament
           form:
-            answer: Answer
-            answer_is_published: Published
-            title: Answer Suggestion
+            answer: Resposta
+            answer_is_published: Publicar directament
+            title: Resposta del suggeriment
           index:
             actions:
-              answer: Answer
-              assign_to_valuator: Assign to valuator
-              assign_to_valuator_button: Assign
-              cancel: Cancel
-              download: download %{filename}
-              publish: Publish
-              publish_answers: Publish answers
-              title: Actions
-              unassign_from_valuator: Unassign from valuator
-              unassign_from_valuator_button: Unassign
-            author: Author
-            created_at: Submitted on
+              answer: Resposta
+              assign_to_valuator: Assignar a avaluadora
+              assign_to_valuator_button: Assignar
+              cancel: Cancel·lar
+              download: descarrega %{filename}
+              publish: Publicar
+              publish_answers: Respostes publicades
+              title: Accions
+              unassign_from_valuator: Desfer assignació a avaluadora
+              unassign_from_valuator_button: Desassigna
+            author: Autor
+            created_at: Enviat el
             id: Id
-            no_text: "(no text)"
-            published_answer: Published Answer
-            section: Section
-            selected: selected
-            state: State
-            suggestion: Suggestion
-            title: List Suggestions
+            no_text: "(sense text)"
+            published_answer: Resposta publicada
+            section: Secció
+            selected: seleccionat
+            state: Estat
+            suggestion: <strong>Atenció:</strong> Si carregues un nou document, totes les àrees (caixes) de participació seran eliminades!
+            title: Llista Suggeriments
           publish_answers:
-            number_of_suggestions: Answers for %{number} suggestions will be published.
-            select_a_suggestion: Please select a suggestion
-            success: Suggestion answers successfully published.
+            number_of_suggestions: Es publicaran les respostes per a %{number} suggeriments.
+            select_a_suggestion: Si us plau, selecciona un suggeriment
+            success: Respostes als suggeriments publicats amb èxit.
           show:
-            authors: Authors
-            body: Body
-            created_at: Creation date
-            file: File
-            update: Update
+            authors: Autors
+            body: Cos
+            created_at: Data de creació
+            file: Arxiu
+            update: Actualitza
           suggestion:
             global: Global
           valuators:
-            assigned_valuators: Assigned valuators
+            assigned_valuators: Avaluadores assignades
             remove_assignment: Desfer assignació
             remove_assignment_confirmation: Segur que vols desfer l'assignació a l'avaluadora d'aquest suggeriment?
             valuators: Avaluadores
@@ -209,7 +209,7 @@ ca:
       documents:
         export_modal:
           description_html: Tens %{count} suggeriments en aquest document. Si vols exportar-los, rebràs un fitxer ZIP amb un document Excel que conté totes les teves dades i les possibles respostes que els administradors t'hagin donat. <br><br>Rebràs un correu electrònic a <b>%{email}</b>.
-          send: Envia els meus suggeriments
+          send: Envia'm els meus suggeriments
           title: Exporta els meus suggeriments
         missing: No hi ha cap document pujat encara
         not_supported: Aquesta pàgina requereix l'habilitació de JavaScript!
