@@ -7,54 +7,54 @@ es:
         box_opacity: Opacidad aplicada al color de las cajas (%)
         description: Descripción de ayuda
         file: Documento PDF
-        title: Helper title
+        title: Título de ayuda
       suggestion:
-        body: Add your comment
+        body: Añade tu sugerencia
     errors:
       models:
         answer_suggestion:
           attributes:
             state:
-              inclusion: It's not possible to publish with status "not answered"
+              inclusion: No es posible publicar con estado "sin respuesta"
         document:
-          has_suggestions: This document cannot be changed or removed because it has suggestions
+          has_suggestions: Este documento no puede ser cambiado o eliminado porque tiene sugerencias
         suggestion:
           attributes:
-            not_blank: 'Validation failed: Please provide a message or upload a file'
-            too_long: is too long (over %{max_length} characters)
-            too_short: is too short (under %{min_length} characters)
+            not_blank: 'Validación fallida: Por favor, proporcione un mensaje o suba un archivo'
+            too_long: es demasiado largo (más de %{max_length} caracteres)
+            too_short: es demasiado corto (menos de %{min_length} caracteres)
   decidim:
     admin:
       actions:
-        export: Export
+        export: Exportar
       exports:
-        export_as: "%{name} as %{export_format}"
+        export_as: "%{name} como %{export_format}"
       filters:
         search_placeholder:
-          body_cont: Body Contains
+          body_cont: El cuerpo contiene
         suggestions:
           body_cont:
-            label: Body contains
+            label: El cuerpo contiene
           dummy_author_ids_has:
-            label: Author
+            label: Autor
           dummy_suggestable_id_has:
-            label: Section
+            label: Sección
           state_eq:
-            label: State is
+            label: El estado es
             values:
-              accepted: Accepted
-              evaluating: Evaluating
-              not_answered: Not Answered
-              published: Published
-              rejected: Rejected
-              withdrawn: Withdrawn
+              accepted: Aceptada
+              evaluating: En evaluación
+              not_answered: No contestada
+              published: Publicada
+              rejected: Rechazada
+              withdrawn: Retirada
           valuator_role_ids_has:
-            label: Assigned to valuator
+            label: Asignada a evaluadora
     admin_log:
       annotation:
-        create: "%{user_name} creó una nueva área participativa para %{document_name}"
-        delete: "%{user_name} deleted a participatory area for %{document_name}"
-        update: "%{user_name} has updated a participatory area for %{document_name}"
+        create: "%{user_name} eliminó una nueva área participativa en %{document_name}"
+        delete: "%{user_name} eliminó una nueva área participativa en %{document_name}"
+        update: "%{user_name} ha editado una nueva área participativa en %{document_name}"
       document:
         create: "%{user_name} creó el documento llamado %{resource_name} en %{space_name}"
         delete: "%{user_name} borro el documento llamado %{resource_name} en %{space_name}"
@@ -88,13 +88,13 @@ es:
     participatory_documents:
       actions:
         back: Atrás
-        back_edit: Go back to edit participatory sections
-        confirm: This action means that you will not be able to edit the document or create new sections, are you sure?
+        back_edit: Volver atrás para editar las secciones de participación
+        confirm: Esta acción significa que no podrá editar el documento o crear nuevas secciones, ¿está seguro?
         edit_boxes: Editar áreas participativas
         edit_document: Editar/subir documento
-        finish_publishing: Publish participatory sections
+        finish_publishing: Publicar secciones participativas
         new: Subir un documento PDF
-        preview_publishing_sections: Preview and publish sections
+        preview_publishing_sections: Previsualizar y publicar secciones de participación
         title: Acciones
       admin:
         documents:
@@ -105,24 +105,24 @@ es:
             title: Edita el documento participativo
             update: Actualiza
           final_publish:
-            error: There was an error publishing sections
-            success: Sections have been successfully published
+            error: Hubo un error al publicar las secciones
+            success: Las secciones han sido publicadas correctamente
           form:
-            alert_suggestions_html: "<strong>IMPORTANT:</strong> This document cannot be changed or removed because it already has suggestions attached"
+            alert_suggestions_html: "<strong>IMPORTANTE:</strong> Este documento no puede ser cambiado o eliminado porque ya tiene sugerencias asociadas"
             box_style_preview: 'Box style preview:'
-            warning_sections_html: "<strong>Warning:</strong> If you upload a new document, all the participatory areas will be deleted!"
+            warning_sections_html: "<strong>¡Atención!:</strong> Si subes un nuevo documento, todas las secciones de participación seran eliminadas"
           index:
             start: Por favor cargue un documento PDF para empezar
           new:
             create: Create participatory document
             title: New participatory document
           sections:
-            empty: "(empty)"
+            empty: "(vacío)"
           update:
             error: There was a problem updating Document
             success: El documento ha sido actualizado con éxito
         exports:
-          suggestions: Suggestions
+          suggestions: Sugerencias
         suggestion_notes:
           create:
             error: There was a problem creating this suggestion note
@@ -169,9 +169,9 @@ es:
             selected: selected
             state: State
             suggestion: Suggestion
-            title: List Suggestions
+            title: Lista de Sugerencias
           publish_answers:
-            number_of_suggestions: Answers for %{number} suggestions will be published.
+            number_of_suggestions: Se publicarán las respuestas para %{number} sugerencias.
             select_a_suggestion: Please select a suggestion
             success: Suggestion answers successfully published.
           show:
@@ -196,15 +196,15 @@ es:
             success: Valuator unassigned from suggestions successfully
       document:
         close: Close
-        export_my_suggestions: Export my suggestions
-        global_suggestions: Global suggestions
+        export_my_suggestions: Exportar mis sugerencias
+        global_suggestions: Sugerencias globales
         save_changes: Save changes!
         send_suggestion: Send suggestion
         suggestion_answer: Official answer
         upload_file: Attach a document
       document_suggestions:
         export:
-          empty: There are no suggestions to export.
+          empty: No hay sugerencias para exportar.
           success: "%{count} suggestions have been successfully exported. Please check your email inbox at %{email}."
       documents:
         export_modal:
@@ -214,7 +214,7 @@ es:
         missing: There is no document uploaded yet
         not_supported: This page requires JavaScript to be enabled!
         preview_title: Preview
-        publish_description: 'Admin options: you are previewing the participatory sections of the document'
+        publish_description: 'Opciones de administración: está previsualizando las secciones participativas del documento'
       models:
         document:
           fields:
