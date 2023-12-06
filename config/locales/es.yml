@@ -3,10 +3,10 @@ es:
   activemodel:
     attributes:
       document:
-        box_color: Color of the boxes
-        box_opacity: Opacity applied at the color of the boxes (%)
-        description: Helper description
-        file: PDF Document
+        box_color: Color de las cajas
+        box_opacity: Opacidad aplicada al color de las cajas (%)
+        description: Descripción de ayuda
+        file: Documento PDF
         title: Helper title
       suggestion:
         body: Add your comment
