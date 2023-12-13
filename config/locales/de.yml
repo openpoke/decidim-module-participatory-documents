@@ -9,7 +9,7 @@ de:
         file: PDF Dokument
         title: Titel
       suggestion:
-        body: Add your comment
+        body: Fügen Sie Ihren Kommentar hinzu
     errors:
       models:
         answer_suggestion:
