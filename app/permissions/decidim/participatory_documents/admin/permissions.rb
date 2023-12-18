@@ -24,6 +24,7 @@ module Decidim
             disallow!
           end
           valuator_can_unassign_valuator_from_suggestions?
+          can_assign_valuator_to_suggestions?
         end
 
         def handle_general_permissions
@@ -94,6 +95,12 @@ module Decidim
           return unless permission_action.action == :assign_to_valuator && permission_action.subject == :suggestions
 
           allow!
+        end
+
+        def can_assign_valuator_to_suggestions?
+          return unless permission_action.action == :assign_to_valuator && permission_action.subject == :suggestions
+
+          allow! if valuator_can_unassign_valuator_from_suggestions?
         end
 
         def admin_suggestion_answering_is_enabled?
