@@ -4,7 +4,6 @@ module Decidim
   module ParticipatoryDocuments
     module Admin
       class ValuationAssignmentsController < Admin::ApplicationController
-
         helper_method :suggestion
 
         def create
