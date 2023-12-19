@@ -1,4 +1,4 @@
-<% if valuator_assigned_to_suggestion? %>
+<% if valuator_assigned_to_suggestion? || current_user.admin? %>
   <div id="js-assign-suggestion-to-valuator-actions" class="form-single-suggestion"
        style="max-width:400px">
     <%= form_tag(document_valuation_assignment_path(document), method: :post, id: "js-form-assign-suggestion-to-valuator",

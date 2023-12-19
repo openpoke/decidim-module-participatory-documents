@@ -46,15 +46,24 @@ describe Decidim::ParticipatoryDocuments::Admin::Permissions do
     end
   end
 
-  shared_examples "cannot add valuators to the suggestion" do
-    describe "add other valuators" do
+  shared_examples "can delete valuators from the suggestion" do
+    describe "delete other valuators" do
       let(:action_subject) { :suggestions }
-      let(:action_name) { :assign_to_valuator }
+      let(:action_name) { :unassign_from_valuator }
 
-      # it { expect { subject.allowed? }.to raise_error(Decidim::PermissionAction::PermissionNotSetError) }
       it { expect(subject.allowed?).to be true }
     end
   end
+
+  # shared_examples "cannot add valuators to the suggestion" do
+  #   describe "add other valuators" do
+  #     let(:action_subject) { :suggestions }
+  #     let(:action_name) { :assign_to_valuator }
+  #
+  #     # it { expect { subject.allowed? }.to raise_error(Decidim::PermissionAction::PermissionNotSetError) }
+  #     it { expect(subject.allowed?).to be true }
+  #   end
+  # end
 
   shared_examples "edit suggestion note" do
     describe "edit suggestion note" do
@@ -120,9 +129,6 @@ describe Decidim::ParticipatoryDocuments::Admin::Permissions do
 
     let(:user) { valuator }
 
-    it_behaves_like "can add valuators to the suggestion"
-    it_behaves_like "cannot add valuators to the suggestion"
-
     context "when is assigned" do
       let!(:assigned) { create :suggestion_valuation_assignment, suggestion: suggestion, valuator_role: valuator_role }
 
@@ -135,6 +141,8 @@ describe Decidim::ParticipatoryDocuments::Admin::Permissions do
 
       it_behaves_like "can create a suggestion note", true
       it_behaves_like "can create a suggestion answer", true
+      it_behaves_like "can add valuators to the suggestion", true
+      it_behaves_like "can delete valuators from the suggestion", true
     end
 
     context "when is not assigned" do
