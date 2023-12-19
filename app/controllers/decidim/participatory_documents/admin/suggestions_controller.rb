@@ -11,7 +11,8 @@ module Decidim
         helper Decidim::ParticipatoryDocuments::Admin::SuggestionHelper
         helper Decidim::Messaging::ConversationHelper
 
-        helper_method :suggestions, :suggestion, :notes_form, :find_valuators_for_select, :suggestion_ids, :suggestion_find
+        helper_method :suggestions, :suggestion, :notes_form, :find_valuators_for_select, :suggestion_ids,
+                      :suggestion_find, :valuator_assigned_to_suggestion?
 
         def show
           enforce_permission_to :show, :suggestion, suggestion: suggestion
@@ -173,6 +174,13 @@ module Decidim
 
             [valuator.name, role.id]
           end
+        end
+
+        def valuator_assigned_to_suggestion?
+          @valuator_assigned_to_suggestion ||=
+            Decidim::ParticipatoryDocuments::ValuationAssignment
+            .where(suggestion: suggestion, valuator_role: valuator_roles)
+            .any?
         end
       end
     end

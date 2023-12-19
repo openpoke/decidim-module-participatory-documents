@@ -20,8 +20,7 @@
                       presented_valuator.profile_path,
                       target: :blank
                     ) %>
-
-                <% if allowed_to? :unassign_from_valuator, :suggestions, valuator: assignment.valuator %>
+                <% if valuator_assigned_to_suggestion? %>
                   <%= icon_link_to(
                         "circle-x",
                         document_suggestion_valuation_assignment_path(document, suggestion, assignment.valuator_role),
