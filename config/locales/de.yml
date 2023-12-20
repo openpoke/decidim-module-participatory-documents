@@ -8,6 +8,8 @@ de:
         description: Beschreibung
         file: PDF Dokument
         title: Titel
+      suggestion:
+        body: Fügen Sie Ihren Kommentar hinzu
     errors:
       models:
         answer_suggestion:

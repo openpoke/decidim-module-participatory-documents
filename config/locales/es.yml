@@ -3,96 +3,98 @@ es:
   activemodel:
     attributes:
       document:
-        box_color: Color of the boxes
-        box_opacity: Opacity applied at the color of the boxes (%)
-        description: Helper description
-        file: PDF Document
-        title: Helper title
+        box_color: Color de las cajas
+        box_opacity: Opacidad aplicada al color de las cajas (%)
+        description: Descripción de ayuda
+        file: Documento PDF
+        title: Título de ayuda
+      suggestion:
+        body: Añade tu sugerencia
     errors:
       models:
         answer_suggestion:
           attributes:
             state:
-              inclusion: It's not possible to publish with status "not answered"
+              inclusion: No es posible publicar con estado "sin respuesta"
         document:
-          has_suggestions: This document cannot be changed or removed because it has suggestions
+          has_suggestions: Este documento no puede ser cambiado o eliminado porque tiene sugerencias
         suggestion:
           attributes:
-            not_blank: 'Validation failed: Please provide a message or upload a file'
-            too_long: is too long (over %{max_length} characters)
-            too_short: is too short (under %{min_length} characters)
+            not_blank: 'Validación fallida: Por favor, proporcione un mensaje o suba un archivo'
+            too_long: es demasiado largo (más de %{max_length} caracteres)
+            too_short: es demasiado corto (menos de %{min_length} caracteres)
   decidim:
     admin:
       actions:
-        export: Export
+        export: Exportar
       exports:
-        export_as: "%{name} as %{export_format}"
+        export_as: "%{name} como %{export_format}"
       filters:
         search_placeholder:
-          body_cont: Body Contains
+          body_cont: El cuerpo contiene
         suggestions:
           body_cont:
-            label: Body contains
+            label: El cuerpo contiene
           dummy_author_ids_has:
-            label: Author
+            label: Autor
           dummy_suggestable_id_has:
-            label: Section
+            label: Sección
           state_eq:
-            label: State is
+            label: El estado es
             values:
-              accepted: Accepted
-              evaluating: Evaluating
-              not_answered: Not Answered
-              published: Published
-              rejected: Rejected
-              withdrawn: Withdrawn
+              accepted: Aceptada
+              evaluating: En evaluación
+              not_answered: No contestada
+              published: Publicada
+              rejected: Rechazada
+              withdrawn: Retirada
           valuator_role_ids_has:
-            label: Assigned to valuator
+            label: Asignada a evaluadora
     admin_log:
       annotation:
-        create: "%{user_name} creó una nueva área participativa para %{document_name}"
-        delete: "%{user_name} deleted a participatory area for %{document_name}"
-        update: "%{user_name} has updated a participatory area for %{document_name}"
+        create: "%{user_name} eliminó una nueva área participativa en %{document_name}"
+        delete: "%{user_name} eliminó una nueva área participativa en %{document_name}"
+        update: "%{user_name} ha editado una nueva área participativa en %{document_name}"
       document:
         create: "%{user_name} creó el documento llamado %{resource_name} en %{space_name}"
         delete: "%{user_name} borro el documento llamado %{resource_name} en %{space_name}"
         update: "%{user_name} actualizo el documento llamado %{resource_name} en %{space_name}"
       section:
-        create: "%{user_name} has created a new Section named %{resource_name} for %{document_name}"
-        delete: "%{user_name} has deleted a section"
-        update: "%{user_name} has updated a section in %{document_name}"
+        create: "%{user_name} ha creado una nueva sección participativa llamada %{resource_name} en %{document_name}"
+        delete: "%{user_name} ha eliminado una sección"
+        update: "%{user_name} ha editado una sección en %{document_name}"
       suggestion_note:
-        create: "%{user_name} created a new suggestion note %{suggestion}"
+        create: "%{user_name} ha creado una nueva nota privada en %{suggestion}"
     components:
       participatory_documents:
         name: Documento participativo
         settings:
           global:
-            max_suggestion_length: Maximum suggestion length (characters)
-            min_suggestion_length: Minimum suggestion length (characters)
-            suggestion_answering_enabled: Enable suggestion answering from admin
+            max_suggestion_length: Longitud máxima de la sugerencia (caracteres)
+            min_suggestion_length: Longitud mínima de la sugerencia (caracteres)
+            suggestion_answering_enabled: Habilitar la respuesta de sugerencias des del administrador
     events:
       participatory_documents:
         suggestion_answered:
           affected_user:
-            email_intro: 'A suggestion you submitted on "<a href="%{resource_path}">%{resource_title}</a>" document has been answered by an administrator. You can read the answer in this page:'
-            email_outro: You have received this notification because you have submitted a suggestion for "<a href="%{resource_path}">%{resource_title}</a>" document.
-            email_subject: A suggestion you have submitted has been answered by an administrator
-            notification_title: A suggestion you submitted on "<a href="%{resource_path}">%{resource_title}</a>" document has been answered by an administrator
+            email_intro: 'La sugerencia que enviaste en el documento"<a href="%{resource_path}">%{resource_title}</a>" ha sido respondida por una administradora. Puedes consultar la respuesta en esta página:'
+            email_outro: Ha recibido esta notificación porque envió una sugerencia en el documento "<a href="%{resource_path}">%{resource_title}</a>".
+            email_subject: Una sugerencia que has enviado ha sido respondida por una administradora
+            notification_title: La sugerencia que enviaste en el documento"<a href="%{resource_path}">%{resource_title}</a>" ha sido respondida por una administradora
     forms:
       file_help:
         file:
-          pdf_message: Only PDF files are allowed
+          pdf_message: Solo se permiten archivos PDF
     participatory_documents:
       actions:
         back: Atrás
-        back_edit: Go back to edit participatory sections
-        confirm: This action means that you will not be able to edit the document or create new sections, are you sure?
+        back_edit: Volver atrás para editar las secciones de participación
+        confirm: Esta acción significa que no podrá editar el documento o crear nuevas secciones, ¿está seguro?
         edit_boxes: Editar áreas participativas
         edit_document: Editar/subir documento
-        finish_publishing: Publish participatory sections
+        finish_publishing: Publicar secciones participativas
         new: Subir un documento PDF
-        preview_publishing_sections: Preview and publish sections
+        preview_publishing_sections: Previsualizar y publicar secciones de participación
         title: Acciones
       admin:
         documents:
@@ -103,116 +105,116 @@ es:
             title: Edita el documento participativo
             update: Actualiza
           final_publish:
-            error: There was an error publishing sections
-            success: Sections have been successfully published
+            error: Hubo un error al publicar las secciones
+            success: Las secciones han sido publicadas correctamente
           form:
-            alert_suggestions_html: "<strong>IMPORTANT:</strong> This document cannot be changed or removed because it already has suggestions attached"
-            box_style_preview: 'Box style preview:'
-            warning_sections_html: "<strong>Warning:</strong> If you upload a new document, all the participatory areas will be deleted!"
+            alert_suggestions_html: "<strong>IMPORTANTE:</strong> Este documento no puede ser cambiado o eliminado porque ya tiene sugerencias asociadas"
+            box_style_preview: 'Vista previa del estilo de caja:'
+            warning_sections_html: "<strong>¡Atención!:</strong> Si subes un nuevo documento, todas las secciones de participación serán eliminadas"
           index:
             start: Por favor cargue un documento PDF para empezar
           new:
-            create: Create participatory document
-            title: New participatory document
+            create: Crear documento participativo
+            title: Nuevo documento participativo
           sections:
-            empty: "(empty)"
+            empty: "(vacío)"
           update:
-            error: There was a problem updating Document
+            error: Se ha producido un error al actualizar el documento
             success: El documento ha sido actualizado con éxito
         exports:
-          suggestions: Suggestions
+          suggestions: Sugerencias
         suggestion_notes:
           create:
-            error: There was a problem creating this suggestion note
-            success: Suggestion note successfully created
+            error: Se ha producido un error al crear la nota
+            success: La nota ha sido creada con éxito
           form:
-            note: Note
-            submit: Submit
-          leave_your_note: Leave your note
+            note: Nota
+            submit: Enviar
+          leave_your_note: Deja tu nota
           modal:
-            body: Body
-            title: Edit note
-            update: Update
-          title: Private notes
+            body: Cuerpo
+            title: Editar nota
+            update: Actualizar
+          title: Notas privadas
           update:
-            edited: Edited
-            invalid: There was a problem updating this suggestion note
-            success: Suggestion note successfully updated
+            edited: Editado
+            invalid: Se ha producido un error al actualizar la nota
+            success: La nota ha sido actualizada con éxito
         suggestions:
           answer:
-            invalid: There was an error adding the answer
-            success: Successfully added the answer
+            invalid: Se ha producido un error al añadir la respuesta
+            success: Se añadió correctamente la respuesta
           form:
-            answer: Answer
-            answer_is_published: Published
-            title: Answer Suggestion
+            answer: Respuesta
+            answer_is_published: Publicada
+            title: Respuesta de la sugerencia
           index:
             actions:
-              answer: Answer
-              assign_to_valuator: Assign to valuator
-              assign_to_valuator_button: Assign
-              cancel: Cancel
-              download: download %{filename}
-              publish: Publish
-              publish_answers: Publish answers
-              title: Actions
-              unassign_from_valuator: Unassign from valuator
-              unassign_from_valuator_button: Unassign
-            author: Author
-            created_at: Submitted on
+              answer: Respuesta
+              assign_to_valuator: Asignar a evaluadora
+              assign_to_valuator_button: Asignar
+              cancel: Cancelar
+              download: descargar %{filename}
+              publish: Publicar
+              publish_answers: Publicar respuestas
+              title: Acciones
+              unassign_from_valuator: Desasignar la evaluadora
+              unassign_from_valuator_button: Desasignar
+            author: Autor
+            created_at: Envíado el
             id: Id
-            no_text: "(no text)"
-            published_answer: Published Answer
-            section: Section
-            selected: selected
-            state: State
-            suggestion: Suggestion
-            title: List Suggestions
+            no_text: "(sin texto)"
+            published_answer: Respuesta publicada
+            section: Sección de participación
+            selected: seleccionado
+            state: Estado
+            suggestion: Sugerencia
+            title: Lista de Sugerencias
           publish_answers:
-            number_of_suggestions: Answers for %{number} suggestions will be published.
-            select_a_suggestion: Please select a suggestion
-            success: Suggestion answers successfully published.
+            number_of_suggestions: Se publicarán las respuestas para %{number} sugerencias.
+            select_a_suggestion: Por favor, elige una sugerencia
+            success: Las respuestas en las sugerencias han sido publicadas correctamente.
           show:
-            authors: Authors
-            body: Body
-            created_at: Creation date
-            file: File
-            update: Update
+            authors: Autores
+            body: Cuerpo
+            created_at: Fecha de creación
+            file: Archivo
+            update: Actualizar
           suggestion:
             global: Global
           valuators:
-            assigned_valuators: Assigned valuators
-            remove_assignment: Remove assignment
-            remove_assignment_confirmation: Are you sure you want to remove the valuator from this suggestion?
-            valuators: Valuators
+            assigned_valuators: Evaluadoras asignadas
+            remove_assignment: Eliminar asignación
+            remove_assignment_confirmation: '¿Confirmas que quieres desasignar la evaluadora de esta sugerencia?'
+            valuators: Evaluadoras
         valuation_assignments:
           create:
-            invalid: There was an error assigning suggestions to a valuator
-            success: Suggestions assigned to a valuator successfully
+            invalid: Se ha producido un error al asignar sugerencias a una evaluadora
+            success: Sugerencias asignadas a evaluadora con éxito
           delete:
-            invalid: There was an error unassigning suggestions from a valuator
-            success: Valuator unassigned from suggestions successfully
+            invalid: Se ha producido un error al desasignar sugerencias a una evaluadora
+            success: Evaluadora desasignada correctamente
       document:
-        close: Close
-        export_my_suggestions: Export my suggestions
-        global_suggestions: Global suggestions
-        save_changes: Save changes!
-        send_suggestion: Send suggestion
-        suggestion_answer: Official answer
-        upload_file: Attach a document
+        close: Cerrar
+        export_my_suggestions: Exportar mis sugerencias
+        global_suggestions: Sugerencias globales
+        save_changes: '¡Guardar cambios!'
+        send_suggestion: Enviar sugerencia
+        suggestion_answer: Respuesta oficial
+        upload_file: Adjuntar documento
       document_suggestions:
         export:
-          empty: There are no suggestions to export.
-          success: "%{count} suggestions have been successfully exported. Please check your email inbox at %{email}."
+          empty: No hay sugerencias para exportar.
+          success: "Se han exportado correctamente %{count} sugerencias. Revisa tu bandeja de entrada de correo en %{email}."
       documents:
         export_modal:
-          description_html: You have %{count} suggestions on this document. If you want to export them, you will receive a ZIP file with and Excel document in it with all your data and any possible answer the admins have given to you. <br><br>You will receive an email at <b>%{email}</b>.
-          send: Send me my suggestions
-          title: Export my suggestions
-        missing: There is no document uploaded yet
-        not_supported: This page requires JavaScript to be enabled!
-        preview_title: Preview
-        publish_description: 'Admin options: you are previewing the participatory sections of the document'
+          description_html: Tiene %{count} sugerencias en este documento. Si quiere exportarlo, recibirá un fichero ZIP que contiene un documento Excel con todos sus datos y cualquier posible respuesta que los administradores le hayan dado. <br><br>Recibirá un correo electrónico en <b>%{email}</b>.
+          send: Envíame mis sugerencias
+          title: Exportar mis sugerencias
+        missing: No hay ningún documento subido aún
+        not_supported: '¡Esta página requiere JavaScript para ser habilitada!'
+        preview_title: Previsualizar
+        publish_description: 'Opciones de administración: está previsualizando las secciones participativas del documento'
       models:
         document:
           fields:
@@ -223,37 +225,37 @@ es:
             title: Título
         section:
           fields:
-            artificial_tile: Section %{position}
+            artificial_tile: Sección %{position}
         suggestion:
           fields:
-            valuators: Valuators
+            valuators: Evaluadoras
       'no': 'No'
       suggestions:
         answers:
-          accepted: Accepted
-          evaluating: Evaluating
-          not_answered: Not Answered
-          published: Published
-          rejected: Rejected
-          withdrawn: Withdrawn
+          accepted: Aceptada
+          evaluating: En evaluación
+          not_answered: No contestada
+          published: Publicada
+          rejected: Rechazada
+          withdrawn: Retirada
         modal:
-          exit_full_screen: Exit fullscreen
-          full_screen: Fullscreen
+          exit_full_screen: Salir pantalla completa
+          full_screen: Pantalla Completa
       ui_messages:
-        allSaved: All the areas have been saved successfully
-        confirmExit: Are you sure you want to exit?
-        created: The area has been created
-        errorsSaving: Some errors have occurred while saving the areas
-        group: Group
-        modalTitle: Section %{section}, area %{box}
-        move: Move
-        needsSaving: You have to save the areas before editing them
-        operationFailed: The operation has failed
-        removeBoxConfirm: Are you sure you want to delete this area? This cannot be undone.
-        removed: The area has been removed
-        startEditing: Start creating areas for participation by clicking and dragging. Once created, boxes can be resized, moved, or grouped.
-        startSuggesting: Click on a marked area to participate!
+        allSaved: Todas las áreas han sido guardadas correctamente
+        confirmExit: '¿Seguro que quieres salir?'
+        created: El área ha sido creada
+        errorsSaving: Se han producido algunos errores al guardar las áreas
+        group: Grupo
+        modalTitle: Sección %{section}, área %{box}
+        move: Mover
+        needsSaving: Tienes que guardar las áreas antes de editarlas
+        operationFailed: La operación falló
+        removeBoxConfirm: '¿Está seguro que desea eliminar esta área? Esta acción no se puede deshacer.'
+        removed: El área ha sido eliminada
+        startEditing: Empieza a crear áreas para la participación haciendo clic y arrastrando. Una vez creadas y guardadas, se pueden cambiar el tamaño, mover o agrupar. Una agrupación de áreas es una sección. Finalmente, se publicarán todas las secciones (sean agrupadas en varias áreas o en una sola área).
+        startSuggesting: '¡Haga clic en una sección marcada para participar!'
         suggestion_form:
-          blank: There was an error creating the suggestion. Upload the valid  file or add a text message with the suggestion.
-          title: Write your suggestion or upload a file with your suggestions
+          blank: Se ha producido un error al crear la sugerencia. Sube un archivo válido o añade un mensaje de texto con la sugerencia.
+          title: Escribe tu sugerencia o sube un archivo con tus sugerencias
       'yes': 'Sí'
