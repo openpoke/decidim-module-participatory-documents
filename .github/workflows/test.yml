@@ -40,6 +40,10 @@ jobs:
         with:
           chromedriver-version: 119.0.6045.105
 
+      - uses: nanasess/setup-chromedriver@v2
+        with:
+          chromedriver-version: 119.0.6045.105
+
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ env.RUBY_VERSION }}
