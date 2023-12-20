@@ -19,11 +19,11 @@ module Decidim
           if valuator_assigned_to_suggestion?
             can_create_suggestion_note?
             can_create_suggestion_answer?
+            valuator_can_assign_or_unassign_valuator_from_suggestions?
             allow! if action_is_show_on_suggestion?
           elsif action_is_show_on_suggestion?
             disallow!
           end
-          valuator_can_unassign_valuator_from_suggestions?
         end
 
         def handle_general_permissions
@@ -84,16 +84,8 @@ module Decidim
           permission_action.action == :create
         end
 
-        def can_unassign_valuator_from_suggestions?
-          allow! if permission_action.subject == :suggestions && permission_action.action == :unassign_from_valuator
-        end
-
-        def valuator_can_unassign_valuator_from_suggestions?
-          can_unassign_valuator_from_suggestions? if user == context.fetch(:valuator, nil)
-
-          return unless permission_action.action == :assign_to_valuator && permission_action.subject == :suggestions
-
-          allow!
+        def valuator_can_assign_or_unassign_valuator_from_suggestions?
+          allow! if permission_action.action == :unassign_from_valuator || permission_action.action == :assign_to_valuator
         end
 
         def admin_suggestion_answering_is_enabled?

@@ -53,7 +53,7 @@ describe "Admin manages participatory documents", type: :system do
         click_button "Publish answers"
 
         within ".table-scroll" do
-          expect(page).to have_content("No", count: 3)
+          expect(page).to have_content("No ", count: 3)
           expect(page).to have_content("Yes", count: 1)
         end
 

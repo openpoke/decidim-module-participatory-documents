@@ -4,8 +4,10 @@ module Decidim
   module ParticipatoryDocuments
     module Admin
       class ValuationAssignmentsController < Admin::ApplicationController
+        helper_method :suggestion
+
         def create
-          enforce_permission_to :assign_to_valuator, :suggestions
+          enforce_permission_to :assign_to_valuator, :suggestions, suggestion: suggestion
 
           @form = form(Admin::ValuationAssignmentForm).from_params(params)
 
@@ -25,7 +27,7 @@ module Decidim
         def destroy
           @form = form(Admin::ValuationAssignmentForm).from_params(destroy_params)
 
-          enforce_permission_to :unassign_from_valuator, :suggestions, valuator: @form.valuator_user
+          enforce_permission_to :unassign_from_valuator, :suggestions, valuator: @form.valuator_user, suggestion: suggestion
 
           Admin::UnassignSuggestionsFromValuator.call(@form) do
             on(:ok) do |_proposal|
@@ -45,6 +47,10 @@ module Decidim
         end
 
         private
+
+        def suggestion
+          @suggestion ||= Decidim::ParticipatoryDocuments::Suggestion.find(params[:suggestion_ids] || [params[:suggestion_id]])
+        end
 
         def destroy_params
           {

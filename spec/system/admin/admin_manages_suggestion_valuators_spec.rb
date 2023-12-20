@@ -110,7 +110,7 @@ describe "Admin manages suggestion valuators", type: :system do
     end
   end
 
-  context "when unassigning valuators from a proposal from the suggestion index page" do
+  context "when unassigning valuators from the suggestion index page" do
     let(:assigned_suggestion) { suggestion }
 
     before do
@@ -152,7 +152,7 @@ describe "Admin manages suggestion valuators", type: :system do
     end
   end
 
-  context "when unassigning valuators from a proposal from the suggestion show page" do
+  context "when unassigning valuators from the suggestion show page" do
     let(:assigned_suggestion) { suggestion }
 
     before do
@@ -176,6 +176,45 @@ describe "Admin manages suggestion valuators", type: :system do
       expect(page).to have_content("Valuator unassigned from suggestions successfully")
 
       expect(page).to have_no_selector("#valuators")
+    end
+  end
+
+  context "when valuators assign another valuator" do
+    let(:assigned_suggestion) { suggestion }
+    let(:another_valuator) { create :user, :confirmed, :admin_terms_accepted, organization: organization }
+    let!(:another_valuator_role) { create :participatory_process_user_role, role: :valuator, user: another_valuator, participatory_process: participatory_process }
+
+    before do
+      sign_in valuator
+      create :suggestion_valuation_assignment, suggestion: suggestion, valuator_role: valuator_role
+      visit current_path
+    end
+
+    context "when the valuator is assigned" do
+      before do
+        within find("tr", text: assigned_suggestion.id) do
+          click_link "Answer"
+        end
+
+        within "#js-form-assign-suggestion-to-valuator" do
+          find("#valuator_role_id").click
+          find("option", text: another_valuator.name).click
+        end
+
+        click_button "Assign"
+      end
+
+      it "shows the valuator is assigned" do
+        expect(page).to have_content("Suggestions assigned to a valuator successfully")
+      end
+    end
+
+    context "when the valuator is not assigned" do
+      let!(:another_suggestion) { create(:participatory_documents_suggestion, suggestable: section1) }
+
+      it "doesn't show suggestion" do
+        expect(page).not_to have_css("tr", text: another_suggestion.id)
+      end
     end
   end
 
