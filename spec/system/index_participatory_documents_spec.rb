@@ -58,6 +58,17 @@ describe "Index participatory_documents", type: :system do
     end
   end
 
+  context "when the document has a description with potential XSS" do
+    let!(:title) { '<p>Safe title text<img src="about:blank" onerror="alert(777)"></p>' }
+    let!(:description) { '<p>Safe description text<img src="about:blank" onerror="alert(777)"></p>' }
+
+    it "show sanitized title and description" do
+      expect(page).to have_content("Safe title text")
+      expect(page).to have_content("Safe description text")
+      expect { page.driver.browser.switch_to.alert }.to raise_error(Selenium::WebDriver::Error::NoSuchAlertError)
+    end
+  end
+
   # TODO: Fix this test
   # context "when user goes to fullscreen mode" do
   #   it "changes button text and class" do

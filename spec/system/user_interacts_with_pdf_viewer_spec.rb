@@ -271,4 +271,21 @@ describe "User interaction with PDF viewer", type: :system do
       end
     end
   end
+
+  context "when the suggestion answer has a text with potential XSS" do
+    let!(:document) { create :participatory_documents_document, :with_file, component: component }
+    let!(:suggestion) { create(:participatory_documents_suggestion, :published, author: document.author, suggestable: document, answer: { en: answer }) }
+    let!(:answer) { '<p>Safe answer text<img src="about:blank" onerror="alert(777)"></p>' }
+
+    before do
+      login_as document.author, scope: :user
+      page.visit Decidim::EngineRouter.main_proxy(component).pdf_viewer_documents_path(file: document.attached_uploader(:file).path)
+      find("#globalSuggestionTrigger").click
+    end
+
+    it "show sanitized answer" do
+      expect(page).to have_content("Safe answer text")
+      expect { page.driver.browser.switch_to.alert }.to raise_error(Selenium::WebDriver::Error::NoSuchAlertError)
+    end
+  end
 end
