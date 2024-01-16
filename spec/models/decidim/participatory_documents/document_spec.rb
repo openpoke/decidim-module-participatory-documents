@@ -247,7 +247,7 @@ module Decidim
 
         context "when not ratonvirus defined" do
           before do
-            allow(ParticipatoryDocuments).to receive(:antivirus_enabled?).and_return(false)
+            allow(ParticipatoryDocuments).to receive(:antivirus_enabled).and_return(false)
             Decidim::ParticipatoryDocuments.send(:remove_const, :Document)
             load "decidim/participatory_documents/document.rb"
           end
@@ -261,7 +261,7 @@ module Decidim
 
         context "when defined ratonvirus" do
           before do
-            allow(ParticipatoryDocuments).to receive(:antivirus_enabled?).and_return(true)
+            allow(ParticipatoryDocuments).to receive(:antivirus_enabled).and_return(true)
             Decidim::ParticipatoryDocuments.send(:remove_const, :Document)
             load "decidim/participatory_documents/document.rb"
           end

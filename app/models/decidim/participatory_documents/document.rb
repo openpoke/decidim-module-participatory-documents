@@ -18,7 +18,7 @@ module Decidim
       has_one_attached :file
       validates_upload :file, uploader: Decidim::ParticipatoryDocuments::PdfDocumentUploader
       # compatibility with ratonvirus (see https://github.com/mainio/decidim-module-antivirus)
-      validates :file, antivirus: true if ParticipatoryDocuments.antivirus_enabled?
+      validates :file, antivirus: true if ParticipatoryDocuments.antivirus_enabled
 
       has_many :sections, class_name: "Decidim::ParticipatoryDocuments::Section", dependent: :restrict_with_error
       has_many :suggestions, class_name: "Decidim::ParticipatoryDocuments::Suggestion", dependent: :restrict_with_error, as: :suggestable
@@ -32,7 +32,7 @@ module Decidim
 
       # override the delegate from HasComponent for the dynamic upload validator
       def organization
-        @organization ||= component&.organization
+        component&.organization || @organization
       end
 
       def self.log_presenter_class_for(_log)

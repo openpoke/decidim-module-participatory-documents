@@ -16,12 +16,11 @@ module Decidim
         attribute :box_opacity, Integer, default: 12
         attribute :organization
 
-        attribute :file
+        attribute :file, Decidim::Attributes::Blob
         attribute :remove_file, Boolean, default: false
 
-        # validates :file, presence: true, unless: :persisted?
         validates :file, passthru: { to: Document }, if: ->(form) { form.file.present? }
-        validates :file, file_content_type: { allow: ["application/pdf"] }, if: ->(form) { form.file.present? }
+        validates :file, file_content_type: { allow: ["application/pdf"] }
 
         # ensure color and opacity are present
         def map_model(doc)

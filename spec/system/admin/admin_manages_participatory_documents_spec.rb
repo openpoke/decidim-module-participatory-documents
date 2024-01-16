@@ -9,10 +9,6 @@ describe "Admin manages participatory documents", type: :system do
   let(:default_color) { "rgb(30, 152, 215)" }
   let(:default_color_with_opacity) { "rgba(30, 152, 215, 0.12)" }
 
-  def upload_file
-    document.file.attach(io: File.open(Decidim::Dev.asset("Exampledocument.pdf")), filename: "Exampledocument.pdf")
-  end
-
   include_context "when managing a component as an admin"
 
   context "when document is not created" do
