@@ -22,7 +22,7 @@ module Decidim
 
         def new
           enforce_permission_to :create, :participatory_document
-          @form = form(DocumentForm).from_params(params)
+          @form = form(DocumentForm).instance
         end
 
         def create

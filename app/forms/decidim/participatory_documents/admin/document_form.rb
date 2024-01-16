@@ -15,10 +15,21 @@ module Decidim
         attribute :box_color, String, default: "#1e98d7"
         attribute :box_opacity, Integer, default: 12
 
-        attribute :file, Decidim::Attributes::Blob
+        attribute :file
         attribute :remove_file, Boolean, default: false
 
+        validates :file, presence: true, unless: :persisted?
+        validates :file, passthru: { to: Document }
         validates :file, file_content_type: { allow: ["application/pdf"] }
+
+        delegate :attached_to, to: :context, prefix: false
+
+        alias organization current_organization
+
+        def self.from_params(params, additional_params = {})
+          super(params, additional_params)
+        end
+
         # ensure color and opacity are present
         def map_model(doc)
           self.box_color = doc.box_color.presence || "#1e98d7"
