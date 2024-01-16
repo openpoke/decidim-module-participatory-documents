@@ -74,6 +74,8 @@ This module has a builtin compatibility with https://github.com/mainio/decidim-m
 
 If the antivirus is not installed, the module will still work but the documents will not be scanned.
 
+> Note: this module only checks for the existance of the class `AntivirusValidator` so it is possible to use any other antivirus validator as well (a custom one for instance).
+
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/openpoke/decidim-module-participatory-documents.
