@@ -2,6 +2,10 @@
 
 require "spec_helper"
 
+class AntivirusValidator < ActiveModel::EachValidator
+  def validate_each(record, attribute, value); end
+end
+
 module Decidim
   module ParticipatoryDocuments
     describe Document do
@@ -216,6 +220,56 @@ module Decidim
             expect(section1.position).to eq(0)
             expect(section2.position).to eq(0)
             expect(section3.position).to eq(0)
+          end
+        end
+      end
+
+      describe "antivirus compatibility" do
+        let(:document) { build(:participatory_documents_document, component: nil, author: nil) }
+
+        it "is invalid" do
+          expect(document).to be_invalid
+          expect(document.errors.full_messages).to include("Component must exist")
+          expect(document.errors.full_messages).to include("Author must exist")
+          expect(document.errors.full_messages).to include("File The file is not attached to any organization")
+        end
+
+        context "when defined organization" do
+          let(:document) { build(:participatory_documents_document, component: nil, author: nil, organization: organization) }
+
+          it "does not complain about organization" do
+            expect(document).to be_invalid
+            expect(document.errors.full_messages).to include("Component must exist")
+            expect(document.errors.full_messages).to include("Author must exist")
+            expect(document.errors.full_messages).not_to include("File The file is not attached to any organization")
+          end
+        end
+
+        context "when not ratonvirus defined" do
+          before do
+            allow(ParticipatoryDocuments).to receive(:antivirus_enabled?).and_return(false)
+            Decidim::ParticipatoryDocuments.send(:remove_const, :Document)
+            load "decidim/participatory_documents/document.rb"
+          end
+
+          it "has file validator only" do
+            document = Document.new
+            expect(document._validators[:file]).to include(an_instance_of(ActiveModel::Validations::FileSizeValidator))
+            expect(document._validators[:file]).not_to include(an_instance_of(AntivirusValidator))
+          end
+        end
+
+        context "when defined ratonvirus" do
+          before do
+            allow(ParticipatoryDocuments).to receive(:antivirus_enabled?).and_return(true)
+            Decidim::ParticipatoryDocuments.send(:remove_const, :Document)
+            load "decidim/participatory_documents/document.rb"
+          end
+
+          it "has antivirus validator" do
+            document = Document.new
+            expect(document._validators[:file]).to include(an_instance_of(ActiveModel::Validations::FileSizeValidator))
+            expect(document._validators[:file]).to include(an_instance_of(AntivirusValidator))
           end
         end
       end

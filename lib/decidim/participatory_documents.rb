@@ -22,6 +22,10 @@ module Decidim
     config_accessor :max_suggestion_length do
       ENV.fetch("MAX_SUGGESTION_LENGTH", 1000).to_i
     end
+
+    def self.antivirus_enabled?
+      defined?(AntivirusValidator)
+    end
   end
 end
 

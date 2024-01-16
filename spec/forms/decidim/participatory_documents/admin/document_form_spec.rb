@@ -25,7 +25,7 @@ module Decidim::ParticipatoryDocuments::Admin
       let(:box_color) { nil }
       let(:box_opacity) { nil }
 
-      it "is invalid" do
+      it "is valid" do
         expect(subject).to be_valid
         expect(subject.box_color).to eq("#1e98d7")
         expect(subject.box_opacity).to eq(12)
@@ -33,7 +33,8 @@ module Decidim::ParticipatoryDocuments::Admin
     end
 
     context "when from params" do
-      subject { described_class.from_params(params) }
+      subject { described_class.from_params(params).with_context(current_organization: organization) }
+      let(:organization) { create(:organization) }
 
       let(:params) do
         {
@@ -74,7 +75,7 @@ module Decidim::ParticipatoryDocuments::Admin
         let(:file) { upload_test_file(Decidim::Dev.test_file("dummy-dummies-example.json", "application/pdf")) }
 
         it "is valid" do
-          expect(subject).to be_valid
+          expect(subject).to be_invalid
         end
       end
     end

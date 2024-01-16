@@ -41,8 +41,10 @@ Depending on your Decidim version, you can choose the corresponding version to e
 
 ## Usage
 
-TODO...
+This module adds a new component to Decidim called `Participatory Documents` that allows to upload PDFs and define areas on top of it that will become spaces for suggestions or comments.
 
+The administrator must upload a PDF file and then define areas on top of it by drawing polygons. 
+Each area will become a new zone that will allow users to create suggestions.
 
 ## Configuration
 
@@ -65,6 +67,12 @@ Decidim::ParticipatoryDocuments.configure do |config|
   config.max_suggestion_length = 1000
 end
 ```
+
+## Antivirus compatibility
+
+This module has a builtin compatibility with https://github.com/mainio/decidim-module-antivirus to scan the uploaded documents (it is also possible to directly use the gem https://github.com/mainio/ratonvirus if configuring it in a initializer).
+
+If the antivirus is not installed, the module will still work but the documents will not be scanned.
 
 ## Contributing
 
