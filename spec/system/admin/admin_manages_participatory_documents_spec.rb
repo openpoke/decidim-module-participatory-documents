@@ -9,10 +9,6 @@ describe "Admin manages participatory documents", type: :system do
   let(:default_color) { "rgb(30, 152, 215)" }
   let(:default_color_with_opacity) { "rgba(30, 152, 215, 0.12)" }
 
-  def upload_file
-    document.file.attach(io: File.open(Decidim::Dev.asset("Exampledocument.pdf")), filename: "Exampledocument.pdf")
-  end
-
   include_context "when managing a component as an admin"
 
   context "when document is not created" do
@@ -76,6 +72,28 @@ describe "Admin manages participatory documents", type: :system do
 
     it "has no areas delete warning" do
       expect(page).not_to have_content("all the participatory areas will be deleted!")
+    end
+
+    context "when file has a virus" do
+      before do
+        AntivirusValidator.fake_virus = true
+      end
+
+      after do
+        AntivirusValidator.fake_virus = false
+      end
+
+      it "shows an error" do
+        within ".documents_form" do
+          fill_in_i18n(
+            :document_title,
+            "#document-title-tabs",
+            en: "This is my document"
+          )
+        end
+        dynamically_attach_file :document_file, Decidim::Dev.asset("Exampledocument.pdf"), keep_modal_open: true
+        expect(page).to have_content("errors.messages.virus")
+      end
     end
   end
 

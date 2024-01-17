@@ -21,8 +21,12 @@ module Decidim
               create_document
             end
             broadcast(:ok, document)
-          rescue ActiveRecord::RecordInvalid
-            form.errors.add(:file, document.errors[:file]) if document.errors.include? :file
+          rescue ActiveRecord::RecordInvalid => e
+            if document&.errors&.include? :file
+              form.errors.add(:file, document.errors[:file])
+            else
+              form.errors.add(:file, e.message)
+            end
             broadcast(:invalid)
           end
         end
