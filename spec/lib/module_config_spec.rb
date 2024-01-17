@@ -29,7 +29,8 @@ module Decidim
         expect(config).to eq({
                                "max_export_text_length" => 11,
                                "min_suggestion_length" => 33,
-                               "max_suggestion_length" => 77
+                               "max_suggestion_length" => 77,
+                               "antivirus_enabled" => false
                              })
       end
     end

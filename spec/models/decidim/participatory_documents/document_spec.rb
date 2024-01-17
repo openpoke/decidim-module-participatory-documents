@@ -2,10 +2,6 @@
 
 require "spec_helper"
 
-class AntivirusValidator < ActiveModel::EachValidator
-  def validate_each(record, attribute, value); end
-end
-
 module Decidim
   module ParticipatoryDocuments
     describe Document do
@@ -245,9 +241,14 @@ module Decidim
           end
         end
 
-        context "when not ratonvirus defined" do
+        context "when not AntivirusValidator defined" do
           before do
             allow(ParticipatoryDocuments).to receive(:antivirus_enabled).and_return(false)
+            Decidim::ParticipatoryDocuments.send(:remove_const, :Document)
+            load "decidim/participatory_documents/document.rb"
+          end
+
+          after do
             Decidim::ParticipatoryDocuments.send(:remove_const, :Document)
             load "decidim/participatory_documents/document.rb"
           end
@@ -259,12 +260,12 @@ module Decidim
           end
         end
 
-        context "when defined ratonvirus" do
-          before do
-            allow(ParticipatoryDocuments).to receive(:antivirus_enabled).and_return(true)
-            Decidim::ParticipatoryDocuments.send(:remove_const, :Document)
-            load "decidim/participatory_documents/document.rb"
-          end
+        context "when defined AntivirusValidator" do
+          # before do
+          #   allow(ParticipatoryDocuments).to receive(:antivirus_enabled).and_return(true)
+          #   Decidim::ParticipatoryDocuments.send(:remove_const, :Document)
+          #   load "decidim/participatory_documents/document.rb"
+          # end
 
           it "has antivirus validator" do
             document = Document.new

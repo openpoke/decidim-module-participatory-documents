@@ -24,7 +24,7 @@ module Decidim
     end
 
     config_accessor :antivirus_enabled do
-      defined?(AntivirusValidator)
+      defined?(AntivirusValidator) ? true : false
     end
   end
 end
