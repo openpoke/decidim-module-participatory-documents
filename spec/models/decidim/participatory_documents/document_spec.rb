@@ -261,11 +261,11 @@ module Decidim
         end
 
         context "when defined AntivirusValidator" do
-          # before do
-          #   allow(ParticipatoryDocuments).to receive(:antivirus_enabled).and_return(true)
-          #   Decidim::ParticipatoryDocuments.send(:remove_const, :Document)
-          #   load "decidim/participatory_documents/document.rb"
-          # end
+          before do
+            allow(ParticipatoryDocuments).to receive(:antivirus_enabled).and_return(true)
+            Decidim::ParticipatoryDocuments.send(:remove_const, :Document)
+            load "decidim/participatory_documents/document.rb"
+          end
 
           it "has antivirus validator" do
             document = Document.new
