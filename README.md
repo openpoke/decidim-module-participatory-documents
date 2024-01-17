@@ -4,7 +4,7 @@
 [![[CI] Test](https://github.com/openpoke/decidim-module-participatory-documents/actions/workflows/test.yml/badge.svg)](https://github.com/openpoke/decidim-module-participatory-documents/actions/workflows/test.yml)
 [![Maintainability](https://api.codeclimate.com/v1/badges/b55516d46671ac78a43f/maintainability)](https://codeclimate.com/github/openpoke/decidim-module-participatory-documents/maintainability)
 [![codecov](https://codecov.io/gh/openpoke/decidim-module-participatory-documents/branch/main/graph/badge.svg?token=TMZHD2XO6U)](https://codecov.io/gh/openpoke/decidim-module-participatory-documents)
-[![Gem Version](https://badge.fury.io/rb/decidim-participatory-documents.svg)](https://badge.fury.io/rb/decidim-participatory-documents)
+[![Gem Version](https://badge.fury.io/rb/decidim-participatory_documents.svg)](https://badge.fury.io/rb/decidim-participatory_documents)
 
 This module allows to upload PDF (and possibilty other formats) and define areas on top of it that will become spaces for suggestions, improvements and other participative activities.
 
