@@ -162,7 +162,7 @@ de:
               unassign_from_valuator_button: Aufheben
             author: Verfasser/in
             created_at: Eingereicht am
-            id: id
+            id: ID
             no_text: "(kein Text)"
             published_answer: Veröffentlichte Antwort
             section: Abschnitt
@@ -219,7 +219,7 @@ de:
         document:
           fields:
             document_pages: Seitennummern
-            id: id
+            id: ID
             published: Veröffentlicht
             state: Status
             title: Titel
