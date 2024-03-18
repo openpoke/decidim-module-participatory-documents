@@ -1,6 +1,7 @@
-// Images
-require.context("../images", true)
+import "src/decidim/participatory_documents/participatory_documents_application.js"
 
+// Styles
 import "entrypoints/decidim_participatory_documents.scss";
 
-import "../src/decidim/participatory_documents/skip_cookie_warning.js"
+// Images
+require.context("../images", true)

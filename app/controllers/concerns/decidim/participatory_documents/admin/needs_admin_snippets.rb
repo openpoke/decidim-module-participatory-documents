@@ -8,15 +8,15 @@ module Decidim
         extend ActiveSupport::Concern
 
         included do
-          before_action :add_snippets
+          # before_action :add_snippets
 
           private
 
           def add_snippets
             return unless respond_to?(:snippets)
 
-            snippets.add(:head, helpers.stylesheet_pack_tag("decidim_participatory_documents_admin"))
-            snippets.add(:foot, helpers.javascript_pack_tag("decidim_participatory_documents_admin"))
+            snippets.add(:head, helpers.stylesheet_pack_tag("decidim_admin_participatory_documents"))
+            snippets.add(:foot, helpers.append_javascript_pack_tag("decidim_admin_participatory_documents"))
           end
         end
       end

@@ -1,6 +1,6 @@
-@import "stylesheets/decidim/admin/variables";
-@import "stylesheets/decidim/utils/fontface";
-@import "stylesheets/decidim/admin/utils/settings";
+//@import "stylesheets/decidim/admin/variables";
+//@import "stylesheets/decidim/utils/fontface";
+//@import "stylesheets/decidim/admin/utils/settings";
 
 .box {
   position: absolute;
@@ -12,7 +12,7 @@
   border-width: 2px;
   resize: none;
   box-sizing: content-box;
-  font-family: $body-font-family;
+  //font-family: $body-font-family;
   font-weight: 400;
   font-size: 13px;
 

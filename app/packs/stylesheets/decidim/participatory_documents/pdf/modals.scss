@@ -1,16 +1,16 @@
-@import "stylesheets/decidim/variables";
-@import "stylesheets/decidim/utils/fontface";
-@import "stylesheets/decidim/utils/settings";
-@import "stylesheets/decidim/utils/mixins";
-@import "foundation-sites/scss/foundation";
-@import "stylesheets/decidim/modules/icons";
-@import "stylesheets/decidim/modules/margins";
-@import "stylesheets/decidim/modules/callout";
-@import "stylesheets/decidim/utils/helpers";
-
-@include foundation-everything();
-
-@import "stylesheets/decidim/modules/comments";
+//@import "stylesheets/decidim/variables";
+//@import "stylesheets/decidim/utils/fontface";
+//@import "stylesheets/decidim/utils/settings";
+//@import "stylesheets/decidim/utils/mixins";
+//@import "foundation-sites/scss/foundation";
+//@import "stylesheets/decidim/modules/icons";
+//@import "stylesheets/decidim/modules/margins";
+//@import "stylesheets/decidim/modules/callout";
+//@import "stylesheets/decidim/utils/helpers";
+//
+//@include foundation-everything();
+//
+//@import "stylesheets/decidim/modules/comments";
 
 .reveal-overlay {
   z-index: 100000;
@@ -26,10 +26,10 @@
   display: none;
   margin: 0;
   padding: 0;
-  font-family: $body-font-family;
-  font-weight: $global-weight-normal;
-  line-height: $global-lineheight;
-  color: $body-font-color;
+  //font-family: $body-font-family;
+  //font-weight: $global-weight-normal;
+  //line-height: $global-lineheight;
+  //color: $body-font-color;
 
   &.show {
     display: block;

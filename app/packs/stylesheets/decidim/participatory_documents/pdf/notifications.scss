@@ -1,6 +1,6 @@
-@import "stylesheets/decidim/admin/variables";
-@import "stylesheets/decidim/utils/fontface";
-@import "stylesheets/decidim/admin/utils/settings";
+//@import "stylesheets/decidim/admin/variables";
+//@import "stylesheets/decidim/utils/fontface";
+//@import "stylesheets/decidim/admin/utils/settings";
 
 #notifications {
   position: fixed;
@@ -10,14 +10,14 @@
   z-index: 100000;
   display: none;
   box-shadow: 0 0 10px rgba(0, 0, 0, .5);
-  font-family: $body-font-family;
-  font-weight: $global-weight-normal;
-  line-height: $global-lineheight;
-  color: $body-font-color;
-  border: 1px solid rgba($black, .25);
+  //font-family: $body-font-family;
+  //font-weight: $global-weight-normal;
+  //line-height: $global-lineheight;
+  //color: $body-font-color;
+  //border: 1px solid rgba($black, .25);
   border-radius: 5px;
   padding: 1rem;
-  background: scale-color($success-color, $lightness: 75%);
+  //background: scale-color($success-color, $lightness: 75%);
   text-shadow: 0 0 8px #fff;
   background-color: var(--notifications-color-rgba);
 
@@ -25,7 +25,7 @@
     display: block;
   }
 
-  &.alert {
-    background: scale-color($alert-color, $lightness: 75%);
-  }
+  //&.alert {
+  //  background: scale-color($alert-color, $lightness: 75%);
+  //}
 }

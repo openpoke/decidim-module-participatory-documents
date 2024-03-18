@@ -1,5 +1,5 @@
 <div id="js-assign-suggestions-to-valuator-actions" class="hide js-bulk-action-form">
-  <%= form_tag(document_valuation_assignment_path(document), method: :post, id: "js-form-assign-suggestions-to-valuator", class: "flex--cc flex-gap--1") do %>
+  <%= form_tag(document_valuation_assignment_path(document), method: :post, id: "js-form-assign-suggestions-to-valuator", class: "") do %>
     <div class="checkboxes hide">
       <% suggestions.each do |suggestion| %>
         <%= check_box_tag "suggestion_ids[]", suggestion.id, false, class: "js-check-all-suggestion js-suggestion-id-#{suggestion.id}" %>

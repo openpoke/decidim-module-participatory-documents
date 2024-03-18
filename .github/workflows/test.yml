@@ -7,10 +7,10 @@ on:
   pull_request:
 
 env:
-  RUBY_VERSION: 3.0.6
+  RUBY_VERSION: 3.1.1
   SIMPLECOV: 1
   CI: 1
-  NODE_VERSION: 16.9.1
+  NODE_VERSION: 18.17.1
 
 jobs:
   test-report:

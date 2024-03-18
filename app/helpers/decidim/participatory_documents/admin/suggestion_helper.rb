@@ -14,7 +14,7 @@ module Decidim
         def icon_with_link_to_suggestion(document, suggestion)
           return unless allowed_to?(:create, :suggestion_note, suggestion: suggestion) || allowed_to?(:update, :suggestion_answer, suggestion: suggestion)
 
-          icon_link_to("comment-square",
+          icon_link_to("question-answer-line",
                        document_suggestion_path(document, suggestion),
                        t(:answer, scope: "decidim.participatory_documents.admin.suggestions.index.actions"),
                        class: "icon--small action-icon--show-suggestion")

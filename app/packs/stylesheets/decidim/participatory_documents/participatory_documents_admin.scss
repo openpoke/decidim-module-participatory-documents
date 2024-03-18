@@ -1,6 +1,6 @@
 @use "sass:meta";
 
-@import "stylesheets/decidim/participatory_documents/pdf/defaults.scss";
+@import "stylesheets/decidim/participatory_documents/pdf/defaults";
 
 .process-content {
   flex-direction: column;
@@ -66,4 +66,16 @@
       font-weight: 600;
     }
   }
+}
+
+.button__success {
+  @apply bg-success text-white ml-1;
+}
+
+.button__warning {
+  @apply bg-warning text-white ml-1;
+}
+
+.button__alert {
+  @apply bg-alert text-white ml-1;
 }
