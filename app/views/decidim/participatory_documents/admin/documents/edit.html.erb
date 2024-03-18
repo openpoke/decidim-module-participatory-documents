@@ -7,7 +7,7 @@
 
 <div class="item__edit item__edit-1col">
   <div class="item__edit-form">
-    <%= decidim_form_for(@form, url: { action: "update" }, html: { class: "form documents_form edit_document" }) do |f| %>
+    <%= decidim_form_for(@form, url: { action: "update" }, html: { class: "form-defaults form documents_form edit_document" }) do |f| %>
       <%= render partial: "form", object: f, locals: { form: f, title: t(".title") } %>
       <div class="item__edit-sticky">
         <div class="item__edit-sticky-container">

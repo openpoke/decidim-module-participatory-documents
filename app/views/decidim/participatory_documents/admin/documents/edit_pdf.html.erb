@@ -1,16 +1,19 @@
-<div class="card full-height">
-  <div class="card-divider">
-    <h2 class="card-title flex--sbc">
-      <%= translated_attribute(current_component.name) %>
-      <%= render "title", button: :back %>
-      <div class=""><%= preview_sections_btn %></div>
-    </h2>
-  </div>
+<div class="item_show__header">
+  <h1 class="item_show__header-title">
+    <%= translated_attribute(current_component.name) %>
+    <%= render "title", button: :back %>
+    <div class=""><%= preview_sections_btn %></div>
+  </h1>
+</div>
+<div class="item__edit item__edit-1col">
   <div class="card-section pdf-viewer-container">
     <iframe src="<%= pdf_viewer_documents_path(file: document.attached_uploader(:file).path) %>" width="100%" height="100%" id="pdf-iframe" frameborder="0" allowfullscreen_="" webkitallowfullscreen_="true" mozallowfullscreen_="true" oallowfullscreen_="true" msallowfullscreen_="true">
-        <noscript>
-          <h3 class="text-center"><%= t("decidim.participatory_documents.documents.not_supported") %></h3>
-        </noscript>
-      </iframe>
+      <noscript>
+        <h3 class="text-center"><%= t("decidim.participatory_documents.documents.not_supported") %></h3>
+      </noscript>
+    </iframe>
   </div>
 </div>
+<%= append_stylesheet_pack_tag "decidim_admin_participatory_documents" %>
+<%= append_javascript_pack_tag "decidim_admin_participatory_documents" %>
+```

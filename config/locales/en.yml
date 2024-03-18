@@ -28,6 +28,7 @@ en:
     admin:
       actions:
         export: Export
+        manage: Manage
       exports:
         export_as: "%{name} as %{export_format}"
       filters:
