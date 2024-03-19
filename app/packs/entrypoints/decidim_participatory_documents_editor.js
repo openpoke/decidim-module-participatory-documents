@@ -1,7 +1,7 @@
-import "../src/decidim/participatory_documents/pdf_admin.js"
+import "src/decidim/participatory_documents/pdf_admin.js"
+import "src/decidim/participatory_documents/pdf/pdf_modal_manager.js"
 import $ from "jquery"; // eslint-disable-line id-length
 import "foundation-sites";
-
 import "entrypoints/decidim_participatory_documents_editor.scss";
 
 const csrfToken = document.getElementsByName("csrf-token");

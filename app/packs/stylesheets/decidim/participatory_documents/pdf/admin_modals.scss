@@ -1,9 +1,5 @@
 @use "sass:meta";
 
-//@import "stylesheets/decidim/admin/variables";
-//@import "stylesheets/decidim/utils/fontface";
-//@import "stylesheets/decidim/admin/utils/settings";
-
 .reveal-overlay {
   z-index: 100000;
 }
@@ -23,7 +19,34 @@
   //line-height: $global-lineheight;
   //color: $body-font-color;
 
-  //@include meta.load-css("stylesheets/decidim/participatory_documents/pdf/decidim_admin_styles.scss");
+  @include meta.load-css("stylesheets/decidim/participatory_documents/pdf/decidim_admin_styles.scss");
+
+  .reveal-overlay {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1005;
+    display: none;
+    background-color: rgba(26, 24, 29, 0.45);
+    overflow-y: auto;
+  }
+
+  .reveal {
+    z-index: 1006;
+    backface-visibility: hidden;
+    display: none;
+    padding: 1rem;
+    border: 1px solid #adadad;
+    border-radius: 4px;
+    background-color: #eee;
+    position: relative;
+    top: 100px;
+    margin-right: auto;
+    margin-left: auto;
+    overflow-y: auto;
+  }
 
   &.show {
     display: block;
@@ -36,6 +59,16 @@
       }
     }
   }
+}
+
+[data-dialog-closable] {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 24px;
+  line-height: 30px;
+  --tw-text-opacity: 1;
+  color: rgb(var(--secondary-rgb) / 1);
 }
 
 @keyframes blinker {
