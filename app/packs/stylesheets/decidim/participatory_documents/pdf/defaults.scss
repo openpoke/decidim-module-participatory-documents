@@ -5,3 +5,23 @@
   --notifications-color-rgba: rgba(30, 152, 215, .6);
   --suggestions-modal-color-hsla: hsla(213, 48%, 90%, .95);
 }
+
+.button__success {
+  @apply bg-success text-white ml-1;
+}
+
+.button__warning {
+  @apply bg-warning text-white ml-1;
+}
+
+.button__alert {
+  @apply bg-alert text-white ml-1;
+}
+
+.callout {
+  .button__success,
+  .button__warning,
+  .button__alert {
+    @apply text-white ml-0;
+  }
+}

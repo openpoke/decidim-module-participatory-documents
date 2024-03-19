@@ -3,7 +3,7 @@
 module Decidim
   module ParticipatoryDocuments
     class DocumentsController < Decidim::ParticipatoryDocuments::ApplicationController
-      include NeedsPdfDocument
+      # include NeedsPdfDocument
       helper Decidim::LayoutHelper
 
       def index

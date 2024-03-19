@@ -1,6 +1,5 @@
-/* stylelint-disable selector-type-no-unknown */
-//@import "stylesheets/decidim/variables";
-//@import "stylesheets/decidim/utils/mixins";
+@import "stylesheets/decidim/participatory_documents/pdf/defaults";
+@import "stylesheets/decidim/participatory_documents/pdf/polygons";
 
 #loginModal-label {
   outline: none;
