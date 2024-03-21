@@ -48,6 +48,7 @@ module Decidim
 
       initializer "decidim_decidim_participatory_documents.register_icons" do
         Decidim.icons.register(name: "checkbox-multiple-line", icon: "checkbox-multiple-line", category: "system", description: "", engine: :decidim_participatory_documents)
+        Decidim.icons.register(name: "file-download-line", icon: "file-download-line", category: "system", description: "", engine: :decidim_participatory_documents)
       end
     end
   end

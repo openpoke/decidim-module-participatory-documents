@@ -3,7 +3,7 @@
     <%= decidim_form_for([document, @form], html: { class: "form-defaults form", data: "dialog", aria_hidden: "false" })do |form| %>
       <div class="form-wrapper">
         <div class="card-divider">
-          <h2 class="card-title" id="editor-modal-title">Card title</h2>
+          <h3 class="h2 mb-2" id="editor-modal-title">Card title</h3>
         </div>
         <div class="card-section" id="editor-modal-content">
           <%= form.translated :text_field, :title, autofocus: true %>
@@ -14,11 +14,6 @@
       <button class="button button__lg button__secondary" id="editor-modal-save">Save</button>
       <button class="button button__lg button__alert" id="editor-modal-remove">Delete</button>
     </div>
-
-<!--    <button class="button" id="editor-modal-close" data-dialog-close="editor-modal" aria-label="Close"-->
-<!--            type="button">-->
-<!--      <span aria-hidden="true">&times;</span>-->
-<!--    </button>-->
     <button type="button" data-dialog-close="editor-modal" data-dialog-closable="" aria-label="Close modal">&times;</button>
   </div>
 </div>

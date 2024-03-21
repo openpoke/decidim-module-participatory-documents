@@ -13,10 +13,10 @@
   <!-- This snippet is used in production (included from viewer.html) -->
   <link rel="resource" type="application/l10n" href="/pdfjs/web/locale/locale.properties">
   <script src="/pdfjs/web/viewer.js"></script>
-  <%= append_stylesheet_pack_tag "decidim_core", "decidim_admin", "decidim_admin_participatory_documents", media: "all" %>
-  <%= append_javascript_pack_tag "decidim_core", "decidim_admin", "decidim_admin_participatory_documents", defer: false %>
-  <%= javascript_pack_tag "decidim_participatory_documents_editor" %>
-  <%= stylesheet_pack_tag "decidim_participatory_documents_editor" %>
+  <%= append_stylesheet_pack_tag "decidim_core", "decidim_admin", "decidim_admin_participatory_documents",
+                                 "decidim_participatory_documents_editor" %>
+  <%= append_javascript_pack_tag "decidim_core", "decidim_admin", "decidim_admin_participatory_documents",
+                                 "decidim_participatory_documents_editor" %>
   <%= organization_colors %>
   <%= pdf_custom_style %>
   <%= csrf_meta_tags %>
