@@ -71,3 +71,22 @@
     }
   }
 }
+
+.show-form-title {
+  @apply text-lg font-bold decoration-0 p-2 my-4;
+  --tw-text-opacity: 1 !important;
+  --tw-bg-opacity: 0.3 !important;
+  color: rgb(0 0 0 / var(--tw-text-opacity)) !important;
+  background: rgb(var(--secondary-rgb)/var(--tw-bg-opacity)) !important;
+}
+
+.close-icon {
+  font-size: 20px;
+  line-height: 24px;
+  font-weight: 600;
+  --tw-text-opacity: 1;
+  text-decoration-line: underline;
+  svg {
+    fill: currentColor;
+  }
+}

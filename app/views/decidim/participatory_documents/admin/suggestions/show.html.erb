@@ -1,6 +1,7 @@
-<div class="card">
-  <div class="card-divider">
-    <h2 class="card-title">
+<%= append_stylesheet_pack_tag "decidim_admin_participatory_documents" %>
+<div class="item_show__wrapper">
+  <div class="item_show__header">
+    <h1 class="item_show__header-title">
       Suggestion for <%= translated_attribute(suggestion.suggestable.title) %>
       <%#= link_to "#{t ".proposals"} > ", proposals_path %>
       <%#= decidim_html_escape(present(proposal).title).html_safe %>
@@ -8,48 +9,45 @@
       <%# if allowed_to? :edit, :proposal, proposal: proposal %>
       <%#= icon_link_to "pencil", edit_proposal_path(proposal), t("actions.edit_proposal", scope: "decidim.proposals"), class: "action-icon--edit-proposal" %>
       <%# end %>
-    </h2>
+    </h1>
   </div>
-  <div class="card-section">
-
-    <div class="row column">
-      <strong><%= t ".authors" %>:</strong>
-      <ul id="proposal-authors-list">
-        <li>
-          <% presented_author = present(suggestion.author) %>
-          <%= link_to_if(
-                presented_author.profile_path.present?,
-                presented_author.name,
-                presented_author.profile_path,
-                target: :blank
-              ) %>
-          <% if presented_author.can_be_contacted? && presented_author.nickname != present(current_user).nickname %>
-            <%= icon_link_to "envelope-closed", current_or_new_conversation_path_with(presented_author), t("decidim.contact"), class: "action-icon--new" %>
-          <% end %>
-        </li>
-        <%# end %>
-      </ul>
-    </div>
-
-    <div class="row column">
-      <strong><%= t ".body" %>:</strong>
-      <p><%= suggestion_content(suggestion)[:text] %>
-        <% if suggestion_content(suggestion)[:file_link] %>
-          <%= suggestion_content(suggestion)[:file_link] %>
+  <div class="mb-2">
+    <p class="block"><strong><%= t ".authors" %>:</strong></p>
+    <ul id="proposal-authors-list">
+      <li class="text-secondary">
+        <% presented_author = present(suggestion.author) %>
+        <%= link_to_if(
+              presented_author.profile_path.present?,
+              presented_author.name,
+              presented_author.profile_path,
+              target: :blank
+            ) %>
+        <% if presented_author.can_be_contacted? && presented_author.nickname != present(current_user).nickname %>
+          <%= icon_link_to "mail-check-line", current_or_new_conversation_path_with(presented_author), t("decidim.contact"), class: "action-icon--new" %>
         <% end %>
-      </p>
-    </div>
-
-    <div class="row column">
-      <strong><%= t ".created_at" %>:</strong> <%= l suggestion.created_at, format: :decidim_short %>
-    </div>
+      </li>
+      <%# end %>
+    </ul>
   </div>
+
+  <div class="mb-2">
+    <strong><%= t ".body" %>:</strong>
+    <p><%= suggestion_content(suggestion)[:text] %>
+      <% if suggestion_content(suggestion)[:file_link] %>
+        <%= suggestion_content(suggestion)[:file_link] %>
+      <% end %>
+    </p>
+  </div>
+  <div class="mb-2">
+    <strong><%= t ".created_at" %>:</strong>
+    <p><%= l suggestion.created_at, format: :decidim_short %></p>
+  </div>
+
+  <%= render "decidim/participatory_documents/admin/suggestions/valuators" %>
+
+  <% if allowed_to?(:create, :suggestion_note, suggestion: suggestion) %>
+    <%= render "decidim/participatory_documents/admin/suggestion_notes/suggestion_notes" %>
+  <% end %>
+
+  <%= render "decidim/participatory_documents/admin/suggestions/form" %>
 </div>
-
-<%= render "decidim/participatory_documents/admin/suggestions/valuators" %>
-
-<% if allowed_to?(:create, :suggestion_note, suggestion: suggestion) %>
-  <%= render "decidim/participatory_documents/admin/suggestion_notes/suggestion_notes" %>
-<% end %>
-
-<%= render "decidim/participatory_documents/admin/suggestions/form" %>

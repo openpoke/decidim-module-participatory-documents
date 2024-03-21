@@ -1,9 +1,8 @@
 <section class="comments">
   <div class="card">
-    <div class="card-divider">
-      <h2 class="card-title"><%= t("title", scope: "decidim.participatory_documents.admin.suggestion_notes") %></h2>
+    <div>
+      <h2 class="show-form-title"><%= t("title", scope: "decidim.participatory_documents.admin.suggestion_notes") %></h2>
     </div>
-
     <div class="card-section">
       <div class="comment-thread">
         <% suggestion.notes.each do |note| %>
@@ -33,8 +32,8 @@
     <div class="card-section">
       <div class="add-comment">
         <div class="card">
-          <div class="card-divider">
-            <h2 class="card-title"><%= t("leave_your_note", scope: "decidim.participatory_documents.admin.suggestion_notes") %></h2>
+          <div>
+            <h2 class="item_show__header-title"><%= t("leave_your_note", scope: "decidim.participatory_documents.admin.suggestion_notes") %></h2>
           </div>
           <div class="card-section">
             <%= render "decidim/participatory_documents/admin/suggestion_notes/form" %>
