@@ -1,5 +1,5 @@
 <%= decidim_form_for(@form, url: document_section_suggestions_path(document, section_id: section.id),
-                     html: { class: "form-defaults form" }) do |form| %>
+                     html: { class: "form-defaults form send-suggestions-form" }) do |form| %>
   <div class="row column mb-4">
     <%= form.text_area :body %>
   </div>
