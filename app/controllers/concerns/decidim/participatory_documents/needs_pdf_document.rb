@@ -11,13 +11,6 @@ module Decidim
 
         protected
 
-        def add_iframe_snippets
-          return unless respond_to?(:snippets)
-
-          # snippets.add(:head, helpers.stylesheet_pack_tag("decidim_participatory_documents"))
-          # snippets.add(:head, helpers.javascript_pack_tag("decidim_participatory_documents"))
-        end
-
         def document
           @document ||= Decidim::ParticipatoryDocuments::Document.find_by(component: current_component)
         end

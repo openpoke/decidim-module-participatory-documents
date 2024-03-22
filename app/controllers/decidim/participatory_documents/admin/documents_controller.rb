@@ -7,7 +7,6 @@ module Decidim
       class DocumentsController < Admin::ApplicationController
         include Decidim::ApplicationHelper
         include Decidim::ComponentPathHelper
-        # include NeedsAdminSnippets
 
         helper Decidim::LayoutHelper
         helper_method :sections

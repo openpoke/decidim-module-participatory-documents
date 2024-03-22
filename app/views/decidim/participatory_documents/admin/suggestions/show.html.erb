@@ -1,14 +1,9 @@
 <%= append_stylesheet_pack_tag "decidim_admin_participatory_documents" %>
+<%= append_javascript_pack_tag "decidim_admin_participatory_documents" %>
 <div class="item_show__wrapper">
   <div class="item_show__header">
     <h1 class="item_show__header-title">
       Suggestion for <%= translated_attribute(suggestion.suggestable.title) %>
-      <%#= link_to "#{t ".proposals"} > ", proposals_path %>
-      <%#= decidim_html_escape(present(proposal).title).html_safe %>
-
-      <%# if allowed_to? :edit, :proposal, proposal: proposal %>
-      <%#= icon_link_to "pencil", edit_proposal_path(proposal), t("actions.edit_proposal", scope: "decidim.proposals"), class: "action-icon--edit-proposal" %>
-      <%# end %>
     </h1>
   </div>
   <div class="mb-2">
