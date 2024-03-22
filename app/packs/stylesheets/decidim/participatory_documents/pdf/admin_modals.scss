@@ -14,10 +14,6 @@
   display: none;
   margin: 0;
   padding: 0;
-  //font-family: $body-font-family;
-  //font-weight: $global-weight-normal;
-  //line-height: $global-lineheight;
-  //color: $body-font-color;
 
   @include meta.load-css(
     "stylesheets/decidim/participatory_documents/pdf/decidim_admin_styles.scss"

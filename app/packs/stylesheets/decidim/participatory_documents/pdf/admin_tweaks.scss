@@ -13,8 +13,6 @@
 
   &.loading {
     &::before {
-      //@include spinner(25px, #fff, var(--primary), 800ms);
-
       margin: -4px 6px 0 -5px;
       content: "";
       vertical-align: middle;
