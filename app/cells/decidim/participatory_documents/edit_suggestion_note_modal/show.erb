@@ -6,15 +6,19 @@
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  <%= decidim_form_for(notes_form,
-                       url: note_path,
-                       method: :patch,
-                       html: { class: "form edit_suggestion_note" }) do |f| %>
-    <div class="row column">
-      <%= f.text_area :body, rows: 10, label: t("modal.body", scope: "decidim.participatory_documents.admin.suggestion_notes"), value: note_body %>
+  <div class="item__edit item__edit-1col">
+    <div class="item__edit-form">
+      <%= decidim_form_for(notes_form,
+                           url: note_path,
+                           method: :patch,
+                           html: { class: "form form-defaults edit_suggestion_note" }) do |f| %>
+        <div class="form__wrapper">
+          <%= f.text_area :body, rows: 10, label: t("modal.body", scope: "decidim.participatory_documents.admin.suggestion_notes"), value: note_body %>
+        </div>
+        <div class="button button__sm button__secondary">
+          <%= f.submit t("modal.update", scope: "decidim.participatory_documents.admin.suggestion_notes") %>
+        </div>
+      <% end %>
     </div>
-    <div class="button--double">
-      <%= f.submit t("modal.update", scope: "decidim.participatory_documents.admin.suggestion_notes") %>
-    </div>
-  <% end %>
+  </div>
 </div>
