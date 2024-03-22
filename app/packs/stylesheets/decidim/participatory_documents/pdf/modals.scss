@@ -85,16 +85,16 @@
   &.section {
     height: calc(100% - 75px) !important;
     width: 0;
-    transition: width ease-out .7s;
+    transition: width ease-out 0.7s;
 
     &.active {
       width: 50vw;
 
-      @media(max-width: 900px) {
+      @media (max-width: 900px) {
         width: 75vw;
       }
 
-      @media(max-width: 680px) {
+      @media (max-width: 680px) {
         width: 100vw;
       }
     }
@@ -103,7 +103,7 @@
   &.document {
     height: 0;
     width: 100% !important;
-    transition: height ease-out .7s;
+    transition: height ease-out 0.7s;
 
     &.active {
       height: calc(100% - 75px);

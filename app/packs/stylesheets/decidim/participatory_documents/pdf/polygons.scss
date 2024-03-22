@@ -36,7 +36,7 @@
 
   &.blocked {
     pointer-events: none;
-    opacity: .4;
+    opacity: 0.4;
 
     &.grouping,
     &.focus {
@@ -53,7 +53,7 @@
     top: 2px;
     right: 12px;
     font-size: 24px;
-    text-shadow: 1px 1px 3px #000, 0 0 1em #000, 0 0 .3em #000;
+    text-shadow: 1px 1px 3px #000, 0 0 1em #000, 0 0 0.3em #000;
     color: var(--box-text-color);
     font-weight: 600;
   }

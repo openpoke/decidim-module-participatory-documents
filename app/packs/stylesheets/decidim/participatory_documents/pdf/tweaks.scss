@@ -23,23 +23,23 @@
   padding-left: 0;
   padding-right: 0;
 
-  @media(min-width: 940px) {
+  @media (min-width: 940px) {
     transform: translateX(-75%);
   }
 
-  @media(max-width: 680px) {
+  @media (max-width: 680px) {
     padding-left: 1em;
   }
 }
 
 #toolbarViewerLeft {
-  @media(max-width: 680px) {
+  @media (max-width: 680px) {
     display: none;
   }
 }
 
 #toolbarViewerRight {
-  @media(max-width: 380px) {
+  @media (max-width: 380px) {
     display: none;
   }
 }
@@ -75,13 +75,13 @@
 }
 
 .hiddenSmallView {
-  @media(max-width: 800px) {
+  @media (max-width: 800px) {
     display: none;
   }
 }
 
 .toolbarButtonSpacer {
-  @media(max-width: 980px) {
+  @media (max-width: 980px) {
     width: 0;
   }
 }
@@ -102,20 +102,20 @@
     border: 1px solid #000;
   }
 
-  @media(max-width: 940px) {
+  @media (max-width: 940px) {
     display: none;
   }
 
-  @media(min-width: 941px) {
+  @media (min-width: 941px) {
     display: block;
   }
 }
 
 .decidimButton {
   margin: 0 0 0 1rem;
-  padding: .65em;
+  padding: 0.65em;
   border-radius: 4px;
-  transition: background-color .25s ease-out, color .25s ease-out;
+  transition: background-color 0.25s ease-out, color 0.25s ease-out;
   font-family: inherit;
   font-size: 1rem;
   -webkit-appearance: none;
@@ -136,7 +136,7 @@
     color: #333;
   }
 
-  @media(max-width: 900px) {
+  @media (max-width: 900px) {
     margin-top: 12px;
   }
 }
@@ -154,7 +154,7 @@
   background-position: 8px 9px;
   padding-left: 34px;
 
-  @media(max-width: 900px) {
+  @media (max-width: 900px) {
     width: 28px;
     height: 36px;
     overflow: hidden;
@@ -184,7 +184,7 @@
     background-image: url(../images/fullscreen_exit.svg);
   }
 
-  @media(max-width: 940px) {
+  @media (max-width: 940px) {
     width: 28px;
     height: 28px;
     margin-right: 0;

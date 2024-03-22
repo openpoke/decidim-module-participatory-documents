@@ -8,7 +8,9 @@
     "lint": "eslint -c .eslintrc.json --ext .js app/packs/",
     "lint-fix": "eslint -c .eslintrc.json --ext .js app/packs/ --fix",
     "stylelint": "stylelint **/*.scss",
-    "stylelint-fix": "stylelint **/*.scss --fix"
+    "stylelint-fix": "stylelint **/*.scss --fix",
+    "prettier": "prettier --check '**/*.scss'",
+    "prettify": "prettier --write '**/*.scss'"
   },
   "engines": {
     "node": "18.17.1",
@@ -28,11 +30,9 @@
   },
   "homepage": "https://github.com/Openpoke/decidim-module-participatory_documents#readme",
   "stylelint": {
-    "extends": "@decidim/stylelint-config",
-    "rules" : {
-      "block-opening-brace-space-before": "always"
-    }
+    "extends": "@decidim/stylelint-config"
   },
+  "prettier": "@decidim/prettier-config",
   "devDependencies": {
     "@babel/eslint-parser": "^7.23.10",
     "@babel/plugin-proposal-class-properties": "^7.18.6",
@@ -45,12 +45,14 @@
     "@babel/preset-react": "^7.23.3",
     "@decidim/dev": "0.28.0",
     "@decidim/eslint-config": "0.28.0",
+    "@decidim/prettier-config": "0.28.0",
     "@decidim/stylelint-config": "0.28.0",
     "eslint-config-prettier": "^8.2.0",
     "eslint-config-standard": "^17.0.0",
     "eslint-plugin-import": "^2.22.0",
     "eslint-plugin-standard": "^3.1.0",
-    "sass-embedded": "~1.57.1",
-    "postcss-scss": "^4.0.9"
+    "postcss-scss": "^4.0.9",
+    "prettier": "^2.3.2",
+    "sass-embedded": "~1.57.1"
   }
 }

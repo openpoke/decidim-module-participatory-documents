@@ -19,7 +19,9 @@
   //line-height: $global-lineheight;
   //color: $body-font-color;
 
-  @include meta.load-css("stylesheets/decidim/participatory_documents/pdf/decidim_admin_styles.scss");
+  @include meta.load-css(
+    "stylesheets/decidim/participatory_documents/pdf/decidim_admin_styles.scss"
+  );
 
   &.show {
     display: block;
@@ -36,6 +38,6 @@
 
 @keyframes blinker {
   50% {
-    background-color: rgba(var(--primary-rgb), .6);
+    background-color: rgba(var(--primary-rgb), 0.6);
   }
 }

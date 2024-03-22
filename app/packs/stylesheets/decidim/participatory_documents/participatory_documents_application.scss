@@ -11,12 +11,12 @@
   min-height: 50em;
   padding: 0;
 
-  @media(max-width: 680px) {
+  @media (max-width: 680px) {
     margin-left: -1.6rem;
   }
 }
 
-pdf-iframe {
+#pdf-iframe {
   &::before {
     //@include spinner(25px, #fff, var(--primary), 800ms);
 

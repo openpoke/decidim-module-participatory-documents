@@ -1,9 +1,9 @@
 :root {
   --box-text-color: #fff;
   --box-color: rgb(30, 152, 215);
-  --box-color-rgba: rgba(30, 152, 215, .12);
-  --notifications-color-rgba: rgba(30, 152, 215, .6);
-  --suggestions-modal-color-hsla: hsla(213, 48%, 90%, .95);
+  --box-color-rgba: rgba(30, 152, 215, 0.12);
+  --notifications-color-rgba: rgba(30, 152, 215, 0.6);
+  --suggestions-modal-color-hsla: hsla(213, 48%, 90%, 0.95);
 }
 
 .button__success {
@@ -39,10 +39,7 @@
 
   .reveal-overlay {
     position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
+    inset: 0;
     z-index: 1005;
     display: none;
     background-color: rgba(26, 24, 29, 0.45);
@@ -73,6 +70,8 @@
   right: 1rem;
   font-size: 24px;
   line-height: 30px;
+
   --tw-text-opacity: 1;
+
   color: rgb(var(--secondary-rgb) / 1);
 }
