@@ -2,10 +2,10 @@
 
 require "spec_helper"
 
-describe "Admin sees the action logs on homepage", type: :system do
+describe "Admin sees the action logs on homepage" do
   let(:organization) { component.organization }
   let(:component) { create(:participatory_documents_component) }
-  let(:current_user) { create(:user, :admin, :confirmed, organization: organization) }
+  let(:current_user) { create(:user, :admin, :confirmed, organization:) }
 
   before do
     switch_to_host(organization.host)
@@ -27,8 +27,8 @@ describe "Admin sees the action logs on homepage", type: :system do
         description: { en: "Description test Section" },
         box_color: "#f00f00",
         box_opacity: "50",
-        current_user: current_user,
-        file: file,
+        current_user:,
+        file:,
         current_component: component
       )
     end
@@ -59,7 +59,7 @@ describe "Admin sees the action logs on homepage", type: :system do
   end
 
   context "when sees annotation related logs" do
-    let(:document) { create(:participatory_documents_document, component: component) }
+    let(:document) { create(:participatory_documents_document, component:) }
 
     context "when is created" do
       let(:form) do
@@ -69,7 +69,7 @@ describe "Admin sees the action logs on homepage", type: :system do
           rect: { left: 50, top: 50, width: 100, height: 100 },
           id: "annotationid",
           group: "groupid",
-          current_user: current_user,
+          current_user:,
           section: nil
         )
       end
@@ -96,7 +96,7 @@ describe "Admin sees the action logs on homepage", type: :system do
           rect: { left: 0, top: 50, width: 100, height: 100 },
           id: annotation.id,
           section: annotation.section.id,
-          current_user: current_user
+          current_user:
         )
       end
 
@@ -110,15 +110,15 @@ describe "Admin sees the action logs on homepage", type: :system do
 
     context "when is deleted" do
       let(:command) { Decidim::ParticipatoryDocuments::Admin::DestroyAnnotation.new(form, document) }
-      let(:section) { create(:participatory_documents_section, document: document) }
+      let(:section) { create(:participatory_documents_section, document:) }
 
-      let!(:annotation) { create(:participatory_documents_annotation, section: section) }
+      let!(:annotation) { create(:participatory_documents_annotation, section:) }
 
       let(:form) do
         double(
           invalid?: false,
           id: annotation.id,
-          current_user: current_user
+          current_user:
         )
       end
 
@@ -132,7 +132,7 @@ describe "Admin sees the action logs on homepage", type: :system do
   end
 
   context "when sees section related logs" do
-    let(:document) { create(:participatory_documents_document, component: component) }
+    let(:document) { create(:participatory_documents_document, component:) }
 
     context "when is created" do
       let(:form) do
@@ -143,7 +143,7 @@ describe "Admin sees the action logs on homepage", type: :system do
           rect: { left: 50, top: 50, width: 100, height: 100 },
           id: "annotationid",
           group: "groupid",
-          current_user: current_user,
+          current_user:,
           section: nil
         )
       end
@@ -161,14 +161,14 @@ describe "Admin sees the action logs on homepage", type: :system do
     context "when is updated" do
       let(:command) { Decidim::ParticipatoryDocuments::Admin::UpdateSection.new(form, document) }
       let(:document) { create(:participatory_documents_document) }
-      let!(:section) { create(:participatory_documents_section, document: document) }
+      let!(:section) { create(:participatory_documents_section, document:) }
 
       let(:form) do
         double(
           invalid?: false,
           title: { en: "Title test Section" },
           id: section.id,
-          current_user: current_user
+          current_user:
         )
       end
 
@@ -183,14 +183,14 @@ describe "Admin sees the action logs on homepage", type: :system do
     context "when is deleted" do
       let(:command) { Decidim::ParticipatoryDocuments::Admin::DestroyAnnotation.new(form, document) }
       let(:document) { create(:participatory_documents_document) }
-      let!(:section) { create(:participatory_documents_section, document: document) }
-      let!(:annotation) { create(:participatory_documents_annotation, section: section) }
+      let!(:section) { create(:participatory_documents_section, document:) }
+      let!(:annotation) { create(:participatory_documents_annotation, section:) }
 
       let(:form) do
         double(
           invalid?: false,
           id: annotation.id,
-          current_user: current_user
+          current_user:
         )
       end
 
@@ -204,9 +204,9 @@ describe "Admin sees the action logs on homepage", type: :system do
   end
 
   context "when sees suggestion note related logs" do
-    let(:document) { create(:participatory_documents_document, component: component) }
+    let(:document) { create(:participatory_documents_document, component:) }
     let!(:suggestion) { create(:participatory_documents_suggestion, suggestable: document) }
-    let(:section) { create(:participatory_documents_section, document: document) }
+    let(:section) { create(:participatory_documents_section, document:) }
 
     context "when is created" do
       let(:form) do
@@ -214,7 +214,7 @@ describe "Admin sees the action logs on homepage", type: :system do
           invalid?: false,
           body: { en: "Title test Section" },
           suggestion: suggestion.id,
-          current_user: current_user,
+          current_user:,
           section_id: section.id
         )
       end
@@ -233,8 +233,8 @@ describe "Admin sees the action logs on homepage", type: :system do
   context "when sees logs related to sections grouping" do
     let(:command) { Decidim::ParticipatoryDocuments::Admin::UpdateOrCreateAnnotation.new(form, document) }
     let!(:document) { create(:participatory_documents_document) }
-    let!(:section1) { create(:participatory_documents_section, document: document) }
-    let!(:section2) { create(:participatory_documents_section, document: document) }
+    let!(:section1) { create(:participatory_documents_section, document:) }
+    let!(:section2) { create(:participatory_documents_section, document:) }
     let!(:annotation1) { create(:participatory_documents_annotation, section: section1) }
     let!(:annotation2) { create(:participatory_documents_annotation, section: section2) }
 
@@ -245,7 +245,7 @@ describe "Admin sees the action logs on homepage", type: :system do
         rect: { left: 50, top: 50, width: 100, height: 100 },
         id: annotation2.id,
         section: section1.id,
-        current_user: current_user
+        current_user:
       )
     end
 

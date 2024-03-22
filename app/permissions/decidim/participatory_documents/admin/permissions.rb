@@ -102,12 +102,12 @@ module Decidim
         def valuator_assigned_to_suggestion?
           @valuator_assigned_to_suggestion ||=
             Decidim::ParticipatoryDocuments::ValuationAssignment
-            .where(suggestion: suggestion, valuator_role: user_valuator_role)
+            .where(suggestion:, valuator_role: user_valuator_role)
             .any?
         end
 
         def user_valuator_role
-          @user_valuator_role ||= space.user_roles(:valuator).find_by(user: user)
+          @user_valuator_role ||= space.user_roles(:valuator).find_by(user:)
         end
 
         def edit_suggestion_note?

@@ -66,7 +66,7 @@ Decidim.register_component(:participatory_documents) do |component|
       name: Decidim::Components::Namer.new(participatory_space.organization.available_locales, :participatory_documents).i18n_name,
       published_at: Time.current,
       manifest_name: :participatory_documents,
-      participatory_space: participatory_space
+      participatory_space:
     }
 
     component = Decidim.traceability.perform_action!(
@@ -79,7 +79,7 @@ Decidim.register_component(:participatory_documents) do |component|
     end
 
     params = {
-      component: component,
+      component:,
       title: Decidim::Faker::Localized.sentence(word_count: 2),
       description: Decidim::Faker::Localized.sentence(word_count: 20),
       author: admin_user,
@@ -102,7 +102,7 @@ Decidim.register_component(:participatory_documents) do |component|
       Decidim::ParticipatoryDocuments::Section,
       admin_user,
       {
-        document: document,
+        document:,
         title: Decidim::Faker::Localized.sentence(word_count: 2),
         state: :draft
       },
@@ -112,7 +112,7 @@ Decidim.register_component(:participatory_documents) do |component|
       Decidim::ParticipatoryDocuments::Section,
       admin_user,
       {
-        document: document,
+        document:,
         title: Decidim::Faker::Localized.sentence(word_count: 2),
         state: :draft
       },
@@ -122,7 +122,7 @@ Decidim.register_component(:participatory_documents) do |component|
       Decidim::ParticipatoryDocuments::Section,
       admin_user,
       {
-        document: document,
+        document:,
         title: Decidim::Faker::Localized.sentence(word_count: 2),
         state: :draft
       },
@@ -194,7 +194,7 @@ Decidim.register_component(:participatory_documents) do |component|
       10.times do
         Decidim::ParticipatoryDocuments::Suggestion.create(
           body: Decidim::Faker::Localized.sentence(word_count: 20),
-          suggestable: suggestable,
+          suggestable:,
           author: admin_user,
           state: Decidim::ParticipatoryDocuments::Suggestion::POSSIBLE_STATES.sample
         )

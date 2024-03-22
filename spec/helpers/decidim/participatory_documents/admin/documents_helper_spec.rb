@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-describe Decidim::ParticipatoryDocuments::Admin::DocumentsHelper, type: :helper do
-  let(:component) { create :participatory_documents_component }
-  let(:document) { create(:participatory_documents_document, component: component) }
+describe Decidim::ParticipatoryDocuments::Admin::DocumentsHelper do
+  let(:component) { create(:participatory_documents_component) }
+  let(:document) { create(:participatory_documents_document, component:) }
 
   describe "#pdf_manage_buttons" do
     before do
@@ -27,10 +27,8 @@ describe Decidim::ParticipatoryDocuments::Admin::DocumentsHelper, type: :helper 
       let(:document_attached) { true }
 
       before do
-        allow(helper).to receive(:allowed_to?).with(:update, :participatory_document, document: document).and_return(true)
-        allow(helper).to receive(:edit_boxes_btn).and_return("Edit participatory areas")
-        allow(helper).to receive(:edit_document_btn).and_return("Edit/upload document")
-        allow(helper).to receive(:preview_sections_btn).and_return("Preview and publishing sections")
+        allow(helper).to receive(:allowed_to?).with(:update, :participatory_document, document:).and_return(true)
+        allow(helper).to receive_messages(edit_boxes_btn: "Edit participatory areas", edit_document_btn: "Edit/upload document", preview_sections_btn: "Preview and publishing sections")
       end
 
       it "returns the combination of edit_boxes_btn, edit_document_btn and preview_sections_btn" do
@@ -43,7 +41,7 @@ describe Decidim::ParticipatoryDocuments::Admin::DocumentsHelper, type: :helper 
       let(:document_attached) { false }
 
       before do
-        allow(helper).to receive(:allowed_to?).with(:update, :participatory_document, document: document).and_return(true)
+        allow(helper).to receive(:allowed_to?).with(:update, :participatory_document, document:).and_return(true)
         allow(helper).to receive(:edit_document_btn).and_return("Edit/upload document")
       end
 

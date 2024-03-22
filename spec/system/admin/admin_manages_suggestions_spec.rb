@@ -2,19 +2,19 @@
 
 require "spec_helper"
 
-describe "Admin manages participatory documents", type: :system do
+describe "Admin manages participatory documents" do
   include Decidim::TranslationsHelper
   let(:manifest_name) { "participatory_documents" }
   let(:router) { Decidim::EngineRouter.admin_proxy(document.component).decidim_admin_participatory_process_participatory_documents }
 
-  let(:organization) { create :organization }
-  let(:participatory_process) { create :participatory_process, organization: organization }
-  let!(:component) { create :participatory_documents_component, participatory_space: participatory_process }
-  let(:user) { create(:user, :admin, :confirmed, organization: organization) }
-  let!(:document) { create :participatory_documents_document, component: component }
+  let(:organization) { create(:organization) }
+  let(:participatory_process) { create(:participatory_process, organization:) }
+  let!(:component) { create(:participatory_documents_component, participatory_space: participatory_process) }
+  let(:user) { create(:user, :admin, :confirmed, organization:) }
+  let!(:document) { create(:participatory_documents_document, component:) }
 
-  let(:section1) { create(:participatory_documents_section, document: document) }
-  let(:section2) { create(:participatory_documents_section, document: document) }
+  let(:section1) { create(:participatory_documents_section, document:) }
+  let(:section2) { create(:participatory_documents_section, document:) }
   let!(:single_document_suggestion) { create(:participatory_documents_suggestion, suggestable: document) }
   let!(:document_suggestions) { create_list(:participatory_documents_suggestion, 9, suggestable: document) }
   let!(:section1_suggestions) { create_list(:participatory_documents_suggestion, 10, suggestable: section1) }
@@ -49,8 +49,8 @@ describe "Admin manages participatory documents", type: :system do
         page.find("#suggestions_bulk.js-check-all").click
         page.first("[data-published-state=false] .js-suggestion-list-check").click
 
-        click_button "Actions"
-        click_button "Publish answers"
+        click_link_or_button "Actions"
+        click_link_or_button "Publish answers"
 
         within ".table-scroll" do
           expect(page).to have_content("No ", count: 3)
@@ -60,7 +60,7 @@ describe "Admin manages participatory documents", type: :system do
         within "#js-publish-answers-actions" do
           expect(page).to have_content("Answers for 2 suggestions will be published.")
         end
-        page.find("button#js-submit-publish-answers").click
+        click_link_or_button("button#js-submit-publish-answers")
         20.times do
           # wait for the ajax call to finish
           sleep(1)
@@ -83,8 +83,8 @@ describe "Admin manages participatory documents", type: :system do
         page.find("#suggestions_bulk.js-check-all").click
         page.all("[data-published-state=false] .js-suggestion-list-check").map(&:click)
 
-        click_button "Actions"
-        expect(page).not_to have_content("Publish answers")
+        click_link_or_button "Actions"
+        expect(page).to have_no_content("Publish answers")
       end
     end
   end
@@ -99,10 +99,10 @@ describe "Admin manages participatory documents", type: :system do
       it "displays the right state" do
         visit router.document_suggestions_path(document)
 
-        click_link("Published Answer")
+        click_link_or_button("Published Answer")
 
         within(".table-list") do
-          expect(page).not_to have_content(document_suggestion.body["en"].first(20))
+          expect(page).to have_no_content(document_suggestion.body["en"].first(20))
         end
       end
     end
@@ -116,8 +116,8 @@ describe "Admin manages participatory documents", type: :system do
       it "displays the right state" do
         visit router.document_suggestions_path(document)
 
-        click_link("Published Answer")
-        click_link("Published Answer")
+        click_link_or_button("Published Answer")
+        click_link_or_button("Published Answer")
 
         within(".table-list") do
           expect(page).to have_content(document_suggestion.body["en"].first(20))
@@ -133,7 +133,7 @@ describe "Admin manages participatory documents", type: :system do
 
     shared_examples "marks the answer by state" do |state:|
       context "when there is no answer" do
-        let!(:document_suggestion) { create(:participatory_documents_suggestion, :draft, state: state, suggestable: document) }
+        let!(:document_suggestion) { create(:participatory_documents_suggestion, :draft, state:, suggestable: document) }
 
         it "displays the right state" do
           visit router.document_suggestions_path(document)
@@ -145,7 +145,7 @@ describe "Admin manages participatory documents", type: :system do
       end
 
       context "when not published" do
-        let!(:document_suggestion) { create(:participatory_documents_suggestion, :draft, state: state, suggestable: document, answer: { en: "Foo bar" }) }
+        let!(:document_suggestion) { create(:participatory_documents_suggestion, :draft, state:, suggestable: document, answer: { en: "Foo bar" }) }
 
         it "displays the right state" do
           visit router.document_suggestions_path(document)
@@ -157,7 +157,7 @@ describe "Admin manages participatory documents", type: :system do
       end
 
       context "when published" do
-        let!(:document_suggestion) { create(:participatory_documents_suggestion, :published, state: state, suggestable: document, answer: { en: "Foo bar" }) }
+        let!(:document_suggestion) { create(:participatory_documents_suggestion, :published, state:, suggestable: document, answer: { en: "Foo bar" }) }
 
         it "displays the right state" do
           visit router.document_suggestions_path(document)
@@ -190,7 +190,7 @@ describe "Admin manages participatory documents", type: :system do
   context "when admin to exports suggestions" do
     it "exports a JSON" do
       find(".exports.dropdown").click
-      perform_enqueued_jobs { click_link "Suggestions as JSON" }
+      perform_enqueued_jobs { click_link_or_button "Suggestions as JSON" }
 
       within ".callout.success" do
         expect(page).to have_content("in progress")
@@ -212,19 +212,19 @@ describe "Admin manages participatory documents", type: :system do
   end
 
   context "when sorting by author's name" do
-    let(:dummy_user) { create(:user, name: "zzz-user 1", organization: organization) }
+    let(:dummy_user) { create(:user, name: "zzz-user 1", organization:) }
     let!(:single_document_suggestion) { create(:participatory_documents_suggestion, suggestable: document, author: dummy_user) }
 
     it "sorts ascendent" do
       expect(page).to have_content(dummy_user.name)
-      click_link "Author"
-      expect(page).not_to have_content(dummy_user.name)
+      click_link_or_button "Author"
+      expect(page).to have_no_content(dummy_user.name)
     end
 
     it "sorts descendent" do
       expect(page).to have_content(dummy_user.name)
-      click_link "Author"
-      click_link "Author"
+      click_link_or_button "Author"
+      click_link_or_button "Author"
       expect(page).to have_content(dummy_user.name)
     end
   end
@@ -237,23 +237,23 @@ describe "Admin manages participatory documents", type: :system do
       find("a", text: "Author").hover
       find("a", text: document_suggestions.last.author.name).click
     end
-    expect(page).not_to have_content(document_suggestions.first.author.name)
+    expect(page).to have_no_content(document_suggestions.first.author.name)
     expect(page).to have_content(document_suggestions.last.author.name)
   end
 
   context "when sorting by section's name" do
-    let(:section1) { create(:participatory_documents_section, document: document, title: { en: "zzzz-section" }) }
+    let(:section1) { create(:participatory_documents_section, document:, title: { en: "zzzz-section" }) }
 
     it "sorts ascendent" do
       expect(page).to have_content(translated_attribute(section1.title))
-      click_link "Section"
-      expect(page).not_to have_content(translated_attribute(section1.title))
+      click_link_or_button "Section"
+      expect(page).to have_no_content(translated_attribute(section1.title))
     end
 
     it "sorts descendent" do
       expect(page).to have_content(translated_attribute(section1.title))
-      click_link "Section"
-      click_link "Section"
+      click_link_or_button "Section"
+      click_link_or_button "Section"
       expect(page).to have_content(translated_attribute(section1.title))
     end
   end
@@ -269,7 +269,7 @@ describe "Admin manages participatory documents", type: :system do
       find("a", text: translated_attribute(section1.title)).click
     end
     within ".container" do
-      expect(page).not_to have_content("Global")
+      expect(page).to have_no_content("Global")
       expect(page).to have_content(translated_attribute(section1.title))
     end
   end
@@ -279,13 +279,13 @@ describe "Admin manages participatory documents", type: :system do
     within(".table-scroll") do
       expect(page).to have_content("Global")
       expect(page).to have_content(section1.title["en"])
-      expect(page).not_to have_content(section2.title["en"])
+      expect(page).to have_no_content(section2.title["en"])
     end
     within(".pagination") do
       find(".pagination-next > a").click
     end
     within(".table-scroll") do
-      expect(page).not_to have_content("Global")
+      expect(page).to have_no_content("Global")
       expect(page).to have_content(section1.title["en"])
       expect(page).to have_content(section2.title["en"])
     end
@@ -335,7 +335,7 @@ describe "Admin manages participatory documents", type: :system do
           en: "This is my answer"
         )
         check :answer_suggestion_answer_is_published if published
-        click_button "Answer"
+        click_link_or_button "Answer"
       end
       expect(page).to have_content("Successfully")
     end
@@ -379,9 +379,9 @@ describe "Admin manages participatory documents", type: :system do
               en: "This is my answer"
             )
             check :answer_suggestion_answer_is_published
-            click_button "Answer"
+            click_link_or_button "Answer"
           end
-          expect(page).not_to have_content("Successfully added the answer")
+          expect(page).to have_no_content("Successfully added the answer")
           expect(page).to have_content(%q(It's not possible to publish with status "not answered"))
         end
       end

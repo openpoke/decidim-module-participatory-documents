@@ -6,8 +6,13 @@ module Decidim
       class SuggestionNotesController < Admin::ApplicationController
         helper_method :note
 
+        def edit
+          enforce_permission_to :edit_note, :suggestion_note, suggestion_note: note
+          @notes_form = form(Decidim::ParticipatoryDocuments::Admin::SuggestionNoteForm).from_model(note)
+        end
+
         def create
-          enforce_permission_to :create, :suggestion_note, suggestion: suggestion
+          enforce_permission_to(:create, :suggestion_note, suggestion:)
           @form = form(Decidim::ParticipatoryDocuments::Admin::SuggestionNoteForm).from_params(params)
 
           CreateSuggestionNote.call(@form, suggestion) do
@@ -21,11 +26,6 @@ module Decidim
               redirect_to document_suggestion_path(document, suggestion)
             end
           end
-        end
-
-        def edit
-          enforce_permission_to :edit_note, :suggestion_note, suggestion_note: note
-          @notes_form = form(Decidim::ParticipatoryDocuments::Admin::SuggestionNoteForm).from_model(note)
         end
 
         def update

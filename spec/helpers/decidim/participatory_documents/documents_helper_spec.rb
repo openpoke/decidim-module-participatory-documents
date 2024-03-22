@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-describe Decidim::ParticipatoryDocuments::DocumentsHelper, type: :helper do
-  let(:component) { create :participatory_documents_component }
-  let(:document) { create(:participatory_documents_document, component: component) }
+describe Decidim::ParticipatoryDocuments::DocumentsHelper do
+  let(:component) { create(:participatory_documents_component) }
+  let(:document) { create(:participatory_documents_document, component:) }
 
   describe "#back_edit_pdf_btn" do
     before do

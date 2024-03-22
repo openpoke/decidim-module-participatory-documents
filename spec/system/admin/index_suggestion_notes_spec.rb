@@ -2,12 +2,12 @@
 
 require "spec_helper"
 
-describe "Index Suggestion Notes", type: :system do
+describe "Index Suggestion Notes" do
   let(:router) { Decidim::EngineRouter.admin_proxy(component).decidim_admin_participatory_process_participatory_documents }
 
   let(:component) { create(:participatory_documents_component) }
   let(:manifest_name) { "participatory_documents" }
-  let!(:document) { create :participatory_documents_document, component: component }
+  let!(:document) { create(:participatory_documents_document, component:) }
   let!(:suggestion) { create(:participatory_documents_suggestion, suggestable: document) }
   let(:body) { "New awesome body" }
   let(:suggestion_notes_count) { 5 }
@@ -16,7 +16,7 @@ describe "Index Suggestion Notes", type: :system do
     create_list(
       :participatory_documents_suggestion_note,
       suggestion_notes_count,
-      suggestion: suggestion
+      suggestion:
     )
   end
 
@@ -34,7 +34,7 @@ describe "Index Suggestion Notes", type: :system do
       expect(page).to have_content(suggestion_note.author.name)
       expect(page).to have_content(suggestion_note.body)
     end
-    expect(page).to have_selector("form")
+    expect(page).to have_css("form")
   end
 
   context "when the form has a text inside body" do

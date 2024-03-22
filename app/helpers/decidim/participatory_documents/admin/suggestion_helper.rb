@@ -12,7 +12,7 @@ module Decidim
         end
 
         def icon_with_link_to_suggestion(document, suggestion)
-          return unless allowed_to?(:create, :suggestion_note, suggestion: suggestion) || allowed_to?(:update, :suggestion_answer, suggestion: suggestion)
+          return unless allowed_to?(:create, :suggestion_note, suggestion:) || allowed_to?(:update, :suggestion_answer, suggestion:)
 
           icon_link_to("question-answer-line",
                        document_suggestion_path(document, suggestion),
@@ -22,7 +22,7 @@ module Decidim
 
         def bulk_valuators_select(participatory_space, prompt)
           options_for_select = find_valuators_for_select(participatory_space)
-          select(:valuator_role, :id, options_for_select, prompt: prompt)
+          select(:valuator_role, :id, options_for_select, prompt:)
         end
 
         def suggestion_content(suggestion)

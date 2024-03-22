@@ -136,7 +136,7 @@ module Decidim
           )
         )
         SQL
-        where(query, value: value)
+        where(query, value:)
       end
 
       # Defines the base query so that ransack can actually sort by this value

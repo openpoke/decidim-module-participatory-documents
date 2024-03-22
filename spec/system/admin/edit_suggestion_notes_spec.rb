@@ -2,13 +2,13 @@
 
 require "spec_helper"
 
-describe "Edit Suggestion Notes", type: :system do
+describe "Edit Suggestion Notes" do
   let(:router) { Decidim::EngineRouter.admin_proxy(component).decidim_admin_participatory_process_participatory_documents }
 
   let(:component) { create(:participatory_documents_component) }
   let(:organization) { component.organization }
   let(:manifest_name) { "participatory_documents" }
-  let!(:document) { create :participatory_documents_document, :with_file, component: component }
+  let!(:document) { create(:participatory_documents_document, :with_file, component:) }
   let!(:suggestion) { create(:participatory_documents_suggestion, suggestable: document) }
   let(:participatory_space) { component.participatory_space }
 
@@ -19,9 +19,9 @@ describe "Edit Suggestion Notes", type: :system do
     create_list(
       :participatory_documents_suggestion_note,
       suggestion_notes_count,
-      suggestion: suggestion,
-      author: author,
-      body: body
+      suggestion:,
+      author:,
+      body:
     )
   end
 
@@ -58,11 +58,11 @@ describe "Edit Suggestion Notes", type: :system do
   end
 
   context "when the user is not the author of the suggestion note" do
-    let(:author) { create(:user, organization: organization) }
+    let(:author) { create(:user, organization:) }
 
     it "shows suggestion notes for the current suggestion" do
       suggestion_notes.each do |suggestion_note|
-        expect(page).not_to have_css(".link-alt")
+        expect(page).to have_no_css(".link-alt")
         expect(page).to have_content(suggestion_note.author.name)
       end
     end
@@ -72,7 +72,7 @@ describe "Edit Suggestion Notes", type: :system do
     let(:author) { user }
 
     it "does not display the edited status" do
-      expect(page).not_to have_content("Edited")
+      expect(page).to have_no_content("Edited")
     end
   end
 
@@ -86,7 +86,7 @@ describe "Edit Suggestion Notes", type: :system do
 
     it "displays the edited status" do
       expect(page).to have_content("Edited")
-      expect(page).to have_content((suggestion_notes.last.updated_at.strftime("%d/%m/%Y %H:%M")))
+      expect(page).to have_content(suggestion_notes.last.updated_at.strftime("%d/%m/%Y %H:%M"))
     end
   end
 end

@@ -5,14 +5,14 @@ require "spec_helper"
 module Decidim
   module ParticipatoryDocuments
     module Admin
-      describe SectionsController, type: :controller do
+      describe SectionsController do
         routes { Decidim::ParticipatoryDocuments::AdminEngine.routes }
 
         let(:organization) { component.organization }
         let(:participatory_process) { component.participatory_space }
         let(:component) { document.component }
         let(:document) { create(:participatory_documents_document) }
-        let(:user) { create :user, :admin, :confirmed, organization: organization }
+        let(:user) { create(:user, :admin, :confirmed, organization:) }
         let(:model) { Decidim::ParticipatoryDocuments::Section }
 
         before do
@@ -23,7 +23,7 @@ module Decidim
         end
 
         describe ".update" do
-          let!(:section) { create(:participatory_documents_section, document: document, title: nil) }
+          let!(:section) { create(:participatory_documents_section, document:, title: nil) }
 
           let(:params) do
             {
@@ -35,7 +35,7 @@ module Decidim
 
           it "Changes the database record" do
             expect(section.title["en"]).to eq("Section 0")
-            post(:update, params: params)
+            post(:update, params:)
             section.reload
             expect(section.title["en"]).to eq("Title")
           end

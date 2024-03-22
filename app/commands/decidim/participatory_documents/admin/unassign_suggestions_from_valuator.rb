@@ -39,7 +39,7 @@ module Decidim
 
         def find_assignment(suggestion)
           Decidim::ParticipatoryDocuments::ValuationAssignment.find_by(
-            suggestion: suggestion,
+            suggestion:,
             valuator_role: form.valuator_role
           )
         end

@@ -7,7 +7,7 @@ module Decidim
         helper_method :suggestion
 
         def create
-          enforce_permission_to :assign_to_valuator, :suggestions, suggestion: suggestion
+          enforce_permission_to(:assign_to_valuator, :suggestions, suggestion:)
 
           @form = form(Admin::ValuationAssignmentForm).from_params(params)
 
@@ -27,7 +27,7 @@ module Decidim
         def destroy
           @form = form(Admin::ValuationAssignmentForm).from_params(destroy_params)
 
-          enforce_permission_to :unassign_from_valuator, :suggestions, valuator: @form.valuator_user, suggestion: suggestion
+          enforce_permission_to(:unassign_from_valuator, :suggestions, valuator: @form.valuator_user, suggestion:)
 
           Admin::UnassignSuggestionsFromValuator.call(@form) do
             on(:ok) do |_proposal|

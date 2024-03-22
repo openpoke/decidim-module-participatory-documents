@@ -10,29 +10,29 @@ module Decidim
 
         let(:valid) { true }
         let(:organization) { component.organization }
-        let!(:user) { create :user, :admin, :confirmed, organization: organization }
+        let!(:user) { create(:user, :admin, :confirmed, organization:) }
 
-        let(:component) { create :participatory_documents_component }
-        let(:document) { create :participatory_documents_document, component: component }
-        let(:section1) { create(:participatory_documents_section, document: document) }
+        let(:component) { create(:participatory_documents_component) }
+        let(:document) { create(:participatory_documents_document, component:) }
+        let(:section1) { create(:participatory_documents_section, document:) }
         let!(:suggestion) { create(:participatory_documents_suggestion, suggestable: section1) }
-        let(:valuator) { create :user, organization: organization }
+        let(:valuator) { create(:user, organization:) }
 
-        let(:valuator_role) { create :participatory_process_user_role, role: :valuator, user: valuator, participatory_process: component.participatory_space }
+        let(:valuator_role) { create(:participatory_process_user_role, role: :valuator, user: valuator, participatory_process: component.participatory_space) }
 
         let(:form) do
           double(
             current_organization: organization,
             current_user: user,
             valid?: valid,
-            valuator_role: valuator_role,
+            valuator_role:,
             suggestions: [suggestion]
           )
         end
 
         context "when the form is valid" do
           it "successfuly ignore the existing records" do
-            create :suggestion_valuation_assignment, suggestion: suggestion, valuator_role: valuator_role
+            create(:suggestion_valuation_assignment, suggestion:, valuator_role:)
             expect { subject.call }.not_to change(Decidim::ParticipatoryDocuments::ValuationAssignment, :count)
             expect { subject.call }.to broadcast(:ok)
           end

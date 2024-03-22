@@ -7,10 +7,10 @@ module Decidim
     describe Document do
       subject { document }
 
-      let(:component) { build :participatory_documents_component }
+      let(:component) { build(:participatory_documents_component) }
       let(:organization) { component.participatory_space.organization }
-      let(:document) { create(:participatory_documents_document, component: component) }
-      let!(:author) { create(:user, organization: organization) }
+      let(:document) { create(:participatory_documents_document, component:) }
+      let!(:author) { create(:user, organization:) }
 
       describe "associations" do
         it { expect(described_class.reflect_on_association(:suggestions).macro).to eq(:has_many) }
@@ -37,7 +37,7 @@ module Decidim
       it { is_expected.to be_versioned }
 
       context "when has global suggestions" do
-        let(:document) { create(:participatory_documents_document, :with_global_suggestions, component: component) }
+        let(:document) { create(:participatory_documents_document, :with_global_suggestions, component:) }
 
         it "has suggestions" do
           expect(document).to be_has_suggestions
@@ -45,7 +45,7 @@ module Decidim
       end
 
       context "when has section suggestions" do
-        let(:document) { create(:participatory_documents_document, :with_suggestions, component: component) }
+        let(:document) { create(:participatory_documents_document, :with_suggestions, component:) }
 
         it "has suggestions" do
           expect(document).to be_has_suggestions
@@ -53,7 +53,7 @@ module Decidim
       end
 
       describe "with annotations" do
-        let(:section1) { create :participatory_documents_section, document: document }
+        let(:section1) { create(:participatory_documents_section, document:) }
         let(:rect1) do
           {
             "top" => 20.0,
@@ -75,8 +75,8 @@ module Decidim
         let(:page1) { 1 }
         let(:page2) { 1 }
         let(:page3) { 1 }
-        let(:section2) { create :participatory_documents_section, document: document }
-        let(:section3) { create :participatory_documents_section, document: document }
+        let(:section2) { create(:participatory_documents_section, document:) }
+        let(:section3) { create(:participatory_documents_section, document:) }
 
         let!(:annotation1) { create(:participatory_documents_annotation, section: section1, rect: rect1, page_number: page1) }
         let!(:annotation2) { create(:participatory_documents_annotation, section: section2, rect: rect2, page_number: page2) }
@@ -224,17 +224,17 @@ module Decidim
         let(:document) { build(:participatory_documents_document, component: nil, author: nil) }
 
         it "is invalid" do
-          expect(document).to be_invalid
+          expect(document).not_to be_valid
           expect(document.errors.full_messages).to include("Component must exist")
           expect(document.errors.full_messages).to include("Author must exist")
           expect(document.errors.full_messages).to include("File The file is not attached to any organization")
         end
 
         context "when defined organization" do
-          let(:document) { build(:participatory_documents_document, component: nil, author: nil, organization: organization) }
+          let(:document) { build(:participatory_documents_document, component: nil, author: nil, organization:) }
 
           it "does not complain about organization" do
-            expect(document).to be_invalid
+            expect(document).not_to be_valid
             expect(document.errors.full_messages).to include("Component must exist")
             expect(document.errors.full_messages).to include("Author must exist")
             expect(document.errors.full_messages).not_to include("File The file is not attached to any organization")
@@ -244,12 +244,12 @@ module Decidim
         context "when not AntivirusValidator defined" do
           before do
             allow(ParticipatoryDocuments).to receive(:antivirus_enabled).and_return(false)
-            Decidim::ParticipatoryDocuments.send(:remove_const, :Document)
+            Decidim::ParticipatoryDocuments.send(:stub_const, :Document)
             load "decidim/participatory_documents/document.rb"
           end
 
           after do
-            Decidim::ParticipatoryDocuments.send(:remove_const, :Document)
+            Decidim::ParticipatoryDocuments.send(:stub_const, :Document)
             load "decidim/participatory_documents/document.rb"
           end
 
@@ -263,7 +263,7 @@ module Decidim
         context "when defined AntivirusValidator" do
           before do
             allow(ParticipatoryDocuments).to receive(:antivirus_enabled).and_return(true)
-            Decidim::ParticipatoryDocuments.send(:remove_const, :Document)
+            Decidim::ParticipatoryDocuments.send(:stub_const, :Document)
             load "decidim/participatory_documents/document.rb"
           end
 

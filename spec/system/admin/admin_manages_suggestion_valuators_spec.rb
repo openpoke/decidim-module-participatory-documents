@@ -2,42 +2,42 @@
 
 require "spec_helper"
 
-describe "Admin manages suggestion valuators", type: :system do
+describe "Admin manages suggestion valuators" do
   let(:manifest_name) { "participatory_documents" }
   let(:organization) { participatory_process.organization }
-  let!(:user) { create :user, :admin, :admin_terms_accepted, :confirmed, organization: organization }
+  let!(:user) { create(:user, :admin, :admin_terms_accepted, :confirmed, organization:) }
 
-  let(:component) { create :participatory_documents_component, participatory_space: participatory_process }
-  let(:document) { create :participatory_documents_document, :with_file, component: component }
-  let(:section1) { create(:participatory_documents_section, document: document) }
+  let(:component) { create(:participatory_documents_component, participatory_space: participatory_process) }
+  let(:document) { create(:participatory_documents_document, :with_file, component:) }
+  let(:section1) { create(:participatory_documents_section, document:) }
   let!(:suggestion) { create(:participatory_documents_suggestion, suggestable: section1) }
 
   let(:participatory_space_path) do
     decidim_admin_participatory_processes.edit_participatory_process_path(participatory_process)
   end
-  let(:valuator) { create :user, :confirmed, :admin_terms_accepted, organization: organization }
-  let!(:valuator_role) { create :participatory_process_user_role, role: :valuator, user: valuator, participatory_process: participatory_process }
+  let(:valuator) { create(:user, :confirmed, :admin_terms_accepted, organization:) }
+  let!(:valuator_role) { create(:participatory_process_user_role, role: :valuator, user: valuator, participatory_process:) }
 
   include Decidim::ComponentPathHelper
 
   include_context "when managing a component as an admin"
 
   context "when listing suggestions" do
-    let(:valuator2) { create :user, :confirmed, :admin_terms_accepted, organization: organization }
-    let(:valuator_role2) { create :participatory_process_user_role, role: :valuator, user: valuator2, participatory_process: participatory_process }
+    let(:valuator2) { create(:user, :confirmed, :admin_terms_accepted, organization:) }
+    let(:valuator_role2) { create(:participatory_process_user_role, role: :valuator, user: valuator2, participatory_process:) }
 
-    let!(:assignment) { create :suggestion_valuation_assignment, suggestion: suggestion, valuator_role: valuator_role }
+    let!(:assignment) { create(:suggestion_valuation_assignment, suggestion:, valuator_role:) }
 
     it "shows the valuator name" do
       visit current_path
       within(".valuators-count") do
         expect(page).to have_content(valuator.name)
-        expect(page).not_to have_content("(+1)")
+        expect(page).to have_no_content("(+1)")
       end
     end
 
     it "shows the valuator name and counter" do
-      create :suggestion_valuation_assignment, suggestion: suggestion, valuator_role: valuator_role2
+      create(:suggestion_valuation_assignment, suggestion:, valuator_role: valuator_role2)
 
       visit current_path
       within(".valuators-count") do
@@ -51,12 +51,12 @@ describe "Admin manages suggestion valuators", type: :system do
     before do
       visit current_path
 
-      within find("tr", text: suggestion.id) do
+      within "tr", text: suggestion.id do
         page.first(".js-suggestion-list-check").set(true)
       end
 
-      click_button "Actions"
-      click_button "Assign to valuator"
+      click_link_or_button "Actions"
+      click_link_or_button "Assign to valuator"
     end
 
     it "shows the component select" do
@@ -64,22 +64,22 @@ describe "Admin manages suggestion valuators", type: :system do
     end
 
     it "shows an update button" do
-      expect(page).to have_css("button#js-submit-assign-suggestion-to-valuator", count: 1)
+      expect(page).to have_button("#js-submit-assign-suggestion-to-valuator", count: 1)
     end
 
     context "when submitting the form" do
       before do
         within "#js-form-assign-suggestions-to-valuator" do
           select valuator.name, from: :valuator_role_id
-          page.find("button#js-submit-assign-suggestion-to-valuator").click
+          click_link_or_button("#js-submit-assign-suggestion-to-valuator")
         end
       end
 
       it "assigns the proposals to the valuator" do
         expect(page).to have_content("Suggestions assigned to a valuator successfully")
 
-        within find("tr", text: suggestion.id) do
-          expect(page).to have_selector("td.valuators-count", text: valuator.name)
+        within "tr", text: suggestion.id do
+          expect(page).to have_css("td.valuators-count", text: valuator.name)
         end
       end
     end
@@ -90,7 +90,7 @@ describe "Admin manages suggestion valuators", type: :system do
     let(:assigned_suggestion) { suggestion }
 
     before do
-      create :suggestion_valuation_assignment, suggestion: suggestion, valuator_role: valuator_role
+      create(:suggestion_valuation_assignment, suggestion:, valuator_role:)
 
       visit current_path
     end
@@ -114,16 +114,16 @@ describe "Admin manages suggestion valuators", type: :system do
     let(:assigned_suggestion) { suggestion }
 
     before do
-      create :suggestion_valuation_assignment, suggestion: suggestion, valuator_role: valuator_role
+      create(:suggestion_valuation_assignment, suggestion:, valuator_role:)
 
       visit current_path
 
-      within find("tr", text: assigned_suggestion.id) do
+      within "tr", text: assigned_suggestion.id do
         page.first(".js-suggestion-list-check").set(true)
       end
 
-      click_button "Actions"
-      click_button "Unassign from valuator"
+      click_link_or_button "Actions"
+      click_link_or_button "Unassign from valuator"
     end
 
     it "shows the component select" do
@@ -131,22 +131,22 @@ describe "Admin manages suggestion valuators", type: :system do
     end
 
     it "shows an update button" do
-      expect(page).to have_css("button#js-submit-unassign-suggestions-from-valuator", count: 1)
+      expect(page).to have_button("#js-submit-unassign-suggestions-from-valuator", count: 1)
     end
 
     context "when submitting the form" do
       before do
         within "#js-form-unassign-suggestions-from-valuator" do
           select valuator.name, from: :valuator_role_id
-          page.find("button#js-submit-unassign-suggestions-from-valuator").click
+          click_link_or_button("button#js-submit-unassign-suggestions-from-valuator")
         end
       end
 
       it "unassigns the proposals to the valuator" do
         expect(page).to have_content("Valuator unassigned from suggestions successfully")
 
-        within find("tr", text: assigned_suggestion.id) do
-          expect(page).to have_selector("td.valuators-count", text: 0)
+        within "tr", text: assigned_suggestion.id do
+          expect(page).to have_css("td.valuators-count", text: 0)
         end
       end
     end
@@ -156,11 +156,11 @@ describe "Admin manages suggestion valuators", type: :system do
     let(:assigned_suggestion) { suggestion }
 
     before do
-      create :suggestion_valuation_assignment, suggestion: suggestion, valuator_role: valuator_role
+      create(:suggestion_valuation_assignment, suggestion:, valuator_role:)
 
       visit current_path
-      within find("tr", text: assigned_suggestion.id) do
-        click_link "Answer"
+      within "tr", text: assigned_suggestion.id do
+        click_link_or_button "Answer"
       end
     end
 
@@ -181,19 +181,19 @@ describe "Admin manages suggestion valuators", type: :system do
 
   context "when valuators assign another valuator" do
     let(:assigned_suggestion) { suggestion }
-    let(:another_valuator) { create :user, :confirmed, :admin_terms_accepted, organization: organization }
-    let!(:another_valuator_role) { create :participatory_process_user_role, role: :valuator, user: another_valuator, participatory_process: participatory_process }
+    let(:another_valuator) { create(:user, :confirmed, :admin_terms_accepted, organization:) }
+    let!(:another_valuator_role) { create(:participatory_process_user_role, role: :valuator, user: another_valuator, participatory_process:) }
 
     before do
       sign_in valuator
-      create :suggestion_valuation_assignment, suggestion: suggestion, valuator_role: valuator_role
+      create(:suggestion_valuation_assignment, suggestion:, valuator_role:)
       visit current_path
     end
 
     context "when the valuator is assigned" do
       before do
-        within find("tr", text: assigned_suggestion.id) do
-          click_link "Answer"
+        within "tr", text: assigned_suggestion.id do
+          click_link_or_button "Answer"
         end
 
         within "#js-form-assign-suggestion-to-valuator" do
@@ -201,7 +201,7 @@ describe "Admin manages suggestion valuators", type: :system do
           find("option", text: another_valuator.name).click
         end
 
-        click_button "Assign"
+        click_link_or_button "Assign"
       end
 
       it "shows the valuator is assigned" do
@@ -213,7 +213,7 @@ describe "Admin manages suggestion valuators", type: :system do
       let!(:another_suggestion) { create(:participatory_documents_suggestion, suggestable: section1) }
 
       it "doesn't show suggestion" do
-        expect(page).not_to have_css("tr", text: another_suggestion.id)
+        expect(page).to have_no_css("tr", text: another_suggestion.id)
       end
     end
   end
@@ -221,8 +221,8 @@ describe "Admin manages suggestion valuators", type: :system do
   context "when admin to assign a validator" do
     before do
       visit current_path
-      within find("tr", text: suggestion.id) do
-        click_link "Answer"
+      within "tr", text: suggestion.id do
+        click_link_or_button "Answer"
       end
 
       within "#js-form-assign-suggestion-to-valuator" do
@@ -230,31 +230,31 @@ describe "Admin manages suggestion valuators", type: :system do
         find("option", text: valuator.name).click
       end
 
-      click_button "Assign"
+      click_link_or_button "Assign"
     end
 
     it "assigns the suggestions to the valuator" do
       expect(page).to have_content("Suggestions assigned to a valuator successfully")
 
-      within find("tr", text: suggestion.id) do
-        expect(page).to have_selector("td.valuators-count", text: valuator.name)
+      within "tr", text: suggestion.id do
+        expect(page).to have_css("td.valuators-count", text: valuator.name)
       end
     end
   end
 
   context "when a valuator manages assignments" do
-    let(:valuator2) { create :user, :confirmed, :admin_terms_accepted, organization: organization }
-    let!(:valuator_role2) { create :participatory_process_user_role, role: :valuator, user: valuator2, participatory_process: participatory_process }
+    let(:valuator2) { create(:user, :confirmed, :admin_terms_accepted, organization:) }
+    let!(:valuator_role2) { create(:participatory_process_user_role, role: :valuator, user: valuator2, participatory_process:) }
 
     before do
       switch_to_host(organization.host)
       login_as valuator, scope: :user
 
-      create :suggestion_valuation_assignment, suggestion: suggestion, valuator_role: valuator_role
+      create(:suggestion_valuation_assignment, suggestion:, valuator_role:)
 
       visit current_path
-      within find("tr", text: suggestion.id) do
-        click_link "Answer"
+      within "tr", text: suggestion.id do
+        click_link_or_button "Answer"
       end
     end
 
@@ -271,18 +271,18 @@ describe "Admin manages suggestion valuators", type: :system do
       end
 
       it "assigns the suggestion to the valuator" do
-        click_button "Assign"
+        click_link_or_button "Assign"
         expect(page).to have_content("Suggestions assigned to a valuator successfully")
 
-        within find("tr", text: suggestion.id) do
-          expect(page).to have_selector("td.valuators-count", text: "#{valuator.name} (+1)")
+        within "tr", text: suggestion.id do
+          expect(page).to have_css("td.valuators-count", text: "#{valuator.name} (+1)")
         end
       end
 
       context "when the valuator is removed" do
         before do
           accept_confirm do
-            within find("#valuators li", text: valuator.name) do
+            within "#valuators li", text: valuator.name do
               find("a.red-icon").click
             end
           end
@@ -290,11 +290,11 @@ describe "Admin manages suggestion valuators", type: :system do
 
         it "shows the valuator is unassigned successfully" do
           expect(page).to have_content("Valuator unassigned from suggestions successfully")
-          expect(page).not_to have_selector("#valuators")
+          expect(page).to have_no_selector("#valuators")
         end
 
         it "does not show the suggestion content" do
-          expect(page).not_to have_content(translated(suggestion.body).first(20))
+          expect(page).to have_no_content(translated(suggestion.body).first(20))
         end
 
         it "disallows access to the suggestion page" do

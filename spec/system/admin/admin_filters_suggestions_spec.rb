@@ -2,14 +2,14 @@
 
 require "spec_helper"
 
-describe "Admin filters suggestions", type: :system do
+describe "Admin filters suggestions" do
   let(:organization) { component.organization }
   let(:model_name) { Decidim::ParticipatoryDocuments::Suggestion.model_name }
   let(:resource_controller) { Decidim::ParticipatoryDocuments::Admin::SuggestionsController }
   let(:participatory_process) { component.participatory_space }
-  let(:user) { create(:user, :admin, :confirmed, organization: organization) }
+  let(:user) { create(:user, :admin, :confirmed, organization:) }
   let(:component) { create(:participatory_documents_component) }
-  let!(:document) { create :participatory_documents_document, author: user, component: component }
+  let!(:document) { create(:participatory_documents_document, author: user, component:) }
   let(:router) { Decidim::EngineRouter.admin_proxy(component).decidim_admin_participatory_process_participatory_documents }
 
   before do
@@ -27,11 +27,11 @@ describe "Admin filters suggestions", type: :system do
   end
 
   def suggestion_with_state(state)
-    Decidim::ParticipatoryDocuments::Suggestion.where(suggestable: document).find_by(state: state)
+    Decidim::ParticipatoryDocuments::Suggestion.where(suggestable: document).find_by(state:)
   end
 
   def suggestion_without_state(state)
-    Decidim::ParticipatoryDocuments::Suggestion.where(suggestable: document).where.not(state: state).last
+    Decidim::ParticipatoryDocuments::Suggestion.where(suggestable: document).where.not(state:).last
   end
 
   context "when filtering by state" do
@@ -44,7 +44,7 @@ describe "Admin filters suggestions", type: :system do
     STATES.each do |state|
       i18n_state = I18n.t(state, scope: "decidim.admin.filters.suggestions.state_eq.values")
 
-      context "filtering proposals by state: #{i18n_state}" do
+      context "when filtering proposals by state: #{i18n_state}" do
         it_behaves_like "a filtered collection", options: "State", filter: i18n_state do
           let!(:in_filter) { translated(suggestion_with_state(state).body).first(40) }
           let!(:not_in_filter) { translated(suggestion_without_state(state).body).first(40) }
@@ -67,6 +67,8 @@ describe "Admin filters suggestions", type: :system do
   end
 
   it_behaves_like "paginating a collection" do
+    # rubocop:disable RSpec/ExcessiveCreateList
     let!(:collection) { create_list(:participatory_documents_suggestion, 50, suggestable: document) }
+    # rubocop:enable RSpec/ExcessiveCreateList
   end
 end

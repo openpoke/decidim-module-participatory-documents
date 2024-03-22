@@ -17,9 +17,9 @@ module Decidim
         let(:form) do
           double(
             invalid?: invalid,
-            title: title,
-            id: id,
-            current_user: current_user
+            title:,
+            id:,
+            current_user:
           )
         end
 

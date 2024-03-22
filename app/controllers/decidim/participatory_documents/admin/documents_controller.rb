@@ -26,7 +26,7 @@ module Decidim
         end
 
         def edit
-          enforce_permission_to :update, :participatory_document, document: document
+          enforce_permission_to(:update, :participatory_document, document:)
           @form = form(DocumentForm).from_model(document)
         end
 
@@ -50,7 +50,7 @@ module Decidim
         end
 
         def update
-          enforce_permission_to :update, :participatory_document, document: document
+          enforce_permission_to(:update, :participatory_document, document:)
           @form = form(DocumentForm).from_params(params)
           UpdateDocument.call(@form, document) do
             on(:ok) do
@@ -76,11 +76,11 @@ module Decidim
         end
 
         def edit_pdf
-          enforce_permission_to :update, :participatory_document, document: document
+          enforce_permission_to :update, :participatory_document, document:
         end
 
         def publish
-          enforce_permission_to :update, :participatory_document, document: document
+          enforce_permission_to(:update, :participatory_document, document:)
 
           Admin::PublishDocument.call(document) do
             on(:ok) do |_document|
