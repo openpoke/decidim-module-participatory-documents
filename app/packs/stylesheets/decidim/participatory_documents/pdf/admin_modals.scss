@@ -1,9 +1,5 @@
 @use "sass:meta";
 
-.reveal-overlay {
-  z-index: 100000;
-}
-
 #decidim {
   position: fixed;
   top: 0;
@@ -15,20 +11,30 @@
   margin: 0;
   padding: 0;
 
-  @include meta.load-css(
-    "stylesheets/decidim/participatory_documents/pdf/decidim_admin_styles.scss"
-  );
+  .reveal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1005;
+    display: none;
+    background-color: rgba(26, 24, 29, 0.45);
+    overflow-y: auto;
+  }
 
-  &.show {
-    display: block;
-
-    .reveal-overlay {
-      display: block;
-
-      .reveal {
-        display: block;
-      }
-    }
+  .reveal {
+    width: 600px;
+    max-width: 75rem;
+    z-index: 1006;
+    backface-visibility: hidden;
+    display: none;
+    padding: 1rem;
+    border: 1px solid #adadad;
+    border-radius: 4px;
+    background-color: #eee;
+    position: relative;
+    top: 100px;
+    margin-right: auto;
+    margin-left: auto;
+    overflow-y: auto;
   }
 }
 

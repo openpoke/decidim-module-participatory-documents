@@ -1,23 +1,11 @@
-<div id="decidim">
-  <div class="reveal-overlay">
-    <div class="reveal confirm-reveal" id="export-modal" aria-hidden="true" role="dialog" data-reveal data-multiple-opened="true">
-      <div class="reveal__header">
-        <h3 class="h3 mb-2"><%= t(".title") %></h3>
-      </div>
-
-      <div class="content">
-        <div class="row">
-          <p><%= t(".description_html", email: current_user&.email, count: all_suggestions&.count) %></p>
-        </div>
-      </div>
-
-      <div class="row text-center mt-8 my-2" data-dialog-actions>
-        <button type="button" class="export-button button button__lg button__secondary" data-url="<%= export_document_suggestions_path(document) %>"><%= t(".send") %></button>
-      </div>
-
-      <button class="close-button" data-close aria-label="close" type="button" data-dialog-close="export-modal" data-dialog-closable>
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
+<%= decidim_modal id: "exportSuggestionsModal" do %>
+  <div data-dialog-container>
+    <h3 class="h3 mb-2"><%= t(".title") %></h3>
   </div>
-</div>
+  <div data-dialog-container>
+    <p><%= t(".description_html", email: current_user&.email, count: all_suggestions&.count) %></p>
+  </div>
+  <div class="row text-center mt-8 my-2" data-dialog-actions>
+    <button type="button" class="export-button button button__lg button__secondary" data-url="<%= export_document_suggestions_path(document) %>"><%= t(".send") %></button>
+  </div>
+<% end %>

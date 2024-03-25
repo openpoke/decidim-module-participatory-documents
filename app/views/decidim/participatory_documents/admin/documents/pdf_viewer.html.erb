@@ -61,6 +61,7 @@
         var boxChanged = function(box) {
           // reorder box numbers according to page, x position, and y position
           var boxes = Array.from(document.querySelectorAll(".polygon-ready .box"));
+          console.log(boxes);
           boxes.sort(function(a, b) {
             var aPage = parseInt(a.parentElement.dataset.pageNumber, 10);
             var bPage = parseInt(b.parentElement.dataset.pageNumber, 10)

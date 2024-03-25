@@ -1,7 +1,7 @@
 <div class="reveal-overlay">
   <div class="reveal" id="editor-modal">
     <%= decidim_form_for([document, @form], html: { class: "form-defaults form", data: "dialog", aria_hidden: "false" })do |form| %>
-      <div class="form-wrapper">
+      <div class="form__wrapper">
         <div class="card-divider">
           <h3 class="h2 mb-2" id="editor-modal-title">Card title</h3>
         </div>
@@ -14,6 +14,5 @@
       <button class="button button__lg button__secondary" id="editor-modal-save">Save</button>
       <button class="button button__lg button__alert" id="editor-modal-remove">Delete</button>
     </div>
-    <button type="button" data-dialog-close="editor-modal" data-dialog-closable="" aria-label="Close modal">&times;</button>
   </div>
 </div>

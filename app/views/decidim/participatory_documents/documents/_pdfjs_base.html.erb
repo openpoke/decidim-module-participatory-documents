@@ -20,7 +20,7 @@ Adobe CMap resources are covered by their own copyright but the same license:
 See https://github.com/adobe-type-tools/cmap-resources
 -->
 <%= stylesheet_pack_tag  "decidim_participatory_documents_viewer", media: "all" %>
-<%= javascript_pack_tag  "decidim_participatory_documents_viewer", defer: false %>
+<%= javascript_pack_tag  "decidim_participatory_documents_viewer", "decidim_core", defer: false %>
 <%= pdf_custom_style %>
 <div id="outerContainer">
 
@@ -317,7 +317,10 @@ See https://github.com/adobe-type-tools/cmap-resources
               <button id="globalSuggestionTrigger" class="decidimButton" title="<%= t "global_suggestions", scope: "decidim.participatory_documents.document" %>">
                 <%= t "global_suggestions", scope: "decidim.participatory_documents.document" %>
               </button>
-              <button id="exportSuggestionsTrigger" class="decidimButton muted" title="<%= t "export_my_suggestions", scope: "decidim.participatory_documents.document" %>">
+              <button id="exportSuggestionsTrigger"
+                      data-dialog-open="exportSuggestionsModal"
+                      class="decidimButton muted"
+                      title="<%= t "export_my_suggestions", scope: "decidim.participatory_documents.document" %>">
                 <%= t "export_my_suggestions", scope: "decidim.participatory_documents.document" %>
               </button>
             <% end %>

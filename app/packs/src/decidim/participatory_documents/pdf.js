@@ -15,47 +15,6 @@ window.InitDocumentManagers = (options) => {
       window.currentSuggestionForm.open();
     }
   });
-
-  const decidim = document.getElementById("decidim");
-  options.exportModal.addEventListener("click", (evt) => {
-    evt.stopPropagation();
-  });
-  options.exportButton.addEventListener("click", (evt) => {
-    evt.stopPropagation();
-    const uiClose = decidim.querySelector(".close-button");
-    uiClose.addEventListener("click", () => decidim.classList.remove("show"), { once: true });
-    decidim.addEventListener("click", () => decidim.classList.remove("show"), { once: true });
-
-    decidim.classList.add("show");
-  });
-  options.exportModal.querySelector(".export-button").addEventListener("click", (evt) => {
-    evt.stopPropagation();
-    fetch(evt.target.dataset.url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json",
-        "X-CSRF-Token": document.getElementsByName("csrf-token").item(0).content
-      },
-      credentials: "include"
-    }).
-      then((response) => {
-        if (response.ok) {
-          return response.json();
-        }
-        return response.json().then((json) => { 
-          throw new Error(json.message) 
-        });
-      }).
-      then((resp) => {
-        // console.log("response ok", resp);
-        options.exportModal.querySelector(".content").innerHTML = `<div class="callout success">${resp.message}</div>`;
-      }).
-      catch((message) => {
-        options.exportModal.querySelector(".content").innerHTML = `<div class="callout alert">${message}</div>`;
-        // console.error("Error exporting", message);
-      });
-  });
 };
 
 // Call this on an annotation layer to initialize the polygon viewer (public side)
