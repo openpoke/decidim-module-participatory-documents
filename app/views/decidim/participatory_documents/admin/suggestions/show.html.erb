@@ -1,48 +1,52 @@
+<% add_decidim_page_title(translated_attribute(document.title)) %>
 <%= append_stylesheet_pack_tag "decidim_admin_participatory_documents" %>
 <%= append_javascript_pack_tag "decidim_admin_participatory_documents" %>
-<div class="item_show__wrapper">
-  <div class="item_show__header">
-    <h1 class="item_show__header-title">
-      Suggestion for <%= translated_attribute(suggestion.suggestable.title) %>
-    </h1>
-  </div>
-  <div class="mb-2">
-    <p class="block"><strong><%= t ".authors" %>:</strong></p>
-    <ul id="proposal-authors-list">
-      <li class="text-secondary">
-        <% presented_author = present(suggestion.author) %>
-        <%= link_to_if(
-              presented_author.profile_path.present?,
-              presented_author.name,
-              presented_author.profile_path,
-              target: :blank
-            ) %>
-        <% if presented_author.can_be_contacted? && presented_author.nickname != present(current_user).nickname %>
-          <%= icon_link_to "mail-check-line", current_or_new_conversation_path_with(presented_author), t("decidim.contact"), class: "action-icon--new" %>
+<div class="component__show">
+  <div class="card">
+    <div class="component__show_header">
+      <h2 class="component__show_header-title">
+        Suggestion for <%= translated_attribute(suggestion.suggestable.title) %>
+      </h2>
+    </div>
+    <div class="mb-2">
+      <p class="block"><strong><%= t ".authors" %>:</strong></p>
+      <ul id="proposal-authors-list">
+        <li class="text-secondary">
+          <% presented_author = present(suggestion.author) %>
+          <%= link_to_if(
+                presented_author.profile_path.present?,
+                presented_author.name,
+                presented_author.profile_path,
+                target: :blank
+              ) %>
+          <% if presented_author.can_be_contacted? && presented_author.nickname != present(current_user).nickname %>
+            <%= icon_link_to "mail-check-line", current_or_new_conversation_path_with(presented_author), t("decidim.contact"), class: "action-icon--new" %>
+          <% end %>
+        </li>
+      </ul>
+    </div>
+
+    <div class="mb-2">
+      <strong><%= t ".body" %>:</strong>
+      <p><%= suggestion_content(suggestion)[:text] %>
+        <% if suggestion_content(suggestion)[:file_link] %>
+          <%= suggestion_content(suggestion)[:file_link] %>
         <% end %>
-      </li>
-      <%# end %>
-    </ul>
+      </p>
+    </div>
+    <div class="mb-2">
+      <strong><%= t ".created_at" %>:</strong>
+      <p><%= l suggestion.created_at, format: :decidim_short %></p>
+    </div>
+
+    <%= render "decidim/participatory_documents/admin/suggestions/valuators" %>
+
+    <% if allowed_to?(:create, :suggestion_note, suggestion: suggestion) %>
+      <div class="card-section">
+        <%= render "decidim/participatory_documents/admin/suggestion_notes/suggestion_notes" %>
+      </div>
+    <% end %>
+
+    <%= render "decidim/participatory_documents/admin/suggestions/form" %>
   </div>
-
-  <div class="mb-2">
-    <strong><%= t ".body" %>:</strong>
-    <p><%= suggestion_content(suggestion)[:text] %>
-      <% if suggestion_content(suggestion)[:file_link] %>
-        <%= suggestion_content(suggestion)[:file_link] %>
-      <% end %>
-    </p>
-  </div>
-  <div class="mb-2">
-    <strong><%= t ".created_at" %>:</strong>
-    <p><%= l suggestion.created_at, format: :decidim_short %></p>
-  </div>
-
-  <%= render "decidim/participatory_documents/admin/suggestions/valuators" %>
-
-  <% if allowed_to?(:create, :suggestion_note, suggestion: suggestion) %>
-    <%= render "decidim/participatory_documents/admin/suggestion_notes/suggestion_notes" %>
-  <% end %>
-
-  <%= render "decidim/participatory_documents/admin/suggestions/form" %>
 </div>
