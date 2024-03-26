@@ -13,9 +13,9 @@
   <script src="/pdfjs/build/pdf.js"></script>
 
   <script src="/pdfjs/web/viewer.js"></script>
-  
+
   <%= stylesheet_pack_tag  "decidim_participatory_documents_viewer", media: :all %>
-  
+
   <% append_javascript_pack_tag "decidim_core", defer: false %>
   <%= javascript_pack_tag "decidim_participatory_documents_viewer", defer: false if current_user %>
   <%= javascript_pack_tag "decidim_participatory_documents_viewer_off", defer: false unless current_user %>

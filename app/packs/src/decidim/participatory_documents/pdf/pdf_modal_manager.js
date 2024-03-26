@@ -8,7 +8,8 @@ export default class PdfModalManager {
     this.csrfToken = options.csrfToken;
     // UI
     this.modal = document.getElementById("editor-modal");
-    this.modalContent = this.modal.querySelector(".form__wrapper");
+    this.modalContent = document.getElementById("editor-modal-content");
+    this.modalWrapper = this.modal.querySelector(".form__wrapper");
     // events
     this.onSave = () => {};
     this.onDestroy = () => {};
@@ -35,13 +36,14 @@ export default class PdfModalManager {
   }
 
   populateModal(data, box) {
-    this.modalContent.innerHTML = data;
+    this.modalWrapper.innerHTML = data;
     this.displayModal(box);
+    // Admin in 0.28 still uses foundation to handle tabs
+    $(this.modalWrapper).foundation();
   }
 
   displayModal(box) {
     const uiSave = document.getElementById("editor-modal-save");
-    const uiClose = document.querySelector('[data-dialog-close="editor-modal"]');
     const uiTitle = document.getElementById("editor-modal-title");
     const uiRemove = document.getElementById("editor-modal-remove");
     uiTitle.innerHTML = this.i18n.modalTitle.replace("%{box}", box.div.dataset.position).replace("%{section}", box.div.dataset.sectionNumber);
@@ -55,7 +57,7 @@ export default class PdfModalManager {
 
   createBox(box, page) {
     let body = box.getInfo();
-    body.pageNumber = page;
+    body.page_number = page; // eslint-disable-line camelcase
 
     fetch(this.annotationsPath, {
       method: "POST",
@@ -75,10 +77,13 @@ export default class PdfModalManager {
       }).
       then((resp) => {
         box.setInfo();
+        this.modalContent.classList.remove("loading");
+        window.Decidim.currentDialogs[this.modal.id].close();
         this.onSave(box, resp.data);
       }).
       catch((error) => {
-        console.error("Error creating box, removing it from the UI", error);
+        console.error("Error creating box, destroy it", error);
+        this.modalContent.classList.remove("loading");
         box.destroy();
         this.onError(box, error);
       });
@@ -86,14 +91,12 @@ export default class PdfModalManager {
 
   _saveHandler(box, evt) {
     evt.stopPropagation();
+    this.modalContent.classList.add("loading");
     let form = this.modal.querySelector("form");
-console.log("saving", form)
 
     fetch(form.action, {
       method: "PATCH",
       headers: {
-        // "Content-Type": form.encoding,
-        // "Accept": "application/json",
         "X-CSRF-Token": this.csrfToken
       },
       credentials: "include",
@@ -105,23 +108,14 @@ console.log("saving", form)
         }
         throw new Error(response.statusText);
       }).
-      then((resp) => {
+      then(() => {
         this.createBox(box, this.pdfViewer.currentPageNumber);
       }).
       catch((error) => {
-        console.error("Error saving box, removing it from the UI", error);
+        console.error("Error saving box", error);
+        this.modalContent.classList.remove("loading");
         this.populateModal(error, box);
       });
-
-
-    // $.ajax({
-    //   type: $form.attr("method"),
-    //   url: $form.attr("action"),
-    //   data: $form.serialize()
-    // }).done(() => {
-    //   this.createBox(box, this.pdfViewer.currentPageNumber);
-    // }).
-    //   fail((data) => this.populateModal(data.responseText, box));
   }
 
   _removeHandler(box, evt) {

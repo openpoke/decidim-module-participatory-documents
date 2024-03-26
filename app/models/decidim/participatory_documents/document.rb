@@ -54,7 +54,7 @@ module Decidim
                 a.rect["top"].to_i <=> b.rect["top"].to_i
               end
             else
-              a.page_number <=> b.page_number
+              a.page_number.to_i <=> b.page_number.to_i
             end
           end
 
