@@ -27,6 +27,8 @@ describe "Index Suggestion Notes" do
     login_as user, scope: :user
 
     visit router.document_suggestion_path(document, suggestion)
+
+    click_link_or_button("Private notes")
   end
 
   it "shows suggestion notes for the current proposal" do
@@ -47,7 +49,9 @@ describe "Index Suggestion Notes" do
 
       expect(page).to have_admin_callout("successfully")
 
-      within ".comment-thread" do
+      click_link_or_button("Private notes")
+
+      within ".component__show_notes-grid" do
         expect(page).to have_content("New awesome body")
       end
     end
@@ -63,7 +67,7 @@ describe "Index Suggestion Notes" do
         find("*[type=submit]").click
       end
 
-      expect(page).to have_content("There's an error in this field.")
+      expect(page).to have_content("There is an error in this field.")
     end
   end
 end

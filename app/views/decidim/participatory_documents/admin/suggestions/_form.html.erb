@@ -7,23 +7,20 @@
           <h2 class="card-title"><%= t ".title" %></h2>
         </div>
         <div class="row column flex items-center gap-x-4 my-2">
-            <%= form.collection_radio_buttons :state, [
-              ["not_answered", t("not_answered", scope: "decidim.participatory_documents.suggestions.answers")],
-              ["accepted", t("accepted", scope: "decidim.participatory_documents.suggestions.answers")],
-              ["rejected", t("rejected", scope: "decidim.participatory_documents.suggestions.answers")],
-              ["evaluating", t("evaluating", scope: "decidim.participatory_documents.suggestions.answers")]
-            ], :first, :last, prompt: true do |builder|
-              builder.label { builder.radio_button + builder.text } end %>
-          </div>
-
-          <div class="row column">
-            <%= form.translated :editor, :answer, autofocus: true, rows: 15 %>
-          </div>
-
-          <div class="row column">
-            <%= form.check_box :answer_is_published, label: t(".answer_is_published") %>
-          </div>
-
+          <%= form.collection_radio_buttons :state, [
+            ["not_answered", t("not_answered", scope: "decidim.participatory_documents.suggestions.answers")],
+            ["accepted", t("accepted", scope: "decidim.participatory_documents.suggestions.answers")],
+            ["rejected", t("rejected", scope: "decidim.participatory_documents.suggestions.answers")],
+            ["evaluating", t("evaluating", scope: "decidim.participatory_documents.suggestions.answers")]
+          ], :first, :last, prompt: true do |builder|
+            builder.label { builder.radio_button + builder.text }
+          end %>
+        </div>
+        <div class="row column">
+          <%= form.translated :editor, :answer, autofocus: true, rows: 15 %>
+        </div>
+        <div class="row column">
+          <%= form.check_box :answer_is_published, label: t(".answer_is_published") %>
         </div>
       </div>
     </div>

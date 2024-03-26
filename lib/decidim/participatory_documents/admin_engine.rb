@@ -39,6 +39,7 @@ module Decidim
 
       initializer "decidim_decidim_participatory_documents.register_icons" do
         Decidim.icons.register(name: "stack-line", icon: "stack-line", category: "system", description: "", engine: :decidim_participatory_documents)
+        Decidim.icons.register(name: "mail-check-line", icon: "mail-check-line", category: "system", description: "", engine: :decidim_participatory_documents)
         Decidim.icons.register(name: "question-answer-line", icon: "question-answer-line", category: "system", description: "", engine: :decidim_participatory_documents)
         Decidim.icons.register(name: "skip-back-line", icon: "skip-back-line", category: "system", description: "", engine: :decidim_participatory_documents)
       end

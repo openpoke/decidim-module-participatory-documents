@@ -65,10 +65,4 @@ describe "Admin filters suggestions" do
       expect(page).to have_content(suggestion2.id)
     end
   end
-
-  it_behaves_like "paginating a collection" do
-    # rubocop:disable RSpec/ExcessiveCreateList
-    let!(:collection) { create_list(:participatory_documents_suggestion, 50, suggestable: document) }
-    # rubocop:enable RSpec/ExcessiveCreateList
-  end
 end

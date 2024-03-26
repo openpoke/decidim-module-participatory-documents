@@ -189,10 +189,10 @@ describe "Admin manages participatory documents" do
 
   context "when admin to exports suggestions" do
     it "exports a JSON" do
-      find(".exports.dropdown").click
+      find(".exports.button").click
       perform_enqueued_jobs { click_link_or_button "Suggestions as JSON" }
 
-      within ".callout.success" do
+      within ".flash.success" do
         expect(page).to have_content("in progress")
       end
 
@@ -259,7 +259,7 @@ describe "Admin manages participatory documents" do
   end
 
   it "filters by section name" do
-    within ".container" do
+    within ".table-list" do
       expect(page).to have_content("Global")
       expect(page).to have_content(translated_attribute(section1.title))
     end
@@ -268,7 +268,7 @@ describe "Admin manages participatory documents" do
       find("a", text: "Section").hover
       find("a", text: translated_attribute(section1.title)).click
     end
-    within ".container" do
+    within ".table-list" do
       expect(page).to have_no_content("Global")
       expect(page).to have_content(translated_attribute(section1.title))
     end
@@ -281,8 +281,8 @@ describe "Admin manages participatory documents" do
       expect(page).to have_content(section1.title["en"])
       expect(page).to have_no_content(section2.title["en"])
     end
-    within(".pagination") do
-      find(".pagination-next > a").click
+    within("nav[aria-label='Pagination']") do
+      click_link_or_button("Next")
     end
     within(".table-scroll") do
       expect(page).to have_no_content("Global")
@@ -305,7 +305,7 @@ describe "Admin manages participatory documents" do
     it "displays the file" do
       within(".table-scroll") do
         find("a.sort_link", text: "Id").click
-        expect(page).to have_css(".icon--data-transfer-download", count: 1)
+        expect(page).to have_css("svg use[href*='ri-file-download-line']", count: 1)
       end
     end
 
@@ -315,7 +315,7 @@ describe "Admin manages participatory documents" do
         target_row = find("tr", text: document_suggestion.id.to_s)
         target_row.find("a.action-icon[title='Answer']").click
       end
-      expect(page).to have_css(".icon--data-transfer-download", count: 1)
+      expect(page).to have_css("svg use[href*='ri-file-download-line']", count: 1)
     end
   end
 
@@ -329,14 +329,14 @@ describe "Admin manages participatory documents" do
     it "publishes some answers" do
       within "form.suggestion_form_admin" do
         choose selection
-        fill_in_i18n(
+        fill_in_i18n_editor(
           :answer_suggestion_answer,
           "#answer_suggestion-answer-tabs",
           en: "This is my answer"
         )
         check :answer_suggestion_answer_is_published if published
-        click_link_or_button "Answer"
       end
+      click_link_or_button "Answer"
       expect(page).to have_content("Successfully")
     end
   end
@@ -373,14 +373,14 @@ describe "Admin manages participatory documents" do
           end
           within "form.suggestion_form_admin" do
             choose "Not Answered"
-            fill_in_i18n(
+            fill_in_i18n_editor(
               :answer_suggestion_answer,
               "#answer_suggestion-answer-tabs",
               en: "This is my answer"
             )
-            check :answer_suggestion_answer_is_published
-            click_link_or_button "Answer"
           end
+          check :answer_suggestion_answer_is_published
+          click_link_or_button "Answer"
           expect(page).to have_no_content("Successfully added the answer")
           expect(page).to have_content(%q(It's not possible to publish with status "not answered"))
         end

@@ -34,6 +34,10 @@ describe "Edit Suggestion Notes" do
   context "when the user is the author of the suggestion note" do
     let(:author) { user }
 
+    before do
+      click_link_or_button "Private notes"
+    end
+
     it "shows suggestion notes for the current suggestion" do
       suggestion_notes.each do |suggestion_note|
         expect(page).to have_css(".link-alt")
@@ -42,23 +46,28 @@ describe "Edit Suggestion Notes" do
     end
 
     it "edits a suggestion note" do
-      within ".comment-thread .card:last-child" do
+      within ".component__show_notes-grid .comment:last-child" do
         find(".link-alt").click
       end
 
-      within ".edit_suggestion_note" do
+      within "#editNoteModal#{suggestion_notes.last.id}" do
         expect(page).to have_content("Test body")
         fill_in :suggestion_note_body, with: "New awesome body"
         find("*[type=submit]").click
       end
 
       expect(page).to have_admin_callout("successfully updated")
+      click_link_or_button "Private notes"
       expect(page).to have_content("New awesome body")
     end
   end
 
   context "when the user is not the author of the suggestion note" do
     let(:author) { create(:user, organization:) }
+
+    before do
+      click_link_or_button "Private notes"
+    end
 
     it "shows suggestion notes for the current suggestion" do
       suggestion_notes.each do |suggestion_note|
@@ -82,6 +91,7 @@ describe "Edit Suggestion Notes" do
     before do
       suggestion_notes.last.update(body: "Edited body")
       visit current_path
+      click_link_or_button "Private notes"
     end
 
     it "displays the edited status" do

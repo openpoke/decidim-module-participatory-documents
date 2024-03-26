@@ -23,7 +23,8 @@ describe "Admin manages participatory documents" do
 
   shared_examples "creating a document" do |create|
     it "has the fields" do
-      expect(page).to have_content("Add images by dragging & dropping or pasting them.")
+      expect(page).to have_content("Add file") if create
+      expect(page).to have_content("Replace") unless create
       expect(page.execute_script("return window.getComputedStyle(document.querySelector('.box-preview .box')).backgroundColor")).to eq(default_color_with_opacity)
       expect(page.execute_script("return window.getComputedStyle(document.querySelector('.box-preview .box')).borderColor")).to eq(default_color)
 

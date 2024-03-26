@@ -244,12 +244,12 @@ module Decidim
         context "when not AntivirusValidator defined" do
           before do
             allow(ParticipatoryDocuments).to receive(:antivirus_enabled).and_return(false)
-            Decidim::ParticipatoryDocuments.send(:stub_const, :Document)
+            Decidim::ParticipatoryDocuments.send(:remove_const, :Document)
             load "decidim/participatory_documents/document.rb"
           end
 
           after do
-            Decidim::ParticipatoryDocuments.send(:stub_const, :Document)
+            Decidim::ParticipatoryDocuments.send(:remove_const, :Document)
             load "decidim/participatory_documents/document.rb"
           end
 
@@ -263,7 +263,7 @@ module Decidim
         context "when defined AntivirusValidator" do
           before do
             allow(ParticipatoryDocuments).to receive(:antivirus_enabled).and_return(true)
-            Decidim::ParticipatoryDocuments.send(:stub_const, :Document)
+            Decidim::ParticipatoryDocuments.send(:remove_const, :Document)
             load "decidim/participatory_documents/document.rb"
           end
 

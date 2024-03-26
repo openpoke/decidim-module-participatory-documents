@@ -169,7 +169,7 @@ describe "Admin manages suggestion valuators" do
         expect(page).to have_content(valuator.name)
 
         accept_confirm do
-          find("a.red-icon").click
+          find("svg use[href*='ri-close-circle-line']").click
         end
       end
 
@@ -283,7 +283,7 @@ describe "Admin manages suggestion valuators" do
         before do
           accept_confirm do
             within "#valuators li", text: valuator.name do
-              find("a.red-icon").click
+              find("svg use[href*='ri-close-circle-line']").click
             end
           end
         end
