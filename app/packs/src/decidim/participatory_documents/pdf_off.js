@@ -18,7 +18,7 @@ const openLogin = (evt) => {
   params.append("redirect_url", window.parent.location.href);
   loginForm.action = `${parts[0]}?${params.toString()}`;
 
-  window.Decidim.currentDialogs.loginModal.open()
+  window.parent.Decidim.currentDialogs.loginModal.open()
 };
 
 window.InitDocumentManagers = (options) => {
