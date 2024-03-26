@@ -38,7 +38,7 @@ export default class PdfModalManager {
     uiTitle.innerHTML = this.i18n.modalTitle.replace("%{box}", box.div.dataset.position).replace("%{section}", box.sectionNumber);
 
     this.modalLayout.classList.add("show");
-    $(this.modalLayout).foundation();
+    // $(this.modalLayout).foundation();
 
     modal.addEventListener("click", (evt) => evt.stopPropagation(), { once: true });
     uiClose.addEventListener("click", this._closeHandler.bind(this), { once: true });
@@ -79,17 +79,18 @@ export default class PdfModalManager {
 
   _saveHandler(box, evt) {
     evt.stopPropagation();
-    let $form = $(this.modalLayout).find("form");
+    let form = this.modalLayout.querySelector("form");
+console.log("saving", form)
 
-    $.ajax({
-      type: $form.attr("method"),
-      url: $form.attr("action"),
-      data: $form.serialize()
-    }).done(() => {
-      this.modalLayout.classList.remove("show");
-      this.createBox(box, this.pdfViewer.currentPageNumber);
-    }).
-      fail((data) => this.populateModal(data.responseText, box));
+    // $.ajax({
+    //   type: $form.attr("method"),
+    //   url: $form.attr("action"),
+    //   data: $form.serialize()
+    // }).done(() => {
+    //   this.modalLayout.classList.remove("show");
+    //   this.createBox(box, this.pdfViewer.currentPageNumber);
+    // }).
+    //   fail((data) => this.populateModal(data.responseText, box));
   }
 
   _removeHandler(box, evt) {
