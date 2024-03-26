@@ -7,10 +7,10 @@
   <title>PDF.js viewer</title>
 
   <link rel="stylesheet" href="/pdfjs/web/viewer.css">
-  <script src="/pdfjs/build/pdf.js"></script>
-  <script src="/pdfjs/web/viewer.js"></script>
   <!-- This snippet is used in production (included from viewer.html) -->
   <link rel="resource" type="application/l10n" href="/pdfjs/web/locale/locale.properties">
+  <script src="/pdfjs/build/pdf.js"></script>
+  <script src="/pdfjs/web/viewer.js"></script>
 
   <% append_stylesheet_pack_tag "decidim_core", "decidim_admin", media: :all %>
   <%= stylesheet_pack_tag  "decidim_participatory_documents_editor", media: "all" %>
@@ -26,7 +26,9 @@
 <body tabindex="1">
   <%= render "decidim/participatory_documents/documents/pdfjs_base", display_save: true %>
 
-  <%= render "decidim/participatory_documents/admin/documents/editor_modal" %>
+  <div id="decidim">
+    <%= render "decidim/participatory_documents/admin/sections/modal" %>
+  </div>
 
   <div id="notifications"></div>
 

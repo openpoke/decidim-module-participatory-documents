@@ -135,6 +135,11 @@ en:
             success: Document has been successfully updated
         exports:
           suggestions: Suggestions
+        sections:
+          modal:
+            save: Save
+            delete: Delete
+            title: Edit section
         suggestion_notes:
           create:
             error: There was a problem creating this suggestion note

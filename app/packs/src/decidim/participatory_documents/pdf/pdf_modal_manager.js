@@ -7,8 +7,8 @@ export default class PdfModalManager {
     this.pdfViewer = options.pdfViewer;
     this.csrfToken = options.csrfToken;
     // UI
-    this.modalLayout = document.getElementById("decidim");
-    this.modalLayout.addEventListener("click", this._closeHandler.bind(this));
+    this.modal = document.getElementById("editor-modal");
+    this.modalContent = this.modal.querySelector(".form__wrapper");
     // events
     this.onSave = () => {};
     this.onDestroy = () => {};
@@ -17,31 +17,38 @@ export default class PdfModalManager {
   }
 
   loadBoxModal(box) {
-    $.ajax({
-      url: this.editSectionPath(box.section),
-      type: "GET"
-    }).done((data) => this.populateModal(data, box)).
-      fail((error) => this.onError(box, error));
+    fetch(this.editSectionPath(box.section), {
+      method: "GET",
+      headers: {
+        "X-CSRF-Token": this.csrfToken
+      },
+      credentials: "include"
+    }).
+      then((response) => {
+        if (response.ok) {
+          return response.text();
+        }
+        throw new Error(response.statusText);
+      }).
+      then((data) => this.populateModal(data, box)).
+      catch((error) => this.onError(box, error));
   }
 
   populateModal(data, box) {
-    this.modalLayout.innerHTML = data;
+    this.modalContent.innerHTML = data;
     this.displayModal(box);
   }
 
   displayModal(box) {
-    const modal = document.getElementById("editor-modal");
     const uiSave = document.getElementById("editor-modal-save");
-    const uiClose = document.getElementById("editor-modal-close");
+    const uiClose = document.querySelector('[data-dialog-close="editor-modal"]');
     const uiTitle = document.getElementById("editor-modal-title");
     const uiRemove = document.getElementById("editor-modal-remove");
-    uiTitle.innerHTML = this.i18n.modalTitle.replace("%{box}", box.div.dataset.position).replace("%{section}", box.sectionNumber);
+    uiTitle.innerHTML = this.i18n.modalTitle.replace("%{box}", box.div.dataset.position).replace("%{section}", box.div.dataset.sectionNumber);
 
-    this.modalLayout.classList.add("show");
-    // $(this.modalLayout).foundation();
+    window.Decidim.currentDialogs[this.modal.id].open();
 
-    modal.addEventListener("click", (evt) => evt.stopPropagation(), { once: true });
-    uiClose.addEventListener("click", this._closeHandler.bind(this), { once: true });
+    // this.modal.addEventListener("click", (evt) => evt.stopPropagation(), { once: true });
     uiRemove.addEventListener("click", (evt) => this._removeHandler(box, evt), { once: true });
     uiSave.addEventListener("click", (evt) => this._saveHandler(box, evt), { once: true });
   }
@@ -79,15 +86,39 @@ export default class PdfModalManager {
 
   _saveHandler(box, evt) {
     evt.stopPropagation();
-    let form = this.modalLayout.querySelector("form");
+    let form = this.modal.querySelector("form");
 console.log("saving", form)
+
+    fetch(form.action, {
+      method: "PATCH",
+      headers: {
+        // "Content-Type": form.encoding,
+        // "Accept": "application/json",
+        "X-CSRF-Token": this.csrfToken
+      },
+      credentials: "include",
+      body: new FormData(form)
+    }).
+      then((response) => {
+        if (response.ok) {
+          return response.json();
+        }
+        throw new Error(response.statusText);
+      }).
+      then((resp) => {
+        this.createBox(box, this.pdfViewer.currentPageNumber);
+      }).
+      catch((error) => {
+        console.error("Error saving box, removing it from the UI", error);
+        this.populateModal(error, box);
+      });
+
 
     // $.ajax({
     //   type: $form.attr("method"),
     //   url: $form.attr("action"),
     //   data: $form.serialize()
     // }).done(() => {
-    //   this.modalLayout.classList.remove("show");
     //   this.createBox(box, this.pdfViewer.currentPageNumber);
     // }).
     //   fail((data) => this.populateModal(data.responseText, box));
@@ -110,7 +141,7 @@ console.log("saving", form)
             if (response.ok) {
               return response.json();
             }
-            throw new Error(" ");
+            throw new Error(response.statusText);
           }).
           then(() => {
             box.destroy();
@@ -122,12 +153,6 @@ console.log("saving", form)
       } else {
         box.destroy();
       }
-      this.modalLayout.classList.remove("show");
     }
-  }
-
-  _closeHandler(evt) {
-    evt.stopPropagation();
-    this.modalLayout.classList.remove("show");
   }
 }

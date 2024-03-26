@@ -16,7 +16,7 @@ module Decidim
         def update
           enforce_permission_to :update, :document_section
           @form = form(Decidim::ParticipatoryDocuments::Admin::SectionForm).from_params(params)
-
+byebug
           Admin::UpdateSection.call(@form, document) do
             on(:ok) do |_annotation|
               render(json: {}, status: :accepted) && return

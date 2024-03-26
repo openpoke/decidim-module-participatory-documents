@@ -1,23 +1,24 @@
 <%= decidim_modal id: "editNoteModal#{note.id}" do %>
   <div data-dialog-container>
     <%= icon "edit-line" %>
-    <h3 id="<%= modal_id %>-label" class="h3">
+    <h3 id="<%= modal_id %>-label" class="h3" tabindex="-1" data-dialog-title>
       <%= t("modal.title", scope: "decidim.participatory_documents.admin.suggestion_notes") %>
     </h3>
+    <div id="<%= modal_id %>-desc" class="my-8">
+      <%= decidim_form_for(notes_form,
+                           url: note_path,
+                           method: :patch,
+                           html: { class: "form form-defaults edit_suggestion_note" }) do |f| %>
+        <div class="form__wrapper gap-2">
+          <%= f.text_area :body, rows: 10, label: t("modal.body", scope: "decidim.participatory_documents.admin.suggestion_notes"), value: note_body %>
+        </div>
+      </div>
+    </div>
   </div>
-  <div data-dialog-container>
-    <%= decidim_form_for(notes_form,
-                         url: note_path,
-                         method: :patch,
-                         html: { class: "form form-defaults edit_suggestion_note" }) do |f| %>
-      <div class="form__wrapper gap-2">
-        <%= f.text_area :body, rows: 10, label: t("modal.body", scope: "decidim.participatory_documents.admin.suggestion_notes"), value: note_body %>
-      </div>
+  <div data-dialog-actions>
+    <div class="button button__sm button__secondary">
+      <%= f.submit t("modal.update", scope: "decidim.participatory_documents.admin.suggestion_notes") %>
     </div>
-    <div data-dialog-actions>
-      <div class="button button__sm button__secondary">
-        <%= f.submit t("modal.update", scope: "decidim.participatory_documents.admin.suggestion_notes") %>
-      </div>
-    </div>
-    <% end %>
+  </div>
+  <% end %>
 <% end %>
