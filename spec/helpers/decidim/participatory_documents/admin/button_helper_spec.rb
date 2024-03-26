@@ -5,7 +5,6 @@ describe Decidim::ParticipatoryDocuments::Admin::ButtonHelper do
   let(:document) { create(:participatory_documents_document, component:) }
   let(:icon) { "file-text-line" }
 
-
   describe "#button_builder" do
     it "returns a button with the given title and icon" do
       expect(helper.button_builder("Title", icon: "file-text-line")).to include("Title")
