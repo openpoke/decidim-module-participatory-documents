@@ -12,7 +12,7 @@ describe "User interaction with PDF viewer" do
 
   shared_examples "interacts with drawer" do
     it "displays the drawer" do
-      expect(page).to have_css("#participation-modal")
+      expect(page).to have_css("#participationModal")
       expect(page).to have_css("#participation-modal-form")
       expect(page).to have_css("#suggestions-list")
     end
@@ -25,7 +25,7 @@ describe "User interaction with PDF viewer" do
       let(:attributes) { { suggestable: sugested, author: user, answer:, answered_at: Time.zone.now, answer_is_published: published } }
 
       it "displays only my suggestion" do
-        within "#participation-modal" do
+        within "#participationModal" do
           expect(page).to have_content(my_suggestion.body["en"])
           expect(page).to have_no_content(other_suggestion.body["en"])
         end
@@ -40,7 +40,7 @@ describe "User interaction with PDF viewer" do
 
           context "when the answer is draft" do
             it "does not render admin note" do
-              within "#participation-modal" do
+              within "#participationModal" do
                 expect(page).to have_no_content(answer["en"])
               end
             end
@@ -50,7 +50,7 @@ describe "User interaction with PDF viewer" do
             let(:published) { true }
 
             it "does not render admin note" do
-              within "#participation-modal" do
+              within "#participationModal" do
                 expect(page).to have_no_content(answer["en"])
               end
             end
@@ -62,7 +62,7 @@ describe "User interaction with PDF viewer" do
 
           context "when the answer is draft" do
             it "does not render admin note" do
-              within "#participation-modal" do
+              within "#participationModal" do
                 expect(page).to have_no_content(answer["en"])
               end
             end
@@ -72,7 +72,7 @@ describe "User interaction with PDF viewer" do
             let(:published) { true }
 
             it "renders admin note" do
-              within "#participation-modal" do
+              within "#participationModal" do
                 expect(page).to have_content(answer["en"])
               end
             end
@@ -84,7 +84,7 @@ describe "User interaction with PDF viewer" do
 
           context "when the answer is draft" do
             it "does not render admin note" do
-              within "#participation-modal" do
+              within "#participationModal" do
                 expect(page).to have_no_content(answer["en"])
               end
             end
@@ -94,7 +94,7 @@ describe "User interaction with PDF viewer" do
             let(:published) { true }
 
             it "renders admin note" do
-              within "#participation-modal" do
+              within "#participationModal" do
                 expect(page).to have_no_content(answer["en"])
               end
             end
@@ -106,7 +106,7 @@ describe "User interaction with PDF viewer" do
 
           context "when the answer is draft" do
             it "does not render admin note" do
-              within "#participation-modal" do
+              within "#participationModal" do
                 expect(page).to have_no_content(answer["en"])
               end
             end
@@ -116,7 +116,7 @@ describe "User interaction with PDF viewer" do
             let(:published) { true }
 
             it "renders admin note" do
-              within "#participation-modal" do
+              within "#participationModal" do
                 expect(page).to have_content(answer["en"])
               end
             end
@@ -128,7 +128,7 @@ describe "User interaction with PDF viewer" do
 
           context "when the answer is draft" do
             it "does not render admin note" do
-              within "#participation-modal" do
+              within "#participationModal" do
                 expect(page).to have_no_content(answer["en"])
               end
             end
@@ -138,7 +138,7 @@ describe "User interaction with PDF viewer" do
             let(:published) { true }
 
             it "renders admin note" do
-              within "#participation-modal" do
+              within "#participationModal" do
                 expect(page).to have_content(answer["en"])
               end
             end
@@ -194,7 +194,7 @@ describe "User interaction with PDF viewer" do
     it "submits a box content" do
       find("#box-#{section.annotations.first.id}").click
       sleep 1
-      expect(page).to have_css("#participation-modal.active")
+      expect(page).to have_css("#participationModal.active")
       expect(page).to have_no_content("upload a file")
       expect(page).to have_content(t("activemodel.attributes.suggestion.body"))
 
@@ -213,7 +213,7 @@ describe "User interaction with PDF viewer" do
     it "submits a global content" do
       click_link_or_button "Global suggestions"
       sleep 1
-      expect(page).to have_css("#participation-modal.active")
+      expect(page).to have_css("#participationModal.active")
       expect(page).to have_content("upload a file")
       expect(page).to have_content(t("activemodel.attributes.suggestion.body"))
 
