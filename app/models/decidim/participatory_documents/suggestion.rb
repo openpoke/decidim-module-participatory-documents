@@ -103,11 +103,11 @@ module Decidim
       end
 
       scope :sort_by_valuation_assignments_count_asc, lambda {
-        order(Arel.sql("#{sort_by_valuation_assignments_count_nulls_last_query} ASC NULLS FIRST").to_s)
+        order(Arel.sql("#{sort_by_valuation_assignments_count_nulls_last_query} ASC NULLS FIRST"))
       }
 
       scope :sort_by_valuation_assignments_count_desc, lambda {
-        order(Arel.sql("#{sort_by_valuation_assignments_count_nulls_last_query} DESC NULLS LAST").to_s)
+        order(Arel.sql("#{sort_by_valuation_assignments_count_nulls_last_query} DESC NULLS LAST"))
       }
 
       def self.ransackable_scopes(_auth = nil)
