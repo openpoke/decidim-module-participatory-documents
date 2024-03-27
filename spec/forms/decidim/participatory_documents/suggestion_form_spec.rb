@@ -8,13 +8,13 @@ module Decidim
       subject { form }
 
       let(:context) { double(current_component: component) }
-      let(:component) { create :participatory_documents_component }
-      let(:document) { create(:participatory_documents_document, component: component) }
+      let(:component) { create(:participatory_documents_component) }
+      let(:document) { create(:participatory_documents_document, component:) }
 
       let(:form) do
         described_class.from_params(
           {
-            body: body,
+            body:,
             file: example_file
           }
         ).with_context(
@@ -50,7 +50,7 @@ module Decidim
         let(:body) { nil }
         let(:example_file) { nil }
 
-        it { is_expected.to be_invalid }
+        it { is_expected.not_to be_valid }
 
         it_behaves_like "validate error message", "not_blank", {}
       end
@@ -58,7 +58,7 @@ module Decidim
       context "when a body that is too short" do
         let(:body) { "body" }
 
-        it { is_expected.to be_invalid }
+        it { is_expected.not_to be_valid }
 
         it_behaves_like "validate error message", "too_short", { min_length: 5 }
       end
@@ -66,21 +66,21 @@ module Decidim
       context "when a body that is too long" do
         let(:body) { "Long body" * 300 }
 
-        it { is_expected.to be_invalid }
+        it { is_expected.not_to be_valid }
 
         it_behaves_like "validate error message", "too_long", { max_length: 1000 }
       end
 
       context "when default min size is another" do
         let(:body) { "short" }
-        let(:component) { double(:participatory_documents_component, settings: settings) }
+        let(:component) { double(:participatory_documents_component, settings:) }
         let(:settings) { double(:settings, min_suggestion_length: 7, max_suggestion_length: 100) }
 
         before do
           allow(Decidim::ParticipatoryDocuments).to receive(:min_suggestion_length).and_return(7)
         end
 
-        it { is_expected.to be_invalid }
+        it { is_expected.not_to be_valid }
 
         it_behaves_like "validate error message", "too_short", { min_length: 7 }
 
@@ -93,14 +93,14 @@ module Decidim
 
       context "when default max size is another" do
         let(:body) { "A" * 201 }
-        let(:component) { double(:participatory_documents_component, settings: settings) }
+        let(:component) { double(:participatory_documents_component, settings:) }
         let(:settings) { double(:settings, min_suggestion_length: 5, max_suggestion_length: 200) }
 
         before do
           allow(Decidim::ParticipatoryDocuments).to receive(:max_suggestion_length).and_return(200)
         end
 
-        it { is_expected.to be_invalid }
+        it { is_expected.not_to be_valid }
 
         it_behaves_like "validate error message", "too_long", { max_length: 200 }
 
@@ -113,10 +113,10 @@ module Decidim
 
       context "when min length is enough" do
         let(:body) { "Hi" }
-        let(:component) { double(:participatory_documents_component, settings: settings) }
+        let(:component) { double(:participatory_documents_component, settings:) }
         let(:settings) { double(:settings, min_suggestion_length: 3, max_suggestion_length: 100) }
 
-        it { is_expected.to be_invalid }
+        it { is_expected.not_to be_valid }
 
         it_behaves_like "validate error message", "too_short", { min_length: 3 }
 
@@ -129,14 +129,14 @@ module Decidim
 
       context "when :max_suggestion_length is modified in the component settings" do
         let(:body) { "A" * 201 }
-        let(:component) { double(:participatory_documents_component, settings: settings) }
+        let(:component) { double(:participatory_documents_component, settings:) }
         let(:settings) { double(:settings, min_suggestion_length: 5, max_suggestion_length: 200) }
 
         before do
           allow(Decidim::ParticipatoryDocuments).to receive(:max_suggestion_length).and_return(300)
         end
 
-        it { is_expected.to be_invalid }
+        it { is_expected.not_to be_valid }
 
         it_behaves_like "validate error message", "too_long", { max_length: 200 }
 
@@ -149,14 +149,14 @@ module Decidim
 
       context "when :min_suggestion_length is modified in the component settings" do
         let(:body) { "Hi" }
-        let(:component) { double(:participatory_documents_component, settings: settings) }
+        let(:component) { double(:participatory_documents_component, settings:) }
         let(:settings) { double(:settings, min_suggestion_length: 3, max_suggestion_length: 100) }
 
         before do
           allow(Decidim::ParticipatoryDocuments).to receive(:min_suggestion_length).and_return(10)
         end
 
-        it { is_expected.to be_invalid }
+        it { is_expected.not_to be_valid }
 
         it_behaves_like "validate error message", "too_short", { min_length: 3 }
 

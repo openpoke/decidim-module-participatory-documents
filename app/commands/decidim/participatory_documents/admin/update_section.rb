@@ -40,7 +40,7 @@ module Decidim
         def attributes
           {
             title: form.title
-          }.merge(document: document)
+          }.merge(document:)
         end
 
         def section

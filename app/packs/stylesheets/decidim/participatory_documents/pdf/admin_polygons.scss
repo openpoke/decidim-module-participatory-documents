@@ -7,7 +7,12 @@
     right: 0;
     width: 32px;
     height: 32px;
-    background: linear-gradient(135deg, transparent 0, transparent 45%, #fff 80%);
+    background: linear-gradient(
+      135deg,
+      transparent 0,
+      transparent 45%,
+      #fff 80%
+    );
   }
 
   &.hover {
@@ -84,8 +89,8 @@
       border-radius: 5px;
 
       &:hover {
-        transform: scale(.9);
-        opacity: .8;
+        transform: scale(0.9);
+        opacity: 0.8;
       }
 
       &::after {

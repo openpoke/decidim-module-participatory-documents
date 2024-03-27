@@ -1,13 +1,5 @@
 @use "sass:meta";
 
-@import "stylesheets/decidim/admin/variables";
-@import "stylesheets/decidim/utils/fontface";
-@import "stylesheets/decidim/admin/utils/settings";
-
-.reveal-overlay {
-  z-index: 100000;
-}
-
 #decidim {
   position: fixed;
   top: 0;
@@ -18,28 +10,24 @@
   display: none;
   margin: 0;
   padding: 0;
-  font-family: $body-font-family;
-  font-weight: $global-weight-normal;
-  line-height: $global-lineheight;
-  color: $body-font-color;
+}
 
-  @include meta.load-css("stylesheets/decidim/participatory_documents/pdf/decidim_admin_styles.scss");
+#editor-modal {
+  .loading {
+    @apply cursor-wait;
 
-  &.show {
-    display: block;
+    &::after {
+      @apply content-[""] absolute inset-0 w-full h-full bg-white/80 z-10;
+    }
 
-    .reveal-overlay {
-      display: block;
-
-      .reveal {
-        display: block;
-      }
+    &::before {
+      @apply content-[""] z-20 absolute top-[50%] ml-[calc(50%-2rem)] block w-6 h-6 -mt-6 rounded-full animate-spin border-4 border-l-background border-y-background border-r-secondary;
     }
   }
 }
 
 @keyframes blinker {
   50% {
-    background-color: rgba(var(--primary-rgb), .6);
+    background-color: rgba(var(--primary-rgb), 0.6);
   }
 }

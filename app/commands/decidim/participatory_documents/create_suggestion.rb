@@ -35,7 +35,7 @@ module Decidim
           Decidim::ParticipatoryDocuments::Suggestion,
           form.current_user,
           { body: { I18n.locale => sanitized_body },
-            suggestable: suggestable,
+            suggestable:,
             author: form.current_user },
           visibility: "public-only"
         )

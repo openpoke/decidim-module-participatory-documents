@@ -1,11 +1,9 @@
-<div class="card full-height">
-  <div class="card-divider">
-    <h2 class="card-title flex--sbc">
-      <%= translated_attribute(current_component.name) %>
-      <%= render "title" %>
-    </h2>
-  </div>
-  <div class="card-section">
-    <p class="text-large text-center mt-s"><%= t(".start") %></p>
-  </div>
+<div class="item_show__header">
+  <h1 class="item_show__header-title">
+    <%= translated_attribute(current_component.name) %>
+    <%= render "title" %>
+  </h1>
+</div>
+<div class="card-section">
+  <p class="text-xl text-center mt-4"><%= t(".start") %></p>
 </div>

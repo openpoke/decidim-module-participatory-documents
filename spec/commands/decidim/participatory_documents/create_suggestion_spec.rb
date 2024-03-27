@@ -7,14 +7,14 @@ describe Decidim::ParticipatoryDocuments::CreateSuggestion do
 
   let(:organization) { component.organization }
   let(:component) { create(:participatory_documents_component) }
-  let(:document) { create :participatory_documents_document, component: component }
-  let(:user) { create(:user, :admin, :confirmed, organization: organization) }
-  let(:section) { create(:participatory_documents_section, document: document) }
+  let(:document) { create(:participatory_documents_document, component:) }
+  let(:user) { create(:user, :admin, :confirmed, organization:) }
+  let(:section) { create(:participatory_documents_section, document:) }
   let(:form) do
     double(
       invalid?: invalid,
       current_user: user,
-      body: body,
+      body:,
       file: nil
     )
   end

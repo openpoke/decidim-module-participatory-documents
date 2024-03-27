@@ -18,7 +18,7 @@ module Decidim
           store_initial_suggestion_state
 
           suggestion.assign_attributes(attributes)
-          if (%w(state answer answer_is_published) & suggestion.changed).any?
+          if %w(state answer answer_is_published).intersect?(suggestion.changed)
             transaction { answer_suggestion }
             notify_suggestion_answer
           end

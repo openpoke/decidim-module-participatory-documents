@@ -16,26 +16,34 @@ window.InitDocumentManagers = (options) => {
     }
   });
 
-  const decidim = document.getElementById("decidim");
-  options.exportModal.addEventListener("click", (evt) => {
-    evt.stopPropagation();
-  });
+  const exportContent = options.exportModal.querySelector(".content");
+  const exportCallout = options.exportModal.querySelector(".callout");
+  const exportButton = options.exportModal.querySelector(".export-button");
+  const closeButton = options.exportModal.querySelector(".close-button");
+
   options.exportButton.addEventListener("click", (evt) => {
     evt.stopPropagation();
-    const uiClose = decidim.querySelector(".close-button");
-    uiClose.addEventListener("click", () => decidim.classList.remove("show"), { once: true });
-    decidim.addEventListener("click", () => decidim.classList.remove("show"), { once: true });
-
-    decidim.classList.add("show");
+    exportCallout.classList.remove("alert", "success");
+    exportCallout.classList.add("hidden");
+    exportContent.classList.remove("hidden");
+    exportButton.classList.remove("hidden");
+    window.Decidim.currentDialogs[options.exportModal.id].open();
   });
-  options.exportModal.querySelector(".export-button").addEventListener("click", (evt) => {
+
+  closeButton.addEventListener("click", (evt) => {
     evt.stopPropagation();
+    window.Decidim.currentDialogs[options.exportModal.id].close();
+  });
+
+  exportButton.addEventListener("click", (evt) => {
+    evt.stopPropagation();
+    const token = document.getElementsByName("csrf-token");
     fetch(evt.target.dataset.url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         "Accept": "application/json",
-        "X-CSRF-Token": document.getElementsByName("csrf-token").item(0).content
+        "X-CSRF-Token": token && token[0].content
       },
       credentials: "include"
     }).
@@ -48,12 +56,20 @@ window.InitDocumentManagers = (options) => {
         });
       }).
       then((resp) => {
-        // console.log("response ok", resp);
-        options.exportModal.querySelector(".content").innerHTML = `<div class="callout success">${resp.message}</div>`;
+        console.log("response ok", resp);
+        exportButton.classList.add("hidden");
+        exportContent.classList.add("hidden");
+        exportCallout.classList.remove("hidden");
+        exportCallout.classList.add("success");
+        exportCallout.innerHTML = resp.message;
       }).
       catch((message) => {
-        options.exportModal.querySelector(".content").innerHTML = `<div class="callout alert">${message}</div>`;
-        // console.error("Error exporting", message);
+        exportButton.classList.add("hidden");
+        exportContent.classList.add("hidden");
+        exportCallout.classList.remove("hidden");
+        exportCallout.classList.add("alert");
+        exportCallout.innerHTML = message;
+        console.error("Error exporting", message);
       });
   });
 };

@@ -38,7 +38,7 @@ module Decidim
             form.current_user,
             {
               body: form.body,
-              suggestion: suggestion,
+              suggestion:,
               author: form.current_user
             }
           )

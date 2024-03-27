@@ -1,5 +1,5 @@
 <tr <%= "data-published-state=false" if suggestion.has_answer? && suggestion.not_not_answered? && !suggestion.answer_is_published? %>>
-  <td>
+  <td class="text-center">
     <%= check_box_tag "suggestions_ids_s[]", suggestion.id, false, class: "js-check-all-suggestion js-suggestion-list-check  js-suggestion-id-#{suggestion.id}" %><br>
   </td>
   <td><%= suggestion.id %></td>
@@ -29,5 +29,5 @@
     <% end %>
   </td>
   <td><%= l suggestion.created_at, format: :decidim_short %></td>
-  <td><%= icon_with_link_to_suggestion(document, suggestion) %></td>
+  <td class="table-list__actions"><%= icon_with_link_to_suggestion(document, suggestion) %></td>
 </tr>

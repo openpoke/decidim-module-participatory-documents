@@ -7,14 +7,17 @@
   <title>PDF.js viewer</title>
 
   <link rel="stylesheet" href="/pdfjs/web/viewer.css">
-
-  <script src="/pdfjs/build/pdf.js"></script>
-
   <!-- This snippet is used in production (included from viewer.html) -->
   <link rel="resource" type="application/l10n" href="/pdfjs/web/locale/locale.properties">
+  <script src="/pdfjs/build/pdf.js"></script>
   <script src="/pdfjs/web/viewer.js"></script>
-  <%= javascript_pack_tag "decidim_participatory_documents_editor" %>
-  <%= stylesheet_pack_tag "decidim_participatory_documents_editor" %>
+
+  <% append_stylesheet_pack_tag "decidim_core", "decidim_admin", media: :all %>
+  <%= stylesheet_pack_tag  "decidim_participatory_documents_editor", media: "all" %>
+
+  <% append_javascript_pack_tag "decidim_core", "decidim_admin", defer: false %>
+  <%= javascript_pack_tag "decidim_participatory_documents_editor", defer: false %>
+
   <%= organization_colors %>
   <%= pdf_custom_style %>
   <%= csrf_meta_tags %>
@@ -23,7 +26,9 @@
 <body tabindex="1">
   <%= render "decidim/participatory_documents/documents/pdfjs_base", display_save: true %>
 
-  <%= render "decidim/participatory_documents/admin/documents/editor_modal" %>
+  <div id="decidim">
+    <%= render "decidim/participatory_documents/admin/sections/modal" %>
+  </div>
 
   <div id="notifications"></div>
 
@@ -59,6 +64,7 @@
         var boxChanged = function(box) {
           // reorder box numbers according to page, x position, and y position
           var boxes = Array.from(document.querySelectorAll(".polygon-ready .box"));
+          console.log(boxes);
           boxes.sort(function(a, b) {
             var aPage = parseInt(a.parentElement.dataset.pageNumber, 10);
             var bPage = parseInt(b.parentElement.dataset.pageNumber, 10)

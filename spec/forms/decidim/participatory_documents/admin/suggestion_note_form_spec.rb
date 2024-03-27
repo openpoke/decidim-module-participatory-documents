@@ -12,7 +12,7 @@ module Decidim
         let(:body) { Decidim::Faker::Localized.sentence(word_count: 3) }
         let(:params) do
           {
-            body: body
+            body:
           }
         end
 
@@ -29,7 +29,7 @@ module Decidim
         context "when the body is not presence" do
           let(:body) { nil }
 
-          it { is_expected.to be_invalid }
+          it { is_expected.not_to be_valid }
         end
       end
     end

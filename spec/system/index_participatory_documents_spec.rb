@@ -2,17 +2,17 @@
 
 require "spec_helper"
 
-describe "Index participatory_documents", type: :system do
+describe "Index participatory_documents" do
   include_context "with a component"
-  let(:organization) { create :organization }
-  let(:user) { create(:user, :admin, :confirmed, organization: organization) }
-  let(:participatory_process) { create :participatory_process, organization: organization }
+  let(:organization) { create(:organization) }
+  let(:user) { create(:user, :admin, :confirmed, organization:) }
+  let(:participatory_process) { create(:participatory_process, organization:) }
   let(:manifest_name) { "participatory_documents" }
-  let!(:component) { create :participatory_documents_component, participatory_space: participatory_process }
-  let!(:component_unpublished) { create :participatory_documents_component, :unpublished, participatory_space: participatory_process }
+  let!(:component) { create(:participatory_documents_component, participatory_space: participatory_process) }
+  let!(:component_unpublished) { create(:participatory_documents_component, :unpublished, participatory_space: participatory_process) }
   let!(:title) { "Test title" }
   let!(:description) { "Test description" }
-  let!(:document) { create :participatory_documents_document, :with_file, title: { en: title }, description: { en: description }, component: component }
+  let!(:document) { create(:participatory_documents_document, :with_file, title: { en: title }, description: { en: description }, component:) }
 
   before do
     switch_to_host(organization.host)
@@ -32,7 +32,7 @@ describe "Index participatory_documents", type: :system do
     let!(:component) { component_unpublished }
 
     it "shows a message" do
-      expect(page).not_to have_content("There is no document uploaded yet")
+      expect(page).to have_no_content("There is no document uploaded yet")
       expect(page).to have_content(document.title["en"])
     end
   end
@@ -46,8 +46,8 @@ describe "Index participatory_documents", type: :system do
     let(:description) { nil }
 
     it "does not show title and description" do
-      expect(page).not_to have_content("Test title")
-      expect(page).not_to have_content("Test description")
+      expect(page).to have_no_content("Test title")
+      expect(page).to have_no_content("Test description")
     end
   end
 

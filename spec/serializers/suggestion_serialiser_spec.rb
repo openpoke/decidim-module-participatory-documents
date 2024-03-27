@@ -10,7 +10,7 @@ module Decidim::ParticipatoryDocuments
 
     subject { described_class.new(suggestion) }
     let(:suggestion) { create(:participatory_documents_suggestion, :with_answer) }
-    let!(:valuation_assignment) { create(:suggestion_valuation_assignment, suggestion: suggestion) }
+    let!(:valuation_assignment) { create(:suggestion_valuation_assignment, suggestion:) }
     let(:serialized) { subject.serialize }
 
     describe "serialize" do

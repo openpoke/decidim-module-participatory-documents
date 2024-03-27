@@ -19,7 +19,7 @@ module Decidim
             rect: [50, 50, 100, 100],
             id: "annotationid",
             group: "groupid",
-            current_user: current_user,
+            current_user:,
             section: nil
           )
         end
@@ -33,7 +33,7 @@ module Decidim
 
           context "when there is no document" do
             let(:document) { nil }
-            let(:current_user) { create :user, :admin, :confirmed }
+            let(:current_user) { create(:user, :admin, :confirmed) }
 
             it "is not valid" do
               expect { subject.call }.to broadcast(:invalid)

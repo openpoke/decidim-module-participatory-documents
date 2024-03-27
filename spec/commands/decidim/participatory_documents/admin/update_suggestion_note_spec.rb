@@ -9,8 +9,8 @@ module Decidim::ParticipatoryDocuments::Admin
     let!(:document) { create(:participatory_documents_document, :with_file) }
     let(:component) { document.component }
     let(:organization) { component.organization }
-    let(:user) { create :user, :admin, :confirmed, organization: organization }
-    let!(:note) { create(:participatory_documents_suggestion_note, suggestion: suggestion) }
+    let(:user) { create(:user, :admin, :confirmed, organization:) }
+    let!(:note) { create(:participatory_documents_suggestion_note, suggestion:) }
     let!(:suggestion) { create(:participatory_documents_suggestion, suggestable: document) }
 
     let(:form) do
@@ -21,7 +21,7 @@ module Decidim::ParticipatoryDocuments::Admin
 
     describe "call" do
       let(:form_params) do
-        { body: body }
+        { body: }
       end
 
       context "when the form is valid" do

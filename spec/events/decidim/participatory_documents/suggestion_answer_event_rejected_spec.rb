@@ -51,7 +51,7 @@ describe Decidim::ParticipatoryDocuments::SuggestionAnswerEvent do
   end
 
   context "when suggestion is added to a document" do
-    let(:document) { create :participatory_documents_document }
+    let(:document) { create(:participatory_documents_document) }
     let(:resource) { create(:participatory_documents_suggestion, :rejected, :with_answer, suggestable: document) }
 
     it_behaves_like "sends the rejected suggestion notification"

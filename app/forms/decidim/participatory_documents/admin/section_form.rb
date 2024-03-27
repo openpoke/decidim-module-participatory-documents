@@ -9,6 +9,7 @@ module Decidim
         mimic :section
 
         translatable_attribute :title, String
+        attribute :position, Integer
 
         validates :title, translatable_presence: true
       end

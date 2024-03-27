@@ -10,7 +10,7 @@ module Decidim
 
         # document.author
         let!(:suggestion) { create(:participatory_documents_suggestion, suggestable: document) }
-        let(:document) { create :participatory_documents_document }
+        let(:document) { create(:participatory_documents_document) }
 
         let(:suggestion_ids) { [accepted_suggestion.id, evaluating_suggestion.id, accepted_suggestion.id] }
 

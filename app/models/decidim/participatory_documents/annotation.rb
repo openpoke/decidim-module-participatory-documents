@@ -15,12 +15,12 @@ module Decidim
 
       def serialize
         @serialize ||= {
-          id: id,
-          position: position,
-          rect: rect,
+          id:,
+          position:,
+          rect:,
           section: section.id,
           section_number: section.position,
-          page_number: page_number
+          page_number:
         }
       end
     end

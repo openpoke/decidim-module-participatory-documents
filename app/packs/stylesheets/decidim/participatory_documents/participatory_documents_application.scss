@@ -1,0 +1,23 @@
+@import "stylesheets/decidim/participatory_documents/pdf/defaults";
+@import "stylesheets/decidim/participatory_documents/pdf/polygons";
+
+#loginModal-label {
+  outline: none;
+}
+
+.pdf-viewer-container {
+  height: calc(100vh - 30rem);
+  min-height: 50em;
+  padding: 0;
+
+  @media (max-width: 680px) {
+    margin-left: -1.6rem;
+  }
+}
+
+#pdf-iframe {
+  &::before {
+    content: "";
+    vertical-align: middle;
+  }
+}

@@ -1,10 +1,12 @@
 <div class="comment">
-  <div class="comment__content">
-    <%= author_cell %>
-    <%= suggestion_content(model)[:text] %>
-    <% if suggestion_content(model)[:file_link] %>
-      <%= suggestion_content(model)[:file_link] %>
-    <% end %>
+  <div class="comment__content flex items-center">
+    <div class="whitespace-nowrap"><%= author_cell %></div>
+    <div class="flex-grow">
+      <%= suggestion_content(model)[:text] %>
+      <% if suggestion_content(model)[:file_link] %>
+        <%= suggestion_content(model)[:file_link] %>
+      <% end %>
+    </div>
   </div>
   <%= render :admin_answer if has_answer? %>
 </div>

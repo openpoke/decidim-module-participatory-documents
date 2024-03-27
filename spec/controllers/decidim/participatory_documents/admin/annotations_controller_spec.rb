@@ -5,14 +5,14 @@ require "spec_helper"
 module Decidim
   module ParticipatoryDocuments
     module Admin
-      describe AnnotationsController, type: :controller do
+      describe AnnotationsController do
         routes { Decidim::ParticipatoryDocuments::AdminEngine.routes }
 
         let(:organization) { component.organization }
         let(:participatory_process) { component.participatory_space }
         let(:component) { document.component }
         let(:document) { create(:participatory_documents_document) }
-        let(:user) { create :user, :admin, :confirmed, organization: organization }
+        let(:user) { create(:user, :admin, :confirmed, organization:) }
         let(:model) { Decidim::ParticipatoryDocuments::Annotation }
         let(:sections) { Decidim::ParticipatoryDocuments::Section }
 
@@ -34,19 +34,19 @@ module Decidim
 
           it "Creates a new annotation and section" do
             expect do
-              post(:create, params: params)
+              post(:create, params:)
             end.to change(model, :count).by(1).and change(sections, :count).by(1)
           end
         end
 
         describe ".destroy" do
           let!(:annotation) { create(:participatory_documents_annotation) }
-          let!(:section) { create(:participatory_documents_section, document: document, annotations: [annotation]) }
+          let!(:section) { create(:participatory_documents_section, document:, annotations: [annotation]) }
 
           let(:params) { { document_id: document.id, id: annotation.id } }
 
           it "deletes the annotation and section" do
-            expect { delete(:destroy, params: params) }.to change(model, :count).by(-1).and change(sections, :count).by(-1)
+            expect { delete(:destroy, params:) }.to change(model, :count).by(-1).and change(sections, :count).by(-1)
           end
         end
       end

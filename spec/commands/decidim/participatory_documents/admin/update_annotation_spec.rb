@@ -18,10 +18,10 @@ module Decidim
           double(
             invalid?: invalid,
             page_number: 1,
-            rect: rect,
+            rect:,
             id: annotation.id,
             section: annotation.section.id,
-            current_user: current_user
+            current_user:
           )
         end
 

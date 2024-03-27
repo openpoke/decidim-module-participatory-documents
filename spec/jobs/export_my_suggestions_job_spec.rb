@@ -6,7 +6,7 @@ module Decidim::ParticipatoryDocuments
   describe ExportMySuggestionsJob do
     let!(:document) { create(:participatory_documents_document, :with_suggestions) }
     let(:organization) { document.component.organization }
-    let!(:user) { create(:user, organization: organization) }
+    let!(:user) { create(:user, organization:) }
 
     it "sends an email with the result of the export" do
       described_class.perform_now(user, document, "CSV")

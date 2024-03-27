@@ -59,7 +59,7 @@ module Decidim
           @section = Decidim.traceability.create!(
             Decidim::ParticipatoryDocuments::Section,
             form.current_user,
-            document: document
+            document:
           )
         end
 
@@ -81,7 +81,7 @@ module Decidim
           {
             page_number: form.page_number,
             rect: form.rect,
-            section: section
+            section:
           }
         end
 

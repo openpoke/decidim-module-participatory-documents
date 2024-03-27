@@ -17,7 +17,7 @@ module Decidim
       let(:export) { "11" }
       let(:min) { "33" }
       let(:max) { "77" }
-      let(:config) { JSON.parse cmd_capture("bin/rails runner 'puts Decidim::ParticipatoryDocuments.config.to_json'", env: env) }
+      let(:config) { JSON.parse cmd_capture("bin/rails runner 'puts Decidim::ParticipatoryDocuments.config.to_json'", env:) }
 
       def cmd_capture(cmd, env: {})
         Dir.chdir(test_app) do

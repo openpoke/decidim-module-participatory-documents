@@ -28,7 +28,7 @@ module Decidim
           suggestion.file.attach(io: File.open("spec/fixtures/files/test.com"), filename: "test.com", content_type: "text/plain")
         end
 
-        it { is_expected.to be_invalid }
+        it { is_expected.not_to be_valid }
       end
     end
   end

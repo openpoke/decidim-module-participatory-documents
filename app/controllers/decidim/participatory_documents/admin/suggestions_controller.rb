@@ -6,7 +6,6 @@ module Decidim
       class SuggestionsController < Admin::ApplicationController
         include Decidim::Admin::Filterable
         include Decidim::Admin::Paginable
-        include Decidim::ParticipatoryDocuments::Admin::NeedsAdminSnippets
 
         helper Decidim::ParticipatoryDocuments::Admin::SuggestionHelper
         helper Decidim::Messaging::ConversationHelper
@@ -15,13 +14,13 @@ module Decidim
                       :suggestion_find, :valuator_assigned_to_suggestion?
 
         def show
-          enforce_permission_to :show, :suggestion, suggestion: suggestion
+          enforce_permission_to(:show, :suggestion, suggestion:)
 
           @form = form(Decidim::ParticipatoryDocuments::Admin::AnswerSuggestionForm).from_model(suggestion)
         end
 
         def answer
-          enforce_permission_to :update, :suggestion_answer, suggestion: suggestion
+          enforce_permission_to(:update, :suggestion_answer, suggestion:)
           @form = form(Decidim::ParticipatoryDocuments::Admin::AnswerSuggestionForm).from_params(params)
 
           Admin::AnswerSuggestion.call(@form, suggestion) do
@@ -179,7 +178,7 @@ module Decidim
         def valuator_assigned_to_suggestion?
           @valuator_assigned_to_suggestion ||=
             Decidim::ParticipatoryDocuments::ValuationAssignment
-            .where(suggestion: suggestion, valuator_role: valuator_roles)
+            .where(suggestion:, valuator_role: valuator_roles)
             .any?
         end
       end

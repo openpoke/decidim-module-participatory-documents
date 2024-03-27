@@ -9,8 +9,8 @@ FactoryBot.define do
   factory :participatory_documents_document, class: "Decidim::ParticipatoryDocuments::Document" do
     title { generate_localized_title }
     description { Decidim::Faker::Localized.wrapped("<p>", "</p>") { generate_localized_title } }
-    component { create(:participatory_documents_component) }
-    author { build(:user, :confirmed, organization: component.organization) }
+    component { association(:participatory_documents_component) }
+    author { association(:user, :confirmed, organization: component.organization) }
     box_color { "#faaaaa" }
     box_opacity { 20 }
 
@@ -20,13 +20,13 @@ FactoryBot.define do
 
     trait :with_sections do
       after :create do |document|
-        document.sections = create_list(:participatory_documents_section, 2, document: document)
+        document.sections = create_list(:participatory_documents_section, 2, document:)
       end
     end
 
     trait :with_annotations do
       after :create do |document|
-        document.sections = create_list(:participatory_documents_section, 2, :with_annotations, document: document)
+        document.sections = create_list(:participatory_documents_section, 2, :with_annotations, document:)
       end
     end
 
@@ -38,36 +38,36 @@ FactoryBot.define do
 
     trait :with_suggestions do
       after :create do |document|
-        document.sections = create_list(:participatory_documents_section, 2, :with_suggestions, document: document)
+        document.sections = create_list(:participatory_documents_section, 2, :with_suggestions, document:)
       end
     end
   end
 
   factory :participatory_documents_section, class: "Decidim::ParticipatoryDocuments::Section" do
-    document { create :participatory_documents_document }
+    document { association(:participatory_documents_document) }
     title { generate_localized_title }
 
     trait :with_annotation do
       after :create do |section|
-        section.annotations = [create(:participatory_documents_annotation, section: section)]
+        section.annotations = [create(:participatory_documents_annotation, section:)]
       end
     end
 
     trait :with_annotations do
       after :create do |section|
-        section.annotations = create_list(:participatory_documents_annotation, 2, section: section)
+        section.annotations = create_list(:participatory_documents_annotation, 2, section:)
       end
     end
 
     trait :with_suggestions do
       after :create do |section|
-        section.annotations = create_list(:participatory_documents_annotation, 2, :with_suggestions, section: section)
+        section.annotations = create_list(:participatory_documents_annotation, 2, :with_suggestions, section:)
       end
     end
   end
 
   factory :participatory_documents_annotation, class: "Decidim::ParticipatoryDocuments::Annotation" do
-    section { create(:participatory_documents_section) }
+    section { association(:participatory_documents_section) }
     page_number { 1 }
     rect do
       {
@@ -86,8 +86,8 @@ FactoryBot.define do
   end
 
   factory :participatory_documents_suggestion, class: "Decidim::ParticipatoryDocuments::Suggestion" do
-    suggestable { build(:dummy_resource) }
-    author { build(:user, organization: suggestable.organization) }
+    suggestable { association(:dummy_resource) }
+    author { association(:user, organization: suggestable.organization) }
     body { Decidim::Faker::Localized.localized { Faker::Lorem.paragraphs(number: 3).join(" ") } }
     state { Decidim::ParticipatoryDocuments::Suggestion::POSSIBLE_STATES.sample }
     answer { {} }
@@ -128,17 +128,17 @@ FactoryBot.define do
   end
 
   factory :suggestion_valuation_assignment, class: "Decidim::ParticipatoryDocuments::ValuationAssignment" do
-    suggestion { build(:participatory_documents_suggestion) }
+    suggestion { association(:participatory_documents_suggestion) }
     valuator_role do
       space = suggestion.component.participatory_space
       organization = space.organization
-      build :participatory_process_user_role, role: :valuator, user: build(:user, organization: organization)
+      build(:participatory_process_user_role, role: :valuator, user: build(:user, organization:))
     end
   end
 
   factory :participatory_documents_suggestion_note, class: "Decidim::ParticipatoryDocuments::SuggestionNote" do
     body { Faker::Lorem.sentences(number: 3).join("\n") }
-    suggestion { build(:participatory_documents_suggestion) }
-    author { build(:user, organization: suggestion.organization) }
+    suggestion { association(:participatory_documents_suggestion) }
+    author { association(:user, organization: suggestion.organization) }
   end
 end

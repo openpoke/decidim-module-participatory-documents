@@ -1,6 +1,10 @@
 @use "sass:meta";
 
-@import "stylesheets/decidim/participatory_documents/pdf/defaults.scss";
+@import "stylesheets/decidim/participatory_documents/pdf/defaults";
+@import "stylesheets/decidim/participatory_documents/pdf/polygons";
+@import "stylesheets/decidim/participatory_documents/pdf/admin_polygons";
+@import "stylesheets/decidim/participatory_documents/pdf/admin_modals";
+@import "stylesheets/decidim/participatory_documents/pdf/admin_tweaks";
 
 .process-content {
   flex-direction: column;
@@ -24,8 +28,12 @@
 }
 
 .box-preview {
-  @include meta.load-css("stylesheets/decidim/participatory_documents/pdf/polygons.scss");
-  @include meta.load-css("stylesheets/decidim/participatory_documents/pdf/admin_polygons.scss");
+  @include meta.load-css(
+    "stylesheets/decidim/participatory_documents/pdf/polygons.scss"
+  );
+  @include meta.load-css(
+    "stylesheets/decidim/participatory_documents/pdf/admin_polygons.scss"
+  );
 
   .box {
     border-style: dotted;
@@ -65,5 +73,19 @@
     h4 {
       font-weight: 600;
     }
+  }
+}
+
+.close-icon {
+  font-size: 20px;
+  line-height: 24px;
+  font-weight: 600;
+
+  --tw-text-opacity: 1;
+
+  text-decoration-line: underline;
+
+  svg {
+    fill: currentColor;
   }
 }

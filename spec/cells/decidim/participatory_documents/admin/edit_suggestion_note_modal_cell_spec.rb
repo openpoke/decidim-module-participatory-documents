@@ -11,7 +11,7 @@ module Decidim::ParticipatoryDocuments
     let(:suggestion_note) { create(:participatory_documents_suggestion_note) }
     let(:model) { suggestion_note }
     let!(:suggestion) { create(:participatory_documents_suggestion) }
-    let(:options) { { modal_id: "editNoteModal", suggestion: suggestion } }
+    let(:options) { { modal_id: "editNoteModal", suggestion: } }
 
     context "when the suggestion note exists" do
       it "assigns the correct suggestion note body to the view" do
