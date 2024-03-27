@@ -1,6 +1,6 @@
 {
   "name": "decidim_module_participatory_documents",
-  "version": "0.1",
+  "version": "0.3.0",
   "description": "A 3 steps proposals for Decidim",
   "main": "index.js",
   "scripts": {

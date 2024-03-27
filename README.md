@@ -35,8 +35,9 @@ bundle exec rails db:migrate
 Depending on your Decidim version, you can choose the corresponding version to ensure compatibility:
 
 | Version | Compatible Decidim versions |
-|---|---|
-| 0.2.x | 0.27.x |
+|---------|-----------------------------|
+| 0.2.x   | 0.27.x                      |
+| 0.3.x   | 0.28.x                      |
 
 
 ## Usage
