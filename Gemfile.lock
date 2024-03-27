@@ -777,8 +777,8 @@ DEPENDENCIES
   bootsnap (~> 1.7)
   byebug (~> 11.0)
   codecov
-  decidim (= 0.28.0)
-  decidim-dev (= 0.28.0)
+  decidim (= 0.28)
+  decidim-dev (= 0.28)
   decidim-participatory_documents!
   faker (~> 3.2)
   letter_opener_web
