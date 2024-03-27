@@ -137,8 +137,8 @@ en:
           suggestions: Suggestions
         sections:
           modal:
-            save: Save
             delete: Delete
+            save: Save
             title: Edit section
         suggestion_notes:
           create:
