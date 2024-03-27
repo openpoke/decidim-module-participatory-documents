@@ -64,14 +64,14 @@ describe "Admin manages suggestion valuators" do
     end
 
     it "shows an update button" do
-      expect(page).to have_button("#js-submit-assign-suggestion-to-valuator", count: 1)
+      expect(page).to have_button("Assign", count: 1)
     end
 
     context "when submitting the form" do
       before do
         within "#js-form-assign-suggestions-to-valuator" do
           select valuator.name, from: :valuator_role_id
-          click_link_or_button("#js-submit-assign-suggestion-to-valuator")
+          click_link_or_button("Assign")
         end
       end
 
@@ -131,14 +131,14 @@ describe "Admin manages suggestion valuators" do
     end
 
     it "shows an update button" do
-      expect(page).to have_button("#js-submit-unassign-suggestions-from-valuator", count: 1)
+      expect(page).to have_button("Unassign", count: 1)
     end
 
     context "when submitting the form" do
       before do
         within "#js-form-unassign-suggestions-from-valuator" do
           select valuator.name, from: :valuator_role_id
-          click_link_or_button("button#js-submit-unassign-suggestions-from-valuator")
+          click_link_or_button("Unassign")
         end
       end
 

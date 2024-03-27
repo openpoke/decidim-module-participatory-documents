@@ -60,7 +60,7 @@ describe "Admin manages participatory documents" do
         within "#js-publish-answers-actions" do
           expect(page).to have_content("Answers for 2 suggestions will be published.")
         end
-        click_link_or_button("button#js-submit-publish-answers")
+        click_link_or_button("Publish")
         20.times do
           # wait for the ajax call to finish
           sleep(1)
