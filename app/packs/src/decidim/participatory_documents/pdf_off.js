@@ -23,6 +23,7 @@ const openLogin = (evt) => {
 
 window.InitDocumentManagers = (options) => {
   options.globalSuggestionsButton.addEventListener("click", openLogin);
+  options.exportButton.addEventListener("click", openLogin);
 };
 
 // Call this on an annotation layer to initialize the polygon viewer (public side)

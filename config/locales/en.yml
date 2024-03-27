@@ -227,6 +227,7 @@ en:
             your email inbox at %{email}."
       documents:
         export_modal:
+          close: Close
           description_html: You have %{count} suggestions on this document. If you
             want to export them, you will receive a ZIP file with and Excel document
             in it with all your data and any possible answer the admins have given

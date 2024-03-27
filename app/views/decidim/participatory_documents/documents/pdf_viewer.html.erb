@@ -30,7 +30,7 @@
 
   <div id="notifications"></div>
 
-  <div id="participation-modal"></div>
+  <div id="participationModal"></div>
 
   <%= render "export_modal" %>
 
@@ -46,9 +46,9 @@
         i18n: I18n,
         documentPath: DocumentPath,
         globalSuggestionsButton: document.getElementById("globalSuggestionTrigger"),
-        participationLayout: document.getElementById("participation-modal"),
+        participationLayout: document.getElementById("participationModal"),
         exportButton: document.getElementById("exportSuggestionsTrigger"),
-        exportModal: document.getElementById("export-modal")
+        exportModal: document.getElementById("exportSuggestionsModal")
       };
       window.InitDocumentManagers(options);
 

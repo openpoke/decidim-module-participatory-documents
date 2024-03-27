@@ -1,11 +1,14 @@
 <%= decidim_modal id: "exportSuggestionsModal" do %>
   <div data-dialog-container>
+    <%= icon "download-line" %>
     <h3 class="h3 mb-2"><%= t(".title") %></h3>
+    <div>
+      <div class="callout hidden"></div>
+      <p class="content"><%= t(".description_html", email: current_user&.email, count: all_suggestions&.count) %></p>
+    </div>
   </div>
-  <div data-dialog-container>
-    <p><%= t(".description_html", email: current_user&.email, count: all_suggestions&.count) %></p>
-  </div>
-  <div class="row text-center mt-8 my-2" data-dialog-actions>
+  <div class="mt-8 my-2" data-dialog-actions>
+    <button type="button" class="close-button button button__lg button__primary"><%= t(".close") %></button>
     <button type="button" class="export-button button button__lg button__secondary" data-url="<%= export_document_suggestions_path(document) %>"><%= t(".send") %></button>
   </div>
 <% end %>
