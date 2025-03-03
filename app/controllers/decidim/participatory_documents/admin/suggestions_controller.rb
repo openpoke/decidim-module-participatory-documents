@@ -5,7 +5,7 @@ module Decidim
     module Admin
       class SuggestionsController < Admin::ApplicationController
         include Decidim::Admin::Filterable
-        include Decidim::Admin::Paginable
+        include Decidim::Paginable
 
         helper Decidim::ParticipatoryDocuments::Admin::SuggestionHelper
         helper Decidim::Messaging::ConversationHelper
