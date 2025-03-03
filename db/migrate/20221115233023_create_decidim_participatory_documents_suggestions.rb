@@ -9,9 +9,7 @@ class CreateDecidimParticipatoryDocumentsSuggestions < ActiveRecord::Migration[6
       t.references :decidim_user_group, null: true, index: { name: "decidim_pd_suggestion_user_group" }
       t.string :state, default: :not_answered, index: { name: "decidim_pd_suggestion_state" }
       t.datetime :answered_at, index: { name: "decidim_pd_suggestion_answered" }
-      # rubocop:disable Rails/ThreeStateBooleanColumn
-      t.boolean :answer_is_published, default: false
-      # rubocop:enable Rails/ThreeStateBooleanColumn
+      t.boolean :answer_is_published, default: false, null: false
       t.jsonb :answer
       t.timestamps
     end
