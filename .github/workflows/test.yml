@@ -4,18 +4,24 @@ on:
   push:
     branches:
       - main
+      - release/*
   pull_request:
 
 env:
-  RUBY_VERSION: 3.1.1
-  SIMPLECOV: 1
   CI: 1
+  SIMPLECOV: 1
   NODE_VERSION: 18.17.1
+  RUBY_VERSION: 3.1.1
+  DISPLAY: ":99"
+  RUBYOPT: '-W:no-deprecated'
+  RAILS_ENV: test
+  NODE_ENV: test
 
 jobs:
   test-report:
+    name: Tests
     runs-on: ubuntu-latest
-
+    timeout-minutes: 30
     services:
       postgres:
         image: postgres:11
@@ -31,47 +37,54 @@ jobs:
       DATABASE_USERNAME: postgres
       DATABASE_PASSWORD: postgres
       DATABASE_HOST: localhost
-
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 1
 
+      - uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
       - uses: nanasess/setup-chromedriver@v2
         with:
-          chromedriver-version: 119.0.6045.105
-
-      - name: List Chrome
-        run: apt list --installed | grep chrome
+          chromedriver-version: 126.0.6478.182
 
       - name: Remove Chrome
         run: sudo apt remove google-chrome-stable
 
       - uses: browser-actions/setup-chrome@v1
         with:
-          chrome-version: 119.0.6045.105
+          chrome-version: 126.0.6478.182
 
-      - uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: ${{ env.RUBY_VERSION }}
-          bundler-cache: true
-
-      - uses: actions/setup-node@master
+      - uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODE_VERSION }}
 
-      - name: Setup Database
-        run: bundle exec rake test_app
+      - run: bundle exec rake test_app
+        name: Create test app
 
-      - name: Run RSpec
-        run: bundle exec rspec
+      - run: bundle exec rails assets:precompile
+        name: Precompile assets
+        working-directory: ./spec/decidim_dummy_app/
+        shell: "bash"
 
+      - run: bundle exec rspec
+        name: RSpec
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
 
-      - uses: actions/upload-artifact@v2-preview
+      - uses: actions/upload-artifact@v3
         if: always()
         with:
           name: screenshots
           path: ./spec/decidim_dummy_app/tmp/screenshots
+          if-no-files-found: ignore
+
+      - uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: Test logs
+          path: ./spec/decidim_dummy_app/log/test.log
+          if-no-files-found: ignore
