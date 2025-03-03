@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-describe "User interaction with PDF viewer" do
+describe "User interaction with PDF viewer" do # rubocop:disable RSpec/DescribeClass
   include_context "with a component"
   let(:manifest_name) { "participatory_documents" }
 
@@ -175,7 +175,7 @@ describe "User interaction with PDF viewer" do
       login_as document.author, scope: :user
 
       page.visit Decidim::EngineRouter.main_proxy(component).pdf_viewer_documents_path(file: document.attached_uploader(:file).path)
-      find("#globalSuggestionTrigger").click
+      find_by_id("globalSuggestionTrigger").click
     end
 
     it_behaves_like "interacts with drawer"
@@ -204,7 +204,7 @@ describe "User interaction with PDF viewer" do
       end
       expect(page).to have_content("Some random string longer than 15 chrs")
       # hide the modal
-      find("#close-suggestions").click
+      find_by_id("close-suggestions").click
       expect(page).to have_no_content("Some random string longer than 15 chrs")
       page.find("#box-#{section.annotations.first.id}").click
       expect(page).to have_content("Some random string longer than 15 chrs")
@@ -223,7 +223,7 @@ describe "User interaction with PDF viewer" do
       end
       expect(page).to have_content("Some random string longer than 15 chrs")
       # hide the modal
-      find("#close-suggestions").click
+      find_by_id("close-suggestions").click
       expect(page).to have_no_content("Some random string longer than 15 chrs")
       click_link_or_button "Global suggestions"
       expect(page).to have_content("Some random string longer than 15 chrs")
@@ -280,7 +280,7 @@ describe "User interaction with PDF viewer" do
     before do
       login_as document.author, scope: :user
       page.visit Decidim::EngineRouter.main_proxy(component).pdf_viewer_documents_path(file: document.attached_uploader(:file).path)
-      find("#globalSuggestionTrigger").click
+      find_by_id("globalSuggestionTrigger").click
     end
 
     it "show sanitized answer" do

@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-describe "Admin manages participatory documents" do
+describe "Admin manages participatory documents" do # rubocop:disable RSpec/DescribeClass
   include Decidim::TranslationsHelper
   let(:manifest_name) { "participatory_documents" }
   let(:router) { Decidim::EngineRouter.admin_proxy(document.component).decidim_admin_participatory_process_participatory_documents }
@@ -13,13 +13,13 @@ describe "Admin manages participatory documents" do
   let(:user) { create(:user, :admin, :confirmed, organization:) }
   let!(:document) { create(:participatory_documents_document, component:) }
 
-  let(:section1) { create(:participatory_documents_section, document:) }
-  let(:section2) { create(:participatory_documents_section, document:) }
+  let(:first_section) { create(:participatory_documents_section, document:) }
+  let(:second_section) { create(:participatory_documents_section, document:) }
   let!(:single_document_suggestion) { create(:participatory_documents_suggestion, suggestable: document) }
   let!(:document_suggestions) { create_list(:participatory_documents_suggestion, 9, suggestable: document) }
-  let!(:section1_suggestions) { create_list(:participatory_documents_suggestion, 10, suggestable: section1) }
-  let!(:section2_suggestions) { create_list(:participatory_documents_suggestion, 10, suggestable: section2) }
-  let(:all_suggestions_count) { document.suggestions.count + section1_suggestions.count + section2_suggestions.count }
+  let!(:first_section_suggestions) { create_list(:participatory_documents_suggestion, 10, suggestable: first_section) }
+  let!(:second_section_suggestions) { create_list(:participatory_documents_suggestion, 10, suggestable: second_section) }
+  let(:all_suggestions_count) { document.suggestions.count + first_section_suggestions.count + second_section_suggestions.count }
 
   include_context "when managing a component as an admin"
 
@@ -34,11 +34,11 @@ describe "Admin manages participatory documents" do
     let!(:document_suggestions) do
       create_list(:participatory_documents_suggestion, 3, :accepted, :draft, body: { en: "Test suggestion" }, suggestable: document, answer: { en: "Foo bar" })
     end
-    let!(:section1_suggestions) do
+    let!(:first_section_suggestions) do
       create(:participatory_documents_suggestion, :accepted, :published,
-             body: { en: "Test suggestion" }, suggestable: section1, answer: { en: "Foo bar" })
+             body: { en: "Test suggestion" }, suggestable: first_section, answer: { en: "Foo bar" })
     end
-    let!(:section2_suggestions) { nil }
+    let!(:second_section_suggestions) { nil }
 
     context "when publishing answers at once" do
       before do
@@ -46,7 +46,7 @@ describe "Admin manages participatory documents" do
       end
 
       it "publishes some answers" do
-        page.find("#suggestions_bulk.js-check-all").click
+        page.find_by_id("suggestions_bulk", class: "js-check-all").click
         page.first("[data-published-state=false] .js-suggestion-list-check").click
 
         click_link_or_button "Actions"
@@ -80,7 +80,7 @@ describe "Admin manages participatory documents" do
       end
 
       it "can't publish answers for non answered suggestions" do
-        page.find("#suggestions_bulk.js-check-all").click
+        page.find_by_id("suggestions_bulk", class: "js-check-all").click
         page.all("[data-published-state=false] .js-suggestion-list-check").map(&:click)
 
         click_link_or_button "Actions"
@@ -128,8 +128,8 @@ describe "Admin manages participatory documents" do
 
   context "when asnwering suggestions" do
     let!(:document_suggestions) { nil }
-    let!(:section1_suggestions) { nil }
-    let!(:section2_suggestions) { nil }
+    let!(:first_section_suggestions) { nil }
+    let!(:second_section_suggestions) { nil }
 
     shared_examples "marks the answer by state" do |state:|
       context "when there is no answer" do
@@ -242,35 +242,35 @@ describe "Admin manages participatory documents" do
   end
 
   context "when sorting by section's name" do
-    let(:section1) { create(:participatory_documents_section, document:, title: { en: "zzzz-section" }) }
+    let(:first_section) { create(:participatory_documents_section, document:, title: { en: "zzzz-section" }) }
 
     it "sorts ascendent" do
-      expect(page).to have_content(translated_attribute(section1.title))
+      expect(page).to have_content(translated_attribute(first_section.title))
       click_link_or_button "Section"
-      expect(page).to have_no_content(translated_attribute(section1.title))
+      expect(page).to have_no_content(translated_attribute(first_section.title))
     end
 
     it "sorts descendent" do
-      expect(page).to have_content(translated_attribute(section1.title))
+      expect(page).to have_content(translated_attribute(first_section.title))
       click_link_or_button "Section"
       click_link_or_button "Section"
-      expect(page).to have_content(translated_attribute(section1.title))
+      expect(page).to have_content(translated_attribute(first_section.title))
     end
   end
 
   it "filters by section name" do
     within ".table-list" do
       expect(page).to have_content("Global")
-      expect(page).to have_content(translated_attribute(section1.title))
+      expect(page).to have_content(translated_attribute(first_section.title))
     end
     within ".filters__section" do
       find("a.dropdown", text: "Filter").hover
       find("a", text: "Section").hover
-      find("a", text: translated_attribute(section1.title)).click
+      find("a", text: translated_attribute(first_section.title)).click
     end
     within ".table-list" do
       expect(page).to have_no_content("Global")
-      expect(page).to have_content(translated_attribute(section1.title))
+      expect(page).to have_content(translated_attribute(first_section.title))
     end
   end
 
@@ -278,16 +278,16 @@ describe "Admin manages participatory documents" do
     expect(page).to have_content("List Suggestions")
     within(".table-scroll") do
       expect(page).to have_content("Global")
-      expect(page).to have_content(section1.title["en"])
-      expect(page).to have_no_content(section2.title["en"])
+      expect(page).to have_content(first_section.title["en"])
+      expect(page).to have_no_content(second_section.title["en"])
     end
     within("nav[aria-label='Pagination']") do
       click_link_or_button("Next")
     end
     within(".table-scroll") do
       expect(page).to have_no_content("Global")
-      expect(page).to have_content(section1.title["en"])
-      expect(page).to have_content(section2.title["en"])
+      expect(page).to have_content(first_section.title["en"])
+      expect(page).to have_content(second_section.title["en"])
     end
   end
 

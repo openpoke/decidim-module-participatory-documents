@@ -4,3 +4,4 @@ inherit_gem:
 AllCops:
   Exclude:
     - "spec/decidim_dummy_app*/**/*"
+    - "development_app/**/*"

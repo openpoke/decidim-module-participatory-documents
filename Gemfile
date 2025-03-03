@@ -18,12 +18,12 @@ gem "decidim-participatory_documents", path: "."
 gem "bootsnap", "~> 1.7"
 gem "faker", "~> 3.2"
 gem "puma", ">= 6.3.1"
-gem "rspec", "~> 3.0"
 
 group :development, :test do
   gem "byebug", "~> 11.0", platform: :mri
 
   gem "decidim-dev", DECIDIM_VERSION
+  gem "rubocop-rspec", "~> 2.20.0"
 end
 
 group :development do

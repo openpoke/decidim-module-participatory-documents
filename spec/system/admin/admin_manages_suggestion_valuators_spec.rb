@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-describe "Admin manages suggestion valuators" do
+describe "Admin manages suggestion valuators" do # rubocop:disable RSpec/DescribeClass
   let(:manifest_name) { "participatory_documents" }
   let(:organization) { participatory_process.organization }
   let!(:user) { create(:user, :admin, :admin_terms_accepted, :confirmed, organization:) }
@@ -197,7 +197,7 @@ describe "Admin manages suggestion valuators" do
         end
 
         within "#js-form-assign-suggestion-to-valuator" do
-          find("#valuator_role_id").click
+          find_by_id("valuator_role_id").click
           find("option", text: another_valuator.name).click
         end
 
@@ -226,7 +226,7 @@ describe "Admin manages suggestion valuators" do
       end
 
       within "#js-form-assign-suggestion-to-valuator" do
-        find("#valuator_role_id").click
+        find_by_id("valuator_role_id").click
         find("option", text: valuator.name).click
       end
 
@@ -265,7 +265,7 @@ describe "Admin manages suggestion valuators" do
 
       before do
         within "#js-form-assign-suggestion-to-valuator" do
-          find("#valuator_role_id").click
+          find_by_id("valuator_role_id").click
           find("option", text: valuator2.name).click
         end
       end

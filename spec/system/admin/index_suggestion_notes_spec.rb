@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-describe "Index Suggestion Notes" do
+describe "Index Suggestion Notes" do # rubocop:disable RSpec/DescribeClass
   let(:router) { Decidim::EngineRouter.admin_proxy(component).decidim_admin_participatory_process_participatory_documents }
 
   let(:component) { create(:participatory_documents_component) }

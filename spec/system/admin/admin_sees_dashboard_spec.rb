@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-describe "Admin sees the action logs on homepage" do
+describe "Admin sees the action logs on homepage" do # rubocop:disable RSpec/DescribeClass
   let(:organization) { component.organization }
   let(:component) { create(:participatory_documents_component) }
   let(:current_user) { create(:user, :admin, :confirmed, organization:) }
@@ -233,18 +233,18 @@ describe "Admin sees the action logs on homepage" do
   context "when sees logs related to sections grouping" do
     let(:command) { Decidim::ParticipatoryDocuments::Admin::UpdateOrCreateAnnotation.new(form, document) }
     let!(:document) { create(:participatory_documents_document) }
-    let!(:section1) { create(:participatory_documents_section, document:) }
-    let!(:section2) { create(:participatory_documents_section, document:) }
-    let!(:annotation1) { create(:participatory_documents_annotation, section: section1) }
-    let!(:annotation2) { create(:participatory_documents_annotation, section: section2) }
+    let!(:first_section) { create(:participatory_documents_section, document:) }
+    let!(:second_section) { create(:participatory_documents_section, document:) }
+    let!(:first_annotation) { create(:participatory_documents_annotation, section: first_section) }
+    let!(:second_annotation) { create(:participatory_documents_annotation, section: second_section) }
 
     let(:form) do
       double(
         invalid?: false,
         page_number: 1,
         rect: { left: 50, top: 50, width: 100, height: 100 },
-        id: annotation2.id,
-        section: section1.id,
+        id: second_annotation.id,
+        section: first_section.id,
         current_user:
       )
     end

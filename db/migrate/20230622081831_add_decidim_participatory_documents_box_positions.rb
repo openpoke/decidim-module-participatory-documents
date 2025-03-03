@@ -26,11 +26,11 @@ class AddDecidimParticipatoryDocumentsBoxPositions < ActiveRecord::Migration[6.0
     add_index :decidim_participatory_documents_sections, :position
 
     Section.find_each do |section|
-      section.update_column(:position, section.document.sections.where("id < ?", section.id).count + 1)
+      section.update_column(:position, section.document.sections.where(id: ...section.id).count + 1)
     end
 
     Annotation.find_each do |annotation|
-      annotation.update_column(:position, annotation.section.document.annotations.where("decidim_participatory_documents_annotations.id < ?", annotation.id).count + 1)
+      annotation.update_column(:position, annotation.section.document.annotations.where(decidim_participatory_documents_annotations: { id: ...annotation.id }).count + 1)
     end
   end
   # rubocop:enable Rails/SkipsModelValidations:
