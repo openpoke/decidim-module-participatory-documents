@@ -16,7 +16,7 @@ describe "Admin manages participatory documents" do # rubocop:disable RSpec/Desc
   let(:first_section) { create(:participatory_documents_section, document:) }
   let(:second_section) { create(:participatory_documents_section, document:) }
   let!(:single_document_suggestion) { create(:participatory_documents_suggestion, suggestable: document) }
-  let!(:document_suggestions) { create_list(:participatory_documents_suggestion, 9, suggestable: document) }
+  let!(:document_suggestions) { create_list(:participatory_documents_suggestion, 16, suggestable: document) }
   let!(:first_section_suggestions) { create_list(:participatory_documents_suggestion, 10, suggestable: first_section) }
   let!(:second_section_suggestions) { create_list(:participatory_documents_suggestion, 10, suggestable: second_section) }
   let(:all_suggestions_count) { document.suggestions.count + first_section_suggestions.count + second_section_suggestions.count }
@@ -49,8 +49,8 @@ describe "Admin manages participatory documents" do # rubocop:disable RSpec/Desc
         page.find_by_id("suggestions_bulk", class: "js-check-all").click
         page.first("[data-published-state=false] .js-suggestion-list-check").click
 
-        click_link_or_button "Actions"
-        click_link_or_button "Publish answers"
+        click_on "Actions"
+        click_on "Publish answers"
 
         within ".table-scroll" do
           expect(page).to have_content("No ", count: 3)
@@ -60,7 +60,7 @@ describe "Admin manages participatory documents" do # rubocop:disable RSpec/Desc
         within "#js-publish-answers-actions" do
           expect(page).to have_content("Answers for 2 suggestions will be published.")
         end
-        click_link_or_button("Publish")
+        click_on("Publish")
         20.times do
           # wait for the ajax call to finish
           sleep(1)
@@ -83,7 +83,7 @@ describe "Admin manages participatory documents" do # rubocop:disable RSpec/Desc
         page.find_by_id("suggestions_bulk", class: "js-check-all").click
         page.all("[data-published-state=false] .js-suggestion-list-check").map(&:click)
 
-        click_link_or_button "Actions"
+        click_on "Actions"
         expect(page).to have_no_content("Publish answers")
       end
     end
@@ -99,7 +99,7 @@ describe "Admin manages participatory documents" do # rubocop:disable RSpec/Desc
       it "displays the right state" do
         visit router.document_suggestions_path(document)
 
-        click_link_or_button("Published Answer")
+        click_on("Published Answer")
 
         within(".table-list") do
           expect(page).to have_no_content(document_suggestion.body["en"].first(20))
@@ -116,8 +116,8 @@ describe "Admin manages participatory documents" do # rubocop:disable RSpec/Desc
       it "displays the right state" do
         visit router.document_suggestions_path(document)
 
-        click_link_or_button("Published Answer")
-        click_link_or_button("Published Answer")
+        click_on("Published Answer")
+        click_on("Published Answer")
 
         within(".table-list") do
           expect(page).to have_content(document_suggestion.body["en"].first(20))
@@ -190,7 +190,7 @@ describe "Admin manages participatory documents" do # rubocop:disable RSpec/Desc
   context "when admin to exports suggestions" do
     it "exports a JSON" do
       find(".exports.button").click
-      perform_enqueued_jobs { click_link_or_button "Suggestions as JSON" }
+      perform_enqueued_jobs { click_on "Suggestions as JSON" }
 
       within ".flash.success" do
         expect(page).to have_content("in progress")
@@ -217,14 +217,14 @@ describe "Admin manages participatory documents" do # rubocop:disable RSpec/Desc
 
     it "sorts ascendent" do
       expect(page).to have_content(dummy_user.name)
-      click_link_or_button "Author"
+      click_on "Author"
       expect(page).to have_no_content(dummy_user.name)
     end
 
     it "sorts descendent" do
       expect(page).to have_content(dummy_user.name)
-      click_link_or_button "Author"
-      click_link_or_button "Author"
+      click_on "Author"
+      click_on "Author"
       expect(page).to have_content(dummy_user.name)
     end
   end
@@ -245,15 +245,16 @@ describe "Admin manages participatory documents" do # rubocop:disable RSpec/Desc
     let(:first_section) { create(:participatory_documents_section, document:, title: { en: "zzzz-section" }) }
 
     it "sorts ascendent" do
+      puts "first_section suggestions: #{first_section_suggestions}"
       expect(page).to have_content(translated_attribute(first_section.title))
-      click_link_or_button "Section"
+      click_on "Section"
       expect(page).to have_no_content(translated_attribute(first_section.title))
     end
 
     it "sorts descendent" do
       expect(page).to have_content(translated_attribute(first_section.title))
-      click_link_or_button "Section"
-      click_link_or_button "Section"
+      click_on "Section"
+      click_on "Section"
       expect(page).to have_content(translated_attribute(first_section.title))
     end
   end
@@ -282,7 +283,7 @@ describe "Admin manages participatory documents" do # rubocop:disable RSpec/Desc
       expect(page).to have_no_content(second_section.title["en"])
     end
     within("nav[aria-label='Pagination']") do
-      click_link_or_button("Next")
+      click_on("Next")
     end
     within(".table-scroll") do
       expect(page).to have_no_content("Global")
@@ -336,7 +337,7 @@ describe "Admin manages participatory documents" do # rubocop:disable RSpec/Desc
         )
         check :answer_suggestion_answer_is_published if published
       end
-      click_link_or_button "Answer"
+      click_on "Answer"
       expect(page).to have_content("Successfully")
     end
   end
@@ -380,7 +381,7 @@ describe "Admin manages participatory documents" do # rubocop:disable RSpec/Desc
             )
           end
           check :answer_suggestion_answer_is_published
-          click_link_or_button "Answer"
+          click_on "Answer"
           expect(page).to have_no_content("Successfully added the answer")
           expect(page).to have_content(%q(It's not possible to publish with status "not answered"))
         end

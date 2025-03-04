@@ -48,9 +48,9 @@ describe "Admin manages participatory documents" do # rubocop:disable RSpec/Desc
       expect(page.execute_script("return window.getComputedStyle(document.querySelector('.box-preview .box')).borderColor")).to eq("rgb(240, 15, 0)")
 
       if create
-        click_link_or_button "Create participatory document"
+        click_on "Create participatory document"
       else
-        click_link_or_button "Update"
+        click_on "Update"
       end
 
       if create
@@ -66,7 +66,7 @@ describe "Admin manages participatory documents" do # rubocop:disable RSpec/Desc
 
   context "when attaching a file" do
     before do
-      click_link_or_button "Upload PDF document"
+      click_on "Upload PDF document"
     end
 
     it_behaves_like "creating a document", true
@@ -131,7 +131,7 @@ describe "Admin manages participatory documents" do # rubocop:disable RSpec/Desc
         expect(page).to have_content("all the participatory areas will be deleted!")
         expect(document.sections.count).to eq(2)
         dynamically_attach_file :document_file, Decidim::Dev.asset("Exampledocument.pdf"), remove_before: true
-        click_link_or_button "Update"
+        click_on "Update"
         expect(document.sections.reload.count).to eq(0)
       end
     end
@@ -142,7 +142,7 @@ describe "Admin manages participatory documents" do # rubocop:disable RSpec/Desc
         expect(page).to have_content("This document cannot be changed or removed because it already has suggestions attached")
         expect(document.sections.count).to eq(2) if with_sections
         dynamically_attach_file :document_file, Decidim::Dev.asset("Exampledocument.pdf"), remove_before: true
-        click_link_or_button "Update"
+        click_on "Update"
         expect(document.sections.reload.count).to eq(2) if with_sections
         expect(page).to have_content("This document cannot be changed or removed because it has suggestions")
       end
@@ -153,7 +153,7 @@ describe "Admin manages participatory documents" do # rubocop:disable RSpec/Desc
           "#document-description-tabs",
           en: "This is description of the file"
         )
-        click_link_or_button "Update"
+        click_on "Update"
         expect(page).to have_content("Document has been successfully updated")
         expect(document.reload.description["en"]).to include("This is description of the file")
       end
@@ -212,7 +212,7 @@ describe "Admin manages participatory documents" do # rubocop:disable RSpec/Desc
 
     context "when in the editor" do
       before do
-        click_link_or_button "Edit participatory areas"
+        click_on "Edit participatory areas"
       end
 
       it "shows the preview button" do
@@ -220,14 +220,14 @@ describe "Admin manages participatory documents" do # rubocop:disable RSpec/Desc
       end
 
       it "goes to the preview page" do
-        click_link_or_button "Preview and publish sections"
+        click_on "Preview and publish sections"
         expect(page).to have_content("you are previewing the participatory sections of the document")
       end
     end
 
     context "when previewing the document" do
       before do
-        click_link_or_button "Preview and publish sections"
+        click_on "Preview and publish sections"
       end
 
       it "displays the preview content" do
@@ -235,23 +235,23 @@ describe "Admin manages participatory documents" do # rubocop:disable RSpec/Desc
       end
 
       it "can edit sections after previewing" do
-        click_link_or_button "Go back to edit participatory sections"
+        click_on "Go back to edit participatory sections"
         expect(page).to have_css("a[href='#{manage_component_path(component)}'][title='Back']")
       end
 
       it "can publish sections" do
-        click_link_or_button "Publish participatory sections"
+        click_on "Publish participatory sections"
         expect(page).to have_content("are you sure?")
-        click_link_or_button "OK"
+        click_on "OK"
         expect(page).to have_content("Sections have been successfully published")
       end
     end
 
     context "when the document has been published" do
       before do
-        click_link_or_button "Preview and publish sections"
-        click_link_or_button "Publish participatory sections"
-        click_link_or_button "OK"
+        click_on "Preview and publish sections"
+        click_on "Publish participatory sections"
+        click_on "OK"
       end
 
       it "restricts editing sections" do

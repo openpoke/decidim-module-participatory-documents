@@ -35,7 +35,7 @@ describe "Edit Suggestion Notes" do # rubocop:disable RSpec/DescribeClass
     let(:author) { user }
 
     before do
-      click_link_or_button "Private notes"
+      click_on "Private notes"
     end
 
     it "shows suggestion notes for the current suggestion" do
@@ -57,7 +57,7 @@ describe "Edit Suggestion Notes" do # rubocop:disable RSpec/DescribeClass
       end
 
       expect(page).to have_admin_callout("successfully updated")
-      click_link_or_button "Private notes"
+      click_on "Private notes"
       expect(page).to have_content("New awesome body")
     end
   end
@@ -66,7 +66,7 @@ describe "Edit Suggestion Notes" do # rubocop:disable RSpec/DescribeClass
     let(:author) { create(:user, organization:) }
 
     before do
-      click_link_or_button "Private notes"
+      click_on "Private notes"
     end
 
     it "shows suggestion notes for the current suggestion" do
@@ -91,7 +91,7 @@ describe "Edit Suggestion Notes" do # rubocop:disable RSpec/DescribeClass
     before do
       suggestion_notes.last.update(body: "Edited body")
       visit current_path
-      click_link_or_button "Private notes"
+      click_on "Private notes"
     end
 
     it "displays the edited status" do

@@ -200,7 +200,7 @@ describe "User interaction with PDF viewer" do # rubocop:disable RSpec/DescribeC
 
       within "#new_suggestion_" do
         fill_in :suggestion_body, with: "Some random string longer than 15 chrs"
-        click_link_or_button("Send suggestion")
+        click_on("Send suggestion")
       end
       expect(page).to have_content("Some random string longer than 15 chrs")
       # hide the modal
@@ -211,7 +211,7 @@ describe "User interaction with PDF viewer" do # rubocop:disable RSpec/DescribeC
     end
 
     it "submits a global content" do
-      click_link_or_button "Global suggestions"
+      click_on "Global suggestions"
       sleep 1
       expect(page).to have_css("#participationModal.active")
       expect(page).to have_content("upload a file")
@@ -219,13 +219,13 @@ describe "User interaction with PDF viewer" do # rubocop:disable RSpec/DescribeC
 
       within "#new_suggestion_" do
         fill_in :suggestion_body, with: "Some random string longer than 15 chrs"
-        click_link_or_button("Send suggestion")
+        click_on("Send suggestion")
       end
       expect(page).to have_content("Some random string longer than 15 chrs")
       # hide the modal
       find_by_id("close-suggestions").click
       expect(page).to have_no_content("Some random string longer than 15 chrs")
-      click_link_or_button "Global suggestions"
+      click_on "Global suggestions"
       expect(page).to have_content("Some random string longer than 15 chrs")
     end
 
@@ -238,10 +238,10 @@ describe "User interaction with PDF viewer" do # rubocop:disable RSpec/DescribeC
       end
 
       it "exports only his own suggestions" do
-        click_link_or_button "Export my suggestions"
+        click_on "Export my suggestions"
         expect(page).to have_content("You have 2 suggestions on this document")
 
-        click_link_or_button "Send me my suggestions"
+        click_on "Send me my suggestions"
         sleep 1
         perform_enqueued_jobs
 

@@ -55,8 +55,8 @@ describe "Admin manages suggestion valuators" do # rubocop:disable RSpec/Describ
         page.first(".js-suggestion-list-check").set(true)
       end
 
-      click_link_or_button "Actions"
-      click_link_or_button "Assign to valuator"
+      click_on "Actions"
+      click_on "Assign to valuator"
     end
 
     it "shows the component select" do
@@ -71,7 +71,7 @@ describe "Admin manages suggestion valuators" do # rubocop:disable RSpec/Describ
       before do
         within "#js-form-assign-suggestions-to-valuator" do
           select valuator.name, from: :valuator_role_id
-          click_link_or_button("Assign")
+          click_on("Assign")
         end
       end
 
@@ -122,8 +122,8 @@ describe "Admin manages suggestion valuators" do # rubocop:disable RSpec/Describ
         page.first(".js-suggestion-list-check").set(true)
       end
 
-      click_link_or_button "Actions"
-      click_link_or_button "Unassign from valuator"
+      click_on "Actions"
+      click_on "Unassign from valuator"
     end
 
     it "shows the component select" do
@@ -138,7 +138,7 @@ describe "Admin manages suggestion valuators" do # rubocop:disable RSpec/Describ
       before do
         within "#js-form-unassign-suggestions-from-valuator" do
           select valuator.name, from: :valuator_role_id
-          click_link_or_button("Unassign")
+          click_on("Unassign")
         end
       end
 
@@ -160,7 +160,7 @@ describe "Admin manages suggestion valuators" do # rubocop:disable RSpec/Describ
 
       visit current_path
       within "tr", text: assigned_suggestion.id do
-        click_link_or_button "Answer"
+        click_on "Answer"
       end
     end
 
@@ -193,7 +193,7 @@ describe "Admin manages suggestion valuators" do # rubocop:disable RSpec/Describ
     context "when the valuator is assigned" do
       before do
         within "tr", text: assigned_suggestion.id do
-          click_link_or_button "Answer"
+          click_on "Answer"
         end
 
         within "#js-form-assign-suggestion-to-valuator" do
@@ -201,7 +201,7 @@ describe "Admin manages suggestion valuators" do # rubocop:disable RSpec/Describ
           find("option", text: another_valuator.name).click
         end
 
-        click_link_or_button "Assign"
+        click_on "Assign"
       end
 
       it "shows the valuator is assigned" do
@@ -222,7 +222,7 @@ describe "Admin manages suggestion valuators" do # rubocop:disable RSpec/Describ
     before do
       visit current_path
       within "tr", text: suggestion.id do
-        click_link_or_button "Answer"
+        click_on "Answer"
       end
 
       within "#js-form-assign-suggestion-to-valuator" do
@@ -230,7 +230,7 @@ describe "Admin manages suggestion valuators" do # rubocop:disable RSpec/Describ
         find("option", text: valuator.name).click
       end
 
-      click_link_or_button "Assign"
+      click_on "Assign"
     end
 
     it "assigns the suggestions to the valuator" do
@@ -254,7 +254,7 @@ describe "Admin manages suggestion valuators" do # rubocop:disable RSpec/Describ
 
       visit current_path
       within "tr", text: suggestion.id do
-        click_link_or_button "Answer"
+        click_on "Answer"
       end
     end
 
@@ -271,7 +271,7 @@ describe "Admin manages suggestion valuators" do # rubocop:disable RSpec/Describ
       end
 
       it "assigns the suggestion to the valuator" do
-        click_link_or_button "Assign"
+        click_on "Assign"
         expect(page).to have_content("Suggestions assigned to a valuator successfully")
 
         within "tr", text: suggestion.id do

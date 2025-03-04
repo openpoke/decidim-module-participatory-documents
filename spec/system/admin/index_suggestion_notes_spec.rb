@@ -28,7 +28,7 @@ describe "Index Suggestion Notes" do # rubocop:disable RSpec/DescribeClass
 
     visit router.document_suggestion_path(document, suggestion)
 
-    click_link_or_button("Private notes")
+    click_on("Private notes")
   end
 
   it "shows suggestion notes for the current proposal" do
@@ -49,7 +49,7 @@ describe "Index Suggestion Notes" do # rubocop:disable RSpec/DescribeClass
 
       expect(page).to have_admin_callout("successfully")
 
-      click_link_or_button("Private notes")
+      click_on("Private notes")
 
       within ".component__show_notes-grid" do
         expect(page).to have_content("New awesome body")

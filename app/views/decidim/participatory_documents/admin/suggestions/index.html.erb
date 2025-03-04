@@ -15,7 +15,7 @@
     </h1>
   </div>
   <%= admin_filter_selector(:suggestions) %>
-  <div class="table-scroll mt-16">
+  <div class="table-scroll">
     <table class="table-list">
       <thead>
       <tr>
@@ -37,8 +37,8 @@
       <tbody>
       </tbody>
     </table>
-    <%= paginate suggestions, theme: "decidim" %>
   </div>
 </div>
+<%= decidim_paginate suggestions %>
 <%= append_stylesheet_pack_tag "decidim_admin_participatory_documents" %>
 <%= append_javascript_pack_tag "decidim_admin_participatory_documents" %>
