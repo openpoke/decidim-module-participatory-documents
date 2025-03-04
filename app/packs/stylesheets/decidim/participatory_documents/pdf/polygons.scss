@@ -1,5 +1,6 @@
 .box {
   @apply absolute resize-none box-content font-normal text-[13px];
+
   background: var(--box-color-rgba);
   min-width: 1px;
   min-height: 1px;
@@ -40,6 +41,7 @@
   // Box number info
   & > span {
     @apply hidden absolute top-[2px] right-[12px] text-[24px];
+
     text-shadow: 1px 1px 3px #000, 0 0 1em #000, 0 0 0.3em #000;
     color: var(--box-text-color);
     font-weight: 600;

@@ -3,7 +3,13 @@
   // Note: hidden until "hover" class is set
   &::after {
     @apply absolute bottom-0 right-0 w-8 h-8;
-    background: linear-gradient(135deg, transparent 0, transparent 45%, #fff 80%);
+
+    background: linear-gradient(
+      135deg,
+      transparent 0,
+      transparent 45%,
+      #fff 80%
+    );
   }
 
   &.hover {
@@ -71,7 +77,9 @@
 
       &::after {
         content: "";
+
         @apply absolute top-0 left-0 w-full h-full;
+
         background: var(--box-color);
         -webkit-mask-repeat: no-repeat;
         -webkit-mask-size: 37px 37px;
