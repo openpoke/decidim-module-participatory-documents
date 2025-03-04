@@ -2,17 +2,8 @@
   // Make the resize a little bit more visible
   // Note: hidden until "hover" class is set
   &::after {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    width: 32px;
-    height: 32px;
-    background: linear-gradient(
-      135deg,
-      transparent 0,
-      transparent 45%,
-      #fff 80%
-    );
+    @apply absolute bottom-0 right-0 w-8 h-8;
+    background: linear-gradient(135deg, transparent 0, transparent 45%, #fff 80%);
   }
 
   &.hover {
@@ -26,21 +17,21 @@
     }
 
     &::before {
-      left: 0;
+      @apply left-0;
     }
 
     & > span {
-      display: block;
+      @apply block;
     }
 
     .box-controls {
-      display: block;
+      @apply block;
     }
   }
 
   &.blocked {
     & > span {
-      display: block;
+      @apply block;
     }
   }
 
@@ -62,44 +53,25 @@
   &.persisted {
     .box-controls {
       .control.group {
-        display: inline-block;
+        @apply inline-block;
       }
     }
   }
 
   // Admin controls
   .box-controls {
-    position: absolute;
-    display: none;
-    bottom: 0;
-    left: 0;
-    width: auto;
-    height: auto;
-    max-height: 44px;
-    overflow: hidden;
+    @apply absolute hidden bottom-0 left-0 w-auto h-auto max-h-11 overflow-hidden;
 
     .control {
-      background: #fffe;
-      display: inline-block;
-      position: relative;
-      width: 40px;
-      height: 36px;
-      margin: 0 3px;
-      padding: 2px;
-      border-radius: 5px;
+      @apply bg-white/90 inline-block relative w-10 h-9 m-0 mx-1 p-0.5 rounded-md;
 
       &:hover {
-        transform: scale(0.9);
-        opacity: 0.8;
+        @apply scale-90 opacity-80;
       }
 
       &::after {
         content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
+        @apply absolute top-0 left-0 w-full h-full;
         background: var(--box-color);
         -webkit-mask-repeat: no-repeat;
         -webkit-mask-size: 37px 37px;
@@ -110,8 +82,7 @@
       }
 
       &.group {
-        cursor: cell;
-        display: none;
+        @apply cursor-cell hidden;
 
         &::after {
           -webkit-mask-image: url(../images/group.svg);
@@ -124,7 +95,7 @@
       }
 
       &.move {
-        cursor: move;
+        @apply cursor-move;
 
         &::after {
           -webkit-mask-image: url(../images/move.svg);

@@ -1,17 +1,10 @@
 #notifications {
-  position: fixed;
-  top: 80px;
-  right: 50px;
-  max-width: 50%;
-  z-index: 100000;
-  display: none;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-  border-radius: 5px;
-  padding: 1rem;
+  @apply fixed top-[80px] right-[50px] max-w-[50%] z-[100000] hidden rounded-md p-4;
   text-shadow: 0 0 8px #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   background-color: var(--notifications-color-rgba);
 
   &.show {
-    display: block;
+    @apply block;
   }
 }
