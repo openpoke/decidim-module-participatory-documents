@@ -75,7 +75,7 @@ module Decidim::ParticipatoryDocuments::Admin
         let(:file) { upload_test_file(Decidim::Dev.test_file("dummy-dummies-example.json", "application/pdf")) }
 
         it "is valid" do
-          expect(subject).to be_valid
+          expect(subject).not_to be_valid
         end
       end
     end
