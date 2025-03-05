@@ -36,4 +36,5 @@ end
 
 group :test do
   gem "codecov", require: false
+  gem "rubocop-rake", require: false
 end
