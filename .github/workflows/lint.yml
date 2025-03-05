@@ -32,10 +32,13 @@ jobs:
       - run: npm run stylelint
         name: Lint SCSS files
 
+      - name: Remove old bundler cache
+        run: rm -rf ~/.bundle ~/.gem /vendor/bundle
+
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ env.RUBY_VERSION }}
-          bundler-cache: true
+          bundler-cache: false
 
       - run: bundle exec rubocop -P
         name: Lint Ruby files
