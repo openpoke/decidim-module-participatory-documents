@@ -332,7 +332,7 @@ GEM
     doc2text (0.4.7)
       nokogiri (>= 1.13.2, < 1.17.0)
       rubyzip (~> 2.3.0)
-    docile (1.4.1)
+    docile (1.4.0)
     doorkeeper (5.8.1)
       railties (>= 5)
     doorkeeper-i18n (4.0.1)
