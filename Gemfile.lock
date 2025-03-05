@@ -678,6 +678,8 @@ GEM
       rack (>= 1.1)
       rubocop (>= 1.33.0, < 2.0)
       rubocop-ast (>= 1.31.1, < 2.0)
+    rubocop-rake (0.6.0)
+      rubocop (~> 1.0)
     rubocop-rspec (2.20.0)
       rubocop (~> 1.33)
       rubocop-capybara (~> 2.17)
@@ -800,6 +802,7 @@ DEPENDENCIES
   listen (~> 3.1)
   rspec (~> 3.0)
   rubocop-faker (~> 1.1)
+  rubocop-rake
   rubocop-rspec (~> 2.20.0)
   spring (~> 2.0)
   spring-watcher-listen (~> 2.0)

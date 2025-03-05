@@ -23,6 +23,7 @@ group :development, :test do
   gem "byebug", "~> 11.0", platform: :mri
 
   gem "decidim-dev", DECIDIM_VERSION
+  gem "rubocop-rake", require: false
   gem "rubocop-rspec", "~> 2.20.0"
 end
 
