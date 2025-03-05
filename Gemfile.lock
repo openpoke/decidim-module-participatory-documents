@@ -328,8 +328,8 @@ GEM
       devise (>= 4.6)
     diff-lcs (1.6.0)
     diffy (3.4.3)
-    doc2text (0.4.8)
-      nokogiri (>= 1.18.2)
+    doc2text (0.4.7)
+      nokogiri (>= 1.13.2, < 1.17.0)
       rubyzip (~> 2.3.0)
     docile (1.4.1)
     doorkeeper (5.8.1)
@@ -363,8 +363,7 @@ GEM
       logger
     faraday-net_http (3.4.0)
       net-http (>= 0.5.0)
-    ffi (1.17.1-x86_64-darwin)
-    ffi (1.17.1-x86_64-linux-gnu)
+    ffi (1.15.5)
     file_validators (3.0.0)
       activemodel (>= 3.2)
       mime-types (>= 1.0)
@@ -472,6 +471,7 @@ GEM
     mime-types-data (3.2025.0304)
     mini_magick (4.13.2)
     mini_mime (1.1.5)
+    mini_portile2 (2.8.8)
     minitest (5.25.4)
     msgpack (1.7.2)
     multi_xml (0.7.1)
@@ -488,9 +488,8 @@ GEM
     net-smtp (0.3.4)
       net-protocol
     nio4r (2.7.4)
-    nokogiri (1.18.3-x86_64-darwin)
-      racc (~> 1.4)
-    nokogiri (1.18.3-x86_64-linux-gnu)
+    nokogiri (1.14.5)
+      mini_portile2 (~> 2.8.0)
       racc (~> 1.4)
     oauth (1.1.0)
       oauth-tty (~> 1.0, >= 1.0.1)
@@ -594,9 +593,9 @@ GEM
       activesupport (>= 5.0.0)
       minitest
       nokogiri (>= 1.6)
-    rails-html-sanitizer (1.6.2)
+    rails-html-sanitizer (1.6.0)
       loofah (~> 2.21)
-      nokogiri (>= 1.15.7, != 1.16.7, != 1.16.6, != 1.16.5, != 1.16.4, != 1.16.3, != 1.16.2, != 1.16.1, != 1.16.0.rc1, != 1.16.0)
+      nokogiri (~> 1.14)
     rails-i18n (6.0.0)
       i18n (>= 0.7, < 2)
       railties (>= 6.0.0, < 7)
@@ -787,8 +786,7 @@ GEM
     zeitwerk (2.6.18)
 
 PLATFORMS
-  x86_64-darwin-23
-  x86_64-linux
+  ruby
 
 DEPENDENCIES
   bootsnap (~> 1.4)
