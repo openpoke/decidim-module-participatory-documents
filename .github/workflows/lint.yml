@@ -35,13 +35,13 @@ jobs:
       - name: Remove old bundler cache
         run: rm -rf ~/.bundle ~/.gem /vendor/bundle
 
-      - name: Bundle install
-        run: bundle install
-
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ env.RUBY_VERSION }}
           bundler-cache: false
+
+      - name: Bundle install
+        run: bundle install
 
       - run: bundle exec rubocop -P
         name: Lint Ruby files
