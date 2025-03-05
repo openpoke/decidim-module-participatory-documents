@@ -800,7 +800,6 @@ DEPENDENCIES
   faker (~> 3.2)
   letter_opener_web
   listen (~> 3.1)
-  rspec (~> 3.0)
   rubocop-faker (~> 1.1)
   rubocop-rake
   rubocop-rspec (~> 2.20.0)
