@@ -37,9 +37,6 @@ jobs:
           ruby-version: ${{ env.RUBY_VERSION }}
           bundler-cache: true
 
-      - name: Debug rubocop configuration
-        run: bundle exec rubocop --debug
-
       - run: bundle exec rubocop -P
         name: Lint Ruby files
 
