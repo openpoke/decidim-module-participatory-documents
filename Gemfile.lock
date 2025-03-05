@@ -791,7 +791,7 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
-  bootsnap (~> 1.7)
+  bootsnap (~> 1.4)
   byebug (~> 11.0)
   codecov
   decidim!
@@ -800,7 +800,7 @@ DEPENDENCIES
   faker (~> 3.2)
   letter_opener_web
   listen (~> 3.1)
-  puma (>= 6.3.1)
+  rspec (~> 3.0)
   rubocop-faker (~> 1.1)
   rubocop-rspec (~> 2.20.0)
   spring (~> 2.0)

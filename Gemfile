@@ -15,9 +15,9 @@ DECIDIM_VERSION = Decidim::ParticipatoryDocuments::DECIDIM_VERSION
 gem "decidim", DECIDIM_VERSION
 gem "decidim-participatory_documents", path: "."
 
-gem "bootsnap", "~> 1.7"
+gem "bootsnap", "~> 1.4"
 gem "faker", "~> 3.2"
-gem "puma", ">= 6.3.1"
+gem "rspec", "~> 3.0"
 
 group :development, :test do
   gem "byebug", "~> 11.0", platform: :mri
