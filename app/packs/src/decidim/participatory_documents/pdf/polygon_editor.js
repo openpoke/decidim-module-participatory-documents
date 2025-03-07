@@ -1,5 +1,5 @@
-import PolygonViewer from "./polygon_viewer";
-import Box from "./box";
+import PolygonViewer from "src/decidim/participatory_documents/pdf/polygon_viewer";
+import Box from "src/decidim/participatory_documents/pdf/box";
 
 export default class PolygonEditor extends PolygonViewer {
   constructor(div, boxes, options) {
