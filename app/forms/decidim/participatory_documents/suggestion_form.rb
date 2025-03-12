@@ -5,12 +5,14 @@ module Decidim
     class SuggestionForm < Decidim::Form
       include Decidim::AttachmentAttributes
       include Decidim::HasUploadValidations
+      include Decidim::ProcessesFileLocally
 
       attribute :body, String
-      attribute :file
+      attribute :file, Decidim::Attributes::Blob
 
       validate :validate_single_field_presence
       validate :validate_body_length
+      validates :file, file_content_type: { allow: %w(application/pdf image/png image/jpeg) }, allow_nil: true
 
       private
 

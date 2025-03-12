@@ -10,6 +10,7 @@ module Decidim
       include Decidim::Traceable
       include Decidim::Loggable
       include Decidim::AttachmentMethods
+      include Decidim::HasAttachments
 
       translatable_fields :body, :answer
 
@@ -169,10 +170,10 @@ module Decidim
         allowed_extensions = organization.file_upload_settings["allowed_file_extensions"]["default"]
         allowed_content_types = organization.file_upload_settings["allowed_content_types"]["default"]
 
-        file_extension = File.extname(file.blob.filename.to_s)[1..]
+        file_extension = File.extname(file.blob.filename.to_s).delete(".")
         file_content_type = file.blob.content_type
 
-        errors.add(:file, :invalid) if allowed_extensions.exclude?(file_extension) || allowed_content_types.exclude?(file_content_type)
+        errors.add(:file, :invalid) unless allowed_extensions.include?(file_extension) || allowed_content_types.include?(file_content_type)
       end
     end
   end

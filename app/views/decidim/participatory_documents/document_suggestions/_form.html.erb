@@ -8,19 +8,8 @@
         <%= form.text_area :body %>
       </div>
     </div>
-    <div id="fileForm" class="form-section">
-      <div class="column">
-        <div id="fileInputContainer">
-          <%= form.file_field :file, id: "file-upload-field", style: "display: none;", label: false %>
-          <p id="fileNameContainer"></p>
-        </div>
-        <p class="my-2">
-          <%= link_to "#", class: "file-upload flex items-center", onclick: "document.getElementById('file-upload-field').click(); return false;" do %>
-            <%= icon "attachment-line", class: "inline-block" %>
-            <span class="ml-2"><%= t "upload_file", scope: "decidim.participatory_documents.document" %></span>
-          <% end %>
-        </p>
-      </div>
+    <div class="row column mb-2">
+      <%= form.upload :file, button_class: "button button__sm button__transparent-secondary" %>
     </div>
     <%= form.submit t("send_suggestion", scope: "decidim.participatory_documents.document"),
                     id: "editor-modal-save",
