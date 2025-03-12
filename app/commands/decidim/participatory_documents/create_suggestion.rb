@@ -37,11 +37,8 @@ module Decidim
           suggestable: suggestable,
           author: form.current_user
         )
-
-        # Явно прикрепляем файл после создания записи
-        if form.file.present?
-          @suggestion.file.attach(form.file)
-        end
+        
+        @suggestion.file.attach(form.file) if form.file.present?
       end
 
       def create_suggestion_attachment
