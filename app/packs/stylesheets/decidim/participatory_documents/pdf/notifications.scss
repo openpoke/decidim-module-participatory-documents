@@ -3,9 +3,15 @@
 
   text-shadow: 0 0 8px #fff;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-  background-color: var(--notifications-color-rgba);
-
+  background-color: #fff;
+  
   &.show {
     @apply block;
+  }
+  &:before {
+    @apply block absolute top-0 right-0 w-full h-full;
+    content: '';
+    z-index: -1;
+    background-color: var(--notifications-color-rgba);
   }
 }
