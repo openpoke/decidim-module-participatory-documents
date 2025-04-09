@@ -9,7 +9,7 @@ export default class SuggestionUploadModal {
   initialize() {
     const participationModal = document.getElementById("participationModal");
 
-    if (participationModal && participationModal.classList.contains("active")) {
+    if (participationModal?.classList.contains("active")) {
       console.log("[UploadModal] First modal opened, initializing file upload...");
 
       this.fileUploadButton = document.querySelector("#suggestion_file_button");
@@ -31,6 +31,11 @@ export default class SuggestionUploadModal {
     this.modal.saveButton.addEventListener("click", (event) => this.saveFile(event));
     this.modal.cancelButton.addEventListener("click", (event) => this.cancelUpload(event));
     this.modal.modal.addEventListener("click", (event) => this.closeModalOnOutsideClick(event));
+
+    const closeBtn = this.modal.modal.querySelector(`[data-dialog-close="${this.modal.modal.id.replace("-content", "")}"]`);
+    if (closeBtn) {
+      closeBtn.addEventListener("click", () => this.closeModal());
+    }
   }
 
   openModal(event) {

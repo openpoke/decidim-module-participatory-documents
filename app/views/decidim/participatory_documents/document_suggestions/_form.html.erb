@@ -9,7 +9,14 @@
       </div>
     </div>
     <div class="row column mb-2">
-      <%= form.upload :file, button_class: "button button__sm button__transparent-secondary" %>
+      <%= form.attachment :file,
+                          multiple: false,
+                          label: t("suggestion_form.add_attachments", scope: "decidim.participatory_documents.ui_messages"),
+                          button_label: t("suggestion_form.add_attachments", scope: "decidim.participatory_documents.ui_messages"),
+                          button_edit_label: t("suggestion_form.edit_attachments", scope: "decidim.participatory_documents.ui_messages"),
+                          button_class: "button button__sm button__transparent-secondary",
+                          help_i18n_scope: "decidim.forms.file_help.file",
+                          help_text: t("suggestion_form.attachment_legend", scope: "decidim.participatory_documents.ui_messages") %>
     </div>
     <%= form.submit t("send_suggestion", scope: "decidim.participatory_documents.document"),
                     id: "editor-modal-save",

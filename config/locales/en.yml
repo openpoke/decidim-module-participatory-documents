@@ -282,7 +282,10 @@ en:
           Once created, boxes can be resized, moved, or grouped.
         startSuggesting: Click on a marked area to participate!
         suggestion_form:
+          add_attachments: Add attachments
+          attachment_legend: Add a document or an image
           blank: There was an error creating the suggestion. Upload the valid  file
             or add a text message with the suggestion.
+          edit_attachments: Edit attachments
           title: Write your suggestion or upload a file with your suggestions
       'yes': 'Yes'
