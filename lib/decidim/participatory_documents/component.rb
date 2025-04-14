@@ -83,7 +83,7 @@ Decidim.register_component(:participatory_documents) do |component|
       title: Decidim::Faker::Localized.sentence(word_count: 2),
       description: Decidim::Faker::Localized.sentence(word_count: 20),
       author: admin_user,
-      file: ActiveStorage::Blob.create_after_upload!(
+      file: ActiveStorage::Blob.create_and_upload!(
         io: File.open(File.join(__dir__, "seeds", "Exampledocument.pdf")),
         filename: "Exampledocument.pdf",
         content_type: "application/pdf",

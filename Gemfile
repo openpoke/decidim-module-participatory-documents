@@ -24,12 +24,11 @@ group :development, :test do
 
   gem "decidim-dev", DECIDIM_VERSION
 
-  gem "brakeman", "~> 5.4"
+  gem "brakeman", "~> 6.1"
   gem "net-imap", "~> 0.2.3"
   gem "net-pop", "~> 0.1.1"
   gem "net-smtp", "~> 0.3.1"
   gem "parallel_tests", "~> 4.2"
-  gem "rubocop-rspec", "~> 2.20.0"
 end
 
 group :development do

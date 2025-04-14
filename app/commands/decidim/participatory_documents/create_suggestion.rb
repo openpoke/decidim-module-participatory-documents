@@ -43,7 +43,7 @@ module Decidim
 
       def create_suggestion_attachment
         file = form.file
-        file_blob = ActiveStorage::Blob.create_after_upload!(
+        file_blob = ActiveStorage::Blob.create_and_upload!(
           io: file.open,
           filename: file.original_filename,
           content_type: file.content_type
