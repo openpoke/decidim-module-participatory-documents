@@ -40,7 +40,7 @@ bundle exec rails db:migrate
 > bundle exec rails decidim_participatory_documents:install_pdf_js
 > ```
 >
-> Note that the PDF.js library is installed in the `public/pdfjs` (this might change in the future). Take into account when deploying the application.
+> Note that the PDF.js library is installed in the `public/pdfjs` (this might change in the future). Take it into account when deploying the application.
 
 Depending on your Decidim version, you can choose the corresponding version to ensure compatibility:
 

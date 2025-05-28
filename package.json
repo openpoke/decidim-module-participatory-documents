@@ -50,5 +50,7 @@
     "eslint-plugin-standard": "^3.1.0",
     "postcss-scss": "^4.0.9",
     "sass-embedded": "~1.57.1"
+  },
+  "dependencies": {
   }
 }

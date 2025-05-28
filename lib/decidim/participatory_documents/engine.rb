@@ -32,6 +32,12 @@ module Decidim
         Rails.logger.error("Error while trying to include Decidim::ReportingProposals::ParticipatorySpaceUserRoleOverride: #{e.message}")
       end
 
+      # Older versions of Rack does not support the .mjs extension, so we register it here.
+      initializer "decidim_participatory_documents.rack_mime" do
+        Mime::Type.register "text/javascript", :mjs
+        Rack::Mime::MIME_TYPES[".mjs"] = "text/javascript"
+      end
+
       initializer "decidim_participatory_documents.overrides", after: "decidim.action_controller" do
         config.to_prepare do
           Decidim::ParticipatorySpaceRoleConfig::Valuator.include(Decidim::ParticipatoryDocuments::ValuatorOverride)

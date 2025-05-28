@@ -16,7 +16,8 @@
 }
 
 #toolbarViewerMiddle {
-  @apply pl-0 pr-0;
+  @apply pl-0 pr-0 absolute left-[50%];
+
 
   @media (min-width: 940px) {
     transform: translateX(-75%);

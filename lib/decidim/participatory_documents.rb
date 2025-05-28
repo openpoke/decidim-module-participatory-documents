@@ -26,6 +26,11 @@ module Decidim
     config_accessor :antivirus_enabled do
       defined?(AntivirusValidator) ? true : false
     end
+
+    # PDF.js URL to download the prebuilt version of PDF.js
+    config_accessor :pdfjs_url do
+      "https://github.com/mozilla/pdf.js/releases/download/v5.2.133/pdfjs-5.2.133-dist.zip"
+    end
   end
 end
 
