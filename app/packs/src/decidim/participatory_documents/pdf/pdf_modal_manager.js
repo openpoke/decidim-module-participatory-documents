@@ -1,3 +1,5 @@
+import initLanguageChangeSelect from "src/decidim/admin/choose_language";
+
 /* eslint-disable no-alert */
 export default class PdfModalManager {
   constructor(options) {
@@ -37,22 +39,25 @@ export default class PdfModalManager {
 
   populateModal(data, box) {
     this.modalWrapper.innerHTML = data;
-    this.displayModal(box);
-    // Admin in 0.28 still uses foundation to handle tabs
-    $(this.modalWrapper).foundation();
-  }
-
-  displayModal(box) {
     const uiSave = document.getElementById("editor-modal-save");
     const uiTitle = document.getElementById("editor-modal-title");
     const uiRemove = document.getElementById("editor-modal-remove");
     uiTitle.innerHTML = this.i18n.modalTitle.replace("%{box}", box.div.dataset.position).replace("%{section}", box.div.dataset.sectionNumber);
-
-    window.Decidim.currentDialogs[this.modal.id].open();
-
     // this.modal.addEventListener("click", (evt) => evt.stopPropagation(), { once: true });
     uiRemove.addEventListener("click", (evt) => this._removeHandler(box, evt), { once: true });
     uiSave.addEventListener("click", (evt) => this._saveHandler(box, evt), { once: true });
+    this.openModal(box);
+    // Admin in 0.28 still uses foundation to handle tabs
+    $(this.modalWrapper).foundation();
+    initLanguageChangeSelect(document.querySelectorAll("select.language-change"));
+  }
+
+  openModal() {
+    window.Decidim.currentDialogs[this.modal.id].open();
+  }
+
+  closeModal() {
+    window.Decidim.currentDialogs[this.modal.id].close();
   }
 
   createBox(box, page) {
@@ -78,12 +83,13 @@ export default class PdfModalManager {
       then((resp) => {
         box.setInfo();
         this.modalContent.classList.remove("loading");
-        window.Decidim.currentDialogs[this.modal.id].close();
+        this.closeModal();
         this.onSave(box, resp.data);
       }).
       catch((error) => {
         console.error("Error creating box, destroy it", error);
         this.modalContent.classList.remove("loading");
+        this.closeModal();
         box.destroy();
         this.onError(box, error);
       });
@@ -148,5 +154,6 @@ export default class PdfModalManager {
         box.destroy();
       }
     }
+    this.closeModal();
   }
 }

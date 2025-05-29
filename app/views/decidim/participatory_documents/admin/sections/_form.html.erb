@@ -1,4 +1,4 @@
-<%= decidim_form_for([document, @form], html: { class: "form-defaults form", data: "dialog", aria_hidden: "false" })do |form| %>
+<%= decidim_form_for([document, @form], html: { class: "form-defaults form", aria_hidden: "false" }) do |form| %>
   <div class="card-section" id="editor-modal-content">
     <%= form.translated :text_field, :title, autofocus: true %>
   </div>

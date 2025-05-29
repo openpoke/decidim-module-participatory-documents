@@ -30,9 +30,11 @@ namespace :decidim_participatory_documents do
     filename = File.basename(URI.parse(pdfjs_url).path)
     tmp_file = temp_dir.join(filename)
 
+    # rubocop:disable Security/Open
     URI.open(pdfjs_url) do |remote_file|
       File.binwrite(tmp_file, remote_file.read)
     end
+    # rubocop:enable Security/Open
 
     raise "The downloaded file is not a zip file: #{filename}" unless filename.end_with?(".zip")
 

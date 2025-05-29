@@ -17,7 +17,6 @@ export default class PolygonEditor extends PolygonViewer {
     // this effectively disables pointer events on the layer (so links are not clickable).
     // But that's okay for the editor, it's for creating the boxes.
     this.div.style.pointerEvents = "all";
-    console.log("init polygon editor", this);
     // add controls to existing boxes
     this.getBoxes().map((box) => box.createControls());
     this.div.addEventListener("mousedown", this._mouseDown.bind(this));
@@ -41,7 +40,7 @@ export default class PolygonEditor extends PolygonViewer {
       this.left = this.div.getBoundingClientRect().x;
       this.top = this.div.getBoundingClientRect().y;
       // disable mouse events on all children
-      console.log("mousedown", "evt", evt,  "this", this, "box div", this.box.div);
+      // console.log("mousedown", "evt", evt,  "this", this, "box div", this.box.div);
     }
   }
 
@@ -88,7 +87,7 @@ export default class PolygonEditor extends PolygonViewer {
   }
 
   _initBox() {
-    console.log("init box", this.box)
+    // console.log("init box", this.box)
     if (!this.boxes[this.box.id]) {
       this.box.createControls();
       this.bindBoxEvents(this.box);

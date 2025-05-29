@@ -40,7 +40,7 @@
 
     document.addEventListener("DOMContentLoaded", function() {
       var pages = {};
-      console.log("CurrentBoxes", CurrentBoxes);
+      // console.log("CurrentBoxes", CurrentBoxes);
 
       PDFViewerApplication.initializedPromise.then(function() {
         var options = {
@@ -62,11 +62,10 @@
           var page = PDFViewerApplication.pdfViewer._pages[doc.pageNumber - 1];
           var annotationsLayer = page.annotationEditorLayer && page.annotationEditorLayer.div;
           var savedPage = pages[doc.pageNumber];
-          console.log("rendered", doc, "page", page, "annotationsLayer", annotationsLayer, "savedPage", savedPage);
-          var boxChanged = function(box) {
+          // console.log("rendered", doc, "page", page, "annotationsLayer", annotationsLayer, "savedPage", savedPage);
+          var boxChanged = function() {
             // reorder box numbers according to page, x position, and y position
             var boxes = Array.from(document.querySelectorAll(".polygon-ready .box"));
-            console.log(boxes);
             boxes.sort(function(a, b) {
               var aPage = parseInt(a.parentElement.dataset.pageNumber, 10);
               var bPage = parseInt(b.parentElement.dataset.pageNumber, 10)
@@ -87,15 +86,17 @@
             var sectionNumber = 0;
             var allSections = {};
             boxes.forEach(function(box, index) {
-              box.dataset.position = index + 1;
-              box.querySelector("span").innerText = index + 1;
-              if(allSections[box.dataset.section]) {
-                box.dataset.sectionNumber = allSections[box.dataset.section];
+              const position = index + 1;
+              const section = parseInt(box.dataset.section, 10) || 0;
+              box.dataset.position = position;
+              box.querySelector("span").innerText = position;
+              if(section && allSections[section]) {
+                box.dataset.sectionNumber = allSections[section];
               } else {
                 sectionNumber++;
                 box.dataset.sectionNumber = sectionNumber;
               }
-              allSections[box.dataset.section] = sectionNumber;
+              allSections[section] = sectionNumber;
             });
           };
 
