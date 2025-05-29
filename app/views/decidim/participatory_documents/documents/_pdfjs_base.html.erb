@@ -139,15 +139,18 @@ See https://github.com/adobe-type-tools/cmap-resources
               </div>
               <div id="toolbarViewerMiddle" class="toolbarHorizontalGroup">
                 <% if defined?(display_save) && display_save == true %>
-                  <button id="DecidimPDSaveButton" class="decidimButton" title="<%= t "save_changes", scope: "decidim.participatory_documents.document" %>">
+                  <button id="DecidimPDSaveButton" class="button button__primary button__xs mr-2 decidim-button" title="<%= t "save_changes", scope: "decidim.participatory_documents.document" %>">
+                    <%= icon "save-line" %>
                     <%= t "save_changes", scope: "decidim.participatory_documents.document" %>
                   </button>
                 <% end %>
                 <% if defined?(display_suggestions) && display_suggestions == true %>
-                  <button id="globalSuggestionTrigger" class="decidimButton" title="<%= t "global_suggestions", scope: "decidim.participatory_documents.document" %>">
+                  <button id="globalSuggestionTrigger" class="button button__secondary button__xs mr-2 decidim-button" title="<%= t "global_suggestions", scope: "decidim.participatory_documents.document" %>">
+                    <%= icon("chat-1-line") %>
                     <%= t "global_suggestions", scope: "decidim.participatory_documents.document" %>
                   </button>
-                  <button id="exportSuggestionsTrigger" class="decidimButton muted" title="<%= t "export_my_suggestions", scope: "decidim.participatory_documents.document" %>">
+                  <button id="exportSuggestionsTrigger" class="button button__xs button__transparent-secondary decidim-button" title="<%= t "export_my_suggestions", scope: "decidim.participatory_documents.document" %>">
+                    <%= icon("download-line") %>
                     <%= t "export_my_suggestions", scope: "decidim.participatory_documents.document" %>
                   </button>
                 <% end %>
@@ -271,7 +274,7 @@ See https://github.com/adobe-type-tools/cmap-resources
 
                 <div id="editorModeSeparator" class="verticalToolbarSeparator"></div>
 
-                <div class="toolbarHorizontalGroup hiddenMediumView">
+                <div class="toolbarHorizontalGroup hiddenMediumView hidden">
                   <button id="printButton" class="toolbarButton" type="button" tabindex="0" data-l10n-id="pdfjs-print-button">
                     <span data-l10n-id="pdfjs-print-button-label"></span>
                   </button>
@@ -283,9 +286,10 @@ See https://github.com/adobe-type-tools/cmap-resources
 
                 <div class="verticalToolbarSeparator hiddenMediumView"></div>
             
-                <button id="fullscreenButton" onclick="toggleFullscreen()"
+                <button id="fullscreenButton" class="button button__xs button__text decidim-button" onclick="toggleFullscreen()"
                     data-fullscreen="<%= t("decidim.participatory_documents.suggestions.modal.full_screen") %>"
                     data-exit="<%= t("decidim.participatory_documents.suggestions.modal.exit_full_screen") %>">
+                    <%= icon "fullscreen-line" %>
                   <%= t("decidim.participatory_documents.suggestions.modal.full_screen") %>
                 </button>
 

@@ -6,7 +6,6 @@
   <meta name="google" content="notranslate">
   <title>PDF.js viewer</title>
 
-
   <!-- This snippet is used in production (included from viewer.html) -->
   <link rel="resource" type="application/l10n" href="/pdfjs/web/locale/locale.json">
   <script src="/pdfjs/build/pdf.mjs" type="module"></script>
@@ -40,31 +39,37 @@
     var CurrentBoxes = <%= document.annotations.collect(&:serialize).to_json.html_safe %>;
     var pages = {};
 
-    PDFViewerApplication.initializedPromise.then(function() {
-      var options = {
-        i18n: I18n,
-        documentPath: DocumentPath,
-        globalSuggestionsButton: document.getElementById("globalSuggestionTrigger"),
-        participationLayout: document.getElementById("participationModal"),
-        exportButton: document.getElementById("exportSuggestionsTrigger"),
-        exportModal: document.getElementById("exportSuggestionsModal")
-      };
-      window.InitDocumentManagers(options);
+    document.addEventListener("DOMContentLoaded", function() {
+      PDFViewerApplication.initializedPromise.then(function() {
+          var options = {
+            i18n: I18n,
+          documentPath: DocumentPath,
+          globalSuggestionsButton: document.getElementById("globalSuggestionTrigger"),
+          participationLayout: document.getElementById("participationModal"),
+          exportButton: document.getElementById("exportSuggestionsTrigger"),
+          exportModal: document.getElementById("exportSuggestionsModal")
+        };
+        window.InitDocumentManagers(options);
 
-      window.showInfo(I18n.startSuggesting, {delay: 5000});
+        window.showInfo(I18n.startSuggesting, {delay: 5000});
 
-      PDFViewerApplication.eventBus.on('annotationeditorlayerrendered', function (doc) {
-        var page = PDFViewerApplication.pdfViewer._pages[doc.pageNumber - 1];
-        var annotationsLayer = page.annotationEditorLayer && page.annotationEditorLayer.div;
-        var savedPage = pages[doc.pageNumber];
-        // Let's render the object only if not already existing.
-        // Note that the PDF library might redraw the annotation layer, if this happens we need to re-render the areas.
-        if(annotationsLayer && (!savedPage || savedPage.boxEditor.div !== annotationsLayer)) {
-          page.boxEditor = window.InitPolygonViewer(annotationsLayer, CurrentBoxes.filter(box => box.page_number === doc.pageNumber), options);
-          pages[doc.pageNumber] = page;
-        }
-        // make all links with target blank to prevent open them inside the iframe
-        page.div.querySelectorAll("a[href]").forEach(anchor => anchor.target = "_blank")
+        PDFViewerApplication.eventBus.on('annotationeditorlayerrendered', function (doc) {
+          var page = PDFViewerApplication.pdfViewer._pages[doc.pageNumber - 1];
+          var annotationsLayer = page.annotationEditorLayer && page.annotationEditorLayer.div;
+          var savedPage = pages[doc.pageNumber];
+          // Let's render the object only if not already existing.
+          // Note that the PDF library might redraw the annotation layer, if this happens we need to re-render the areas.
+          if(annotationsLayer && (!savedPage || savedPage.boxEditor.div !== annotationsLayer)) {
+            // ensure the annotations layer is visible as in recent versions of PDF.js it is hidden by default
+            annotationsLayer.hidden = false;
+            page.annotationEditorLayer.show();
+
+            page.boxEditor = window.InitPolygonViewer(annotationsLayer, CurrentBoxes.filter(box => box.page_number === doc.pageNumber), options);
+            pages[doc.pageNumber] = page;
+          }
+          // make all links with target blank to prevent open them inside the iframe
+          page.div.querySelectorAll("a[href]").forEach(anchor => anchor.target = "_blank")
+        });
       });
     });
   </script>

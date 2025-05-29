@@ -15,8 +15,9 @@ export default class PolygonEditor extends PolygonViewer {
     super.init();
     // The editor needs to draw boxes over the underlying layer
     // this effectively disables pointer events on the layer (so links are not clickable).
-    // But that's okey for the editor, it's for creating the boxes.
+    // But that's okay for the editor, it's for creating the boxes.
     this.div.style.pointerEvents = "all";
+    console.log("init polygon editor", this);
     // add controls to existing boxes
     this.getBoxes().map((box) => box.createControls());
     this.div.addEventListener("mousedown", this._mouseDown.bind(this));

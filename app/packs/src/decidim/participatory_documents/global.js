@@ -12,11 +12,12 @@ document.addEventListener("fullscreenchange", () => {
   let fsElement = document.fullscreenElement;
 
   const button = document.getElementById("fullscreenButton");
+  const icon = button.querySelector("svg");
   if (fsElement) {
     button.classList.add("exit");
-    button.textContent = button.dataset.exit;
+    button.innerHTML = icon.outerHTML + button.dataset.exit;
   } else {
     button.classList.remove("exit");
-    button.textContent = button.dataset.fullscreen;
+    button.innerHTML = icon.outerHTML + button.dataset.fullscreen;
   }
 });
