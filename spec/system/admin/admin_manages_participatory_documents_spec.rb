@@ -132,6 +132,7 @@ describe "Admin manages participatory documents" do
         expect(document.sections.count).to eq(2)
         dynamically_attach_file :document_file, Decidim::Dev.asset("Exampledocument.pdf"), remove_before: true
         click_on "Update"
+        sleep 1
         expect(document.sections.reload.count).to eq(0)
       end
     end

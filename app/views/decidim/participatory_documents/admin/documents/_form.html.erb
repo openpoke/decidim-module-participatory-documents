@@ -15,7 +15,7 @@
       <div class="row column">
         <fieldset class="fieldset">
           <% if document&.sections&.any? || document&.has_suggestions? %>
-            <div class="callout alert" style="margin:-1em -1em 1em -1em;"><%= t document&.has_suggestions? ? ".alert_suggestions_html" : ".warning_sections_html" %></div>
+            <div class="flash flex-col warning"><%= t document&.has_suggestions? ? ".alert_suggestions_html" : ".warning_sections_html" %></div>
           <% end %>
           <%= form.upload :file, optional: !current_component.published?, help_i18n_messages: "pdf_message", button_class: "button button__sm button__transparent-secondary" %>
         </fieldset>
