@@ -38,7 +38,7 @@ module Decidim
           icon_link_to("file-download-line",
                        Rails.application.routes.url_helpers.rails_blob_url(suggestion.file.blob, only_path: true, target: "_blank", rel: "noopener"),
                        t("decidim.participatory_documents.admin.suggestions.index.actions.download", filename: suggestion.file.filename.to_s),
-                       class: "icon--small ml-xs")
+                       class: "icon--small ml-xs", data: { externalLink: false })
         end
 
         def content_with_class(content, css_class)

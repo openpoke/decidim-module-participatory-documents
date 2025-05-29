@@ -68,7 +68,10 @@
             pages[doc.pageNumber] = page;
           }
           // make all links with target blank to prevent open them inside the iframe
-          page.div.querySelectorAll("a[href]").forEach(anchor => anchor.target = "_blank")
+          page.div.querySelectorAll("a[href]").forEach((anchor) => {
+            anchor.target = "_blank";
+            anchor.dataset.externalLink= false;
+          });
         });
       });
     });
