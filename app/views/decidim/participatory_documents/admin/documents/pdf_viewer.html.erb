@@ -32,7 +32,7 @@
 
   <div id="notifications"></div>
 
-  <script>
+  <script type="text/javascript">
     var AnnotationsPath = '<%= document_annotations_path(document).split("?")[0] %>';
     var SectionPath = '<%= document_sections_path(document).split("?")[0] %>';
     var CurrentBoxes = <%= document.annotations.collect(&:serialize).to_json.html_safe %>;

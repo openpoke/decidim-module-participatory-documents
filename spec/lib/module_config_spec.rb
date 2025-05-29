@@ -30,7 +30,8 @@ module Decidim
                                "max_export_text_length" => 11,
                                "min_suggestion_length" => 33,
                                "max_suggestion_length" => 77,
-                               "antivirus_enabled" => false
+                               "antivirus_enabled" => false,
+                               "pdfjs_url" => "https://github.com/mozilla/pdf.js/releases/download/v5.2.133/pdfjs-5.2.133-dist.zip"
                              })
       end
     end

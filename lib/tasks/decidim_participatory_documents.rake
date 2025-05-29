@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 namespace :decidim_participatory_documents do
-  # Since we cannot install pdentry.js as node module, nor we can use it from CDN, We are using the prebuilt version.
-  desc "Copies the pdentry.js library from plugin root to designated application folder"
+  # Since we cannot install pdf.js as node module, nor we can use it from CDN, We are using the prebuilt version.
+  desc "Downloads the pdf.js library to the designated application folder"
   task :install_pdf_js do
     download_pdfjs_to_application "public"
     apply_path_corrections_to_pdfjs "public"

@@ -1,6 +1,6 @@
 <% locals = flash.key?(:notice) ? { css: %q{success}, text: flash.now[:notice] } : { css: %q{alert}, text: flash.now[:alert] } %>
 
-$("<%= escape_javascript(render partial: "js-callout", locals: locals) %>").appendTo(".callout-wrapper");
+$("<%= escape_javascript(render partial: %q(decidim/admin/shared/js-callout), locals: locals) %>").appendTo(".callout-wrapper");
 
 <% suggestion_ids.each do |id| %>
   $(".table-list [data-id='<%= id %>']")

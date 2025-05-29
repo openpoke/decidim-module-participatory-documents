@@ -32,7 +32,7 @@
 
   <%= render "export_modal" %>
 
-  <script>
+  <script type="text/javascript">
 
     var I18n = <%= I18n.t("decidim.participatory_documents.ui_messages").to_json.html_safe %>;
     var DocumentPath = '<%= document_path(document).split("?")[0] %>';

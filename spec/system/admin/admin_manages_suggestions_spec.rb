@@ -61,15 +61,6 @@ describe "Admin manages participatory documents" do
           expect(page).to have_content("Answers for 2 suggestions will be published.")
         end
         click_on("Publish")
-        20.times do
-          # wait for the ajax call to finish
-          sleep(1)
-          expect(page).to have_content(I18n.t("suggestions.publish_answers.success", scope: "decidim.participatory_documents.admin"))
-          break
-        rescue StandardError
-          # ignore and loop again if ajax content is still not there
-          nil
-        end
         expect(page).to have_content(I18n.t("suggestions.publish_answers.success", scope: "decidim.participatory_documents.admin"))
 
         visit current_path

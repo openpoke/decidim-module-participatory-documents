@@ -81,7 +81,7 @@ See https://github.com/adobe-type-tools/cmap-resources
                   <div class="hidden doorHanger toolbarHorizontalGroup" id="findbar">
                     <div id="findInputContainer" class="toolbarHorizontalGroup">
                       <span class="loadingInput end toolbarHorizontalGroup">
-                        <input id="findInput" class="toolbarField" tabindex="0" data-l10n-id="pdfjs-find-input" aria-invalid="false">
+                        <input id="findInput" class="toolbarField" tabindex="0" data-l10n-id="pdfjs-find-input" aria-invalid="false" autocomplete="off">
                       </span>
                       <div class="toolbarHorizontalGroup">
                         <button id="findPreviousButton" class="toolbarButton" type="button" tabindex="0" data-l10n-id="pdfjs-find-previous-button">
@@ -96,21 +96,25 @@ See https://github.com/adobe-type-tools/cmap-resources
 
                     <div id="findbarOptionsOneContainer" class="toolbarHorizontalGroup">
                       <div class="toggleButton toolbarLabel">
-                        <input type="checkbox" id="findHighlightAll" tabindex="0">
+                        <input type="checkbox" id="findHighlightAll" tabindex="0" autocomplete="off"
+ autocomplete="off">
                         <label for="findHighlightAll" data-l10n-id="pdfjs-find-highlight-checkbox"></label>
                       </div>
                       <div class="toggleButton toolbarLabel">
-                        <input type="checkbox" id="findMatchCase" tabindex="0">
+                        <input type="checkbox" id="findMatchCase" tabindex="0" autocomplete="off"
+ autocomplete="off">
                         <label for="findMatchCase" data-l10n-id="pdfjs-find-match-case-checkbox-label"></label>
                       </div>
                     </div>
                     <div id="findbarOptionsTwoContainer" class="toolbarHorizontalGroup">
                       <div class="toggleButton toolbarLabel">
-                        <input type="checkbox" id="findMatchDiacritics" tabindex="0">
+                        <input type="checkbox" id="findMatchDiacritics" tabindex="0" autocomplete="off"
+ autocomplete="off">
                         <label for="findMatchDiacritics" data-l10n-id="pdfjs-find-match-diacritics-checkbox-label"></label>
                       </div>
                       <div class="toggleButton toolbarLabel">
-                        <input type="checkbox" id="findEntireWord" tabindex="0">
+                        <input type="checkbox" id="findEntireWord" tabindex="0" autocomplete="off"
+ autocomplete="off">
                         <label for="findEntireWord" data-l10n-id="pdfjs-find-entire-word-checkbox-label"></label>
                       </div>
                     </div>
@@ -207,7 +211,8 @@ See https://github.com/adobe-type-tools/cmap-resources
                         <div id="editorHighlightThickness">
                           <label for="editorFreeHighlightThickness" class="editorParamsLabel" data-l10n-id="pdfjs-editor-free-highlight-thickness-input"></label>
                           <div class="thicknessPicker">
-                            <input type="range" id="editorFreeHighlightThickness" class="editorParamsSlider" data-l10n-id="pdfjs-editor-free-highlight-thickness-title" value="12" min="8" max="24" step="1" tabindex="0">
+                            <input type="range" id="editorFreeHighlightThickness" class="editorParamsSlider" data-l10n-id="pdfjs-editor-free-highlight-thickness-title" value="12" min="8" max="24" step="1" tabindex="0" autocomplete="off"
+ autocomplete="off">
                           </div>
                         </div>
                         <div id="editorHighlightVisibility">
@@ -228,11 +233,13 @@ See https://github.com/adobe-type-tools/cmap-resources
                       <div class="editorParamsToolbarContainer">
                         <div class="editorParamsSetter">
                           <label for="editorFreeTextColor" class="editorParamsLabel" data-l10n-id="pdfjs-editor-free-text-color-input"></label>
-                          <input type="color" id="editorFreeTextColor" class="editorParamsColor" tabindex="0">
+                          <input type="color" id="editorFreeTextColor" class="editorParamsColor" tabindex="0" autocomplete="off"
+ autocomplete="off">
                         </div>
                         <div class="editorParamsSetter">
                           <label for="editorFreeTextFontSize" class="editorParamsLabel" data-l10n-id="pdfjs-editor-free-text-size-input"></label>
-                          <input type="range" id="editorFreeTextFontSize" class="editorParamsSlider" value="10" min="5" max="100" step="1" tabindex="0">
+                          <input type="range" id="editorFreeTextFontSize" class="editorParamsSlider" value="10" min="5" max="100" step="1" tabindex="0" autocomplete="off"
+ autocomplete="off">
                         </div>
                       </div>
                     </div>
@@ -245,15 +252,18 @@ See https://github.com/adobe-type-tools/cmap-resources
                       <div class="editorParamsToolbarContainer">
                         <div class="editorParamsSetter">
                           <label for="editorInkColor" class="editorParamsLabel" data-l10n-id="pdfjs-editor-ink-color-input"></label>
-                          <input type="color" id="editorInkColor" class="editorParamsColor" tabindex="0">
+                          <input type="color" id="editorInkColor" class="editorParamsColor" tabindex="0" autocomplete="off"
+ autocomplete="off">
                         </div>
                         <div class="editorParamsSetter">
                           <label for="editorInkThickness" class="editorParamsLabel" data-l10n-id="pdfjs-editor-ink-thickness-input"></label>
-                          <input type="range" id="editorInkThickness" class="editorParamsSlider" value="1" min="1" max="20" step="1" tabindex="0">
+                          <input type="range" id="editorInkThickness" class="editorParamsSlider" value="1" min="1" max="20" step="1" tabindex="0" autocomplete="off"
+ autocomplete="off">
                         </div>
                         <div class="editorParamsSetter">
                           <label for="editorInkOpacity" class="editorParamsLabel" data-l10n-id="pdfjs-editor-ink-opacity-input"></label>
-                          <input type="range" id="editorInkOpacity" class="editorParamsSlider" value="1" min="0.05" max="1" step="0.05" tabindex="0">
+                          <input type="range" id="editorInkOpacity" class="editorParamsSlider" value="1" min="0.05" max="1" step="0.05" tabindex="0" autocomplete="off"
+ autocomplete="off">
                         </div>
                       </div>
                     </div>
@@ -419,7 +429,8 @@ See https://github.com/adobe-type-tools/cmap-resources
             <label for="password" id="passwordText" data-l10n-id="pdfjs-password-label"></label>
           </div>
           <div class="row">
-            <input type="password" id="password" class="toolbarField">
+            <input type="password" id="password" class="toolbarField" autocomplete="off"
+ autocomplete="off">
           </div>
           <div class="buttonRow">
             <button id="passwordCancel" class="dialogButton" type="button"><span data-l10n-id="pdfjs-password-cancel-button"></span></button>
@@ -499,7 +510,8 @@ See https://github.com/adobe-type-tools/cmap-resources
             <div id="addDescription">
               <div class="radio">
                 <div class="radioButton">
-                  <input type="radio" id="descriptionButton" name="altTextOption" tabindex="0" aria-describedby="descriptionAreaLabel" checked>
+                  <input type="radio" id="descriptionButton" name="altTextOption" tabindex="0" aria-describedby="descriptionAreaLabel" checked autocomplete="off"
+ autocomplete="off">
                   <label for="descriptionButton" data-l10n-id="pdfjs-editor-alt-text-add-description-label"></label>
                 </div>
                 <div class="radioLabel">
@@ -513,7 +525,8 @@ See https://github.com/adobe-type-tools/cmap-resources
             <div id="markAsDecorative">
               <div class="radio">
                 <div class="radioButton">
-                  <input type="radio" id="decorativeButton" name="altTextOption" aria-describedby="decorativeLabel">
+                  <input type="radio" id="decorativeButton" name="altTextOption" aria-describedby="decorativeLabel" autocomplete="off"
+ autocomplete="off">
                   <label for="decorativeButton" data-l10n-id="pdfjs-editor-alt-text-mark-decorative-label"></label>
                 </div>
                 <div class="radioLabel">
@@ -630,7 +643,7 @@ See https://github.com/adobe-type-tools/cmap-resources
             </div>
             <div id="addSignatureActionContainer" data-selected="type">
               <div id="addSignatureTypeContainer" role="tabpanel" aria-labelledby="addSignatureTypeContainer">
-                <input id="addSignatureTypeInput" type="text" data-l10n-id="pdfjs-editor-add-signature-type-input" tabindex="0"><input>
+                <input id="addSignatureTypeInput" type="text" data-l10n-id="pdfjs-editor-add-signature-type-input" tabindex="0" autocomplete="off">
               </div>
               <div id="addSignatureDrawContainer" role="tabpanel" aria-labelledby="addSignatureDrawButton" tabindex="-1">
                 <svg id="addSignatureDraw" xmlns="http://www.w3.org/2000/svg" aria-labelledby="addSignatureDrawPlaceholder"></svg>
@@ -649,7 +662,7 @@ See https://github.com/adobe-type-tools/cmap-resources
                   <label id="addSignatureImageBrowse" for="addSignatureFilePicker" tabindex="0">
                     <a data-l10n-id="pdfjs-editor-add-signature-image-browse-link"></a>
                   </label>
-                  <input id="addSignatureFilePicker" type="file"><input>
+                  <input id="addSignatureFilePicker" type="file">
                 </div>
               </div>
               <div id="addSignatureControls">
@@ -657,14 +670,14 @@ See https://github.com/adobe-type-tools/cmap-resources
                   <div id="addSignatureDescriptionContainer">
                     <label for="addSignatureDescInput" data-l10n-id="pdfjs-editor-add-signature-description-label"></label>
                     <span id="addSignatureDescription" class="inputWithClearButton">
-                      <input id="addSignatureDescInput" type="text" data-l10n-id="pdfjs-editor-add-signature-description-input" tabindex="0"><input>
+                      <input id="addSignatureDescInput" type="text" data-l10n-id="pdfjs-editor-add-signature-description-input" tabindex="0">
                       <button class="clearInputButton" type="button" tabindex="0" aria-hidden="true"></button>
                     </span>
                   </div>
                   <button id="clearSignatureButton" type="button" data-l10n-id="pdfjs-editor-add-signature-clear-button" tabindex="0"><span data-l10n-id="pdfjs-editor-add-signature-clear-button-label"></span></button>
                 </div>
                 <div id="addSignatureSaveContainer">
-                  <input type="checkbox" id="addSignatureSaveCheckbox" checked="true"><input>
+                  <input type="checkbox" id="addSignatureSaveCheckbox" checked="true">
                   <label for="addSignatureSaveCheckbox" data-l10n-id="pdfjs-editor-add-signature-save-checkbox"></label>
                   <span></span>
                   <span id="addSignatureSaveWarning" data-l10n-id="pdfjs-editor-add-signature-save-warning-message"></span>
@@ -696,7 +709,7 @@ See https://github.com/adobe-type-tools/cmap-resources
             <div id="editSignatureDescriptionContainer">
               <label for="editSignatureDescInput" data-l10n-id="pdfjs-editor-add-signature-description-label"></label>
               <span id="editSignatureDescription" class="inputWithClearButton">
-                <input id="editSignatureDescInput" type="text" data-l10n-id="pdfjs-editor-add-signature-description-input" tabindex="0"><input>
+                <input id="editSignatureDescInput" type="text" data-l10n-id="pdfjs-editor-add-signature-description-input" tabindex="0" autocomplete="off">
                 <button class="clearInputButton" type="button" tabindex="0" aria-hidden="true"></button>
               </span>
             </div>

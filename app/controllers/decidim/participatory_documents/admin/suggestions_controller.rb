@@ -52,9 +52,7 @@ module Decidim
             end
           end
 
-          respond_to do |format|
-            format.js
-          end
+          render "decidim/participatory_documents/admin/suggestions/publish_answers"
         end
 
         private

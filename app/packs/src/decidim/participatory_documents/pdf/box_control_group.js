@@ -74,7 +74,7 @@ export default class BoxControlGroup {
         this.box.setSection(this.layer.div.dataset.groupBoxSection, this.layer.div.dataset.groupBoxNumber);
       }
       this.box.onChange();
-      console.log("group this", this.layer.div.dataset.groupBoxId, this.box.div.id, evt, this.box.div.dataset.sectionNumber);
+      // console.log("group this", this.layer.div.dataset.groupBoxId, this.box.div.id, evt, this.box.div.dataset.sectionNumber);
     }
   }
 }
