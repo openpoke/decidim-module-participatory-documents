@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-describe "Index participatory_documents" do # rubocop:disable RSpec/DescribeClass
+describe "Index participatory_documents" do
   include_context "with a component"
   let(:organization) { create(:organization) }
   let(:user) { create(:user, :admin, :confirmed, organization:) }

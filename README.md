@@ -50,6 +50,41 @@ Depending on your Decidim version, you can choose the corresponding version to e
 | 0.3.x   | 0.28.x                      |
 
 
+### Usage with external static file servers
+
+A common setup is to use standalone web server (such as Nginx or Apache) to serve the static files present in the `public` folder.
+If that is your case, you need to ensure that the files ending with the extension `.mjs` are served with the mime type `text/javascript`.
+
+#### For Apache webserver
+
+Make sure to add `AddType text/javascript .mjs` in the mime_module:
+
+```
+<IfModule mime_module>
+...
+  AddType text/javascript .mjs
+</IfModule>
+```
+
+or in a `.htaccess` file:
+
+```
+<IfModule mod_mime.c>
+  AddType text/javascript mjs
+</IfModule>
+```
+
+#### For Nginx webserver
+
+Edit the file `/etc/nginx/mime.types` and add the type (if missing):
+
+```
+types {
+  ...
+  text/javascript mjs;
+}
+```
+
 ## Usage
 
 This module adds a new component to Decidim called `Participatory Documents` that allows to upload PDFs and define areas on top of it that will become spaces for suggestions or comments.
