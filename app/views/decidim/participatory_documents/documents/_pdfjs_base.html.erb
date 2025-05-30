@@ -145,17 +145,17 @@ See https://github.com/adobe-type-tools/cmap-resources
                 <% if defined?(display_save) && display_save == true %>
                   <button id="DecidimPDSaveButton" class="button button__primary button__xs mr-2 decidim-button" title="<%= t "save_changes", scope: "decidim.participatory_documents.document" %>">
                     <%= icon "save-line" %>
-                    <%= t "save_changes", scope: "decidim.participatory_documents.document" %>
+                    <span><%= t "save_changes", scope: "decidim.participatory_documents.document" %></span>
                   </button>
                 <% end %>
                 <% if defined?(display_suggestions) && display_suggestions == true %>
                   <button id="globalSuggestionTrigger" class="button button__secondary button__xs mr-2 decidim-button" title="<%= t "global_suggestions", scope: "decidim.participatory_documents.document" %>">
                     <%= icon("chat-1-line") %>
-                    <%= t "global_suggestions", scope: "decidim.participatory_documents.document" %>
+                    <span><%= t "global_suggestions", scope: "decidim.participatory_documents.document" %></span>
                   </button>
                   <button id="exportSuggestionsTrigger" class="button button__xs button__transparent-secondary decidim-button" title="<%= t "export_my_suggestions", scope: "decidim.participatory_documents.document" %>">
                     <%= icon("download-line") %>
-                    <%= t "export_my_suggestions", scope: "decidim.participatory_documents.document" %>
+                    <span><%= t "export_my_suggestions", scope: "decidim.participatory_documents.document" %></>
                   </button>
                 <% end %>
               </div>
@@ -299,8 +299,8 @@ See https://github.com/adobe-type-tools/cmap-resources
                 <button id="fullscreenButton" class="button button__xs button__text decidim-button" onclick="toggleFullscreen()"
                     data-fullscreen="<%= t("decidim.participatory_documents.suggestions.modal.full_screen") %>"
                     data-exit="<%= t("decidim.participatory_documents.suggestions.modal.exit_full_screen") %>">
-                    <%= icon "fullscreen-line" %>
-                  <%= t("decidim.participatory_documents.suggestions.modal.full_screen") %>
+                  <%= icon "fullscreen-line" %>
+                  <span><%= t("decidim.participatory_documents.suggestions.modal.full_screen") %></span>
                 </button>
 
                 <div id="secondaryToolbarToggle" class="toolbarButtonWithContainer">
