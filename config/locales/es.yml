@@ -27,6 +27,7 @@ es:
     admin:
       actions:
         export: Exportar
+        manage: Manage
       exports:
         export_as: "%{name} como %{export_format}"
       filters:
@@ -123,6 +124,11 @@ es:
             success: El documento ha sido actualizado con éxito
         exports:
           suggestions: Sugerencias
+        sections:
+          modal:
+            delete: Delete
+            save: Save
+            title: Edit section
         suggestion_notes:
           create:
             error: Se ha producido un error al crear la nota
@@ -208,6 +214,7 @@ es:
           success: "Se han exportado correctamente %{count} sugerencias. Revisa tu bandeja de entrada de correo en %{email}."
       documents:
         export_modal:
+          close: Close
           description_html: Tiene %{count} sugerencias en este documento. Si quiere exportarlo, recibirá un fichero ZIP que contiene un documento Excel con todos sus datos y cualquier posible respuesta que los administradores le hayan dado. <br><br>Recibirá un correo electrónico en <b>%{email}</b>.
           send: Envíame mis sugerencias
           title: Exportar mis sugerencias
@@ -256,6 +263,9 @@ es:
         startEditing: Empieza a crear áreas para la participación haciendo clic y arrastrando. Una vez creadas y guardadas, se pueden cambiar el tamaño, mover o agrupar. Una agrupación de áreas es una sección. Finalmente, se publicarán todas las secciones (sean agrupadas en varias áreas o en una sola área).
         startSuggesting: '¡Haga clic en una sección marcada para participar!'
         suggestion_form:
+          add_attachments: Add attachments
+          attachment_legend: Add a document or an image
           blank: Se ha producido un error al crear la sugerencia. Sube un archivo válido o añade un mensaje de texto con la sugerencia.
+          edit_attachments: Edit attachments
           title: Escribe tu sugerencia o sube un archivo con tus sugerencias
       'yes': 'Sí'
