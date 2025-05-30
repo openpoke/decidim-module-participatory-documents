@@ -48,7 +48,7 @@ describe "Admin manages suggestion valuators" do
   end
 
   context "when assigning to a valuator" do
-    before do
+    it "shows the component select" do
       visit current_path
 
       within "tr", text: suggestion.id do
@@ -57,45 +57,29 @@ describe "Admin manages suggestion valuators" do
 
       click_on "Actions"
       click_on "Assign to valuator"
-    end
-
-    it "shows the component select" do
       expect(page).to have_css("#js-form-assign-suggestions-to-valuator select", count: 1)
-    end
-
-    it "shows an update button" do
       expect(page).to have_button("Assign", count: 1)
-    end
 
-    context "when submitting the form" do
-      before do
-        within "#js-form-assign-suggestions-to-valuator" do
-          select valuator.name, from: :valuator_role_id
-          click_on("Assign")
-        end
+      within "#js-form-assign-suggestions-to-valuator" do
+        select valuator.name, from: :valuator_role_id
+        click_on("Assign")
       end
 
-      it "assigns the proposals to the valuator" do
-        expect(page).to have_content("Suggestions assigned to a valuator successfully")
+      expect(page).to have_content("Suggestions assigned to a valuator successfully")
 
-        within "tr", text: suggestion.id do
-          expect(page).to have_css("td.valuators-count", text: valuator.name)
-        end
+      within "tr", text: suggestion.id do
+        expect(page).to have_css("td.valuators-count", text: valuator.name)
       end
     end
   end
 
   context "when filtering suggestions by assigned valuator" do
     let!(:unassigned_suggestion) { create(:participatory_documents_suggestion, suggestable: section1) }
-    let(:assigned_suggestion) { suggestion }
-
-    before do
-      create(:suggestion_valuation_assignment, suggestion:, valuator_role:)
-
-      visit current_path
-    end
+    let!(:assigned_suggestion) { suggestion }
+    let!(:assignment) { create(:suggestion_valuation_assignment, suggestion:, valuator_role:) }
 
     it "only shows the proposals assigned to the selected valuator" do
+      visit current_path
       expect(page).to have_content(assigned_suggestion.id)
       expect(page).to have_content(unassigned_suggestion.id)
 
@@ -112,10 +96,9 @@ describe "Admin manages suggestion valuators" do
 
   context "when unassigning valuators from the suggestion index page" do
     let(:assigned_suggestion) { suggestion }
+    let!(:assignment) { create(:suggestion_valuation_assignment, suggestion:, valuator_role:) }
 
-    before do
-      create(:suggestion_valuation_assignment, suggestion:, valuator_role:)
-
+    it "shows the component select" do
       visit current_path
 
       within "tr", text: assigned_suggestion.id do
@@ -124,47 +107,31 @@ describe "Admin manages suggestion valuators" do
 
       click_on "Actions"
       click_on "Unassign from valuator"
-    end
-
-    it "shows the component select" do
       expect(page).to have_css("#js-form-unassign-suggestions-from-valuator select", count: 1)
-    end
-
-    it "shows an update button" do
       expect(page).to have_button("Unassign", count: 1)
-    end
 
-    context "when submitting the form" do
-      before do
-        within "#js-form-unassign-suggestions-from-valuator" do
-          select valuator.name, from: :valuator_role_id
-          click_on("Unassign")
-        end
+      within "#js-form-unassign-suggestions-from-valuator" do
+        select valuator.name, from: :valuator_role_id
+        click_on("Unassign")
       end
+      expect(page).to have_content("Valuator unassigned from suggestions successfully")
 
-      it "unassigns the proposals to the valuator" do
-        expect(page).to have_content("Valuator unassigned from suggestions successfully")
-
-        within "tr", text: assigned_suggestion.id do
-          expect(page).to have_css("td.valuators-count", text: 0)
-        end
+      within "tr", text: assigned_suggestion.id do
+        expect(page).to have_css("td.valuators-count", text: 0)
       end
     end
   end
 
   context "when unassigning valuators from the suggestion show page" do
     let(:assigned_suggestion) { suggestion }
+    let!(:assignment) { create(:suggestion_valuation_assignment, suggestion:, valuator_role:) }
 
-    before do
-      create(:suggestion_valuation_assignment, suggestion:, valuator_role:)
-
+    it "can unassign a valuator" do
       visit current_path
       within "tr", text: assigned_suggestion.id do
         click_on "Answer"
       end
-    end
 
-    it "can unassign a valuator" do
       within "#valuators" do
         expect(page).to have_content(valuator.name)
 
@@ -183,6 +150,7 @@ describe "Admin manages suggestion valuators" do
     let(:assigned_suggestion) { suggestion }
     let(:another_valuator) { create(:user, :confirmed, :admin_terms_accepted, organization:) }
     let!(:another_valuator_role) { create(:participatory_process_user_role, role: :valuator, user: another_valuator, participatory_process:) }
+    let!(:another_suggestion) { create(:participatory_documents_suggestion, suggestable: section1) }
 
     before do
       sign_in valuator
@@ -191,7 +159,8 @@ describe "Admin manages suggestion valuators" do
     end
 
     context "when the valuator is assigned" do
-      before do
+      it "shows the valuator is assigned" do
+        expect(page).to have_no_css("tr", text: another_suggestion.id)
         within "tr", text: assigned_suggestion.id do
           click_on "Answer"
         end
@@ -202,24 +171,13 @@ describe "Admin manages suggestion valuators" do
         end
 
         click_on "Assign"
-      end
-
-      it "shows the valuator is assigned" do
         expect(page).to have_content("Suggestions assigned to a valuator successfully")
-      end
-    end
-
-    context "when the valuator is not assigned" do
-      let!(:another_suggestion) { create(:participatory_documents_suggestion, suggestable: section1) }
-
-      it "doesn't show suggestion" do
-        expect(page).to have_no_css("tr", text: another_suggestion.id)
       end
     end
   end
 
   context "when admin to assign a validator" do
-    before do
+    it "assigns the suggestions to the valuator" do
       visit current_path
       within "tr", text: suggestion.id do
         click_on "Answer"
@@ -231,9 +189,6 @@ describe "Admin manages suggestion valuators" do
       end
 
       click_on "Assign"
-    end
-
-    it "assigns the suggestions to the valuator" do
       expect(page).to have_content("Suggestions assigned to a valuator successfully")
 
       within "tr", text: suggestion.id do
@@ -245,62 +200,48 @@ describe "Admin manages suggestion valuators" do
   context "when a valuator manages assignments" do
     let(:valuator2) { create(:user, :confirmed, :admin_terms_accepted, organization:) }
     let!(:valuator_role2) { create(:participatory_process_user_role, role: :valuator, user: valuator2, participatory_process:) }
+    let!(:assignment) { create(:suggestion_valuation_assignment, suggestion:, valuator_role:) }
+    let(:suggestion_path) do
+      Decidim::EngineRouter.admin_proxy(document.component).document_suggestion_path(document_id: document.id, id: suggestion.id)
+    end
 
     before do
       switch_to_host(organization.host)
       login_as valuator, scope: :user
 
-      create(:suggestion_valuation_assignment, suggestion:, valuator_role:)
-
       visit current_path
       within "tr", text: suggestion.id do
         click_on "Answer"
       end
+      within "#js-form-assign-suggestion-to-valuator" do
+        find_by_id("valuator_role_id").click
+        find("option", text: valuator2.name).click
+      end
     end
 
-    context "when a valuator assigns other valuators" do
-      let(:suggestion_path) do
-        Decidim::EngineRouter.admin_proxy(document.component).document_suggestion_path(document_id: document.id, id: suggestion.id)
+    it "assigns the suggestion to the valuator" do
+      click_on "Assign"
+      expect(page).to have_content("Suggestions assigned to a valuator successfully")
+
+      within "tr", text: suggestion.id do
+        expect(page).to have_css("td.valuators-count", text: "#{valuator.name} (+1)")
       end
+    end
 
-      before do
-        within "#js-form-assign-suggestion-to-valuator" do
-          find_by_id("valuator_role_id").click
-          find("option", text: valuator2.name).click
-        end
-      end
-
-      it "assigns the suggestion to the valuator" do
-        click_on "Assign"
-        expect(page).to have_content("Suggestions assigned to a valuator successfully")
-
-        within "tr", text: suggestion.id do
-          expect(page).to have_css("td.valuators-count", text: "#{valuator.name} (+1)")
-        end
-      end
-
-      context "when the valuator is removed" do
-        before do
-          accept_confirm do
-            within "#valuators li", text: valuator.name do
-              find("svg use[href*='ri-close-circle-line']").click
-            end
+    context "when the valuator is removed" do
+      it "shows the valuator is unassigned successfully" do
+        accept_confirm do
+          within "#valuators li", text: valuator.name do
+            find("svg use[href*='ri-close-circle-line']").click
           end
         end
+        expect(page).to have_content("Valuator unassigned from suggestions successfully")
+        expect(page).to have_no_selector("#valuators")
 
-        it "shows the valuator is unassigned successfully" do
-          expect(page).to have_content("Valuator unassigned from suggestions successfully")
-          expect(page).to have_no_selector("#valuators")
-        end
+        expect(page).to have_no_content(translated(suggestion.body).first(20))
 
-        it "does not show the suggestion content" do
-          expect(page).to have_no_content(translated(suggestion.body).first(20))
-        end
-
-        it "disallows access to the suggestion page" do
-          visit suggestion_path
-          expect(page).to have_content("You are not authorized to perform this action")
-        end
+        visit suggestion_path
+        expect(page).to have_content("You are not authorized to perform this action")
       end
     end
   end
