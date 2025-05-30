@@ -1,8 +1,9 @@
-<%= decidim_form_for(@form, url: document_section_suggestions_path(document, section_id: section.id), html: { class: "form" }) do |form| %>
-  <div class="column">
+<%= decidim_form_for(@form, url: document_section_suggestions_path(document, section_id: section.id),
+                     html: { class: "form-defaults form send-suggestions-form" }) do |form| %>
+  <div class="row column mb-4">
     <%= form.text_area :body %>
   </div>
-  <div class="button--double form-general-submit">
+  <div class="button button__sm button__secondary">
     <%= form.submit t("send_suggestion", scope: "decidim.participatory_documents.document"), id: "editor-modal-save", name: "editor-modal-save" %>
   </div>
 <% end %>

@@ -6,16 +6,18 @@
   <meta name="google" content="notranslate">
   <title>PDF.js viewer</title>
 
-  <link rel="stylesheet" href="/pdfjs/web/viewer.css">
-
-  <script src="/pdfjs/build/pdf.js"></script>
-
   <!-- This snippet is used in production (included from viewer.html) -->
-  <link rel="resource" type="application/l10n" href="/pdfjs/web/locale/locale.properties">
-  <script src="/pdfjs/web/viewer.js"></script>
-  <%= stylesheet_pack_tag "decidim_participatory_documents_viewer" %>
-  <%= javascript_pack_tag "decidim_participatory_documents_viewer" if current_user %>
-  <%= javascript_pack_tag "decidim_participatory_documents_viewer_off" unless current_user %>
+  <link rel="resource" type="application/l10n" href="/pdfjs/web/locale/locale.json">
+  <script src="/pdfjs/build/pdf.mjs" type="module"></script>
+  <link rel="stylesheet" href="/pdfjs/web/viewer.css">
+  <script src="/pdfjs/web/viewer.mjs" type="module"></script>
+
+  <%= stylesheet_pack_tag  "decidim_participatory_documents_viewer", "decidim_core", media: :all %>
+
+  <% append_javascript_pack_tag "decidim_core", defer: false %>
+  <%= javascript_pack_tag "decidim_participatory_documents_viewer", defer: false if current_user %>
+  <%= javascript_pack_tag "decidim_participatory_documents_viewer_off", defer: false unless current_user %>
+
   <%= organization_colors %>
   <%= pdf_custom_style %>
   <%= csrf_meta_tags %>
@@ -26,43 +28,51 @@
 
   <div id="notifications"></div>
 
-  <div id="participation-modal"></div>
+  <div id="participationModal"></div>
 
   <%= render "export_modal" %>
 
-  <script>
+  <script type="text/javascript">
 
     var I18n = <%= I18n.t("decidim.participatory_documents.ui_messages").to_json.html_safe %>;
     var DocumentPath = '<%= document_path(document).split("?")[0] %>';
     var CurrentBoxes = <%= document.annotations.collect(&:serialize).to_json.html_safe %>;
     var pages = {};
 
-    PDFViewerApplication.initializedPromise.then(function() {
-      var options = {
-        i18n: I18n,
-        documentPath: DocumentPath,
-        globalSuggestionsButton: document.getElementById("globalSuggestionTrigger"),
-        participationLayout: document.getElementById("participation-modal"),
-        exportButton: document.getElementById("exportSuggestionsTrigger"),
-        exportModal: document.getElementById("export-modal")
-      };
+    document.addEventListener("DOMContentLoaded", function() {
+      PDFViewerApplication.initializedPromise.then(function() {
+          var options = {
+            i18n: I18n,
+          documentPath: DocumentPath,
+          globalSuggestionsButton: document.getElementById("globalSuggestionTrigger"),
+          participationLayout: document.getElementById("participationModal"),
+          exportButton: document.getElementById("exportSuggestionsTrigger"),
+          exportModal: document.getElementById("exportSuggestionsModal")
+        };
+        window.InitDocumentManagers(options);
 
-      window.InitDocumentManagers(options);
+        window.showInfo(I18n.startSuggesting, {delay: 5000});
 
-      window.showInfo(I18n.startSuggesting, {delay: 5000});
+        PDFViewerApplication.eventBus.on('annotationeditorlayerrendered', function (doc) {
+          var page = PDFViewerApplication.pdfViewer._pages[doc.pageNumber - 1];
+          var annotationsLayer = page.annotationEditorLayer && page.annotationEditorLayer.div;
+          var savedPage = pages[doc.pageNumber];
+          // Let's render the object only if not already existing.
+          // Note that the PDF library might redraw the annotation layer, if this happens we need to re-render the areas.
+          if(annotationsLayer && (!savedPage || savedPage.boxEditor.div !== annotationsLayer)) {
+            // ensure the annotations layer is visible as in recent versions of PDF.js it is hidden by default
+            annotationsLayer.hidden = false;
+            page.annotationEditorLayer.show();
 
-      PDFViewerApplication.eventBus.on('annotationeditorlayerrendered', function (doc) {
-        var page = PDFViewerApplication.pdfViewer._pages[doc.pageNumber - 1];
-        var annotationsLayer = page.annotationEditorLayer && page.annotationEditorLayer.div;
-        var savedPage = pages[doc.pageNumber];
-        // Let's render the object only if not already existing.
-        // Note that the PDF library might redraw the annotation layer, if this happens we need to re-render the areas.
-        if(annotationsLayer && (!savedPage || savedPage.boxEditor.div !== annotationsLayer)) {
-          page.boxEditor = window.InitPolygonViewer(annotationsLayer, CurrentBoxes.filter(box => box.page_number === doc.pageNumber), options);
-          pages[doc.pageNumber] = page;
-        }
-        // make all links with target blank to prevent open them inside the iframe
-        page.div.querySelectorAll("a[href]").forEach(anchor => anchor.target = "_blank")
+            page.boxEditor = window.InitPolygonViewer(annotationsLayer, CurrentBoxes.filter(box => box.page_number === doc.pageNumber), options);
+            pages[doc.pageNumber] = page;
+          }
+          // make all links with target blank to prevent open them inside the iframe
+          page.div.querySelectorAll("a[href]").forEach((anchor) => {
+            anchor.target = "_blank";
+            anchor.dataset.externalLink= false;
+          });
+        });
       });
     });
   </script>

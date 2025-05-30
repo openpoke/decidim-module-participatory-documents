@@ -1,0 +1,14 @@
+<%= decidim_modal id: "editor-modal" do %>
+  <div data-dialog-container>
+    <%= icon "edit-line" %>
+    <h3 class="h3" id="editor-modal-title" tabindex="-1" data-dialog-title><%= t("modal.title", scope: "decidim.participatory_documents.admin.sections") %></h3>
+
+    <div class="form__wrapper">
+      <%= render "decidim/participatory_documents/admin/sections/form" %>
+    </div>
+  </div>
+  <div data-dialog-actions>
+    <button class="button button__lg button__alert" id="editor-modal-remove"><%= t("modal.delete", scope: "decidim.participatory_documents.admin.sections") %></button>
+    <button class="button button__lg button__secondary" id="editor-modal-save"><%= t("modal.save", scope: "decidim.participatory_documents.admin.sections") %></button>
+  </div>
+<% end %>

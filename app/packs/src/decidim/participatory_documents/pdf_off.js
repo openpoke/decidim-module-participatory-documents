@@ -18,12 +18,11 @@ const openLogin = (evt) => {
   params.append("redirect_url", window.parent.location.href);
   loginForm.action = `${parts[0]}?${params.toString()}`;
 
-  window.parent.$("#loginModal").foundation("open")
+  window.parent.Decidim.currentDialogs.loginModal.open()
 };
 
 window.InitDocumentManagers = (options) => {
   options.globalSuggestionsButton.addEventListener("click", openLogin);
-
   options.exportButton.addEventListener("click", openLogin);
 };
 

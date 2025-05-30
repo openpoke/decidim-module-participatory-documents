@@ -12,8 +12,8 @@ module Decidim
         content_tag(:a,
                     title: btn_title,
                     href: Decidim::EngineRouter.admin_proxy(document.component).edit_pdf_documents_path(id: document.id),
-                    class: "button small warning mr-s") do
-          button_builder(btn_title, icon: "layers")
+                    class: "button button__sm button__warning") do
+          button_builder(btn_title, icon: "stack-line")
         end
       end
 
@@ -24,9 +24,9 @@ module Decidim
           Decidim::EngineRouter.admin_proxy(document.component).publish_document_path(document),
           method: :put,
           data: { confirm: t("actions.confirm", scope: "decidim.participatory_documents") },
-          class: "button small light success"
+          class: "button button__sm button__success"
         ) do
-          button_builder(btn_title, icon: "check")
+          button_builder(btn_title, icon: "checkbox-multiple-line")
         end
       end
 

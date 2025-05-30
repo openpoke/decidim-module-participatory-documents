@@ -3,8 +3,8 @@
 module Decidim
   module ParticipatoryDocuments
     class CreateSuggestion < Decidim::Command
+      include ::Decidim::AttachmentAttributesMethods
       include ::Decidim::AttachmentMethods
-
       def initialize(form, suggestable)
         @form = form
         @suggestable = suggestable
@@ -30,17 +30,15 @@ module Decidim
 
       def create_suggestion
         sanitized_body = Decidim::ContentProcessor.sanitize(form.body)
-
         @suggestion = Decidim.traceability.create!(
           Decidim::ParticipatoryDocuments::Suggestion,
           form.current_user,
-          { body: { I18n.locale => sanitized_body },
-            suggestable: suggestable,
-            author: form.current_user },
-          visibility: "public-only"
+          body: { I18n.locale => sanitized_body },
+          suggestable:,
+          author: form.current_user
         )
 
-        create_suggestion_attachment if form.file.present?
+        @suggestion.file.attach(form.file) if form.file.present?
       end
 
       def create_suggestion_attachment

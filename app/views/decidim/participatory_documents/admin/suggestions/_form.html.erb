@@ -1,30 +1,33 @@
-<%= decidim_form_for(@form, url: answer_document_suggestion_path(document, suggestion), html: { class: "form edit_suggestion suggestion_form_admin" })  do |form| %>
-  <div class="card" id="suggestion-answer">
-    <div class="card-divider">
-      <h2 class="card-title"><%= t ".title" %></h2>
+<div class="item__edit-form">
+  <%= decidim_form_for(@form, url: answer_document_suggestion_path(document, suggestion),
+                       html: { class: "form-defaults form edit_suggestion suggestion_form_admin" }) do |form| %>
+    <div class="form__wrapper">
+      <div class="card pt4" id="suggestion-answer">
+        <div class="card-divider">
+          <h2 class="card-title"><%= t ".title" %></h2>
+        </div>
+        <div class="row column flex items-center gap-x-4 my-2">
+          <%= form.collection_radio_buttons :state, [
+            ["not_answered", t("not_answered", scope: "decidim.participatory_documents.suggestions.answers")],
+            ["accepted", t("accepted", scope: "decidim.participatory_documents.suggestions.answers")],
+            ["rejected", t("rejected", scope: "decidim.participatory_documents.suggestions.answers")],
+            ["evaluating", t("evaluating", scope: "decidim.participatory_documents.suggestions.answers")]
+          ], :first, :last, prompt: true do |builder|
+            builder.label { builder.radio_button + builder.text }
+          end %>
+        </div>
+        <div class="row column">
+          <%= form.translated :editor, :answer, autofocus: true, rows: 15 %>
+        </div>
+        <div class="row column">
+          <%= form.check_box :answer_is_published, label: t(".answer_is_published") %>
+        </div>
+      </div>
     </div>
-    <div class="card-section">
-      <div class="row column">
-        <%= form.collection_radio_buttons :state, [
-          ["not_answered", t("not_answered", scope: "decidim.participatory_documents.suggestions.answers")],
-          ["accepted", t("accepted", scope: "decidim.participatory_documents.suggestions.answers")],
-          ["rejected", t("rejected", scope: "decidim.participatory_documents.suggestions.answers")],
-          ["evaluating", t("evaluating", scope: "decidim.participatory_documents.suggestions.answers")]
-        ], :first, :last, prompt: true %>
+    <div class="item__edit-sticky">
+      <div class="item__edit-sticky-container">
+        <%= form.submit t(".answer"), class: "button button__sm button__secondary" %>
       </div>
-
-      <div class="row column">
-        <%= form.translated :text_area, :answer, autofocus: true, rows: 15 %>
-      </div>
-
-      <div class="row column">
-        <%= form.check_box :answer_is_published, label: t(".answer_is_published") %>
-      </div>
-
     </div>
-  </div>
-
-  <div class="button--double form-general-submit">
-    <%= form.submit t(".answer") %>
-  </div>
-<% end %>
+  <% end %>
+</div>

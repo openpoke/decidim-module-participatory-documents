@@ -28,6 +28,7 @@ en:
     admin:
       actions:
         export: Export
+        manage: Manage
       exports:
         export_as: "%{name} as %{export_format}"
       filters:
@@ -134,6 +135,11 @@ en:
             success: Document has been successfully updated
         exports:
           suggestions: Suggestions
+        sections:
+          modal:
+            delete: Delete
+            save: Save
+            title: Edit section
         suggestion_notes:
           create:
             error: There was a problem creating this suggestion note
@@ -221,6 +227,7 @@ en:
             your email inbox at %{email}."
       documents:
         export_modal:
+          close: Close
           description_html: You have %{count} suggestions on this document. If you
             want to export them, you will receive a ZIP file with and Excel document
             in it with all your data and any possible answer the admins have given
@@ -275,7 +282,10 @@ en:
           Once created, boxes can be resized, moved, or grouped.
         startSuggesting: Click on a marked area to participate!
         suggestion_form:
+          add_attachments: Add attachments
+          attachment_legend: Add a document or an image
           blank: There was an error creating the suggestion. Upload the valid  file
             or add a text message with the suggestion.
+          edit_attachments: Edit attachments
           title: Write your suggestion or upload a file with your suggestions
       'yes': 'Yes'

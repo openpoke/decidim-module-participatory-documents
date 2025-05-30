@@ -1,39 +1,57 @@
-<div class="row column">
-  <%= form.translated :text_field, :title, autofocus: true %>
-</div>
+<%= append_stylesheet_pack_tag "decidim_admin_participatory_documents" %>
+<%= append_javascript_pack_tag "decidim_admin_participatory_documents" %>
+<%= pdf_custom_style %>
+<div class="form__wrapper">
+  <div class="card pt-4">
+    <div class="card-section">
+      <div class="row column hashtags__container">
+        <%= form.translated :text_field, :title, autofocus: true, class: "js-hashtags", hashtaggable: true, aria: { label: :title } %>
+      </div>
 
-<div class="row column">
-  <%= form.translated :editor, :description %>
-</div>
+      <div class="row column hashtags__container">
+        <%= form.translated :editor, :description, hashtaggable: true, aria: { label: :description } %>
+      </div>
 
-<div class="row column">
-  <fieldset class="fieldset">
-    <% if document&.sections&.any? || document&.has_suggestions? %>
-      <div class="callout alert" style="margin:-1em -1em 1em -1em;"><%= t document&.has_suggestions? ? ".alert_suggestions_html" : ".warning_sections_html" %></div>
-    <% end %>
-    <%= form.upload :file, optional: !current_component.published?, help_i18n_messages: "pdf_message" %>
-  </fieldset>
-</div>
+      <div class="row column">
+        <fieldset class="fieldset">
+          <% if document&.sections&.any? || document&.has_suggestions? %>
+            <div class="flash flex-col warning"><%= t document&.has_suggestions? ? ".alert_suggestions_html" : ".warning_sections_html" %></div>
+          <% end %>
+          <%= form.upload :file, optional: !current_component.published?, help_i18n_messages: "pdf_message", button_class: "button button__sm button__transparent-secondary" %>
+        </fieldset>
+      </div>
 
-<div class="row column">
-  <%= form.color_field :box_color %>
-</div>
+      <div class="row column my-4">
+        <div class="column">
+          <%= form.color_field :box_color, class: "mt-1 w-full p-2" %>
+        </div>
+      </div>
 
-<div class="row column">
-  <%= form.number_field :box_opacity, min: 0, max: 100 %>
-</div>
+      <div class="row column">
+        <%= form.number_field :box_opacity, min: 0, max: 100 %>
+      </div>
 
-<div class="row column box-preview">
-  <fieldset class="fieldset">
-    <h4><%= t ".box_style_preview" %></h4>
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus. Sed sit amet ipsum mauris. Maecenas congue ligula ac quam viverra nec consectetur ante hendrerit. Donec et mollis dolor. Praesent et diam eget libero egestas mattis sit amet vitae augue. Nam tincidunt congue enim, ut porta lorem lacinia consectetur. Donec ut libero sed arcu vehicula ultricies a non tortor. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut gravida lorem. Ut turpis felis, pulvinar a semper sed, adipiscing id dolor. Pellentesque auctor nisi id magna consequat sagittis. Curabitur dapibus enim sit amet elit pharetra tincidunt feugiat nisl imperdiet.</p>
-    <p>Ut convallis libero in urna ultrices accumsan. Donec sed odio eros. Donec viverra mi quis quam pulvinar at malesuada arcu rhoncus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. In rutrum accumsan ultricies. Mauris vitae nisi at sem facilisis semper ac in est.</p>
-    <div class="box" data-section-number="<%= rand(1..9) %>">
-      <div class="box-controls">
-        <div class="control move"></div>
-        <div class="control group"></div>
+      <div class="row column box-preview">
+        <fieldset class="fieldset">
+          <h4 class="h4 mb-4"><%= t ".box_style_preview" %></h4>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus. Sed sit amet ipsum mauris.
+            Maecenas congue ligula ac quam viverra nec consectetur ante hendrerit. Donec et mollis dolor. Praesent et
+            diam eget libero egestas mattis sit amet vitae augue. Nam tincidunt congue enim, ut porta lorem lacinia
+            consectetur. Donec ut libero sed arcu vehicula ultricies a non tortor. Lorem ipsum dolor sit amet,
+            consectetur adipiscing elit. Aenean ut gravida lorem. Ut turpis felis, pulvinar a semper sed, adipiscing id
+            dolor. Pellentesque auctor nisi id magna consequat sagittis. Curabitur dapibus enim sit amet elit pharetra
+            tincidunt feugiat nisl imperdiet.</p>
+          <p class="mt-2">Ut convallis libero in urna ultrices accumsan. Donec sed odio eros. Donec viverra mi quis
+            quam pulvinar at malesuada arcu rhoncus. Cum sociis natoque penatibus et magnis dis parturient montes,
+            nascetur ridiculus mus. In rutrum accumsan ultricies. Mauris vitae nisi at sem facilisis semper ac in est.</p>
+          <div class="box" data-section-number="<%= rand(1..9) %>">
+            <div class="box-controls">
+              <div class="control move"></div>
+              <div class="control group"></div>
+            </div>
+          </div>
+        </fieldset>
       </div>
     </div>
-  </fieldset>
+  </div>
 </div>
-<%= pdf_custom_style %>

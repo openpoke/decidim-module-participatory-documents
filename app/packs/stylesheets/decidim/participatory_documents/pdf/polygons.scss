@@ -1,20 +1,12 @@
-@import "stylesheets/decidim/admin/variables";
-@import "stylesheets/decidim/utils/fontface";
-@import "stylesheets/decidim/admin/utils/settings";
-
 .box {
-  position: absolute;
+  @apply absolute resize-none box-content font-normal text-[13px];
+
   background: var(--box-color-rgba);
   min-width: 1px;
   min-height: 1px;
   border-color: var(--box-color);
   border-style: dotted;
   border-width: 2px;
-  resize: none;
-  box-sizing: content-box;
-  font-family: $body-font-family;
-  font-weight: 400;
-  font-size: 13px;
 
   &.creating,
   &.moving,
@@ -36,7 +28,7 @@
 
   &.blocked {
     pointer-events: none;
-    opacity: .4;
+    opacity: 0.4;
 
     &.grouping,
     &.focus {
@@ -48,12 +40,9 @@
 
   // Box number info
   & > span {
-    display: none;
-    position: absolute;
-    top: 2px;
-    right: 12px;
-    font-size: 24px;
-    text-shadow: 1px 1px 3px #000, 0 0 1em #000, 0 0 .3em #000;
+    @apply hidden absolute top-[2px] right-[12px] text-[24px];
+
+    text-shadow: 1px 1px 3px #000, 0 0 1em #000, 0 0 0.3em #000;
     color: var(--box-text-color);
     font-weight: 600;
   }

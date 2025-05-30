@@ -5,19 +5,19 @@ require "spec_helper"
 module Decidim
   module ParticipatoryDocuments
     module Admin
-      RSpec.describe ValuationAssignmentsController, type: :controller do
+      RSpec.describe ValuationAssignmentsController do
         routes { Decidim::ParticipatoryDocuments::AdminEngine.routes }
 
         let(:organization) { component.organization }
         let(:participatory_process) { component.participatory_space }
-        let(:component) { create :participatory_documents_component }
-        let(:document) { create :participatory_documents_document, :with_suggestions, component: component }
+        let(:component) { create(:participatory_documents_component) }
+        let(:document) { create(:participatory_documents_document, :with_suggestions, component:) }
         let(:suggestion) { create(:participatory_documents_suggestion, suggestable: document) }
-        let(:valuator) { create(:user, :confirmed, :admin_terms_accepted, organization: organization) }
-        let(:valuator2) { create :user, :confirmed, :admin_terms_accepted, organization: organization }
-        let(:valuator_role) { create :participatory_process_user_role, role: :valuator, user: valuator, participatory_process: participatory_process }
-        let(:valuator_role2) { create :participatory_process_user_role, role: :valuator, user: valuator2, participatory_process: participatory_process }
-        let(:non_valuator_user) { create(:user, :confirmed, organization: organization) }
+        let(:valuator) { create(:user, :confirmed, :admin_terms_accepted, organization:) }
+        let(:valuator2) { create(:user, :confirmed, :admin_terms_accepted, organization:) }
+        let(:valuator_role) { create(:participatory_process_user_role, role: :valuator, user: valuator, participatory_process:) }
+        let(:valuator_role2) { create(:participatory_process_user_role, role: :valuator, user: valuator2, participatory_process:) }
+        let(:non_valuator_user) { create(:user, :confirmed, organization:) }
 
         before do
           request.env["decidim.current_organization"] = organization
@@ -35,7 +35,7 @@ module Decidim
           end
 
           context "when valuator is assigned to a suggestion" do
-            let!(:assignment) { create(:suggestion_valuation_assignment, suggestion: suggestion, valuator_role: valuator_role) }
+            let!(:assignment) { create(:suggestion_valuation_assignment, suggestion:, valuator_role:) }
 
             it "allows assigning a valuator to a suggestion" do
               sign_in valuator
@@ -50,7 +50,7 @@ module Decidim
           end
 
           context "when valuator is not assigned to a suggestion" do
-            let!(:assignment) { create(:suggestion_valuation_assignment, suggestion: suggestion, valuator_role: valuator_role2) }
+            let!(:assignment) { create(:suggestion_valuation_assignment, suggestion:, valuator_role: valuator_role2) }
 
             it "does not allow assigning a valuator to a suggestion" do
               sign_in valuator
@@ -74,7 +74,7 @@ module Decidim
           end
 
           context "when valuator is assigned to a suggestion" do
-            let!(:assignment) { create(:suggestion_valuation_assignment, suggestion: suggestion, valuator_role: valuator_role) }
+            let!(:assignment) { create(:suggestion_valuation_assignment, suggestion:, valuator_role:) }
 
             it "allows unassigning a valuator from a suggestion" do
               sign_in valuator
@@ -89,7 +89,7 @@ module Decidim
           end
 
           context "when valuator is not assigned to a suggestion" do
-            let!(:assignment) { create(:suggestion_valuation_assignment, suggestion: suggestion, valuator_role: valuator_role2) }
+            let!(:assignment) { create(:suggestion_valuation_assignment, suggestion:, valuator_role: valuator_role2) }
 
             it "does not allow unassigning a valuator from a suggestion" do
               sign_in valuator

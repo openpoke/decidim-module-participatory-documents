@@ -11,7 +11,7 @@ module Decidim::ParticipatoryDocuments::Admin
     let(:box_color) { "#f00f00" }
     let(:box_opacity) { 50 }
     let(:file) { Decidim::Dev.test_file("Exampledocument.pdf", "application/pdf") }
-    let(:document) { create(:participatory_documents_document, title: { en: title }, description: { en: description }, file: file, box_color: box_color, box_opacity: box_opacity) }
+    let(:document) { create(:participatory_documents_document, title: { en: title }, description: { en: description }, file:, box_color:, box_opacity:) }
 
     context "when the document has a title and a description" do
       it "is valid" do
@@ -39,10 +39,10 @@ module Decidim::ParticipatoryDocuments::Admin
       let(:params) do
         {
           title: { en: title },
-          file: file,
+          file:,
           description: { en: description },
-          box_color: box_color,
-          box_opacity: box_opacity
+          box_color:,
+          box_opacity:
         }
       end
 
@@ -75,7 +75,7 @@ module Decidim::ParticipatoryDocuments::Admin
         let(:file) { upload_test_file(Decidim::Dev.test_file("dummy-dummies-example.json", "application/pdf")) }
 
         it "is valid" do
-          expect(subject).to be_valid
+          expect(subject).not_to be_valid
         end
       end
     end

@@ -6,15 +6,18 @@
   <meta name="google" content="notranslate">
   <title>PDF.js viewer</title>
 
-  <link rel="stylesheet" href="/pdfjs/web/viewer.css">
-
-  <script src="/pdfjs/build/pdf.js"></script>
-
   <!-- This snippet is used in production (included from viewer.html) -->
-  <link rel="resource" type="application/l10n" href="/pdfjs/web/locale/locale.properties">
-  <script src="/pdfjs/web/viewer.js"></script>
-  <%= javascript_pack_tag "decidim_participatory_documents_editor" %>
-  <%= stylesheet_pack_tag "decidim_participatory_documents_editor" %>
+  <link rel="resource" type="application/l10n" href="/pdfjs/web/locale/locale.json">
+  <script src="/pdfjs/build/pdf.mjs" type="module"></script>
+  <link rel="stylesheet" href="/pdfjs/web/viewer.css">
+  <script src="/pdfjs/web/viewer.mjs" type="module"></script>
+
+  <% append_stylesheet_pack_tag "decidim_core", "decidim_admin", media: :all %>
+  <%= stylesheet_pack_tag  "decidim_participatory_documents_editor", media: "all" %>
+
+  <% append_javascript_pack_tag "decidim_core", "decidim_admin", defer: false %>
+  <%= javascript_pack_tag "decidim_participatory_documents_editor", defer: false %>
+
   <%= organization_colors %>
   <%= pdf_custom_style %>
   <%= csrf_meta_tags %>
@@ -23,81 +26,92 @@
 <body tabindex="1">
   <%= render "decidim/participatory_documents/documents/pdfjs_base", display_save: true %>
 
-  <%= render "decidim/participatory_documents/admin/documents/editor_modal" %>
+  <div id="decidim">
+    <%= render "decidim/participatory_documents/admin/sections/modal" %>
+  </div>
 
   <div id="notifications"></div>
 
-  <script>
+  <script type="text/javascript">
     var AnnotationsPath = '<%= document_annotations_path(document).split("?")[0] %>';
     var SectionPath = '<%= document_sections_path(document).split("?")[0] %>';
     var CurrentBoxes = <%= document.annotations.collect(&:serialize).to_json.html_safe %>;
     var I18n = <%= I18n.t("decidim.participatory_documents.ui_messages").to_json.html_safe %>;
 
-    var pages = {};
-    PDFViewerApplication.initializedPromise.then(function() {
-      var options = {
-        i18n: I18n,
-        editSectionPath: function(group) { return SectionPath + `/${group}/edit`; },
-        sectionPath: function(group) { return SectionPath + `/${group}`; },
-        newSectionPath: SectionPath + "/new",
-        annotationsPath: AnnotationsPath,
-        pdfViewer: PDFViewerApplication.pdfViewer,
-        saveButton: document.getElementById("DecidimPDSaveButton"),
-        csrfToken: document.getElementsByName("csrf-token")[0].content,
-        showInfo: window.showInfo,
-        showAlert: window.showAlert
-      };
-      window.InitDocumentManagers(options);
+    document.addEventListener("DOMContentLoaded", function() {
+      var pages = {};
+      // console.log("CurrentBoxes", CurrentBoxes);
 
-      window.showInfo(I18n.startEditing, {delay: 5000});
-
-      PDFViewerApplication.eventBus.on('annotationeditorlayerrendered', function (doc) {
-        console.log("rendered", doc)
-        var page = PDFViewerApplication.pdfViewer._pages[doc.pageNumber - 1];
-        var annotationsLayer = page.annotationEditorLayer && page.annotationEditorLayer.div;
-        var savedPage = pages[doc.pageNumber];
-        var boxChanged = function(box) {
-          // reorder box numbers according to page, x position, and y position
-          var boxes = Array.from(document.querySelectorAll(".polygon-ready .box"));
-          boxes.sort(function(a, b) {
-            var aPage = parseInt(a.parentElement.dataset.pageNumber, 10);
-            var bPage = parseInt(b.parentElement.dataset.pageNumber, 10)
-            var aLeft = parseInt(a.style.left, 10);
-            var bLeft = parseInt(b.style.left, 10);
-            var aTop = parseInt(a.style.top, 10);
-            var bTop = parseInt(b.style.top, 10);
-            if(aPage === bPage) {
-              if(aTop === bTop) {
-                return aLeft - bLeft;
-              } else {
-                return aTop - bTop;
-              }
-            } else {
-              return aPage - bPage;
-            }
-          });
-          var sectionNumber = 0;
-          var allSections = {};
-          boxes.forEach(function(box, index) {
-            box.dataset.position = index + 1;
-            box.querySelector("span").innerText = index + 1;
-            if(allSections[box.dataset.section]) {
-              box.dataset.sectionNumber = allSections[box.dataset.section];
-            } else {
-              sectionNumber++;
-              box.dataset.sectionNumber = sectionNumber;
-            }
-            allSections[box.dataset.section] = sectionNumber;
-          });
+      PDFViewerApplication.initializedPromise.then(function() {
+        var options = {
+          i18n: I18n,
+          editSectionPath: function(group) { return SectionPath + `/${group}/edit`; },
+          sectionPath: function(group) { return SectionPath + `/${group}`; },
+          newSectionPath: SectionPath + "/new",
+          annotationsPath: AnnotationsPath,
+          pdfViewer: PDFViewerApplication.pdfViewer,
+          saveButton: document.getElementById("DecidimPDSaveButton"),
+          csrfToken: document.getElementsByName("csrf-token")[0].content,
+          showInfo: window.showInfo,
+          showAlert: window.showAlert
         };
+        window.InitDocumentManagers(options);
 
-        // Let's render the object only if not already existing.
-        // Note that the PDF library might redraw the annotation layer, if this happens we need to re-render the areas.
-        if(annotationsLayer && (!savedPage || savedPage.boxEditor.div !== annotationsLayer)) {
-          annotationsLayer.dataset.pageNumber = doc.pageNumber;
-          page.boxEditor = window.InitPolygonEditor(annotationsLayer, CurrentBoxes.filter(function(box) { return box.page_number === doc.pageNumber; }), options, boxChanged);
-          pages[doc.pageNumber] = page;
-        }
+        window.showInfo(I18n.startEditing, {delay: 5000});
+        PDFViewerApplication.eventBus.on('annotationeditorlayerrendered', function (doc) {
+          var page = PDFViewerApplication.pdfViewer._pages[doc.pageNumber - 1];
+          var annotationsLayer = page.annotationEditorLayer && page.annotationEditorLayer.div;
+          var savedPage = pages[doc.pageNumber];
+          // console.log("rendered", doc, "page", page, "annotationsLayer", annotationsLayer, "savedPage", savedPage);
+          var boxChanged = function() {
+            // reorder box numbers according to page, x position, and y position
+            var boxes = Array.from(document.querySelectorAll(".polygon-ready .box"));
+            boxes.sort(function(a, b) {
+              var aPage = parseInt(a.parentElement.dataset.pageNumber, 10);
+              var bPage = parseInt(b.parentElement.dataset.pageNumber, 10)
+              var aLeft = parseInt(a.style.left, 10);
+              var bLeft = parseInt(b.style.left, 10);
+              var aTop = parseInt(a.style.top, 10);
+              var bTop = parseInt(b.style.top, 10);
+              if(aPage === bPage) {
+                if(aTop === bTop) {
+                  return aLeft - bLeft;
+                } else {
+                  return aTop - bTop;
+                }
+              } else {
+                return aPage - bPage;
+              }
+            });
+            var sectionNumber = 0;
+            var allSections = {};
+            boxes.forEach(function(box, index) {
+              const position = index + 1;
+              const section = parseInt(box.dataset.section, 10) || 0;
+              box.dataset.position = position;
+              box.querySelector("span").innerText = position;
+              if(section && allSections[section]) {
+                box.dataset.sectionNumber = allSections[section];
+              } else {
+                sectionNumber++;
+                box.dataset.sectionNumber = sectionNumber;
+              }
+              allSections[section] = sectionNumber;
+            });
+          };
+
+          // Let's render the object only if not already existing.
+          // Note that the PDF library might redraw the annotation layer, if this happens we need to re-render the areas.
+          if(annotationsLayer && (!savedPage || savedPage.boxEditor.div !== annotationsLayer)) {
+            // ensure the annotationsLayer as by default is hidden in more recent versions of pdf.js
+            annotationsLayer.hidden = false;
+            page.annotationEditorLayer.show();
+
+            annotationsLayer.dataset.pageNumber = doc.pageNumber;
+            page.boxEditor = window.InitPolygonEditor(annotationsLayer, CurrentBoxes.filter(function(box) { return box.page_number === doc.pageNumber; }), options, boxChanged);
+            pages[doc.pageNumber] = page;
+          }
+        });
       });
     });
   </script>

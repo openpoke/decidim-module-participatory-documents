@@ -5,20 +5,22 @@ module Decidim
     class SuggestionForm < Decidim::Form
       include Decidim::AttachmentAttributes
       include Decidim::HasUploadValidations
+      include Decidim::ProcessesFileLocally
 
       attribute :body, String
-      attribute :file
+      attribute :file, Decidim::Attributes::Blob
 
       validate :validate_single_field_presence
       validate :validate_body_length
+      validates :file, file_content_type: { allow: %w(application/pdf image/png image/jpeg) }, allow_nil: true
 
       private
 
       def validate_body_length
         return if body.blank?
 
-        errors.add(:body, I18n.t("activemodel.errors.models.suggestion.attributes.too_short", min_length: min_length)) if body.length < min_length
-        errors.add(:body, I18n.t("activemodel.errors.models.suggestion.attributes.too_long", max_length: max_length)) if body.length > max_length
+        errors.add(:body, I18n.t("activemodel.errors.models.suggestion.attributes.too_short", min_length:)) if body.length < min_length
+        errors.add(:body, I18n.t("activemodel.errors.models.suggestion.attributes.too_long", max_length:)) if body.length > max_length
       end
 
       def validate_single_field_presence

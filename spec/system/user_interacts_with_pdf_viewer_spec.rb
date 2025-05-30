@@ -2,32 +2,32 @@
 
 require "spec_helper"
 
-describe "User interaction with PDF viewer", type: :system do
+describe "User interaction with PDF viewer" do
   include_context "with a component"
   let(:manifest_name) { "participatory_documents" }
 
-  let!(:user) { create :user, :admin, :confirmed, organization: participatory_process.organization }
-  let!(:document) { create(:participatory_documents_document, :with_file, author: user, component: component) }
-  let!(:section) { create(:participatory_documents_section, :with_annotations, document: document) }
+  let!(:user) { create(:user, :admin, :confirmed, organization: participatory_process.organization) }
+  let!(:document) { create(:participatory_documents_document, :with_file, author: user, component:) }
+  let!(:section) { create(:participatory_documents_section, :with_annotations, document:) }
 
   shared_examples "interacts with drawer" do
     it "displays the drawer" do
-      expect(page).to have_selector("#participation-modal")
-      expect(page).to have_selector("#participation-modal-form")
-      expect(page).to have_selector("#suggestions-list")
+      expect(page).to have_css("#participationModal")
+      expect(page).to have_css("#participation-modal-form")
+      expect(page).to have_css("#suggestions-list")
     end
 
     context "when displaying the suggestions" do
-      let(:other_user) { create :user, :admin, :confirmed, organization: user.organization }
+      let(:other_user) { create(:user, :admin, :confirmed, organization: user.organization) }
       let!(:my_suggestion) { create(:participatory_documents_suggestion, suggestable: sugested, author: user) }
       let!(:other_suggestion) { create(:participatory_documents_suggestion, suggestable: sugested, author: other_user) }
 
-      let(:attributes) { { suggestable: sugested, author: user, answer: answer, answered_at: Time.zone.now, answer_is_published: published } }
+      let(:attributes) { { suggestable: sugested, author: user, answer:, answered_at: Time.zone.now, answer_is_published: published } }
 
       it "displays only my suggestion" do
-        within "#participation-modal" do
+        within "#participationModal" do
           expect(page).to have_content(my_suggestion.body["en"])
-          expect(page).not_to have_content(other_suggestion.body["en"])
+          expect(page).to have_no_content(other_suggestion.body["en"])
         end
       end
 
@@ -40,8 +40,8 @@ describe "User interaction with PDF viewer", type: :system do
 
           context "when the answer is draft" do
             it "does not render admin note" do
-              within "#participation-modal" do
-                expect(page).not_to have_content(answer["en"])
+              within "#participationModal" do
+                expect(page).to have_no_content(answer["en"])
               end
             end
           end
@@ -50,8 +50,8 @@ describe "User interaction with PDF viewer", type: :system do
             let(:published) { true }
 
             it "does not render admin note" do
-              within "#participation-modal" do
-                expect(page).not_to have_content(answer["en"])
+              within "#participationModal" do
+                expect(page).to have_no_content(answer["en"])
               end
             end
           end
@@ -62,8 +62,8 @@ describe "User interaction with PDF viewer", type: :system do
 
           context "when the answer is draft" do
             it "does not render admin note" do
-              within "#participation-modal" do
-                expect(page).not_to have_content(answer["en"])
+              within "#participationModal" do
+                expect(page).to have_no_content(answer["en"])
               end
             end
           end
@@ -72,7 +72,7 @@ describe "User interaction with PDF viewer", type: :system do
             let(:published) { true }
 
             it "renders admin note" do
-              within "#participation-modal" do
+              within "#participationModal" do
                 expect(page).to have_content(answer["en"])
               end
             end
@@ -84,8 +84,8 @@ describe "User interaction with PDF viewer", type: :system do
 
           context "when the answer is draft" do
             it "does not render admin note" do
-              within "#participation-modal" do
-                expect(page).not_to have_content(answer["en"])
+              within "#participationModal" do
+                expect(page).to have_no_content(answer["en"])
               end
             end
           end
@@ -94,8 +94,8 @@ describe "User interaction with PDF viewer", type: :system do
             let(:published) { true }
 
             it "renders admin note" do
-              within "#participation-modal" do
-                expect(page).not_to have_content(answer["en"])
+              within "#participationModal" do
+                expect(page).to have_no_content(answer["en"])
               end
             end
           end
@@ -106,8 +106,8 @@ describe "User interaction with PDF viewer", type: :system do
 
           context "when the answer is draft" do
             it "does not render admin note" do
-              within "#participation-modal" do
-                expect(page).not_to have_content(answer["en"])
+              within "#participationModal" do
+                expect(page).to have_no_content(answer["en"])
               end
             end
           end
@@ -116,7 +116,7 @@ describe "User interaction with PDF viewer", type: :system do
             let(:published) { true }
 
             it "renders admin note" do
-              within "#participation-modal" do
+              within "#participationModal" do
                 expect(page).to have_content(answer["en"])
               end
             end
@@ -128,8 +128,8 @@ describe "User interaction with PDF viewer", type: :system do
 
           context "when the answer is draft" do
             it "does not render admin note" do
-              within "#participation-modal" do
-                expect(page).not_to have_content(answer["en"])
+              within "#participationModal" do
+                expect(page).to have_no_content(answer["en"])
               end
             end
           end
@@ -138,7 +138,7 @@ describe "User interaction with PDF viewer", type: :system do
             let(:published) { true }
 
             it "renders admin note" do
-              within "#participation-modal" do
+              within "#participationModal" do
                 expect(page).to have_content(answer["en"])
               end
             end
@@ -175,7 +175,7 @@ describe "User interaction with PDF viewer", type: :system do
       login_as document.author, scope: :user
 
       page.visit Decidim::EngineRouter.main_proxy(component).pdf_viewer_documents_path(file: document.attached_uploader(:file).path)
-      find("#globalSuggestionTrigger").click
+      find_by_id("globalSuggestionTrigger").click
     end
 
     it_behaves_like "interacts with drawer"
@@ -194,42 +194,42 @@ describe "User interaction with PDF viewer", type: :system do
     it "submits a box content" do
       find("#box-#{section.annotations.first.id}").click
       sleep 1
-      expect(page).to have_css("#participation-modal.active")
-      expect(page).not_to have_content("upload a file")
+      expect(page).to have_css("#participationModal.active")
+      expect(page).to have_no_content("upload a file")
       expect(page).to have_content(t("activemodel.attributes.suggestion.body"))
 
       within "#new_suggestion_" do
         fill_in :suggestion_body, with: "Some random string longer than 15 chrs"
-        click_button("Send suggestion")
+        click_on("Send suggestion")
       end
       expect(page).to have_content("Some random string longer than 15 chrs")
       # hide the modal
-      find("#close-suggestions").click
-      expect(page).not_to have_content("Some random string longer than 15 chrs")
+      find_by_id("close-suggestions").click
+      expect(page).to have_no_content("Some random string longer than 15 chrs")
       page.find("#box-#{section.annotations.first.id}").click
       expect(page).to have_content("Some random string longer than 15 chrs")
     end
 
     it "submits a global content" do
-      click_button "Global suggestions"
+      click_on "Global suggestions"
       sleep 1
-      expect(page).to have_css("#participation-modal.active")
+      expect(page).to have_css("#participationModal.active")
       expect(page).to have_content("upload a file")
       expect(page).to have_content(t("activemodel.attributes.suggestion.body"))
 
       within "#new_suggestion_" do
         fill_in :suggestion_body, with: "Some random string longer than 15 chrs"
-        click_button("Send suggestion")
+        click_on("Send suggestion")
       end
       expect(page).to have_content("Some random string longer than 15 chrs")
       # hide the modal
-      find("#close-suggestions").click
-      expect(page).not_to have_content("Some random string longer than 15 chrs")
-      click_button "Global suggestions"
+      find_by_id("close-suggestions").click
+      expect(page).to have_no_content("Some random string longer than 15 chrs")
+      click_on "Global suggestions"
       expect(page).to have_content("Some random string longer than 15 chrs")
     end
 
-    context "when the user exports own suggestions", js: true do
+    context "when the user exports own suggestions", :js do
       around do |example|
         original_setting = ActionController::Base.allow_forgery_protection
         ActionController::Base.allow_forgery_protection = true
@@ -238,10 +238,10 @@ describe "User interaction with PDF viewer", type: :system do
       end
 
       it "exports only his own suggestions" do
-        click_button "Export my suggestions"
+        click_on "Export my suggestions"
         expect(page).to have_content("You have 2 suggestions on this document")
 
-        click_button "Send me my suggestions"
+        click_on "Send me my suggestions"
         sleep 1
         perform_enqueued_jobs
 
@@ -273,14 +273,14 @@ describe "User interaction with PDF viewer", type: :system do
   end
 
   context "when the suggestion answer has a text with potential XSS" do
-    let!(:document) { create :participatory_documents_document, :with_file, component: component }
+    let!(:document) { create(:participatory_documents_document, :with_file, component:) }
     let!(:suggestion) { create(:participatory_documents_suggestion, :published, author: document.author, suggestable: document, answer: { en: answer }) }
     let!(:answer) { '<p>Safe answer text<img src="about:blank" onerror="alert(777)"></p>' }
 
     before do
       login_as document.author, scope: :user
       page.visit Decidim::EngineRouter.main_proxy(component).pdf_viewer_documents_path(file: document.attached_uploader(:file).path)
-      find("#globalSuggestionTrigger").click
+      find_by_id("globalSuggestionTrigger").click
     end
 
     it "show sanitized answer" do

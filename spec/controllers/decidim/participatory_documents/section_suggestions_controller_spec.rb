@@ -4,14 +4,14 @@ require "spec_helper"
 
 module Decidim
   module ParticipatoryDocuments
-    describe SectionSuggestionsController, type: :controller do
+    describe SectionSuggestionsController do
       routes { Decidim::ParticipatoryDocuments::Engine.routes }
 
       let(:organization) { create(:organization) }
-      let(:participatory_process) { create(:participatory_process, organization: organization) }
+      let(:participatory_process) { create(:participatory_process, organization:) }
       let(:component) { create(:participatory_documents_component, participatory_space: participatory_process) }
-      let(:document) { create(:participatory_documents_document, :with_sections, component: component) }
-      let(:user) { create :user, :confirmed, organization: organization }
+      let(:document) { create(:participatory_documents_document, :with_sections, component:) }
+      let(:user) { create(:user, :confirmed, organization:) }
       let(:model) { Decidim::ParticipatoryDocuments::Suggestion }
       let(:author) { user }
 
@@ -49,7 +49,7 @@ module Decidim
 
         it "Creates a new annotation and section" do
           expect do
-            post(:create, params: params)
+            post(:create, params:)
           end.to change(model, :count).by(1)
         end
 
@@ -57,7 +57,7 @@ module Decidim
           let(:user) { nil }
 
           it "redirects to the login page" do
-            post(:create, params: params)
+            post(:create, params:)
             expect(response).to redirect_to("/users/sign_in")
           end
         end

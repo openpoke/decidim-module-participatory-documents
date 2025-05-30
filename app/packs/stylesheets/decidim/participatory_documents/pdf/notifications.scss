@@ -1,31 +1,19 @@
-@import "stylesheets/decidim/admin/variables";
-@import "stylesheets/decidim/utils/fontface";
-@import "stylesheets/decidim/admin/utils/settings";
-
 #notifications {
-  position: fixed;
-  top: 80px;
-  right: 50px;
-  max-width: 50%;
-  z-index: 100000;
-  display: none;
-  box-shadow: 0 0 10px rgba(0, 0, 0, .5);
-  font-family: $body-font-family;
-  font-weight: $global-weight-normal;
-  line-height: $global-lineheight;
-  color: $body-font-color;
-  border: 1px solid rgba($black, .25);
-  border-radius: 5px;
-  padding: 1rem;
-  background: scale-color($success-color, $lightness: 75%);
+  @apply fixed top-[80px] right-[50px] max-w-[50%] z-[100000] hidden rounded-md p-4;
+
   text-shadow: 0 0 8px #fff;
-  background-color: var(--notifications-color-rgba);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  background-color: #fff;
 
   &.show {
-    display: block;
+    @apply block;
   }
 
-  &.alert {
-    background: scale-color($alert-color, $lightness: 75%);
+  &::before {
+    @apply block absolute top-0 right-0 w-full h-full;
+
+    content: "";
+    z-index: -1;
+    background-color: var(--notifications-color-rgba);
   }
 }

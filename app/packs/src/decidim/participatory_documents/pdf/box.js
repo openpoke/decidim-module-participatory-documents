@@ -1,4 +1,4 @@
-import BoxControls from "./box_controls";
+import BoxControls from "src/decidim/participatory_documents/pdf/box_controls";
 
 export default class Box {
   constructor(layer, json) {

@@ -19,14 +19,14 @@ module Decidim
         let(:form) do
           double(
             invalid?: invalid,
-            title: title,
-            description: description,
-            box_color: box_color,
-            box_opacity: box_opacity,
-            current_user: current_user,
-            file: file,
+            title:,
+            description:,
+            box_color:,
+            box_opacity:,
+            current_user:,
+            file:,
             current_component: component,
-            errors: errors
+            errors:
           )
         end
         let(:file) do

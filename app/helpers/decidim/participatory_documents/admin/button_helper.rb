@@ -4,7 +4,7 @@ module Decidim
   module ParticipatoryDocuments
     module Admin
       module ButtonHelper
-        def button_builder(btn_title, icon: "document")
+        def button_builder(btn_title, icon: "file-text-line")
           btn_icon(icon, btn_title) + content_tag(:span, btn_title)
         end
 

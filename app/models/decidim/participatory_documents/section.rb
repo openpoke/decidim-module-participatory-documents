@@ -24,7 +24,7 @@ module Decidim
       def title
         return artificial_title if attributes["title"].nil?
 
-        artificial_title.merge(super.reject { |_key, value| value.blank? })
+        artificial_title.merge(super.compact_blank)
       end
 
       private
@@ -32,10 +32,10 @@ module Decidim
       def artificial_title
         artificial = {}
         i18n_scope = "decidim.participatory_documents.models.section.fields"
-        default_translation = I18n.with_locale("en") { I18n.t("artificial_tile", scope: i18n_scope, position: position) }
+        default_translation = I18n.with_locale("en") { I18n.t("artificial_tile", scope: i18n_scope, position:) }
 
         Decidim.available_locales.map(&:to_s).each do |locale|
-          artificial[locale] = I18n.with_locale(locale) { I18n.t("artificial_tile", scope: i18n_scope, position: position, default: default_translation) }
+          artificial[locale] = I18n.with_locale(locale) { I18n.t("artificial_tile", scope: i18n_scope, position:, default: default_translation) }
         end
         artificial
       end

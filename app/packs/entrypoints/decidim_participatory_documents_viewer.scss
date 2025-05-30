@@ -1,11 +1,13 @@
 @use "sass:meta";
 
 @import "stylesheets/decidim/participatory_documents/pdf/defaults.scss";
-@import 'stylesheets/decidim/participatory_documents/pdf/tweaks.scss';
+@import "stylesheets/decidim/participatory_documents/pdf/tweaks.scss";
 @import "stylesheets/decidim/participatory_documents/pdf/modals.scss";
-@import 'stylesheets/decidim/participatory_documents/pdf/notifications.scss';
+@import "stylesheets/decidim/participatory_documents/pdf/notifications.scss";
 
 // Scope everything to the annotationslayer of the pdf to avoid any possible collision
 .annotationEditorLayer {
-  @include meta.load-css('stylesheets/decidim/participatory_documents/pdf/polygons.scss');
+  @include meta.load-css(
+    "stylesheets/decidim/participatory_documents/pdf/polygons.scss"
+  );
 }

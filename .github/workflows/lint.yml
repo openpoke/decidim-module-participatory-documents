@@ -4,15 +4,18 @@ on:
   push:
     branches:
       - main
+      - release/*
   pull_request:
 
 env:
-  RUBY_VERSION: 3.0.6
-  NODE_VERSION: 16.9.1
+  RUBY_VERSION: 3.1.6
+  NODE_VERSION: 18.17.1
 
 jobs:
   lint-report:
+    name: Linting
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
         with:

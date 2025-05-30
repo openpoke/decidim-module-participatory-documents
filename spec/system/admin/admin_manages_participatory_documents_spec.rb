@@ -2,10 +2,10 @@
 
 require "spec_helper"
 
-describe "Admin manages participatory documents", type: :system do
+describe "Admin manages participatory documents" do
   let(:manifest_name) { "participatory_documents" }
   let(:organization) { participatory_process.organization }
-  let!(:user) { create :user, :admin, :confirmed, organization: organization }
+  let!(:user) { create(:user, :admin, :confirmed, organization:) }
   let(:default_color) { "rgb(30, 152, 215)" }
   let(:default_color_with_opacity) { "rgba(30, 152, 215, 0.12)" }
 
@@ -16,14 +16,15 @@ describe "Admin manages participatory documents", type: :system do
       visit_component_admin
 
       expect(page).to have_content("Please upload a PDF to start")
-      expect(page).not_to have_link("Edit participatory areas")
+      expect(page).to have_no_link("Edit participatory areas")
       expect(page).to have_link("Upload PDF document")
     end
   end
 
   shared_examples "creating a document" do |create|
     it "has the fields" do
-      expect(page).to have_content("Add images by dragging & dropping or pasting them.")
+      expect(page).to have_content("Add file") if create
+      expect(page).to have_content("Replace") unless create
       expect(page.execute_script("return window.getComputedStyle(document.querySelector('.box-preview .box')).backgroundColor")).to eq(default_color_with_opacity)
       expect(page.execute_script("return window.getComputedStyle(document.querySelector('.box-preview .box')).borderColor")).to eq(default_color)
 
@@ -47,9 +48,9 @@ describe "Admin manages participatory documents", type: :system do
       expect(page.execute_script("return window.getComputedStyle(document.querySelector('.box-preview .box')).borderColor")).to eq("rgb(240, 15, 0)")
 
       if create
-        click_button "Create participatory document"
+        click_on "Create participatory document"
       else
-        click_button "Update"
+        click_on "Update"
       end
 
       if create
@@ -65,13 +66,13 @@ describe "Admin manages participatory documents", type: :system do
 
   context "when attaching a file" do
     before do
-      click_link "Upload PDF document"
+      click_on "Upload PDF document"
     end
 
     it_behaves_like "creating a document", true
 
     it "has no areas delete warning" do
-      expect(page).not_to have_content("all the participatory areas will be deleted!")
+      expect(page).to have_no_content("all the participatory areas will be deleted!")
     end
 
     context "when file has a virus" do
@@ -98,19 +99,19 @@ describe "Admin manages participatory documents", type: :system do
   end
 
   context "when a file is not uploaded" do
-    let!(:document) { create :participatory_documents_document, component: component }
+    let!(:document) { create(:participatory_documents_document, component:) }
 
     it "shows the upload button" do
       visit_component_admin
 
       expect(page).to have_content("Please upload a PDF to start")
-      expect(page).not_to have_link("Edit participatory areas")
+      expect(page).to have_no_link("Edit participatory areas")
       expect(page).to have_link("Edit/upload document")
     end
   end
 
   context "when document is updated" do
-    let!(:document) { create :participatory_documents_document, :with_file, component: component }
+    let!(:document) { create(:participatory_documents_document, :with_file, component:) }
     let(:default_color) { "rgb(250, 170, 170)" }
     let!(:default_color_with_opacity) { "rgba(250, 170, 170, 0.2)" }
 
@@ -122,7 +123,7 @@ describe "Admin manages participatory documents", type: :system do
     it_behaves_like "creating a document", false
 
     it "has no sections delete warning" do
-      expect(page).not_to have_content("all the participatory areas will be deleted!")
+      expect(page).to have_no_content("all the participatory areas will be deleted!")
     end
 
     shared_examples "removes sections" do
@@ -130,18 +131,19 @@ describe "Admin manages participatory documents", type: :system do
         expect(page).to have_content("all the participatory areas will be deleted!")
         expect(document.sections.count).to eq(2)
         dynamically_attach_file :document_file, Decidim::Dev.asset("Exampledocument.pdf"), remove_before: true
-        click_button "Update"
+        click_on "Update"
+        sleep 1
         expect(document.sections.reload.count).to eq(0)
       end
     end
 
     shared_examples "does not remove sections" do |with_sections|
       it "do not remove the document" do
-        expect(page).not_to have_content("all the participatory areas will be deleted!")
+        expect(page).to have_no_content("all the participatory areas will be deleted!")
         expect(page).to have_content("This document cannot be changed or removed because it already has suggestions attached")
         expect(document.sections.count).to eq(2) if with_sections
         dynamically_attach_file :document_file, Decidim::Dev.asset("Exampledocument.pdf"), remove_before: true
-        click_button "Update"
+        click_on "Update"
         expect(document.sections.reload.count).to eq(2) if with_sections
         expect(page).to have_content("This document cannot be changed or removed because it has suggestions")
       end
@@ -152,31 +154,31 @@ describe "Admin manages participatory documents", type: :system do
           "#document-description-tabs",
           en: "This is description of the file"
         )
-        click_button "Update"
+        click_on "Update"
         expect(page).to have_content("Document has been successfully updated")
         expect(document.reload.description["en"]).to include("This is description of the file")
       end
     end
 
     context "when document has sections" do
-      let!(:document) { create :participatory_documents_document, :with_file, :with_sections, component: component }
+      let!(:document) { create(:participatory_documents_document, :with_file, :with_sections, component:) }
 
       it_behaves_like "removes sections"
 
       context "and have global suggestions" do
-        let!(:document) { create :participatory_documents_document, :with_file, :with_global_suggestions, component: component }
+        let!(:document) { create(:participatory_documents_document, :with_file, :with_global_suggestions, component:) }
 
         it_behaves_like "does not remove sections", false
       end
 
       context "and areas have annotations (boxes)" do
-        let!(:document) { create :participatory_documents_document, :with_file, :with_annotations, component: component }
+        let!(:document) { create(:participatory_documents_document, :with_file, :with_annotations, component:) }
 
         it_behaves_like "removes sections"
       end
 
       context "and areas have suggestions" do
-        let!(:document) { create :participatory_documents_document, :with_file, :with_suggestions, component: component }
+        let!(:document) { create(:participatory_documents_document, :with_file, :with_suggestions, component:) }
 
         it_behaves_like "does not remove sections", true
       end
@@ -184,7 +186,7 @@ describe "Admin manages participatory documents", type: :system do
   end
 
   context "when a file is uploaded" do
-    let!(:document) { create :participatory_documents_document, :with_file, component: component }
+    let!(:document) { create(:participatory_documents_document, :with_file, component:) }
 
     it "shows the edit buttons" do
       visit_component_admin
@@ -196,10 +198,10 @@ describe "Admin manages participatory documents", type: :system do
   end
 
   context "when the admin wants to publish sections of the document" do
-    let!(:document) { create :participatory_documents_document, :with_file, component: component }
-    let!(:section) { create :participatory_documents_section, document: document }
-    let!(:section2) { create :participatory_documents_section, document: document }
-    let!(:section3) { create :participatory_documents_section, document: document }
+    let!(:document) { create(:participatory_documents_document, :with_file, component:) }
+    let!(:section) { create(:participatory_documents_section, document:) }
+    let!(:second_section) { create(:participatory_documents_section, document:) }
+    let!(:third_section) { create(:participatory_documents_section, document:) }
 
     before do
       visit_component_admin
@@ -211,7 +213,7 @@ describe "Admin manages participatory documents", type: :system do
 
     context "when in the editor" do
       before do
-        click_link "Edit participatory areas"
+        click_on "Edit participatory areas"
       end
 
       it "shows the preview button" do
@@ -219,14 +221,14 @@ describe "Admin manages participatory documents", type: :system do
       end
 
       it "goes to the preview page" do
-        click_link "Preview and publish sections"
+        click_on "Preview and publish sections"
         expect(page).to have_content("you are previewing the participatory sections of the document")
       end
     end
 
     context "when previewing the document" do
       before do
-        click_link "Preview and publish sections"
+        click_on "Preview and publish sections"
       end
 
       it "displays the preview content" do
@@ -234,29 +236,29 @@ describe "Admin manages participatory documents", type: :system do
       end
 
       it "can edit sections after previewing" do
-        click_link "Go back to edit participatory sections"
-        expect(page).to have_selector("a[href='#{manage_component_path(component)}'][title='Back']")
+        click_on "Go back to edit participatory sections"
+        expect(page).to have_css("a[href='#{manage_component_path(component)}'][title='Back']")
       end
 
       it "can publish sections" do
-        click_link "Publish participatory sections"
+        click_on "Publish participatory sections"
         expect(page).to have_content("are you sure?")
-        click_link "OK"
+        click_on "OK"
         expect(page).to have_content("Sections have been successfully published")
       end
     end
 
     context "when the document has been published" do
       before do
-        click_link "Preview and publish sections"
-        click_link "Publish participatory sections"
-        click_link "OK"
+        click_on "Preview and publish sections"
+        click_on "Publish participatory sections"
+        click_on "OK"
       end
 
       it "restricts editing sections" do
-        expect(page).not_to have_content("Edit/upload document")
-        expect(page).not_to have_content("Edit participatory areas")
-        expect(page).not_to have_content("Preview and publish sections")
+        expect(page).to have_no_content("Edit/upload document")
+        expect(page).to have_no_content("Edit participatory areas")
+        expect(page).to have_no_content("Preview and publish sections")
       end
     end
   end

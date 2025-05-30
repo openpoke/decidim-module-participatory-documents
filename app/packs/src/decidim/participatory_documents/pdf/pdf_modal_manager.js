@@ -1,3 +1,5 @@
+import initLanguageChangeSelect from "src/decidim/admin/choose_language";
+
 /* eslint-disable no-alert */
 export default class PdfModalManager {
   constructor(options) {
@@ -7,8 +9,9 @@ export default class PdfModalManager {
     this.pdfViewer = options.pdfViewer;
     this.csrfToken = options.csrfToken;
     // UI
-    this.modalLayout = document.getElementById("decidim");
-    this.modalLayout.addEventListener("click", this._closeHandler.bind(this));
+    this.modal = document.getElementById("editor-modal");
+    this.modalContent = document.getElementById("editor-modal-content");
+    this.modalWrapper = this.modal.querySelector(".form__wrapper");
     // events
     this.onSave = () => {};
     this.onDestroy = () => {};
@@ -17,38 +20,49 @@ export default class PdfModalManager {
   }
 
   loadBoxModal(box) {
-    $.ajax({
-      url: this.editSectionPath(box.section),
-      type: "GET"
-    }).done((data) => this.populateModal(data, box)).
-      fail((error) => this.onError(box, error));
+    fetch(this.editSectionPath(box.section), {
+      method: "GET",
+      headers: {
+        "X-CSRF-Token": this.csrfToken
+      },
+      credentials: "include"
+    }).
+      then((response) => {
+        if (response.ok) {
+          return response.text();
+        }
+        throw new Error(response.statusText);
+      }).
+      then((data) => this.populateModal(data, box)).
+      catch((error) => this.onError(box, error));
   }
 
   populateModal(data, box) {
-    this.modalLayout.innerHTML = data;
-    this.displayModal(box);
-  }
-
-  displayModal(box) {
-    const modal = document.getElementById("editor-modal");
+    this.modalWrapper.innerHTML = data;
     const uiSave = document.getElementById("editor-modal-save");
-    const uiClose = document.getElementById("editor-modal-close");
     const uiTitle = document.getElementById("editor-modal-title");
     const uiRemove = document.getElementById("editor-modal-remove");
-    uiTitle.innerHTML = this.i18n.modalTitle.replace("%{box}", box.div.dataset.position).replace("%{section}", box.sectionNumber);
-
-    this.modalLayout.classList.add("show");
-    $(this.modalLayout).foundation();
-
-    modal.addEventListener("click", (evt) => evt.stopPropagation(), { once: true });
-    uiClose.addEventListener("click", this._closeHandler.bind(this), { once: true });
+    uiTitle.innerHTML = this.i18n.modalTitle.replace("%{box}", box.div.dataset.position).replace("%{section}", box.div.dataset.sectionNumber);
+    // this.modal.addEventListener("click", (evt) => evt.stopPropagation(), { once: true });
     uiRemove.addEventListener("click", (evt) => this._removeHandler(box, evt), { once: true });
     uiSave.addEventListener("click", (evt) => this._saveHandler(box, evt), { once: true });
+    this.openModal(box);
+    // Admin in 0.28 still uses foundation to handle tabs
+    $(this.modalWrapper).foundation();
+    initLanguageChangeSelect(document.querySelectorAll("select.language-change"));
+  }
+
+  openModal() {
+    window.Decidim.currentDialogs[this.modal.id].open();
+  }
+
+  closeModal() {
+    window.Decidim.currentDialogs[this.modal.id].close();
   }
 
   createBox(box, page) {
     let body = box.getInfo();
-    body.pageNumber = page;
+    body.page_number = page; // eslint-disable-line camelcase
 
     fetch(this.annotationsPath, {
       method: "POST",
@@ -68,10 +82,14 @@ export default class PdfModalManager {
       }).
       then((resp) => {
         box.setInfo();
+        this.modalContent.classList.remove("loading");
+        this.closeModal();
         this.onSave(box, resp.data);
       }).
       catch((error) => {
-        console.error("Error creating box, removing it from the UI", error);
+        console.error("Error creating box, destroy it", error);
+        this.modalContent.classList.remove("loading");
+        this.closeModal();
         box.destroy();
         this.onError(box, error);
       });
@@ -79,17 +97,31 @@ export default class PdfModalManager {
 
   _saveHandler(box, evt) {
     evt.stopPropagation();
-    let $form = $(this.modalLayout).find("form");
+    this.modalContent.classList.add("loading");
+    let form = this.modal.querySelector("form");
 
-    $.ajax({
-      type: $form.attr("method"),
-      url: $form.attr("action"),
-      data: $form.serialize()
-    }).done(() => {
-      this.modalLayout.classList.remove("show");
-      this.createBox(box, this.pdfViewer.currentPageNumber);
+    fetch(form.action, {
+      method: "PATCH",
+      headers: {
+        "X-CSRF-Token": this.csrfToken
+      },
+      credentials: "include",
+      body: new FormData(form)
     }).
-      fail((data) => this.populateModal(data.responseText, box));
+      then((response) => {
+        if (response.ok) {
+          return response.json();
+        }
+        throw new Error(response.statusText);
+      }).
+      then(() => {
+        this.createBox(box, this.pdfViewer.currentPageNumber);
+      }).
+      catch((error) => {
+        console.error("Error saving box", error);
+        this.modalContent.classList.remove("loading");
+        this.populateModal(error, box);
+      });
   }
 
   _removeHandler(box, evt) {
@@ -109,7 +141,7 @@ export default class PdfModalManager {
             if (response.ok) {
               return response.json();
             }
-            throw new Error(" ");
+            throw new Error(response.statusText);
           }).
           then(() => {
             box.destroy();
@@ -121,12 +153,7 @@ export default class PdfModalManager {
       } else {
         box.destroy();
       }
-      this.modalLayout.classList.remove("show");
     }
-  }
-
-  _closeHandler(evt) {
-    evt.stopPropagation();
-    this.modalLayout.classList.remove("show");
+    this.closeModal();
   }
 }

@@ -1,4 +1,4 @@
-import Box from "./box";
+import Box from "src/decidim/participatory_documents/pdf/box";
 
 export default class PolygonViewer {
   constructor(div, json, options) {

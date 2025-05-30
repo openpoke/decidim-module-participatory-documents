@@ -7,7 +7,6 @@ module Decidim
       class DocumentsController < Admin::ApplicationController
         include Decidim::ApplicationHelper
         include Decidim::ComponentPathHelper
-        include NeedsAdminSnippets
 
         helper Decidim::LayoutHelper
         helper_method :sections
@@ -23,6 +22,11 @@ module Decidim
         def new
           enforce_permission_to :create, :participatory_document
           @form = form(DocumentForm).instance
+        end
+
+        def edit
+          enforce_permission_to(:update, :participatory_document, document:)
+          @form = form(DocumentForm).from_model(document)
         end
 
         def create
@@ -44,13 +48,8 @@ module Decidim
           end
         end
 
-        def edit
-          enforce_permission_to :update, :participatory_document, document: document
-          @form = form(DocumentForm).from_model(document)
-        end
-
         def update
-          enforce_permission_to :update, :participatory_document, document: document
+          enforce_permission_to(:update, :participatory_document, document:)
           @form = form(DocumentForm).from_params(params)
           UpdateDocument.call(@form, document) do
             on(:ok) do
@@ -76,11 +75,11 @@ module Decidim
         end
 
         def edit_pdf
-          enforce_permission_to :update, :participatory_document, document: document
+          enforce_permission_to :update, :participatory_document, document:
         end
 
         def publish
-          enforce_permission_to :update, :participatory_document, document: document
+          enforce_permission_to(:update, :participatory_document, document:)
 
           Admin::PublishDocument.call(document) do
             on(:ok) do |_document|

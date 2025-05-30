@@ -1,5 +1,5 @@
-import PolygonViewer from "./polygon_viewer";
-import Box from "./box";
+import PolygonViewer from "src/decidim/participatory_documents/pdf/polygon_viewer";
+import Box from "src/decidim/participatory_documents/pdf/box";
 
 export default class PolygonEditor extends PolygonViewer {
   constructor(div, boxes, options) {
@@ -15,7 +15,7 @@ export default class PolygonEditor extends PolygonViewer {
     super.init();
     // The editor needs to draw boxes over the underlying layer
     // this effectively disables pointer events on the layer (so links are not clickable).
-    // But that's okey for the editor, it's for creating the boxes.
+    // But that's okay for the editor, it's for creating the boxes.
     this.div.style.pointerEvents = "all";
     // add controls to existing boxes
     this.getBoxes().map((box) => box.createControls());
@@ -40,7 +40,7 @@ export default class PolygonEditor extends PolygonViewer {
       this.left = this.div.getBoundingClientRect().x;
       this.top = this.div.getBoundingClientRect().y;
       // disable mouse events on all children
-      console.log("mousedown", "evt", evt,  "this", this, "box div", this.box.div);
+      // console.log("mousedown", "evt", evt,  "this", this, "box div", this.box.div);
     }
   }
 
@@ -87,7 +87,7 @@ export default class PolygonEditor extends PolygonViewer {
   }
 
   _initBox() {
-    console.log("init box", this.box)
+    // console.log("init box", this.box)
     if (!this.boxes[this.box.id]) {
       this.box.createControls();
       this.bindBoxEvents(this.box);

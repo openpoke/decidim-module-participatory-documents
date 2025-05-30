@@ -6,29 +6,23 @@ module Decidim
       include Decidim::Events::AuthorEvent
 
       def resource_path
-        @resource_path ||= if resource.suggestable.is_a?(Decidim::ParticipatoryDocuments::Document)
-                             main_component_path(resource.suggestable.component)
-                           else
-                             main_component_path(resource.suggestable.document.component)
-                           end
+        @resource_path ||= main_component_path(document.component)
       end
 
       def resource_url
-        @resource_url ||= if resource.suggestable.is_a?(Decidim::ParticipatoryDocuments::Document)
-                            main_component_url(resource.suggestable.component)
-                          else
-                            main_component_url(resource.suggestable.document.component)
-                          end
+        @resource_url ||= main_component_url(document.component)
       end
 
       def resource_title
-        title ||= if resource.suggestable.is_a?(Decidim::ParticipatoryDocuments::Document)
-                    translated_attribute(resource.suggestable.title)
-                  else
-                    translated_attribute(resource.suggestable.document.title)
-                  end
+        @resource_title ||= Decidim::ContentProcessor.render_without_format(translated_attribute(document.title), links: false).html_safe
+      end
 
-        Decidim::ContentProcessor.render_without_format(title, links: false).html_safe
+      def document
+        @document ||= if resource.suggestable.respond_to?(:document)
+                        resource.suggestable.document
+                      else
+                        resource.suggestable
+                      end
       end
 
       def event_has_roles?

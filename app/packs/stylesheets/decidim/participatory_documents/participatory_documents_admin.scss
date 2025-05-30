@@ -1,0 +1,82 @@
+@use "sass:meta";
+
+@import "stylesheets/decidim/participatory_documents/pdf/defaults";
+@import "stylesheets/decidim/participatory_documents/pdf/polygons";
+@import "stylesheets/decidim/participatory_documents/pdf/admin_polygons";
+@import "stylesheets/decidim/participatory_documents/pdf/admin_modals";
+
+.process-content {
+  @apply flex flex-col flex-grow;
+}
+
+.layout-content > .container {
+  @apply h-full;
+}
+
+.container .full-height {
+  @apply h-full;
+}
+
+.pdf-viewer-container {
+  @apply m-0 p-0;
+
+  height: calc(100vh - 30rem);
+  min-height: 50em;
+}
+
+.box-preview {
+  @include meta.load-css(
+    "stylesheets/decidim/participatory_documents/pdf/polygons.scss"
+  );
+  @include meta.load-css(
+    "stylesheets/decidim/participatory_documents/pdf/admin_polygons.scss"
+  );
+
+  .box {
+    @apply border-2 border-dotted absolute w-1/2 h-1/2 top-1/4 left-1/4;
+
+    .box-controls {
+      @apply block;
+
+      .control.group {
+        @apply inline-block;
+      }
+    }
+
+    &::after {
+      content: "";
+    }
+
+    &:hover {
+      resize: both;
+      overflow: hidden;
+      border-style: solid;
+
+      &::before {
+        left: 0;
+      }
+    }
+  }
+
+  fieldset {
+    position: relative;
+
+    h4 {
+      font-weight: 600;
+    }
+  }
+}
+
+.close-icon {
+  font-size: 20px;
+  line-height: 24px;
+  font-weight: 600;
+
+  --tw-text-opacity: 1;
+
+  text-decoration-line: underline;
+
+  svg {
+    fill: currentColor;
+  }
+}

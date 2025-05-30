@@ -1,71 +1,13 @@
-@import "stylesheets/decidim/variables";
-@import "stylesheets/decidim/utils/fontface";
-@import "stylesheets/decidim/utils/settings";
-@import "stylesheets/decidim/utils/mixins";
-@import "foundation-sites/scss/foundation";
-@import "stylesheets/decidim/modules/icons";
-@import "stylesheets/decidim/modules/margins";
-@import "stylesheets/decidim/modules/callout";
-@import "stylesheets/decidim/utils/helpers";
+#participationModal {
+  @apply w-0 h-0 absolute top-[75px] right-0 m-0 overflow-hidden z-[100000];
 
-@include foundation-everything();
-
-@import "stylesheets/decidim/modules/comments";
-
-.reveal-overlay {
-  z-index: 100000;
-}
-
-#decidim {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 100000;
-  display: none;
-  margin: 0;
-  padding: 0;
-  font-family: $body-font-family;
-  font-weight: $global-weight-normal;
-  line-height: $global-lineheight;
-  color: $body-font-color;
-
-  &.show {
-    display: block;
-
-    .reveal-overlay {
-      display: block;
-
-      .reveal {
-        display: block;
-      }
-    }
-  }
-}
-
-#participation-modal {
-  width: 0;
-  height: 0;
-  position: absolute;
-  top: 75px;
-  right: 0;
-  margin: 0;
-  overflow: hidden;
-  z-index: 100000;
   background: var(--suggestions-modal-color-hsla);
   box-shadow: -2px -2px 10px #cbcbcb;
 
   .close {
-    color: #000;
-    text-decoration: none;
-    float: right;
-    position: fixed;
-    top: 85px;
-    right: 3%;
+    @apply text-black no-underline fixed top-[85px] right-[3%] z-[10000] hidden;
+
     text-shadow: 0 0 15px #000;
-    z-index: 10000;
-    display: none;
 
     &:hover {
       text-shadow: 0 0 15px #ccc;
@@ -75,127 +17,103 @@
   }
 
   &.active {
-    overflow: auto;
+    @apply overflow-auto;
 
     .close {
-      display: block;
+      @apply block;
     }
   }
 
   &.section {
+    @apply w-0 transition-[width] ease-out duration-700;
+
     height: calc(100% - 75px) !important;
-    width: 0;
-    transition: width ease-out .7s;
 
     &.active {
       width: 50vw;
 
-      @media(max-width: 900px) {
+      @media (max-width: 900px) {
         width: 75vw;
       }
 
-      @media(max-width: 680px) {
+      @media (max-width: 680px) {
         width: 100vw;
       }
     }
   }
 
   &.document {
-    height: 0;
-    width: 100% !important;
-    transition: height ease-out .7s;
+    @apply h-0 w-full transition-[height] ease-out duration-700;
 
     &.active {
       height: calc(100% - 75px);
     }
   }
 
-  .suggestion__bottom-line {
-    margin: 1em -1em;
-    height: 2px;
-    background-color: #fff;
-  }
-
   #suggestions-list {
-    padding: 0 1em;
+    @apply px-4;
   }
 
   #participation-modal-form {
-    padding: 1em;
+    @apply p-4;
   }
 
   #suggestions__title {
-    padding: 1rem 2rem;
-    border-bottom: 2px solid #fff;
-    margin-bottom: 1rem;
+    @apply p-4 px-8 mb-4 font-extrabold border-b-2 border-white;
+
     margin-left: -1rem;
     margin-right: -1rem;
-    font-weight: 800;
     color: var(--box-color);
   }
 
   .author__data {
-    display: flex;
-    align-items: center;
+    @apply flex items-center;
 
     .author__name {
-      margin: 0 1rem;
+      @apply mx-4;
     }
   }
 
   .answer__title {
-    margin-bottom: 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    @apply mb-4 flex items-center justify-between;
 
     strong {
-      margin-left: 1rem;
+      @apply ml-4;
 
       &:first-child {
-        margin-left: 0;
+        @apply ml-0;
       }
     }
   }
 
   .author__info {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1em;
+    @apply flex justify-between items-center mb-4;
 
     & .author__avatar img {
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
+      @apply w-[30px] h-[30px] rounded-full;
     }
   }
 
   .comment__content,
   .comment__footer {
-    display: block;
-    position: relative;
-    width: fit-content;
-    height: auto;
-    min-height: 3rem;
-    padding: 1rem;
-    text-align: left;
-    background-color: #fff;
+    @apply block relative w-fit h-auto min-h-12 p-4 text-left bg-white;
   }
 
   .comment__footer {
+    @apply ml-auto mt-4;
+
     border-radius: 30px 0 0 30px;
-    margin-left: auto;
-    margin-top: 1rem;
     border-right: 10px solid var(--box-color);
     box-shadow: -2px 2px 4px #cbcbcb;
-    font-size: 1rem;
   }
 
   .comment__content {
-    text-align: left;
     border-radius: 0 30px 30px 0;
     border-left: 10px solid var(--box-color);
     box-shadow: 2px 2px 4px #cbcbcb;
   }
+}
+
+.send-suggestions-form textarea {
+  @apply block w-full;
 }

@@ -9,7 +9,7 @@ module Decidim
         subject { described_class.new(form, suggestion) }
 
         let!(:suggestion) { create(:participatory_documents_suggestion, suggestable: document) }
-        let(:document) { create :participatory_documents_document }
+        let(:document) { create(:participatory_documents_document) }
 
         let(:invalid) { false }
         let(:state) { "not_answered" }
@@ -20,9 +20,9 @@ module Decidim
             current_organization: document.component.organization,
             current_user: document.author,
             invalid?: invalid,
-            state: state,
-            answer: answer,
-            answer_is_published: answer_is_published
+            state:,
+            answer:,
+            answer_is_published:
           )
         end
 
@@ -47,7 +47,7 @@ module Decidim
             expect(suggestion.answer_is_published).to eq(answer_is_published)
           end
 
-          it "saves an additional version", versioning: true do
+          it "saves an additional version", :versioning do
             expect(suggestion.versions.count).to eq(1)
             subject.call
             suggestion.reload
@@ -56,11 +56,11 @@ module Decidim
         end
 
         shared_examples "published an answer for suggestion" do |selection:|
-          it_behaves_like "provides an answer to suggestion", selection: selection, draft: false
+          it_behaves_like "provides an answer to suggestion", selection:, draft: false
         end
 
         shared_examples "saves a draft answer for suggestion" do |selection:|
-          it_behaves_like "provides an answer to suggestion", selection: selection, draft: true
+          it_behaves_like "provides an answer to suggestion", selection:, draft: true
 
           it "does not publishes an event" do
             expect { subject.call }.not_to have_enqueued_job

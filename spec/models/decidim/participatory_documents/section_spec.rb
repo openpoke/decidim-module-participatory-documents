@@ -31,7 +31,7 @@ module Decidim
 
         context "when is not being provided" do
           let(:position) { 1 }
-          let(:section) { create(:participatory_documents_section, title: nil, position: position) }
+          let(:section) { create(:participatory_documents_section, title: nil, position:) }
 
           it "returns computed value" do
             expect(translated(subject.title)).to eq("Section 1")

@@ -1,5 +1,5 @@
-import BoxControlMove from "./box_control_move";
-import BoxControlGroup from "./box_control_group";
+import BoxControlMove from "src/decidim/participatory_documents/pdf/box_control_move";
+import BoxControlGroup from "src/decidim/participatory_documents/pdf/box_control_group";
 
 export default class BoxControls {
   constructor(box) {

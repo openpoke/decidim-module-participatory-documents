@@ -1,7 +1,31 @@
 :root {
   --box-text-color: #fff;
   --box-color: rgb(30, 152, 215);
-  --box-color-rgba: rgba(30, 152, 215, .12);
-  --notifications-color-rgba: rgba(30, 152, 215, .6);
-  --suggestions-modal-color-hsla: hsla(213, 48%, 90%, .95);
+  --box-color-rgba: rgba(30, 152, 215, 0.12);
+  --notifications-color-rgba: rgba(30, 152, 215, 0.6);
+  --suggestions-modal-color-hsla: hsla(213, 48%, 90%, 0.95);
+}
+
+.button__success {
+  @apply bg-success text-white ml-1;
+}
+
+.button__warning {
+  @apply bg-warning text-white ml-1;
+}
+
+.button__alert {
+  @apply bg-alert text-white ml-1;
+}
+
+.callout {
+  .button__success,
+  .button__warning,
+  .button__alert {
+    @apply text-white ml-0;
+  }
+}
+
+div[data-dialog] {
+  z-index: 30000;
 }

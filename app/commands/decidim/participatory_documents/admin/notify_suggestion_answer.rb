@@ -40,8 +40,8 @@ module Decidim
 
         def publish_event(event, event_class)
           Decidim::EventsManager.publish(
-            event: event,
-            event_class: event_class,
+            event:,
+            event_class:,
             resource: suggestion,
             affected_users: [suggestion.author]
           )

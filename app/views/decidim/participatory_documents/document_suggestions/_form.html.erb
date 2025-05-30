@@ -2,28 +2,25 @@
   <b><%= t("suggestion_form.title", scope: "decidim.participatory_documents.ui_messages") %></b>
 </div>
 <div id="formContainer">
-  <%= decidim_form_for(@form, url: document_suggestions_path(document), html: { class: "form", multipart: true }) do |form| %>
+  <%= decidim_form_for(@form, url: document_suggestions_path(document), html: { class: "form-defaults form send-suggestions-form", multipart: true }) do |form| %>
     <div id="messageForm" class="form-section">
-      <div class="column">
+      <div class="row column mb-4">
         <%= form.text_area :body %>
       </div>
     </div>
-    <div id="fileForm" class="form-section">
-      <div class="column">
-        <div id="fileInputContainer">
-          <%= form.file_field :file, id: "file-upload-field", style: "display: none;", label: false %>
-          <p id="fileNameContainer"></p>
-        </div>
-        <p>
-          <%= link_to "#", class: "file-upload", onclick: "document.getElementById('file-upload-field').click(); return false;" do %>
-            <%= icon "paperclip" %>
-            <%= t "upload_file", scope: "decidim.participatory_documents.document" %>
-          <% end %>
-        </p>
-      </div>
+    <div class="row column mb-2">
+      <%= form.attachment :file,
+                          multiple: false,
+                          label: t("suggestion_form.add_attachments", scope: "decidim.participatory_documents.ui_messages"),
+                          button_label: t("suggestion_form.add_attachments", scope: "decidim.participatory_documents.ui_messages"),
+                          button_edit_label: t("suggestion_form.edit_attachments", scope: "decidim.participatory_documents.ui_messages"),
+                          button_class: "button button__sm button__transparent-secondary",
+                          help_i18n_scope: "decidim.forms.file_help.file",
+                          help_text: t("suggestion_form.attachment_legend", scope: "decidim.participatory_documents.ui_messages") %>
     </div>
-    <div class="button--double form-general-submit">
-      <%= form.submit t("send_suggestion", scope: "decidim.participatory_documents.document"), id: "editor-modal-save", name: "editor-modal-save" %>
-    </div>
+    <%= form.submit t("send_suggestion", scope: "decidim.participatory_documents.document"),
+                    id: "editor-modal-save",
+                    name: "editor-modal-save",
+                    class: "button button__sm button__secondary" %>
   <% end %>
 </div>
