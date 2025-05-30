@@ -1,15 +1,68 @@
 #toolbarViewerMiddle {
-  @apply pl-0 pr-0 absolute left-[50%];
+  @apply pl-0 pr-0 absolute left-[45%];
 
   @media (min-width: 940px) {
-    transform: translateX(-75%);
+    @apply -translate-x-[50%];
   }
 
   @media (max-width: 680px) {
-    padding-left: 1em;
+    @apply pr-4 left-auto right-0;
+  }
+
+  @media(max-width: 380px) {
+    @apply left-[45%] right-0 ml-[-25%];
+  }
+}
+
+#toolbarViewerLeft {
+  @media(max-width: 680px) {
+    @apply hidden;
+  }
+}
+
+#toolbarViewerRight {
+  @media(max-width: 380px) {
+    @apply hidden;
+  }
+}
+
+
+#scaleSelectContainer {
+  @apply my-[7px] mx-[5px];
+
+  #scaleSelect {
+    @apply bg-white border border-black;
+  }
+
+  @media(max-width: 940px) {
+    @apply hidden;
+  }
+
+  @media(min-width: 941px) {
+    @apply hidden;
+  }
+}
+
+.hiddenSmallView {
+  @media(max-width: 800px) {
+    @apply hidden;
+  }
+}
+
+.toolbarButtonSpacer {
+  @media(max-width: 980px) {
+    @apply w-0;
   }
 }
 
 .button.decidim-button {
   @apply outline-none focus:outline-none font-normal text-xs;
+}
+
+#exportSuggestionsTrigger,#fullscreenButton { 
+  @media(max-width: 900px) {
+    span {
+      @apply hidden;
+    }
+  }
 }
