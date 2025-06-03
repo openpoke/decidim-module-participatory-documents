@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-describe "Admin manages participatory documents" do # rubocop:disable RSpec/DescribeClass
+describe "Admin manages participatory documents" do
   include Decidim::TranslationsHelper
   let(:manifest_name) { "participatory_documents" }
   let(:router) { Decidim::EngineRouter.admin_proxy(document.component).decidim_admin_participatory_process_participatory_documents }

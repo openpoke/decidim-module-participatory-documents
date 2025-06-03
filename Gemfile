@@ -16,13 +16,12 @@ gem "decidim", DECIDIM_VERSION
 gem "decidim-participatory_documents", path: "."
 
 gem "bootsnap", "~> 1.4"
-gem "faker"
-gem "rspec", "~> 3.0"
 
 gem "puma", ">= 6.3.1"
 
 group :development, :test do
   gem "byebug", "~> 11.0", platform: :mri
+  gem "concurrent-ruby"
 
   gem "decidim-dev", DECIDIM_VERSION
 end

@@ -8,6 +8,7 @@ on:
   pull_request:
 
 env:
+  CI: "true"
   RUBY_VERSION: 3.2.6
   NODE_VERSION: 18.17.1
 
@@ -15,7 +16,6 @@ jobs:
   lint-report:
     name: Linting
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
         with:

@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-describe "Admin filters suggestions" do # rubocop:disable RSpec/DescribeClass
+describe "Admin filters suggestions" do
   let(:organization) { component.organization }
   let(:model_name) { Decidim::ParticipatoryDocuments::Suggestion.model_name }
   let(:resource_controller) { Decidim::ParticipatoryDocuments::Admin::SuggestionsController }

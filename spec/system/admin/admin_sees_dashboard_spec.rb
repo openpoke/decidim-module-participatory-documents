@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-describe "Admin sees the action logs on homepage" do # rubocop:disable RSpec/DescribeClass
+describe "Admin sees the action logs on homepage" do
   let(:organization) { component.organization }
   let(:component) { create(:participatory_documents_component) }
   let(:current_user) { create(:user, :admin, :confirmed, organization:) }

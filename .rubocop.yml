@@ -6,3 +6,8 @@ AllCops:
     - "spec/decidim_dummy_app*/**/*"
     - "development_app/**/*"
     - "node_modules/**/*"
+
+RSpec/DescribeClass:
+  Exclude:
+    - 'spec/system/**/*'
+    - 'spec/i18n_spec.rb'
