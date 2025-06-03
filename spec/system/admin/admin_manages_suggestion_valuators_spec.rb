@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-describe "Admin manages suggestion valuators" do
+describe "Admin manages suggestion valuators" do # rubocop:disable RSpec/DescribeClass
   let(:manifest_name) { "participatory_documents" }
   let(:organization) { participatory_process.organization }
   let!(:user) { create(:user, :admin, :admin_terms_accepted, :confirmed, organization:) }

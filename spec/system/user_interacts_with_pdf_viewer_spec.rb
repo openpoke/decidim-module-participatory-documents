@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-describe "User interaction with PDF viewer" do
+describe "User interaction with PDF viewer" do # rubocop:disable RSpec/DescribeClass
   include_context "with a component"
   let(:manifest_name) { "participatory_documents" }
 

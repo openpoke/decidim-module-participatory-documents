@@ -32,6 +32,8 @@ module Decidim
 
       validate :validate_file_type, if: :attached?
 
+      validates_upload :file, uploader: Decidim::AttachmentUploader
+
       POSSIBLE_STATES = %w(not_answered evaluating accepted rejected withdrawn).freeze
 
       POSSIBLE_STATES.each do |possible|
@@ -173,7 +175,7 @@ module Decidim
         file_extension = File.extname(file.blob.filename.to_s).delete(".")
         file_content_type = file.blob.content_type
 
-        errors.add(:file, :invalid) unless allowed_extensions.include?(file_extension) && allowed_content_types.include?(file_content_type)
+        errors.add(:file, :invalid) unless allowed_extensions.include?(file_extension) && allowed_content_types.any? { |type| File.fnmatch(type, file_content_type) }
       end
     end
   end

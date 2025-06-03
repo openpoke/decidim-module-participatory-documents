@@ -27,8 +27,8 @@ module Decidim
 
           let(:params) do
             {
-              document_id: document.id,
-              id: section.id,
+              :document_id => document.id,
+              :id => section.id,
               "title_en" => "Title"
             }
           end

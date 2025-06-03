@@ -41,10 +41,7 @@ module Decidim
 
           Decidim::ParticipatoryDocuments::Admin::PublishAnswers.call(current_component, current_user, suggestion_ids) do
             on(:invalid) do
-              flash.now[:alert] = t(
-                "suggestions.publish_answers.select_a_suggestion",
-                scope: "decidim.participatory_documents.admin"
-              )
+              flash.now[:alert] = I18n.t("suggestions.publish_answers.select_a_suggestion", scope: "decidim.participatory_documents.admin")
             end
 
             on(:ok) do
@@ -52,7 +49,7 @@ module Decidim
             end
           end
 
-          render "decidim/participatory_documents/admin/suggestions/publish_answers"
+          render "decidim/participatory_documents/admin/suggestions/publish_answers", formats: [:js]
         end
 
         private
