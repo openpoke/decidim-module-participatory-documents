@@ -16,20 +16,18 @@ gem "decidim", DECIDIM_VERSION
 gem "decidim-participatory_documents", path: "."
 
 gem "bootsnap", "~> 1.4"
-
 gem "puma", ">= 6.3.1"
 
 group :development, :test do
   gem "byebug", "~> 11.0", platform: :mri
-  gem "concurrent-ruby"
-
   gem "decidim-dev", DECIDIM_VERSION
 end
 
 group :development do
+  gem "faker", "~> 3.3.1"
   gem "letter_opener_web", "~> 2.0"
   gem "listen", "~> 3.1"
-  gem "rubocop-faker", "~> 1.1"
+  gem "rubocop-faker"
   gem "web-console", "~> 4.2"
 end
 

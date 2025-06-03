@@ -355,7 +355,7 @@ GEM
     factory_bot_rails (6.4.4)
       factory_bot (~> 6.5)
       railties (>= 5.0.0)
-    faker (3.5.1)
+    faker (3.3.1)
       i18n (>= 1.8.11, < 2)
     faraday (2.13.1)
       faraday-net_http (>= 2.0, < 3.5)
@@ -800,14 +800,14 @@ DEPENDENCIES
   bootsnap (~> 1.4)
   byebug (~> 11.0)
   codecov
-  concurrent-ruby
   decidim (= 0.29.3)
   decidim-dev (= 0.29.3)
   decidim-participatory_documents!
+  faker (~> 3.3.1)
   letter_opener_web (~> 2.0)
   listen (~> 3.1)
   puma (>= 6.3.1)
-  rubocop-faker (~> 1.1)
+  rubocop-faker
   web-console (~> 4.2)
 
 RUBY VERSION
