@@ -27,6 +27,7 @@ de:
     admin:
       actions:
         export: Exportieren
+        manage: Verwalten
       exports:
         export_as: "%{name} als %{export_format}"
       filters:
@@ -123,6 +124,11 @@ de:
             success: Das Dokument wurde erfolgreich aktualisiert
         exports:
           suggestions: Bemerkungen
+        sections:
+          modal:
+            delete: Löschen
+            save: Speichern
+            title: Abschnitt Bearbeiten
         suggestion_notes:
           create:
             error: Beim Erstellen dieser Notiz ist ein Problem aufgetreten
@@ -162,7 +168,7 @@ de:
               unassign_from_valuator_button: Aufheben
             author: Verfasser/in
             created_at: Eingereicht am
-            id: id
+            id: ID
             no_text: "(kein Text)"
             published_answer: Veröffentlichte Antwort
             section: Abschnitt
@@ -208,6 +214,7 @@ de:
           success: "Deine %{count} Bemerkungen wurden erfolgreich exportiert. Bitte überprüfe deinen E-Mail-Posteingang unter %{email}."
       documents:
         export_modal:
+          close: Schliessen
           description_html: 'Du hast in diesem Dokument %{count} Bemerkungen eingebracht. Um diese übersichtlich für dich ablegen zu können, schicken wir dir ein E-Mail mit einem Anhang in Form einer ZIP-Datei mit darin enthaltenem Excel-Dokument. <br><br>Du erhälst die ZIP-Datei auf die folgende E-Mail Adresse: <b>%{email}</b>.'
           send: Meine Bemerkungen als Excel-Export erhalten
           title: Meine Bemerkungen herunterladen
@@ -219,7 +226,7 @@ de:
         document:
           fields:
             document_pages: Seitennummern
-            id: id
+            id: ID
             published: Veröffentlicht
             state: Status
             title: Titel
@@ -256,6 +263,9 @@ de:
         startEditing: Durch klicken und ziehen kannst du Bereiche für die Eingabe von Bemerkungen definieren. Einmal erstellt, können die Abschnitte verändert, verschoben oder gruppiert werden.
         startSuggesting: Klicke auf einen markierten Bereich, um eine Bemerkung einzubringen! Deine Bemerkungen sind nicht durch Drittpersonen einsehbar.
         suggestion_form:
+          add_attachments: Anhang hinzufügen
+          attachment_legend: Dokument oder Bild hinzufügen
           blank: Beim Speichern der Bemerkung ist ein Fehler aufgetreten. Lade eine gültige Datei hoch oder schreibe eine Bemerkung.
+          edit_attachments: Anhänge bearbeiten
           title: Schreib eine Bemerkung oder lade eine Datei hoch
       'yes': 'Ja'

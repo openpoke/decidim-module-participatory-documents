@@ -27,6 +27,7 @@ ca:
     admin:
       actions:
         export: Exporta
+        manage: Gestiona
       exports:
         export_as: "%{name} com a %{export_format}"
       filters:
@@ -123,6 +124,11 @@ ca:
             success: El document s'ha actualitzat correctament
         exports:
           suggestions: Suggeriments
+        sections:
+          modal:
+            delete: Elimina
+            save: Desa
+            title: Edita la secció
         suggestion_notes:
           create:
             error: S'ha produït un error en crear la nota privada
@@ -208,6 +214,7 @@ ca:
           success: "%{count} suggeriments han estat exportats amb èxit. Si us plau, revisa el teu email a %{email}."
       documents:
         export_modal:
+          close: Tanca
           description_html: Tens %{count} suggeriments en aquest document. Si vols exportar-los, rebràs un fitxer ZIP amb un document Excel que conté totes les teves dades i les possibles respostes que els administradors t'hagin donat. <br><br>Rebràs un correu electrònic a <b>%{email}</b>.
           send: Envia'm els meus suggeriments
           title: Exporta els meus suggeriments
@@ -256,6 +263,9 @@ ca:
         startEditing: Comença a crear àrees de participació (caixes) fent clic i arrossegant. Un cop creats, les caixes es poden redimensionar, moure o agrupar.
         startSuggesting: Clica a l'àrea marcada per participar!
         suggestion_form:
+          add_attachments: Afegeix fitxers adjunts
+          attachment_legend: Afegeix un document o una imatge
           blank: S'ha produït un error en crear el suggeriment. Pujar un fitxer vàlid o afegeix un missatge de text amb el suggeriment.
+          edit_attachments: Edita els fitxers adjunts
           title: Escriu el teu suggeriment o puja un fitxer amb els teus suggeriments
       'yes': 'Sí'
