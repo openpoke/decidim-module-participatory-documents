@@ -1,11 +1,11 @@
 #participationModal {
-  @apply w-0 h-0 absolute top-[75px] right-0 m-0 overflow-hidden z-[100000];
+  @apply w-0 h-0 absolute top-[50px] right-0 m-0 overflow-hidden z-[100000] rounded-l;
 
   background: var(--suggestions-modal-color-hsla);
   box-shadow: -2px -2px 10px #cbcbcb;
 
   .close {
-    @apply text-black no-underline fixed top-[85px] right-[3%] z-[10000] hidden;
+    @apply text-black no-underline fixed top-[65px] right-[2%] z-[10000] hidden;
 
     text-shadow: 0 0 15px #000;
 
@@ -43,7 +43,11 @@
   }
 
   &.document {
-    @apply h-0 w-full transition-[height] ease-out duration-700;
+    @apply h-0 w-[90%] right-[5%] transition-[height] ease-out duration-700 rounded-r;
+
+    .close {
+      @apply right-[7%];
+    }
 
     &.active {
       height: calc(100% - 75px);
