@@ -94,7 +94,7 @@ module Decidim
         end
 
         def user_is_valuator?
-          return if user.admin?
+          return false if user.admin?
 
           user_valuator_role.present?
         end
@@ -111,7 +111,7 @@ module Decidim
         end
 
         def edit_suggestion_note?
-          return unless permission_action.action == :edit_note && permission_action.subject == :suggestion_note
+          return false unless permission_action.action == :edit_note && permission_action.subject == :suggestion_note
 
           toggle_allow(suggestion_note_author?)
         end

@@ -72,9 +72,9 @@ module Decidim::ParticipatoryDocuments::Admin
       end
 
       context "when the document has a file with an invalid extension" do
-        let(:file) { upload_test_file(Decidim::Dev.test_file("dummy-dummies-example.json", "application/pdf")) }
+        let(:file) { upload_test_file(Decidim::Dev.test_file("dummy-dummies-example.json", "application/json")) }
 
-        it "is valid" do
+        it "is not valid" do
           expect(subject).not_to be_valid
         end
       end

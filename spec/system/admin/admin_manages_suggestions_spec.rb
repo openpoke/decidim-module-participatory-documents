@@ -186,7 +186,6 @@ describe "Admin manages participatory documents" do
       within ".flash.success" do
         expect(page).to have_content("in progress")
       end
-
       expect(last_email.subject).to include("suggestions", "json")
       expect(last_email.attachments.length).to be_positive
       expect(last_email.attachments.first.filename).to match(/^suggestions.*\.zip$/)

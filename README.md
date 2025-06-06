@@ -48,6 +48,7 @@ Depending on your Decidim version, you can choose the corresponding version to e
 |---------|-----------------------------|
 | 0.2.x   | 0.27.x                      |
 | 0.3.x   | 0.28.x                      |
+| 0.4.x   | 0.29.x                      |
 
 
 ### Usage with external static file servers

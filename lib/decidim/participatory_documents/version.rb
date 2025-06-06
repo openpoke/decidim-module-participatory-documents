@@ -2,8 +2,8 @@
 
 module Decidim
   module ParticipatoryDocuments
-    VERSION = "0.3.0"
-    DECIDIM_VERSION = "0.28.5"
-    COMPAT_DECIDIM_VERSION = [">= 0.28", "< 0.29"].freeze
+    VERSION = "0.4.0"
+    DECIDIM_VERSION = "0.29.3"
+    COMPAT_DECIDIM_VERSION = [">= 0.29", "< 0.30"].freeze
   end
 end

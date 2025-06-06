@@ -39,26 +39,7 @@ module Decidim
         )
 
         @suggestion.file.attach(form.file) if form.file.present?
-      end
-
-      def create_suggestion_attachment
-        file = form.file
-        file_blob = ActiveStorage::Blob.create_after_upload!(
-          io: file.open,
-          filename: file.original_filename,
-          content_type: file.content_type
-        )
-
-        attachment = Decidim::Attachment.create!(
-          file: file_blob,
-          attached_to: suggestion,
-          content_type: file.content_type,
-          title: { I18n.locale => file.original_filename }
-        )
-
-        suggestion.file.attach(attachment.file.blob)
-
-        suggestion.save!
+        @suggestion.save!
       end
     end
   end

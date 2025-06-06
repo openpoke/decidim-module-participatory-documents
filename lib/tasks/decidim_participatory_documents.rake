@@ -26,7 +26,7 @@ namespace :decidim_participatory_documents do
     public_dir = rails_app_path.join(destination_path, "pdfjs")
     temp_dir = Rails.root.join("tmp/pdfjs")
     FileUtils.mkdir_p(temp_dir)
-    FileUtils.rm_rf(public_dir) if File.exist?(public_dir)
+    FileUtils.rm_rf(public_dir)
     FileUtils.mkdir_p(public_dir)
     filename = File.basename(URI.parse(pdfjs_url).path)
     tmp_file = temp_dir.join(filename)
@@ -61,7 +61,7 @@ namespace :decidim_participatory_documents do
   end
 end
 
-Rake::Task["decidim:webpacker:upgrade"].enhance do
+Rake::Task["decidim:webpacker:install"].enhance do
   Rake::Task["decidim_participatory_documents:install_pdf_js"].invoke
 end
 
