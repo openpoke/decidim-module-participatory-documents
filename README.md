@@ -42,6 +42,14 @@ bundle exec rails db:migrate
 >
 > Note that the PDF.js library is installed in the `public/pdfjs` (this might change in the future). Take it into account when deploying the application.
 
+> **NOTE**
+> If your application does not work because you have an .mjs error, you can run the rake task to create the initializer.:
+>
+> ```
+> bundle
+> bundle exec rails decidim_participatory_documents:create_mjs_initializer
+> ```
+
 Depending on your Decidim version, you can choose the corresponding version to ensure compatibility:
 
 | Version | Compatible Decidim versions |

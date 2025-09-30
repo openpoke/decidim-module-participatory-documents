@@ -8,6 +8,12 @@ namespace :decidim_participatory_documents do
     apply_path_corrections_to_pdfjs "public"
   end
 
+  desc "Create rack mime type initializer for .mjs files"
+  task :create_mjs_initializer do
+    Mime::Type.register "text/javascript", :mjs
+    Rack::Mime::MIME_TYPES[".mjs"] = "text/javascript"
+  end
+
   private
 
   def decidim_participatory_documents_path
@@ -63,6 +69,7 @@ end
 
 Rake::Task["decidim:upgrade:webpacker"].enhance do
   Rake::Task["decidim_participatory_documents:install_pdf_js"].invoke
+  Rake::Task["decidim_participatory_documents:create_mjs_initializer"].invoke
 end
 
 Rake::Task["decidim:choose_target_plugins"].enhance do
