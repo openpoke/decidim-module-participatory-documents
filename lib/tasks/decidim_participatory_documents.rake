@@ -8,10 +8,23 @@ namespace :decidim_participatory_documents do
     apply_path_corrections_to_pdfjs "public"
   end
 
+  # Since older versions of Rack does not support the .mjs extension, so we register it here."
   desc "Create rack mime type initializer for .mjs files"
   task :create_mjs_initializer do
-    Mime::Type.register "text/javascript", :mjs
-    Rack::Mime::MIME_TYPES[".mjs"] = "text/javascript"
+    initializer_path = Rails.root.join("config/initializers/rack_mjs_type.rb")
+
+    if File.exist?(initializer_path)
+      puts "⚠️ Initializer already exists at #{initializer_path}, skipping creation."
+      next
+    end
+
+    content = <<~RUBY
+      Mime::Type.register "text/javascript", :mjs
+      Rack::Mime::MIME_TYPES[".mjs"] = "text/javascript"
+    RUBY
+
+    File.write(initializer_path, content)
+    puts "Created initializer at #{initializer_path}"
   end
 
   private
