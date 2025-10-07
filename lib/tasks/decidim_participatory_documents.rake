@@ -10,7 +10,7 @@ namespace :decidim_participatory_documents do
 
   # Since older versions of Rack does not support the .mjs extension, so we register it here."
   desc "Create rack mime type initializer for .mjs files"
-  task :create_mjs_initializer do
+  task :install_mjs_initializer do
     initializer_path = Rails.root.join("config/initializers/rack_mjs_type.rb")
 
     if File.exist?(initializer_path)

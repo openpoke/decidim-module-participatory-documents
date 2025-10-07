@@ -42,14 +42,6 @@ bundle exec rails db:migrate
 >
 > Note that the PDF.js library is installed in the `public/pdfjs` (this might change in the future). Take it into account when deploying the application.
 
-> **NOTE**
-> If your application does not work because you have an .mjs error, you can run the rake task to create the initializer.:
->
-> ```
-> bundle
-> bundle exec rails decidim_participatory_documents:create_mjs_initializer
-> ```
-
 Depending on your Decidim version, you can choose the corresponding version to ensure compatibility:
 
 | Version | Compatible Decidim versions |
@@ -58,6 +50,20 @@ Depending on your Decidim version, you can choose the corresponding version to e
 | 0.3.x   | 0.28.x                      |
 | 0.4.x   | 0.29.x                      |
 
+
+## Required MIME types
+
+Latests versions of PDFjs require that the web server to send the mime type `text/javascript` for files ending in `.mjs`
+
+### Usage with Puma + Rack
+
+If you are using Puma with Rack (< v3.1.0) you might have to add and initializer to ensure files with `.mjs` are served correctly. This is usually the most common approach when docker is used or when the ENV var `RAILS_SERVE_STATIC_FILES=true` is active.
+
+Execute the following command to create an initializer that does that:
+
+```
+bin/rails decidim_participatory_documents:install_mjs_initializer
+```
 
 ### Usage with external static file servers
 
