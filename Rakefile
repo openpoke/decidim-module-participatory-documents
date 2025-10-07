@@ -9,6 +9,7 @@ def install_module(path)
     system("bundle exec rake decidim_participatory_documents:install:migrations")
     system("bundle exec rake db:migrate")
     system("bundle exec rake decidim_participatory_documents:install_pdf_js")
+    system("bundle exec rake decidim_participatory_documents:install_mjs_initializer")
   end
 end
 
