@@ -82,7 +82,11 @@ end
 
 Rake::Task["decidim:upgrade:webpacker"].enhance do
   Rake::Task["decidim_participatory_documents:install_pdf_js"].invoke
-  Rake::Task["decidim_participatory_documents:create_mjs_initializer"].invoke
+  puts "✅ PDF.js library installed"
+  puts "⚠️ Run the task `decidim_participatory_documents:install_mjs_initializer` to create the .mjs mime type initializer if your app is using an older version of Rack (< 2.2.3)."
+  puts
+  puts "bin/rails g decidim_participatory_documents:install_mjs_initializer"
+  puts
 end
 
 Rake::Task["decidim:choose_target_plugins"].enhance do
