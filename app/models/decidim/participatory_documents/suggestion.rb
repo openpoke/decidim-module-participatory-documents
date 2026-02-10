@@ -21,7 +21,7 @@ module Decidim
       delegate :organization, to: :suggestable, allow_nil: true
       belongs_to :suggestable, polymorphic: true
       has_many :evaluation_assignments, class_name: "Decidim::ParticipatoryDocuments::EvaluationAssignment",
-                                       foreign_key: "decidim_participatory_documents_suggestion_id", dependent: :destroy
+                                        foreign_key: "decidim_participatory_documents_suggestion_id", dependent: :destroy
 
       delegate :participatory_space, :component, to: :suggestable, allow_nil: true
 
@@ -37,8 +37,8 @@ module Decidim
       POSSIBLE_STATES = %w(not_answered evaluating accepted rejected withdrawn).freeze
 
       POSSIBLE_STATES.each do |possible|
-        scope "state_not_#{possible}".to_sym, -> { where.not(state: possible) }
-        scope "state_#{possible}".to_sym, -> { where(state: possible) }
+        scope :"state_not_#{possible}", -> { where.not(state: possible) }
+        scope :"state_#{possible}", -> { where(state: possible) }
 
         define_method(:"#{possible}?") do
           state == possible.to_s

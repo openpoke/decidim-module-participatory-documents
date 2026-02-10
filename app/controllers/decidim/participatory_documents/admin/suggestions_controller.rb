@@ -139,7 +139,7 @@ module Decidim
 
         def suggestions_for_evaluator
           evaluator_suggestions_ids = Decidim::ParticipatoryDocuments::EvaluationAssignment
-                                     .where(evaluator_role: evaluator_roles).pluck(:decidim_participatory_documents_suggestion_id)
+                                      .where(evaluator_role: evaluator_roles).pluck(:decidim_participatory_documents_suggestion_id)
           Suggestion.where(id: evaluator_suggestions_ids)
         end
 
