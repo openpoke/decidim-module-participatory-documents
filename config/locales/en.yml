@@ -50,8 +50,8 @@ en:
               published: Published
               rejected: Rejected
               withdrawn: Withdrawn
-          valuator_role_ids_has:
-            label: Assigned to valuator
+          evaluator_role_ids_has:
+            label: Assigned to evaluator
     admin_log:
       annotation:
         create: "%{user_name} created a new participatory area for %{document_name}"
@@ -168,15 +168,15 @@ en:
           index:
             actions:
               answer: Answer
-              assign_to_valuator: Assign to valuator
-              assign_to_valuator_button: Assign
+              assign_to_evaluator: Assign to evaluator
+              assign_to_evaluator_button: Assign
               cancel: Cancel
               download: download %{filename}
               publish: Publish
               publish_answers: Publish answers
               title: Actions
-              unassign_from_valuator: Unassign from valuator
-              unassign_from_valuator_button: Unassign
+              unassign_from_evaluator: Unassign from evaluator
+              unassign_from_evaluator_button: Unassign
             author: Author
             created_at: Submitted on
             id: Id
@@ -199,19 +199,19 @@ en:
             update: Update
           suggestion:
             global: Global
-          valuators:
-            assigned_valuators: Assigned valuators
+          evaluators:
+            assigned_evaluators: Assigned evaluators
             remove_assignment: Remove assignment
-            remove_assignment_confirmation: Are you sure you want to remove the valuator
+            remove_assignment_confirmation: Are you sure you want to remove the evaluator
               from this suggestion?
-            valuators: Valuators
-        valuation_assignments:
+            evaluators: Evaluators
+        evaluation_assignments:
           create:
-            invalid: There was an error assigning suggestions to a valuator
-            success: Suggestions assigned to a valuator successfully
+            invalid: There was an error assigning suggestions to an evaluator
+            success: Suggestions assigned to an evaluator successfully
           delete:
-            invalid: There was an error unassigning suggestions from a valuator
-            success: Valuator unassigned from suggestions successfully
+            invalid: There was an error unassigning suggestions from an evaluator
+            success: Evaluator unassigned from suggestions successfully
       document:
         close: Close
         export_my_suggestions: Export my suggestions
@@ -252,7 +252,8 @@ en:
             artificial_tile: Section %{position}
         suggestion:
           fields:
-            valuators: Valuators
+            evaluator_ids: Evaluators
+            evaluators: Evaluators
       'no': 'No'
       suggestions:
         answers:

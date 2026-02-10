@@ -177,6 +177,14 @@ module Decidim
 
         errors.add(:file, :invalid) unless allowed_extensions.include?(file_extension) && allowed_content_types.any? { |type| File.fnmatch(type, file_content_type) }
       end
+
+      def self.ransackable_attributes(_auth_object = nil)
+        %w(body_cont)
+      end
+
+      def self.ransackable_associations(_auth_object = nil)
+        %w(body_cont)
+      end
     end
   end
 end

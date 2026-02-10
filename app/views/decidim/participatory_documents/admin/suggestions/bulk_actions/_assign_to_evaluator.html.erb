@@ -1,0 +1,15 @@
+<div id="js-assign-suggestions-to-evaluator-actions" class="hide js-bulk-action-form">
+  <%= form_tag(document_evaluation_assignment_path(document), method: :post, id: "js-form-assign-suggestions-to-evaluator", class: "form form-defaults flex items-center gap-x-2") do %>
+    <div class="checkboxes hide">
+      <% suggestions.each do |suggestion| %>
+        <%= check_box_tag "suggestion_ids[]", suggestion.id, false, class: "js-check-all-suggestion js-suggestion-id-#{suggestion.id}" %>
+      <% end %>
+    </div>
+
+    <%= bulk_evaluators_select(current_participatory_space, t("decidim.participatory_documents.admin.suggestions.index.actions.assign_to_evaluator")) %>
+
+    <%= submit_tag(t("decidim.participatory_documents.admin.suggestions.index.actions.assign_to_evaluator_button"), id: "js-submit-assign-suggestion-to-evaluator", class: "button button__sm button__secondary small button--simple float-left") %>
+
+    <button id="js-cancel-assign-suggestion-to-evaluator" class="button button__sm button__secondary clear compact js-cancel-bulk-action" type="button"><%= t("decidim.participatory_documents.admin.suggestions.index.actions.cancel") %></button>
+  <% end %>
+</div>

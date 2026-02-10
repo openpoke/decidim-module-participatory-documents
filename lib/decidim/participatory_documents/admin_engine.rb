@@ -21,10 +21,10 @@ module Decidim
           resources :annotations, except: [:show, :new, :edit]
           resources :sections, except: [:show, :index]
           resources :suggestions, only: [:index, :show] do
-            resources :valuation_assignments, only: [:destroy]
+            resources :evaluation_assignments, only: [:destroy]
             collection do
               post :publish_answers
-              resource :valuation_assignment, only: [:create, :destroy]
+              resource :evaluation_assignment, only: [:create, :destroy]
             end
 
             member do
