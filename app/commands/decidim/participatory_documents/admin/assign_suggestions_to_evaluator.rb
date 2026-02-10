@@ -3,7 +3,7 @@
 module Decidim
   module ParticipatoryDocuments
     module Admin
-      class AssignSuggestionsToValuator < Decidim::Command
+      class AssignSuggestionsToEvaluator < Decidim::Command
         # Public: Initializes the command.
         #
         # form - A form object with the params.
@@ -39,18 +39,18 @@ module Decidim
         end
 
         def find_assignment(suggestion)
-          Decidim::ParticipatoryDocuments::ValuationAssignment.find_by(
+          Decidim::ParticipatoryDocuments::EvaluationAssignment.find_by(
             suggestion:,
-            valuator_role: form.valuator_role
+            evaluator_role: form.evaluator_role
           )
         end
 
         def assign_suggestion(suggestion)
           Decidim.traceability.create!(
-            Decidim::ParticipatoryDocuments::ValuationAssignment,
+            Decidim::ParticipatoryDocuments::EvaluationAssignment,
             form.current_user,
             suggestion:,
-            valuator_role: form.valuator_role
+            evaluator_role: form.evaluator_role
           )
         end
       end

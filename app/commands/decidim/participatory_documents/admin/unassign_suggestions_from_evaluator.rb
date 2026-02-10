@@ -3,7 +3,7 @@
 module Decidim
   module ParticipatoryDocuments
     module Admin
-      class UnassignSuggestionsFromValuator < Decidim::Command
+      class UnassignSuggestionsFromEvaluator < Decidim::Command
         # Public: Initializes the command.
         #
         # form - A form object with the params.
@@ -38,9 +38,9 @@ module Decidim
         end
 
         def find_assignment(suggestion)
-          Decidim::ParticipatoryDocuments::ValuationAssignment.find_by(
+          Decidim::ParticipatoryDocuments::EvaluationAssignment.find_by(
             suggestion:,
-            valuator_role: form.valuator_role
+            evaluator_role: form.evaluator_role
           )
         end
 

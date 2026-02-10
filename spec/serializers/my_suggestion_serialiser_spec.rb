@@ -18,7 +18,7 @@ module Decidim::ParticipatoryDocuments
         expect(serialized).to include(author: suggestion.try(:normalized_author).try(:name))
         expect(serialized).to include(state: humanize_suggestion_state(suggestion.state))
         expect(serialized).to include(section: translated_attribute(suggestion.suggestable.title))
-        expect(serialized).not_to have_key(:valuators)
+        expect(serialized).not_to have_key(:evaluators)
         expect(serialized).to include(submitted_on: I18n.l(suggestion.created_at, format: :decidim_short))
       end
     end

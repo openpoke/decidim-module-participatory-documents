@@ -10,8 +10,8 @@ module Decidim
         helper Decidim::ParticipatoryDocuments::Admin::SuggestionHelper
         helper Decidim::Messaging::ConversationHelper
 
-        helper_method :suggestions, :suggestion, :notes_form, :find_valuators_for_select, :suggestion_ids,
-                      :suggestion_find, :valuator_assigned_to_suggestion?
+        helper_method :suggestions, :suggestion, :notes_form, :find_evaluators_for_select, :suggestion_ids,
+                      :suggestion_find, :evaluator_assigned_to_suggestion?
 
         def show
           enforce_permission_to(:show, :suggestion, suggestion:)
@@ -73,7 +73,7 @@ module Decidim
         def filters
           [
             :state_eq,
-            :valuator_role_ids_has,
+            :evaluator_role_ids_has,
             :dummy_author_ids_has,
             :dummy_suggestable_id_has
           ]
@@ -82,7 +82,7 @@ module Decidim
         def filters_with_values
           {
             state_eq: suggestion_stats,
-            valuator_role_ids_has: valuator_role_ids,
+            evaluator_role_ids_has: evaluator_role_ids,
             dummy_author_ids_has: author_ids,
             dummy_suggestable_id_has: suggestable_ids
           }
@@ -96,14 +96,14 @@ module Decidim
           base_query.pluck(:decidim_author_id)
         end
 
-        def valuator_role_ids
-          current_participatory_space.user_roles(:valuator).pluck(:id)
+        def evaluator_role_ids
+          current_participatory_space.user_roles(:evaluator).pluck(:id)
         end
 
         # Can't user `super` here, because it does not belong to a superclass
         # but to a concern.
         def dynamically_translated_filters
-          [:valuator_role_ids_has, :dummy_author_ids_has, :dummy_suggestable_id_has]
+          [:evaluator_role_ids_has, :dummy_author_ids_has, :dummy_suggestable_id_has]
         end
 
         def translated_dummy_suggestable_id_has(value)
@@ -120,8 +120,8 @@ module Decidim
           Decidim::UserBaseEntity.find_by(id: value).try(:name)
         end
 
-        def translated_valuator_role_ids_has(valuator_role_id)
-          user_role = current_participatory_space.user_roles(:valuator).find_by(id: valuator_role_id)
+        def translated_evaluator_role_ids_has(evaluator_role_id)
+          user_role = current_participatory_space.user_roles(:evaluator).find_by(id: evaluator_role_id)
           user_role&.user&.name
         end
 
@@ -130,50 +130,50 @@ module Decidim
         end
 
         def base_query
-          valuator_roles_exist? ? suggestions_for_valuator : all_document_suggestions
+          evaluator_roles_exist? ? suggestions_for_evaluator : all_document_suggestions
         end
 
         def all_document_suggestions
           Suggestion.where(suggestable: document).or(Suggestion.where(suggestable: document.sections))
         end
 
-        def suggestions_for_valuator
-          valuator_suggestions_ids = Decidim::ParticipatoryDocuments::ValuationAssignment
-                                     .where(valuator_role: valuator_roles).pluck(:decidim_participatory_documents_suggestion_id)
-          Suggestion.where(id: valuator_suggestions_ids)
+        def suggestions_for_evaluator
+          evaluator_suggestions_ids = Decidim::ParticipatoryDocuments::EvaluationAssignment
+                                     .where(evaluator_role: evaluator_roles).pluck(:decidim_participatory_documents_suggestion_id)
+          Suggestion.where(id: evaluator_suggestions_ids)
         end
 
-        def valuator_roles
-          current_participatory_space.user_roles(:valuator).where(user: current_user)
+        def evaluator_roles
+          current_participatory_space.user_roles(:evaluator).where(user: current_user)
         end
 
-        def valuator_roles_exist?
-          valuator_roles.exists?
+        def evaluator_roles_exist?
+          evaluator_roles.exists?
         end
 
         def suggestion
           base_query.find_by(id: params[:id])
         end
 
-        # Internal: A method to cache to queries to find the valuators for the
+        # Internal: A method to cache to queries to find the evaluators for the
         # current space.
-        def find_valuators_for_select(participatory_space)
-          return @valuators_for_select if @valuators_for_select
+        def find_evaluators_for_select(participatory_space)
+          return @evaluators_for_select if @evaluators_for_select
 
-          valuator_roles = participatory_space.user_roles(:valuator)
-          valuators = Decidim::User.where(id: valuator_roles.pluck(:decidim_user_id)).to_a
+          evaluator_roles = participatory_space.user_roles(:evaluator)
+          evaluators = Decidim::User.where(id: evaluator_roles.pluck(:decidim_user_id)).to_a
 
-          @valuators_for_select = valuator_roles.map do |role|
-            valuator = valuators.find { |user| user.id == role.decidim_user_id }
+          @evaluators_for_select = evaluator_roles.map do |role|
+            evaluator = evaluators.find { |user| user.id == role.decidim_user_id }
 
-            [valuator.name, role.id]
+            [evaluator.name, role.id]
           end
         end
 
-        def valuator_assigned_to_suggestion?
-          @valuator_assigned_to_suggestion ||=
-            Decidim::ParticipatoryDocuments::ValuationAssignment
-            .where(suggestion:, valuator_role: valuator_roles)
+        def evaluator_assigned_to_suggestion?
+          @evaluator_assigned_to_suggestion ||=
+            Decidim::ParticipatoryDocuments::EvaluationAssignment
+            .where(suggestion:, evaluator_role: evaluator_roles)
             .any?
         end
       end

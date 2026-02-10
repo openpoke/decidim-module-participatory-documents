@@ -26,7 +26,7 @@
         <th><%= sort_link(query, :suggestable, t(".section")) %></th>
         <th><%= sort_link(query, :published, t(".published_answer")) %></th>
         <th><%= sort_link(query, :state, t(".state")) %></th>
-        <th><%= sort_link(query, :valuation_assignments_count, t("models.suggestion.fields.valuators", scope: "decidim.participatory_documents")) %></th>
+        <th><%= sort_link(query, :evaluation_assignments_count, t("models.suggestion.fields.evaluators", scope: "decidim.participatory_documents")) %></th>
         <th><%= sort_link(query, :created_at, t(".created_at")) %></th>
         <th class="actions"><%= t(".actions.title") %></th>
       </tr>

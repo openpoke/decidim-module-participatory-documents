@@ -5,7 +5,7 @@ require "spec_helper"
 module Decidim
   module ParticipatoryDocuments
     module Admin
-      describe AssignSuggestionsToValuator do
+      describe AssignSuggestionsToEvaluator do
         subject { described_class.new(form) }
 
         let(:valid) { true }
@@ -16,29 +16,29 @@ module Decidim
         let(:document) { create(:participatory_documents_document, component:) }
         let(:section1) { create(:participatory_documents_section, document:) }
         let!(:suggestion) { create(:participatory_documents_suggestion, suggestable: section1) }
-        let(:valuator) { create(:user, organization:) }
+        let(:evaluator) { create(:user, organization:) }
 
-        let(:valuator_role) { create(:participatory_process_user_role, role: :valuator, user: valuator, participatory_process: component.participatory_space) }
+        let(:evaluator_role) { create(:participatory_process_user_role, role: :evaluator, user: evaluator, participatory_process: component.participatory_space) }
 
         let(:form) do
           double(
             current_organization: organization,
             current_user: user,
             valid?: valid,
-            valuator_role:,
+            evaluator_role:,
             suggestions: [suggestion]
           )
         end
 
         context "when the form is valid" do
           it "successfuly ignore the existing records" do
-            create(:suggestion_valuation_assignment, suggestion:, valuator_role:)
-            expect { subject.call }.not_to change(Decidim::ParticipatoryDocuments::ValuationAssignment, :count)
+            create(:suggestion_evaluation_assignment, suggestion:, evaluator_role:)
+            expect { subject.call }.not_to change(Decidim::ParticipatoryDocuments::EvaluationAssignment, :count)
             expect { subject.call }.to broadcast(:ok)
           end
 
           it "saves the data when inexistent" do
-            expect { subject.call }.to change(Decidim::ParticipatoryDocuments::ValuationAssignment, :count).by(1)
+            expect { subject.call }.to change(Decidim::ParticipatoryDocuments::EvaluationAssignment, :count).by(1)
             expect { subject.call }.to broadcast(:ok)
           end
         end

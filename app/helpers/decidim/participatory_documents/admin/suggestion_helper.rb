@@ -20,9 +20,9 @@ module Decidim
                        class: "icon--small action-icon--show-suggestion")
         end
 
-        def bulk_valuators_select(participatory_space, prompt)
-          options_for_select = find_valuators_for_select(participatory_space)
-          select(:valuator_role, :id, options_for_select, prompt:)
+        def bulk_evaluators_select(participatory_space, prompt)
+          options_for_select = find_evaluators_for_select(participatory_space)
+          select(:evaluator_role, :id, options_for_select, prompt:)
         end
 
         def suggestion_content(suggestion)

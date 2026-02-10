@@ -20,11 +20,11 @@
   </td>
   <td><%= humanize_suggestion_state(suggestion.state) %></td>
   <td class="valuators-count">
-    <% count = suggestion.valuation_assignments.size %>
+    <% count = suggestion.evaluation_assignments.size %>
     <% if count.zero? %>
       0
     <% else %>
-      <%= suggestion.valuation_assignments.first&.valuator_role&.user&.name %>
+      <%= suggestion.evaluation_assignments.first&.evaluator_role&.user&.name %>
       <%= "(+#{(count - 1)})" if count > 1 %>
     <% end %>
   </td>

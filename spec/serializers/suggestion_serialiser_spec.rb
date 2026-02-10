@@ -10,7 +10,7 @@ module Decidim::ParticipatoryDocuments
 
     subject { described_class.new(suggestion) }
     let(:suggestion) { create(:participatory_documents_suggestion, :with_answer) }
-    let!(:valuation_assignment) { create(:suggestion_valuation_assignment, suggestion:) }
+    let!(:evaluation_assignment) { create(:suggestion_evaluation_assignment, suggestion:) }
     let(:serialized) { subject.serialize }
 
     describe "serialize" do
@@ -19,7 +19,7 @@ module Decidim::ParticipatoryDocuments
         expect(serialized).to include(author: suggestion.try(:normalized_author).try(:name))
         expect(serialized).to include(state: humanize_suggestion_state(suggestion.state))
         expect(serialized).to include(section: translated_attribute(suggestion.suggestable.title))
-        expect(serialized).to include(valuators: valuation_assignment.valuator.name)
+        expect(serialized).to include(evaluators: evaluation_assignment.evaluator.name)
         expect(serialized).to include(submitted_on: I18n.l(suggestion.created_at, format: :decidim_short))
       end
 

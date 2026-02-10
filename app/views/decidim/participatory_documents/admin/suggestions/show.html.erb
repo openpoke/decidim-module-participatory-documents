@@ -39,7 +39,7 @@
       <p><%= l suggestion.created_at, format: :decidim_short %></p>
     </div>
 
-    <%= render "decidim/participatory_documents/admin/suggestions/valuators" %>
+    <%= render "decidim/participatory_documents/admin/suggestions/evaluators" %>
 
     <% if allowed_to?(:create, :suggestion_note, suggestion: suggestion) %>
       <div class="card-section">

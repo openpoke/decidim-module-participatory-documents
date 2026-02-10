@@ -3,36 +3,35 @@
 module Decidim
   module ParticipatoryDocuments
     module Admin
-      class ValuationAssignmentsController < Admin::ApplicationController
+      class EvaluationAssignmentsController < Admin::ApplicationController
         helper_method :suggestion
 
         def create
-          enforce_permission_to(:assign_to_valuator, :suggestions, suggestion:)
+          enforce_permission_to(:assign_to_evaluator, :suggestions, suggestion:)
+          @form = form(Admin::EvaluationAssignmentForm).from_params(params)
 
-          @form = form(Admin::ValuationAssignmentForm).from_params(params)
-
-          Admin::AssignSuggestionsToValuator.call(@form) do
+          Admin::AssignSuggestionsToEvaluator.call(@form) do
             on(:ok) do |_proposal|
-              flash[:notice] = I18n.t("valuation_assignments.create.success", scope: "decidim.participatory_documents.admin")
+              flash[:notice] = I18n.t("evaluation_assignments.create.success", scope: "decidim.participatory_documents.admin")
               redirect_to EngineRouter.admin_proxy(current_component).root_path
             end
 
             on(:invalid) do
-              flash.now[:alert] = I18n.t("valuation_assignments.create.invalid", scope: "decidim.participatory_documents.admin")
+              flash.now[:alert] = I18n.t("evaluation_assignments.create.invalid", scope: "decidim.participatory_documents.admin")
               redirect_to EngineRouter.admin_proxy(current_component).root_path
             end
           end
         end
 
         def destroy
-          @form = form(Admin::ValuationAssignmentForm).from_params(destroy_params)
+          @form = form(Admin::EvaluationAssignmentForm).from_params(destroy_params)
 
-          enforce_permission_to(:unassign_from_valuator, :suggestions, valuator: @form.valuator_user, suggestion:)
+          enforce_permission_to(:unassign_from_evaluator, :suggestions, evaluator: @form.evaluator_role, suggestion:)
 
-          Admin::UnassignSuggestionsFromValuator.call(@form) do
+          Admin::UnassignSuggestionsFromEvaluator.call(@form) do
             on(:ok) do |_proposal|
-              flash.keep[:notice] = I18n.t("valuation_assignments.delete.success", scope: "decidim.participatory_documents.admin")
-              if current_user == @form.valuator_user
+              flash.keep[:notice] = I18n.t("evaluation_assignments.delete.success", scope: "decidim.participatory_documents.admin")
+              if current_user == @form.evaluator_user
                 redirect_to EngineRouter.admin_proxy(current_component).root_path
               else
                 redirect_back fallback_location: EngineRouter.admin_proxy(current_component).root_path
@@ -40,7 +39,7 @@ module Decidim
             end
 
             on(:invalid) do
-              flash.keep[:alert] = I18n.t("valuation_assignments.delete.invalid", scope: "decidim.participatory_documents.admin")
+              flash.keep[:alert] = I18n.t("evaluation_assignments.delete.invalid", scope: "decidim.participatory_documents.admin")
               redirect_back fallback_location: EngineRouter.admin_proxy(current_component).root_path
             end
           end

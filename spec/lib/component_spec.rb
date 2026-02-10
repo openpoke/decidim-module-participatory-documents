@@ -12,7 +12,7 @@ describe "document component", type: :system do
   let(:context) { nil }
   let(:user) { nil }
 
-  it "export valuators and different users"	do
+  it "export evaluators and different users"	do
     expect(collection).to include(suggestion)
     expect(collection).to include(another_suggestion)
     expect(collection.map(&:author).uniq.count).to eq(2)
@@ -22,7 +22,7 @@ describe "document component", type: :system do
     let(:user) { suggestion.author }
     let(:context) { :my_suggestions }
 
-    it "export only valuators from the user" do
+    it "export only evaluators from the user" do
       expect(collection).to include(suggestion)
       expect(collection).not_to include(another_suggestion)
     end

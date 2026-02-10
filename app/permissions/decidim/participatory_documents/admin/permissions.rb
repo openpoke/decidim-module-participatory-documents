@@ -7,19 +7,19 @@ module Decidim
         def permissions
           return permission_action if permission_action.scope != :admin
 
-          handle_valuator_permissions if user_is_valuator?
-          handle_general_permissions unless user_is_valuator?
+          handle_evaluator_permissions if user_is_evaluator?
+          handle_general_permissions unless user_is_evaluator?
 
           permission_action
         end
 
         private
 
-        def handle_valuator_permissions
-          if valuator_assigned_to_suggestion?
+        def handle_evaluator_permissions
+          if evaluator_assigned_to_suggestion?
             can_create_suggestion_note?
             can_create_suggestion_answer?
-            valuator_can_assign_or_unassign_valuator_from_suggestions?
+            evaluator_can_assign_or_unassign_evaluator_from_suggestions?
             allow! if action_is_show_on_suggestion?
           elsif action_is_show_on_suggestion?
             disallow!
@@ -84,8 +84,8 @@ module Decidim
           permission_action.action == :create
         end
 
-        def valuator_can_assign_or_unassign_valuator_from_suggestions?
-          allow! if permission_action.action == :unassign_from_valuator || permission_action.action == :assign_to_valuator
+        def evaluator_can_assign_or_unassign_evaluator_from_suggestions?
+          allow! if permission_action.action == :unassign_from_evaluator || permission_action.action == :assign_to_evaluator
         end
 
         def admin_suggestion_answering_is_enabled?
@@ -93,21 +93,21 @@ module Decidim
             component_settings.try(:suggestion_answering_enabled)
         end
 
-        def user_is_valuator?
+        def user_is_evaluator?
           return false if user.admin?
 
-          user_valuator_role.present?
+          user_evaluator_role.present?
         end
 
-        def valuator_assigned_to_suggestion?
-          @valuator_assigned_to_suggestion ||=
-            Decidim::ParticipatoryDocuments::ValuationAssignment
-            .where(suggestion:, valuator_role: user_valuator_role)
+        def evaluator_assigned_to_suggestion?
+          @evaluator_assigned_to_suggestion ||=
+            Decidim::ParticipatoryDocuments::EvaluationAssignment
+            .where(suggestion:, evaluator_role: user_evaluator_role)
             .any?
         end
 
-        def user_valuator_role
-          @user_valuator_role ||= space.user_roles(:valuator).find_by(user:)
+        def user_evaluator_role
+          @user_evaluator_role ||= space.user_roles(:evaluator).find_by(user:)
         end
 
         def edit_suggestion_note?

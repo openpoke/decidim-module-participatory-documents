@@ -37,28 +37,28 @@ describe Decidim::ParticipatoryDocuments::Admin::Permissions do
     end
   end
 
-  shared_examples "can add valuators to the suggestion" do
-    describe "add other valuators" do
+  shared_examples "can add evaluators to the suggestion" do
+    describe "add other evaluators" do
       let(:action_subject) { :suggestions }
-      let(:action_name) { :assign_to_valuator }
+      let(:action_name) { :assign_to_evaluator }
 
       it { expect(subject.allowed?).to be true }
     end
   end
 
-  shared_examples "can delete valuators from the suggestion" do
-    describe "delete other valuators" do
+  shared_examples "can delete evaluators from the suggestion" do
+    describe "delete other evaluators" do
       let(:action_subject) { :suggestions }
-      let(:action_name) { :unassign_from_valuator }
+      let(:action_name) { :unassign_from_evaluator }
 
       it { expect(subject.allowed?).to be true }
     end
   end
 
-  # shared_examples "cannot add valuators to the suggestion" do
-  #   describe "add other valuators" do
+  # shared_examples "cannot add evaluators to the suggestion" do
+  #   describe "add other evaluators" do
   #     let(:action_subject) { :suggestions }
-  #     let(:action_name) { :assign_to_valuator }
+  #     let(:action_name) { :assign_to_evaluator }
   #
   #     # it { expect { subject.allowed? }.to raise_error(Decidim::PermissionAction::PermissionNotSetError) }
   #     it { expect(subject.allowed?).to be true }
@@ -121,16 +121,16 @@ describe Decidim::ParticipatoryDocuments::Admin::Permissions do
   it_behaves_like "Allows the permission", scope: :participatory_document, allowed: true
   it_behaves_like "Allows the permission", scope: :suggestions, allowed: true
 
-  context "when user is valuator" do
-    let(:valuator) { create(:user, organization:) }
-    let!(:valuator_role) { create(:participatory_process_user_role, role: :valuator, user: valuator, participatory_process: component.participatory_space) }
+  context "when user is evaluator" do
+    let(:evaluator) { create(:user, organization:) }
+    let!(:evaluator_role) { create(:participatory_process_user_role, role: :evaluator, user: evaluator, participatory_process: component.participatory_space) }
     let(:section1) { create(:participatory_documents_section, document:) }
     let!(:suggestion) { create(:participatory_documents_suggestion, suggestable: section1) }
 
-    let(:user) { valuator }
+    let(:user) { evaluator }
 
     context "when is assigned" do
-      let!(:assigned) { create(:suggestion_valuation_assignment, suggestion:, valuator_role:) }
+      let!(:assigned) { create(:suggestion_evaluation_assignment, suggestion:, evaluator_role:) }
 
       it_behaves_like "Allows the permission", scope: :suggestion_note, allowed: true
       it_behaves_like "Allows the permission", scope: :suggestion_answer, allowed: true
@@ -141,8 +141,8 @@ describe Decidim::ParticipatoryDocuments::Admin::Permissions do
 
       it_behaves_like "can create a suggestion note", true
       it_behaves_like "can create a suggestion answer", true
-      it_behaves_like "can add valuators to the suggestion", true
-      it_behaves_like "can delete valuators from the suggestion", true
+      it_behaves_like "can add evaluators to the suggestion", true
+      it_behaves_like "can delete evaluators from the suggestion", true
     end
 
     context "when is not assigned" do
