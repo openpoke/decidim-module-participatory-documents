@@ -180,7 +180,7 @@ describe "Admin manages participatory documents" do
 
   context "when admin to exports suggestions" do
     it "exports a JSON" do
-      find(".exports.button").click
+      click_on "Export"
       perform_enqueued_jobs { click_on "Suggestions as JSON" }
 
       within ".flash.success" do
@@ -255,8 +255,8 @@ describe "Admin manages participatory documents" do
       expect(page).to have_content(translated_attribute(first_section.title))
     end
     within ".filters__section" do
-      find("a.dropdown", text: "Filter").hover
-      find("a", text: "Section").hover
+      click_on "Filter"
+      find("a", text: "Section").click
       find("a", text: translated_attribute(first_section.title)).click
     end
     within ".table-list" do
