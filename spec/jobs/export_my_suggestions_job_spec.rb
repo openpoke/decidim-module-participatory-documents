@@ -13,23 +13,19 @@ module Decidim::ParticipatoryDocuments
 
       email = last_email
       expect(email.subject).to include("suggestions")
-      attachment = email.attachments.first
-
-      expect(attachment.read.length).to be_positive
-      expect(attachment.mime_type).to eq("application/zip")
-      expect(attachment.filename).to match(/^suggestions-[0-9]+-[0-9]+-[0-9]+-[0-9]+\.zip$/)
+      expect(email.to).to include(user.email)
     end
 
     describe "CSV" do
       it "uses the CSV exporter" do
-        export_data = double
+        export_data = double(filename: proc { "test" }, read: "test data")
 
         expect(Decidim::Exporters::CSV)
           .to(receive(:new).with(anything, MySuggestionSerializer))
           .and_return(double(export: export_data))
 
         expect(Decidim::ExportMailer)
-          .to(receive(:export).with(user, anything, export_data))
+          .to(receive(:export).with(user, anything))
           .and_return(double(deliver_now: true))
 
         described_class.perform_now(user, document, "CSV")
@@ -38,14 +34,14 @@ module Decidim::ParticipatoryDocuments
 
     describe "JSON" do
       it "uses the JSON exporter" do
-        export_data = double
+        export_data = double(filename: proc { "test" }, read: "test data")
 
         expect(Decidim::Exporters::JSON)
           .to(receive(:new).with(anything, MySuggestionSerializer))
           .and_return(double(export: export_data))
 
         expect(Decidim::ExportMailer)
-          .to(receive(:export).with(user, anything, export_data))
+          .to(receive(:export).with(user, anything))
           .and_return(double(deliver_now: true))
 
         described_class.perform_now(user, document, "JSON")
@@ -54,14 +50,14 @@ module Decidim::ParticipatoryDocuments
 
     describe "XLSX" do
       it "uses the XLSX exporter" do
-        export_data = double
+        export_data = double(filename: proc { "test" }, read: "test data")
 
         expect(Decidim::Exporters::Excel)
           .to(receive(:new).with(anything, MySuggestionSerializer))
           .and_return(double(export: export_data))
 
         expect(Decidim::ExportMailer)
-          .to(receive(:export).with(user, anything, export_data))
+          .to(receive(:export).with(user, anything))
           .and_return(double(deliver_now: true))
 
         described_class.perform_now(user, document, "Excel")

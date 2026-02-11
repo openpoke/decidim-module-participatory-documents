@@ -24,7 +24,7 @@ describe "Admin manages suggestion evaluators" do
 
   context "when listing suggestions" do
     let(:evaluator2) { create(:user, :confirmed, :admin_terms_accepted, organization:) }
-    let(:evaluator_role2) { create(:participatory_process_user_role, role: :evaluator, user: evaluator2, participatory_process:) }
+    let!(:evaluator_role2) { create(:participatory_process_user_role, role: :evaluator, user: evaluator2, participatory_process:) }
 
     let!(:assignment) { create(:suggestion_evaluation_assignment, suggestion:, evaluator_role:) }
 
@@ -84,8 +84,8 @@ describe "Admin manages suggestion evaluators" do
       expect(page).to have_content(unassigned_suggestion.id)
 
       within ".filters__section" do
-        find("a.dropdown", text: "Filter").hover
-        find("a", text: "Assigned to evaluator").hover
+        click_on "Filter"
+        find("a", text: "Assigned to evaluator").click
         find("a", text: evaluator.name).click
       end
 
@@ -221,7 +221,7 @@ describe "Admin manages suggestion evaluators" do
 
     it "assigns the suggestion to the evaluator" do
       click_on "Assign"
-      expect(page).to have_content("Suggestions assigned to a evaluator successfully")
+      expect(page).to have_content("Suggestions assigned to an evaluator successfully")
 
       within "tr", text: suggestion.id do
         expect(page).to have_css("td.evaluators-count", text: "#{evaluator2.name} (+1)")

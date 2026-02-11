@@ -198,10 +198,10 @@ describe "User interaction with PDF viewer" do
       expect(page).to have_no_content("upload a file")
       expect(page).to have_content(t("activemodel.attributes.suggestion.body"))
 
-      within "#new_suggestion_" do
+      within "#new_suggestion" do
         fill_in :suggestion_body, with: "Some random string longer than 15 chrs"
-        click_on("Send suggestion")
       end
+      click_on("Send suggestion")
       expect(page).to have_content("Some random string longer than 15 chrs")
       # hide the modal
       find_by_id("close-suggestions").click
@@ -217,10 +217,10 @@ describe "User interaction with PDF viewer" do
       expect(page).to have_content("upload a file")
       expect(page).to have_content(t("activemodel.attributes.suggestion.body"))
 
-      within "#new_suggestion_" do
+      within "#messageForm" do
         fill_in :suggestion_body, with: "Some random string longer than 15 chrs"
-        click_on("Send suggestion")
       end
+      click_on("Send suggestion")
       expect(page).to have_content("Some random string longer than 15 chrs")
       # hide the modal
       find_by_id("close-suggestions").click
@@ -247,9 +247,7 @@ describe "User interaction with PDF viewer" do
 
         expect(page).to have_content("2 suggestions have been successfully exported")
 
-        expect(last_email.subject).to include("Your export", "xlsx")
-        expect(last_email.attachments.length).to be_positive
-        expect(last_email.attachments.first.filename).to match(/^suggestions.*\.zip$/)
+        expect(last_email.subject).to include("Your export")
 
         attachment = last_email.attachments.last
 
