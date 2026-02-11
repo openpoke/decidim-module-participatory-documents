@@ -6,8 +6,6 @@ module Decidim
   module ParticipatoryDocuments
     module Admin
       describe SectionsController do
-        routes { Decidim::ParticipatoryDocuments::AdminEngine.routes }
-
         let(:organization) { component.organization }
         let(:participatory_process) { component.participatory_space }
         let(:component) { document.component }

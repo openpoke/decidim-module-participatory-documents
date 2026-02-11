@@ -6,8 +6,6 @@ module Decidim
   module ParticipatoryDocuments
     module Admin
       RSpec.describe EvaluationAssignmentsController do
-        routes { Decidim::ParticipatoryDocuments::AdminEngine.routes }
-
         let(:organization) { component.organization }
         let(:participatory_process) { component.participatory_space }
         let(:component) { create(:participatory_documents_component) }
