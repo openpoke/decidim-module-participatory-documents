@@ -1,18 +1,22 @@
 <% add_decidim_page_title(t(".title")) %>
 <div class="card">
-  <div class="item_show__header">
+  <div class="item_show__header item_show__header--with-action-options">
     <h1 class="item_show__header-title">
       <div>
         <%= t(".title") %>
         <span id="js-selected-suggestions-count" class="component-counter component-counter--inline" title="<%= t("decidim.participatory_documents.admin.suggestions.index.selected") %>"></span>
       </div>
-      <%= render "decidim/participatory_documents/admin/suggestions/bulk-actions" %>
-      <% if defined?(button) && button == :back %>
-        <%= back_btn %>
-      <% else %>
-        <%= pdf_manage_buttons(document) %>
-      <% end %>
+      <div class="flex items-center gap-x-4">
+        <%= render "decidim/participatory_documents/admin/suggestions/bulk-actions" %>
+        <% if defined?(button) && button == :back %>
+          <%= back_btn %>
+        <% else %>
+          <%= pdf_manage_buttons(document) %>
+        <% end %>
+      </div>
     </h1>
+    <%= render partial: "decidim/participatory_documents/admin/suggestions/bulk_actions/assign_to_evaluator" %>
+    <%= render partial: "decidim/participatory_documents/admin/suggestions/bulk_actions/unassign_from_evaluator" %>
   </div>
   <%= admin_filter_selector(:suggestions) %>
   <div class="table-scroll">

@@ -16,7 +16,7 @@ module Decidim::ParticipatoryDocuments
     describe "serialize" do
       it "returns a hash with the serialized data for the suggestion" do
         expect(serialized).to include(id: suggestion.id)
-        expect(serialized).to include(author: suggestion.try(:normalized_author).try(:name))
+        expect(serialized).to include(author: suggestion.author_name)
         expect(serialized).to include(state: humanize_suggestion_state(suggestion.state))
         expect(serialized).to include(section: translated_attribute(suggestion.suggestable.title))
         expect(serialized).to include(evaluators: evaluation_assignment.evaluator.name)

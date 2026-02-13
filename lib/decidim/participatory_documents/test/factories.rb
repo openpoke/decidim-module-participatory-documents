@@ -87,7 +87,7 @@ FactoryBot.define do
 
   factory :participatory_documents_suggestion, class: "Decidim::ParticipatoryDocuments::Suggestion" do
     suggestable { association(:dummy_resource) }
-    author { association(:user, organization: suggestable.organization) }
+    author { build(:user, :confirmed, organization: suggestable.component.organization) }
     body { Decidim::Faker::Localized.localized { Faker::Lorem.paragraphs(number: 3).join(" ") } }
     state { Decidim::ParticipatoryDocuments::Suggestion::POSSIBLE_STATES.sample }
     answer { {} }
@@ -139,6 +139,6 @@ FactoryBot.define do
   factory :participatory_documents_suggestion_note, class: "Decidim::ParticipatoryDocuments::SuggestionNote" do
     body { Faker::Lorem.sentences(number: 3).join("\n") }
     suggestion { association(:participatory_documents_suggestion) }
-    author { association(:user, organization: suggestion.organization) }
+    author { build(:user, :confirmed, organization: suggestion.organization) }
   end
 end

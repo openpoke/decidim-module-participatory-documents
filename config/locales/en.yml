@@ -41,6 +41,8 @@ en:
             label: Author
           dummy_suggestable_id_has:
             label: Section
+          evaluator_role_ids_has:
+            label: Assigned to evaluator
           state_eq:
             label: State is
             values:
@@ -50,8 +52,6 @@ en:
               published: Published
               rejected: Rejected
               withdrawn: Withdrawn
-          evaluator_role_ids_has:
-            label: Assigned to evaluator
     admin_log:
       annotation:
         create: "%{user_name} created a new participatory area for %{document_name}"
@@ -133,6 +133,13 @@ en:
           update:
             error: There was a problem updating Document
             success: Document has been successfully updated
+        evaluation_assignments:
+          create:
+            invalid: There was an error assigning suggestions to an evaluator
+            success: Suggestions assigned to an evaluator successfully
+          delete:
+            invalid: There was an error unassigning suggestions from an evaluator
+            success: Evaluator unassigned from suggestions successfully
         exports:
           suggestions: Suggestions
         sections:
@@ -161,6 +168,12 @@ en:
           answer:
             invalid: There was an error adding the answer
             success: Successfully added the answer
+          evaluators:
+            assigned_evaluators: Assigned evaluators
+            evaluators: Evaluators
+            remove_assignment: Remove assignment
+            remove_assignment_confirmation: Are you sure you want to remove the evaluator
+              from this suggestion?
           form:
             answer: Answer
             answer_is_published: Published
@@ -199,19 +212,6 @@ en:
             update: Update
           suggestion:
             global: Global
-          evaluators:
-            assigned_evaluators: Assigned evaluators
-            remove_assignment: Remove assignment
-            remove_assignment_confirmation: Are you sure you want to remove the evaluator
-              from this suggestion?
-            evaluators: Evaluators
-        evaluation_assignments:
-          create:
-            invalid: There was an error assigning suggestions to an evaluator
-            success: Suggestions assigned to an evaluator successfully
-          delete:
-            invalid: There was an error unassigning suggestions from an evaluator
-            success: Evaluator unassigned from suggestions successfully
       document:
         close: Close
         export_my_suggestions: Export my suggestions

@@ -1,3 +1,5 @@
+import TomSelect from "tom-select/dist/cjs/tom-select.popular";
+
 const selectedSuggestionsCount = function() {
   return document.querySelectorAll(".table-list .js-check-all-suggestion:checked").length
 }
@@ -62,6 +64,8 @@ window.addEventListener("load", () => {
     document.querySelectorAll("#js-bulk-actions-dropdown ul li button").forEach((button) => {
       button.addEventListener("click", (evt) => {
         evt.preventDefault();
+        hideBulkActionForms();
+        
         let action = evt.target.dataset.action;
 
         if (action) {
@@ -130,4 +134,19 @@ window.addEventListener("load", () => {
       })
     })
   }
+});
+
+document.addEventListener("turbo:load", () => {
+  const evaluatorMultiselectContainers = document.querySelectorAll(
+    ".js-evaluator-multiselect"
+  );
+
+  evaluatorMultiselectContainers.forEach((container) => {
+    const config = {
+      plugins: ["remove_button", "dropdown_input"],
+      allowEmptyOption: true
+    };
+
+    return new TomSelect(container, config);
+  });
 });

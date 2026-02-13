@@ -20,9 +20,19 @@ module Decidim
                        class: "icon--small action-icon--show-suggestion")
         end
 
-        def bulk_evaluators_select(participatory_space, prompt)
-          options_for_select = find_evaluators_for_select(participatory_space)
-          select(:evaluator_role, :id, options_for_select, prompt:)
+        def bulk_evaluators_select(participatory_space, prompt, select_id: "evaluator_role_ids")
+          render partial: "decidim/participatory_documents/admin/suggestions/bulk_actions/evaluators_picker",
+                 locals: { participatory_space:, select_id: }
+        end
+
+        def find_evaluators_for_select(participatory_space)
+          evaluator_roles = participatory_space.user_roles(:evaluator)
+          evaluators = Decidim::User.where(id: evaluator_roles.pluck(:decidim_user_id)).to_a
+
+          evaluator_roles.map do |role|
+            evaluator = evaluators.find { |user| user.id == role.decidim_user_id }
+            [evaluator.name, role.id]
+          end
         end
 
         def suggestion_content(suggestion)

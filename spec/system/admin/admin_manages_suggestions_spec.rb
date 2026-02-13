@@ -223,8 +223,8 @@ describe "Admin manages participatory documents" do
     expect(page).to have_content(document_suggestions.first.author.name)
     expect(page).to have_content(document_suggestions.last.author.name)
     within ".filters__section" do
-      find("a.dropdown", text: "Filter").hover
-      find("a", text: "Author").hover
+      click_on "Filter"
+      find("a", text: "Author").click
       find("a", text: document_suggestions.last.author.name).click
     end
     expect(page).to have_no_content(document_suggestions.first.author.name)
