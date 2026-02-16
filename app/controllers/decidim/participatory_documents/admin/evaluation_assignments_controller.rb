@@ -4,11 +4,12 @@ module Decidim
   module ParticipatoryDocuments
     module Admin
       class EvaluationAssignmentsController < Admin::ApplicationController
-        helper_method :suggestion
-
         def create
-          enforce_permission_to(:assign_to_evaluator, :suggestions, suggestion:)
           @form = form(Admin::EvaluationAssignmentForm).from_params(params)
+
+          @form.suggestions.each do |suggestion|
+            enforce_permission_to :assign_to_evaluator, :suggestions, suggestion:
+          end
 
           Admin::AssignSuggestionsToEvaluator.call(@form) do
             on(:ok) do |_proposal|
@@ -26,12 +27,16 @@ module Decidim
         def destroy
           @form = form(Admin::EvaluationAssignmentForm).from_params(destroy_params)
 
-          enforce_permission_to(:unassign_from_evaluator, :suggestions, evaluator: @form.evaluator_role, suggestion:)
+          @form.evaluator_roles.each do |evaluator_role|
+            enforce_permission_to :unassign_from_evaluator, :suggestions, evaluator: evaluator_role.user
+          end
 
           Admin::UnassignSuggestionsFromEvaluator.call(@form) do
             on(:ok) do |_proposal|
               flash.keep[:notice] = I18n.t("evaluation_assignments.delete.success", scope: "decidim.participatory_documents.admin")
-              if current_user == @form.evaluator_user
+              
+              # If current user is one of the evaluators being unassigned, check if they still have access
+              if current_user_is_being_unassigned?
                 redirect_to EngineRouter.admin_proxy(current_component).root_path
               else
                 redirect_back fallback_location: EngineRouter.admin_proxy(current_component).root_path
@@ -47,15 +52,22 @@ module Decidim
 
         private
 
-        def suggestion
-          @suggestion ||= Decidim::ParticipatoryDocuments::Suggestion.find(params[:suggestion_ids] || [params[:suggestion_id]])
+        def destroy_params
+          if params[:suggestion_id].present?
+            {
+              suggestion_ids: [params[:suggestion_id]],
+              evaluator_role_ids: [params[:id]]
+            }
+          else
+            params.permit(suggestion_ids: [], evaluator_role_ids: []).to_h
+          end
         end
 
-        def destroy_params
-          {
-            id: params.dig(:valuator_role, :id) || params[:id],
-            suggestion_ids: params[:suggestion_ids] || [params[:suggestion_id]]
-          }
+        def current_user_is_being_unassigned?
+          return false unless current_user.present? && !current_user.admin?
+          
+          # Check if current_user is one of the evaluator roles being unassigned
+          @form.evaluator_roles.any? { |role| role.user == current_user }
         end
 
         def skip_manage_component_permission

@@ -32,25 +32,27 @@ module Decidim
 
         def assign_suggestions
           transaction do
-            form.suggestions.flat_map do |suggestion|
-              find_assignment(suggestion) || assign_suggestion(suggestion)
+            form.evaluator_roles.each do |evaluator_role|
+              form.suggestions.each do |suggestion|
+                find_assignment(suggestion, evaluator_role) || assign_suggestion(suggestion, evaluator_role)
+              end
             end
           end
         end
 
-        def find_assignment(suggestion)
+        def find_assignment(suggestion, evaluator_role)
           Decidim::ParticipatoryDocuments::EvaluationAssignment.find_by(
             suggestion:,
-            evaluator_role: form.evaluator_role
+            evaluator_role:
           )
         end
 
-        def assign_suggestion(suggestion)
+        def assign_suggestion(suggestion, evaluator_role)
           Decidim.traceability.create!(
             Decidim::ParticipatoryDocuments::EvaluationAssignment,
             form.current_user,
             suggestion:,
-            evaluator_role: form.evaluator_role
+            evaluator_role:
           )
         end
       end

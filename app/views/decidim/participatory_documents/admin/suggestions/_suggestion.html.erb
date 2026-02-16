@@ -24,7 +24,7 @@
     <% if count.zero? %>
       0
     <% else %>
-      <%= suggestion.evaluation_assignments.first&.evaluator_role&.user&.name %>
+      <%= suggestion.evaluation_assignments.last&.evaluator_role&.user&.name %>
       <%= "(+#{(count - 1)})" if count > 1 %>
     <% end %>
   </td>

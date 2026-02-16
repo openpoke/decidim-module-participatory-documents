@@ -97,7 +97,7 @@ module Decidim
         end
 
         def evaluator_role_ids
-          current_participatory_space.user_roles(:evaluator).pluck(:id)
+          current_participatory_space.user_roles(:evaluator).order_by_name.pluck(:id)
         end
 
         # Can't user `super` here, because it does not belong to a superclass

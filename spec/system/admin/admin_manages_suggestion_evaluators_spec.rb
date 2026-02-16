@@ -26,9 +26,9 @@ describe "Admin manages suggestion evaluators" do
     let(:evaluator2) { create(:user, :confirmed, :admin_terms_accepted, organization:) }
     let!(:evaluator_role2) { create(:participatory_process_user_role, role: :evaluator, user: evaluator2, participatory_process:) }
 
-    let!(:assignment) { create(:suggestion_evaluation_assignment, suggestion:, evaluator_role:) }
-
     it "shows the evaluator name" do
+      create(:suggestion_evaluation_assignment, suggestion:, evaluator_role:)
+
       visit current_path
       within(".evaluators-count") do
         expect(page).to have_content(evaluator.name)
@@ -37,6 +37,7 @@ describe "Admin manages suggestion evaluators" do
     end
 
     it "shows the evaluator name and counter" do
+      create(:suggestion_evaluation_assignment, suggestion:, evaluator_role:)
       create(:suggestion_evaluation_assignment, suggestion:, evaluator_role: evaluator_role2)
 
       visit current_path
@@ -61,11 +62,11 @@ describe "Admin manages suggestion evaluators" do
       expect(page).to have_button("Assign", count: 1)
 
       within "#js-form-assign-suggestions-to-evaluator" do
-        select evaluator.name, from: :evaluator_role_id
+        tom_select("#assign_evaluator_role_ids", option_id: [evaluator_role.id])
         click_on("Assign")
       end
 
-      expect(page).to have_content("Suggestions assigned to a evaluator successfully")
+      expect(page).to have_content("Suggestions assigned to an evaluator successfully")
 
       within "tr", text: suggestion.id do
         expect(page).to have_css("td.evaluators-count", text: evaluator.name)
@@ -111,7 +112,7 @@ describe "Admin manages suggestion evaluators" do
       expect(page).to have_button("Unassign", count: 1)
 
       within "#js-form-unassign-suggestions-from-evaluator" do
-        select evaluator.name, from: :evaluator_role_id
+        tom_select("#unassign_evaluator_role_ids", option_id: [evaluator_role.id])
         click_on("Unassign")
       end
       expect(page).to have_content("Evaluator unassigned from suggestions successfully")
@@ -166,8 +167,7 @@ describe "Admin manages suggestion evaluators" do
         end
 
         within "#js-form-assign-suggestion-to-evaluator" do
-          find_by_id("evaluator_role_id").click
-          find("option", text: another_evaluator.name).click
+          tom_select("#evaluator_role_ids", option_id: another_evaluator_role.id)
         end
 
         click_on "Assign"
@@ -184,8 +184,7 @@ describe "Admin manages suggestion evaluators" do
       end
 
       within "#js-form-assign-suggestion-to-evaluator" do
-        find_by_id("evaluator_role_id").click
-        find("option", text: evaluator.name).click
+        tom_select("#evaluator_role_ids", option_id: evaluator_role.id)
       end
 
       click_on "Assign"
@@ -214,8 +213,7 @@ describe "Admin manages suggestion evaluators" do
         click_on "Answer"
       end
       within "#js-form-assign-suggestion-to-evaluator" do
-        find_by_id("evaluator_role_id").click
-        find("option", text: evaluator2.name).click
+        tom_select("#evaluator_role_ids", option_id: evaluator_role2.id)
       end
     end
 

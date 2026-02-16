@@ -30,17 +30,19 @@ module Decidim
 
         def unassign_suggestions
           transaction do
-            form.suggestions.flat_map do |suggestion|
-              assignment = find_assignment(suggestion)
-              unassign(assignment) if assignment
+            form.evaluator_roles.each do |evaluator_role|
+              form.suggestions.each do |suggestion|
+                assignment = find_assignment(suggestion, evaluator_role)
+                unassign(assignment) if assignment
+              end
             end
           end
         end
 
-        def find_assignment(suggestion)
+        def find_assignment(suggestion, evaluator_role)
           Decidim::ParticipatoryDocuments::EvaluationAssignment.find_by(
             suggestion:,
-            evaluator_role: form.evaluator_role
+            evaluator_role:
           )
         end
 
