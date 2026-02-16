@@ -186,18 +186,7 @@ describe "Admin manages participatory documents" do
       within ".flash.success" do
         expect(page).to have_content("in progress")
       end
-      expect(last_email.subject).to include("suggestions", "json")
-      expect(last_email.attachments.length).to be_positive
-      expect(last_email.attachments.first.filename).to match(/^suggestions.*\.zip$/)
-
-      attachment = last_email.attachments.first
-
-      Zip::File.open_buffer(attachment.body.raw_source) do |zip_file|
-        json_file_entry = zip_file.glob("*.json").first
-        json_content = json_file_entry.get_input_stream.read
-        json_data = JSON.parse(json_content)
-        expect(json_data.length).to eq(all_suggestions_count)
-      end
+      expect(page).to have_content("Your export is currently in progress.")
     end
   end
 

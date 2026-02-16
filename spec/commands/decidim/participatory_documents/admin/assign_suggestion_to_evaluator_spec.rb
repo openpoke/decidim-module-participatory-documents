@@ -25,7 +25,7 @@ module Decidim
             current_organization: organization,
             current_user: user,
             valid?: valid,
-            evaluator_role:,
+            evaluator_roles: [evaluator_role],
             suggestions: [suggestion]
           )
         end

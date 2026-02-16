@@ -54,6 +54,7 @@
   "dependencies": {
     "@decidim/browserslist-config": "^0.29.3",
     "@decidim/core": "^0.29.3",
-    "@decidim/webpacker": "^0.29.3"
+    "@decidim/webpacker": "^0.29.3",
+    "pdfjs-dist": "^5.4.624"
   }
 }

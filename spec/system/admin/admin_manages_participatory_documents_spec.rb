@@ -93,7 +93,7 @@ describe "Admin manages participatory documents" do
           )
         end
         dynamically_attach_file :document_file, Decidim::Dev.asset("Exampledocument.pdf"), keep_modal_open: true
-        expect(page).to have_content("errors.messages.virus")
+        expect(page).to have_content(I18n.t("errors.messages.virus"))
       end
     end
   end

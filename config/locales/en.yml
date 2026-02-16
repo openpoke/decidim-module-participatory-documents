@@ -290,3 +290,6 @@ en:
           edit_attachments: Edit attachments
           title: Write your suggestion or upload a file with your suggestions
       'yes': 'Yes'
+  errors:
+    messages:
+      virus: "The file you uploaded contains a virus and has been rejected. Please upload a clean file."

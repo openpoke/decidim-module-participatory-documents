@@ -34,7 +34,7 @@ module Decidim
           Admin::UnassignSuggestionsFromEvaluator.call(@form) do
             on(:ok) do |_proposal|
               flash.keep[:notice] = I18n.t("evaluation_assignments.delete.success", scope: "decidim.participatory_documents.admin")
-              
+
               # If current user is one of the evaluators being unassigned, check if they still have access
               if current_user_is_being_unassigned?
                 redirect_to EngineRouter.admin_proxy(current_component).root_path
@@ -65,7 +65,7 @@ module Decidim
 
         def current_user_is_being_unassigned?
           return false unless current_user.present? && !current_user.admin?
-          
+
           # Check if current_user is one of the evaluator roles being unassigned
           @form.evaluator_roles.any? { |role| role.user == current_user }
         end
