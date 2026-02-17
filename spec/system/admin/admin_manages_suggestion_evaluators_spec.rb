@@ -228,8 +228,14 @@ describe "Admin manages suggestion evaluators" do
 
     context "when the evaluator is removed" do
       it "shows the evaluator is unassigned successfully" do
+        click_on "Assign"
+        expect(page).to have_content("Suggestions assigned to an evaluator successfully")
+
+        visit suggestion_path
+        expect(page).to have_css("#evaluators li", text: evaluator.name)
+
         accept_confirm do
-          within "#evaluators li", text: evaluator2.name do
+          within "#evaluators li", text: evaluator.name do
             find("svg use[href*='ri-close-circle-line']").click
           end
         end

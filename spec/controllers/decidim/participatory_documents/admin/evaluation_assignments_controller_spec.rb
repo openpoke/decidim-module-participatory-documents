@@ -28,7 +28,7 @@ module Decidim
             {
               document_id: document.id,
               suggestion_ids: [suggestion.id],
-              id: evaluator_role2.id
+              evaluator_role_ids: [evaluator_role2.id]
             }
           end
 
@@ -66,7 +66,7 @@ module Decidim
           let(:destroy_params) do
             {
               document_id: document.id,
-              id: evaluator_role.id,
+              evaluator_role_ids: [evaluator_role.id],
               suggestion_ids: [suggestion.id]
             }
           end

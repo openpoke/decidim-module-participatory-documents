@@ -21,7 +21,7 @@ module Decidim
 
       def cmd_capture(cmd, env: {})
         Dir.chdir(test_app) do
-          Open3.capture2(env.merge("RUBYOPT" => "-W0"), cmd)[0]
+          Open3.capture3(env.merge("RUBYOPT" => "-W0", "RAILS_ENV" => "test", "DISABLE_SPRING" => "1"), cmd).tap { |_out, err, st| raise err unless st.success? }[0]
         end
       end
 

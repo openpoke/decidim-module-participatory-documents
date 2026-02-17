@@ -292,4 +292,5 @@ en:
       'yes': 'Yes'
   errors:
     messages:
-      virus: "The file you uploaded contains a virus and has been rejected. Please upload a clean file."
+      virus: The file you uploaded contains a virus and has been rejected. Please
+        upload a clean file.
