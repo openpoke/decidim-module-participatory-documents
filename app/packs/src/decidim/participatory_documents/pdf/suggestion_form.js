@@ -1,3 +1,5 @@
+import { initializeUploadFields } from "src/decidim/direct_uploads/upload_field";
+
 export default class SuggestionForm {
   constructor(div, path, group = null) {
     this.path = path;
@@ -61,6 +63,10 @@ export default class SuggestionForm {
 
   populateArea(data) {
     this.div.innerHTML = data;
+    const attachmentButtons = this.div.querySelectorAll("button[data-upload][data-dialog-open]");
+    if (attachmentButtons.length) {
+      initializeUploadFields(Array.from(attachmentButtons));
+    }
     this.addCloseHandler();
     this.addFormHandler();
     this.scrollToEnd();
@@ -77,7 +83,7 @@ export default class SuggestionForm {
   }
 
   addFormHandler() {
-    let form = document.getElementById("new_suggestion_");
+    let form = this.div.querySelector("form.send-suggestions-form") || document.getElementById("new_suggestion") || document.getElementById("new_suggestion_");
     if (form) {
       let fileInput = document.getElementById("file-upload-field");
       let fileNameContainer = document.getElementById("fileNameContainer");
@@ -101,15 +107,15 @@ export default class SuggestionForm {
           method: event.target.method,
           body: formData,
           headers: {
-            "X-CSRF-Token": this.getCSRFToken()
+            "X-CSRF-Token": this.getCSRFToken(),
+            "X-Requested-With": "XMLHttpRequest",
+            "Accept": "text/html"
           },
           credentials: "include"
         }).then((response) => {
           return response.text();
         }).then((data) => {
-          this.div.innerHTML = data;
-          this.addFormHandler();
-          this.addCloseHandler();
+          this.populateArea(data);
         }).catch((error) => {
           console.error(error);
         });

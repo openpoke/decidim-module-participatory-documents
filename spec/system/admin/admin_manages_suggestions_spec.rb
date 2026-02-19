@@ -272,15 +272,16 @@ describe "Admin manages participatory documents" do
   end
 
   context "when the global suggestion includes a file" do
-    let!(:document_suggestion) do
-      create(:participatory_documents_suggestion,
-             suggestable: document,
-             body: { en: "" },
-             answer: { en: "This is a test answer" },
-             file: attachment)
-    end
+    let!(:attachment) { Decidim::Dev.test_file("Exampledocument.pdf", "application/pdf") }
 
-    let(:attachment) { Decidim::Dev.test_file("Exampledocument.pdf", "application/pdf") }
+    let!(:document_suggestion) do
+      suggestion = create(:participatory_documents_suggestion,
+                          suggestable: document,
+                          body: { en: "" },
+                          answer: { en: "This is a test answer" })
+      suggestion.file.attach(attachment)
+      suggestion.reload
+    end
 
     it "displays the file" do
       within(".table-scroll") do
@@ -293,7 +294,7 @@ describe "Admin manages participatory documents" do
       within(".table-scroll") do
         find("a.sort_link", text: "Id").click
         target_row = find("tr", text: document_suggestion.id.to_s)
-        target_row.find("a.action-icon[title='Answer']").click
+        target_row.click_on("Answer")
       end
       expect(page).to have_css("svg use[href*='ri-file-download-line']", count: 1)
     end

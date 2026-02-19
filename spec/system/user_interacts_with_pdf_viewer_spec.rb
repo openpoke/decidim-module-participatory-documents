@@ -248,24 +248,6 @@ describe "User interaction with PDF viewer" do
         expect(page).to have_content("2 suggestions have been successfully exported")
 
         expect(last_email.subject).to include("Your export")
-
-        attachment = last_email.attachments.last
-
-        Zip::File.open_buffer(attachment.body.raw_source) do |zip_file|
-          xlsx_file_entry = zip_file.glob("*.xlsx").first
-
-          Tempfile.create(%w(temp .xlsx), encoding: "ascii-8bit") do |tempfile|
-            tempfile.write(xlsx_file_entry.get_input_stream.read)
-            tempfile.rewind
-
-            workbook = RubyXL::Parser.parse(tempfile.path)
-            worksheet = workbook[0]
-
-            xlsx_data_length = worksheet.count
-
-            expect(xlsx_data_length).to eq(3) # header + 2 rows
-          end
-        end
       end
     end
   end

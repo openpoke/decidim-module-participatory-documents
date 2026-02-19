@@ -65,7 +65,7 @@ export default class SuggestionUploadModal {
 
     this.modal.updateAddAttachmentsButton();
 
-    const form = document.querySelector("#new_suggestion_");
+    const form = document.querySelector("#participationModal form.send-suggestions-form") || document.querySelector("#new_suggestion") || document.querySelector("#new_suggestion_");
     if (form && this.modal.items.length > 0) {
       const file = this.modal.items[0];
       const hiddenInput = document.createElement("input");

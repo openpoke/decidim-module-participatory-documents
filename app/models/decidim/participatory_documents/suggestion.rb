@@ -179,7 +179,7 @@ module Decidim
       end
 
       def self.ransackable_attributes(_auth_object = nil)
-        %w(body_cont)
+        %w(id body_cont)
       end
 
       def self.ransackable_associations(_auth_object = nil)
