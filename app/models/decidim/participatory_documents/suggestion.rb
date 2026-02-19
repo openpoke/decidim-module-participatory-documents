@@ -11,6 +11,7 @@ module Decidim
       include Decidim::Loggable
       include Decidim::AttachmentMethods
       include Decidim::HasAttachments
+      include Decidim::FilterableResource
 
       translatable_fields :body, :answer
 
@@ -179,7 +180,7 @@ module Decidim
       end
 
       def self.ransackable_attributes(_auth_object = nil)
-        %w(id body_cont)
+        %w(id body body_cont state)
       end
 
       def self.ransackable_associations(_auth_object = nil)

@@ -15,7 +15,9 @@ FactoryBot.define do
     box_opacity { 20 }
 
     trait :with_file do
-      file { Decidim::Dev.test_file("Exampledocument.pdf", "application/pdf") }
+      after :create do |document|
+        document.file.attach(Decidim::Dev.test_file("Exampledocument.pdf", "application/pdf"))
+      end
     end
 
     trait :with_sections do

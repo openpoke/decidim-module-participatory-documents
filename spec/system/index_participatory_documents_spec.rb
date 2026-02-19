@@ -38,7 +38,7 @@ describe "Index participatory_documents" do
   end
 
   it "shows the index page" do
-    expect(page).to have_css("iframe", id: "pdf-iframe")
+    expect(page).to have_css(".pdf-viewer-container", wait: 10)
   end
 
   context "when the document has no title or description" do
