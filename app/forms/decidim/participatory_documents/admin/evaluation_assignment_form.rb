@@ -22,16 +22,6 @@ module Decidim
           @evaluator_roles ||= current_component.participatory_space.user_roles(:evaluator).where(id: evaluator_role_ids)
         end
 
-        def evaluator_role
-          @evaluator_role ||= current_component.participatory_space.user_roles(:evaluator).find_by(id:)
-        end
-
-        def evaluator_user
-          return unless evaluator_role
-
-          @evaluator_user ||= evaluator_role.user
-        end
-
         def same_participatory_space
           return if evaluator_roles.empty? || !current_component
 
