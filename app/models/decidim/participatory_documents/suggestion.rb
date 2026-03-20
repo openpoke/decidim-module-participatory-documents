@@ -186,6 +186,16 @@ module Decidim
       def self.ransackable_associations(_auth_object = nil)
         []
       end
+
+      def self.log_presenter_class_for(_log)
+        Decidim::ParticipatoryDocuments::AdminLog::EvaluationAssignmentPresenter
+      end
+
+      # Returns the presenter for this author, to be used in the views.
+      # Required by ResourceRenderer.
+      def presenter
+        Decidim::ParticipatoryDocuments::SuggestionPresenter.new(self)
+      end
     end
   end
 end
