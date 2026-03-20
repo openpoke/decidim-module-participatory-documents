@@ -2,15 +2,15 @@
 en:
   activemodel:
     attributes:
-      evaluation_assignment:
-        admin_log:
-          evaluator_role_id: Evaluator name
       document:
         box_color: Color of the boxes
         box_opacity: Opacity applied at the color of the boxes (%)
         description: Helper description
         file: PDF Document
         title: Helper title
+      evaluation_assignment:
+        admin_log:
+          evaluator_role_id: Evaluator name
       suggestion:
         body: Add your comment
     errors:
@@ -218,7 +218,8 @@ en:
       admin_log:
         evaluation_assignment:
           create: "%{user_name} assigned the %{resource_name} suggestion to an evaluator"
-          delete: "%{user_name} unassigned an evaluator from the %{suggestion_title} suggestion"
+          delete: "%{user_name} unassigned an evaluator from the %{suggestion_title}
+            suggestion"
       document:
         close: Close
         export_my_suggestions: Export my suggestions
