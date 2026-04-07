@@ -1,5 +1,3 @@
-import initLanguageChangeSelect from "src/decidim/admin/choose_language";
-
 /* eslint-disable no-alert */
 export default class PdfModalManager {
   constructor(options) {
@@ -49,7 +47,6 @@ export default class PdfModalManager {
     this.openModal(box);
     // Admin in 0.28 still uses foundation to handle tabs
     $(this.modalWrapper).foundation();
-    initLanguageChangeSelect(document.querySelectorAll("select.language-change"));
   }
 
   openModal() {
