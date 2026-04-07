@@ -1,0 +1,9 @@
+<select
+  id="<%= select_id %>"
+  name="evaluator_role_ids[]"
+  class="w-full mt-2 js-evaluator-multiselect"
+  multiple>
+  <%= find_evaluators_for_select(participatory_space).map do |option| %>
+    <option value="<%= option[1] %>"><%= option[0] %></option>
+  <% end %>
+</select>

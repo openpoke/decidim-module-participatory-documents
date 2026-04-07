@@ -53,7 +53,10 @@ Decidim.register_component(:participatory_documents) do |component|
   #   resource.searchable = true
   # end
 
-  # component.register_stat :participatory_documents_count, primary: true, priority: Decidim::StatsRegistry::HIGH_PRIORITY do |components, start_at, end_at|
+  # component.register_stat :participatory_documents_count,
+  #                         primary: true,
+  #                         priority: Decidim::StatsRegistry::MEDIUM_PRIORITY do |components, _start_at, _end_at|
+  #   Decidim::ParticipatoryDocuments::Document.where(component: components).count
   # end
 
   component.seeds do |participatory_space|

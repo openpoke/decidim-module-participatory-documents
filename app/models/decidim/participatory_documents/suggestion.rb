@@ -11,6 +11,7 @@ module Decidim
       include Decidim::Loggable
       include Decidim::AttachmentMethods
       include Decidim::HasAttachments
+      include Decidim::FilterableResource
 
       translatable_fields :body, :answer
 
@@ -20,8 +21,8 @@ module Decidim
 
       delegate :organization, to: :suggestable, allow_nil: true
       belongs_to :suggestable, polymorphic: true
-      has_many :valuation_assignments, class_name: "Decidim::ParticipatoryDocuments::ValuationAssignment",
-                                       foreign_key: "decidim_participatory_documents_suggestion_id", dependent: :destroy
+      has_many :evaluation_assignments, class_name: "Decidim::ParticipatoryDocuments::EvaluationAssignment",
+                                        foreign_key: "decidim_participatory_documents_suggestion_id", dependent: :destroy
 
       delegate :participatory_space, :component, to: :suggestable, allow_nil: true
 
@@ -37,8 +38,8 @@ module Decidim
       POSSIBLE_STATES = %w(not_answered evaluating accepted rejected withdrawn).freeze
 
       POSSIBLE_STATES.each do |possible|
-        scope "state_not_#{possible}".to_sym, -> { where.not(state: possible) }
-        scope "state_#{possible}".to_sym, -> { where(state: possible) }
+        scope :"state_not_#{possible}", -> { where.not(state: possible) }
+        scope :"state_#{possible}", -> { where(state: possible) }
 
         define_method(:"#{possible}?") do
           state == possible.to_s
@@ -105,16 +106,16 @@ module Decidim
         Arel.sql(%{cast("decidim_participatory_documents_suggestions"."body" as text)})
       end
 
-      scope :sort_by_valuation_assignments_count_asc, lambda {
-        order(Arel.sql("#{sort_by_valuation_assignments_count_nulls_last_query} ASC NULLS FIRST"))
+      scope :sort_by_evaluation_assignments_count_asc, lambda {
+        order(Arel.sql("#{sort_by_evaluation_assignments_count_nulls_last_query} ASC NULLS FIRST"))
       }
 
-      scope :sort_by_valuation_assignments_count_desc, lambda {
-        order(Arel.sql("#{sort_by_valuation_assignments_count_nulls_last_query} DESC NULLS LAST"))
+      scope :sort_by_evaluation_assignments_count_desc, lambda {
+        order(Arel.sql("#{sort_by_evaluation_assignments_count_nulls_last_query} DESC NULLS LAST"))
       }
 
       def self.ransackable_scopes(_auth = nil)
-        [:valuator_role_ids_has, :dummy_author_ids_has, :dummy_suggestable_id_has]
+        [:evaluator_role_ids_has, :dummy_author_ids_has, :dummy_suggestable_id_has]
       end
 
       def self.dummy_author_ids_has(value)
@@ -129,13 +130,13 @@ module Decidim
         end
       end
 
-      # method to filter by assigned valuator role ID
-      def self.valuator_role_ids_has(value)
+      # method to filter by assigned evaluator role ID
+      def self.evaluator_role_ids_has(value)
         query = <<-SQL.squish
         :value = any(
-          (SELECT decidim_participatory_documents_valuation_assignments.valuator_role_id
-          FROM decidim_participatory_documents_valuation_assignments
-          WHERE decidim_participatory_documents_valuation_assignments.decidim_participatory_documents_suggestion_id = decidim_participatory_documents_suggestions.id
+          (SELECT decidim_participatory_documents_evaluation_assignments.evaluator_role_id
+          FROM decidim_participatory_documents_evaluation_assignments
+          WHERE decidim_participatory_documents_evaluation_assignments.decidim_participatory_documents_suggestion_id = decidim_participatory_documents_suggestions.id
           )
         )
         SQL
@@ -143,13 +144,13 @@ module Decidim
       end
 
       # Defines the base query so that ransack can actually sort by this value
-      def self.sort_by_valuation_assignments_count_nulls_last_query
+      def self.sort_by_evaluation_assignments_count_nulls_last_query
         <<-SQL.squish
         (
-          SELECT COUNT(decidim_participatory_documents_valuation_assignments.id)
-          FROM decidim_participatory_documents_valuation_assignments
-          WHERE decidim_participatory_documents_valuation_assignments.decidim_participatory_documents_suggestion_id = decidim_participatory_documents_suggestions.id
-          GROUP BY decidim_participatory_documents_valuation_assignments.decidim_participatory_documents_suggestion_id
+          SELECT COUNT(decidim_participatory_documents_evaluation_assignments.id)
+          FROM decidim_participatory_documents_evaluation_assignments
+          WHERE decidim_participatory_documents_evaluation_assignments.decidim_participatory_documents_suggestion_id = decidim_participatory_documents_suggestions.id
+          GROUP BY decidim_participatory_documents_evaluation_assignments.decidim_participatory_documents_suggestion_id
         )
         SQL
       end
@@ -158,9 +159,9 @@ module Decidim
         Arel.sql("COALESCE(d.title->>'#{I18n.locale}', s.title->>'#{I18n.locale}')")
       end
 
-      def valuators
-        valuator_role_ids = valuation_assignments.where(suggestion: self).pluck(:valuator_role_id)
-        user_ids = participatory_space.user_roles(:valuator).where(id: valuator_role_ids).pluck(:decidim_user_id)
+      def evaluators
+        evaluator_role_ids = evaluation_assignments.where(suggestion: self).pluck(:evaluator_role_id)
+        user_ids = participatory_space.user_roles(:evaluator).where(id: evaluator_role_ids).pluck(:decidim_user_id)
         participatory_space.organization.users.where(id: user_ids)
       end
 
@@ -176,6 +177,24 @@ module Decidim
         file_content_type = file.blob.content_type
 
         errors.add(:file, :invalid) unless allowed_extensions.include?(file_extension) && allowed_content_types.any? { |type| File.fnmatch(type, file_content_type) }
+      end
+
+      def self.ransackable_attributes(_auth_object = nil)
+        %w(id body state)
+      end
+
+      def self.ransackable_associations(_auth_object = nil)
+        []
+      end
+
+      def self.log_presenter_class_for(_log)
+        Decidim::ParticipatoryDocuments::AdminLog::EvaluationAssignmentPresenter
+      end
+
+      # Returns the presenter for this author, to be used in the views.
+      # Required by ResourceRenderer.
+      def presenter
+        Decidim::ParticipatoryDocuments::SuggestionPresenter.new(self)
       end
     end
   end

@@ -5,8 +5,6 @@ require "spec_helper"
 module Decidim
   module ParticipatoryDocuments
     describe SectionSuggestionsController do
-      routes { Decidim::ParticipatoryDocuments::Engine.routes }
-
       let(:organization) { create(:organization) }
       let(:participatory_process) { create(:participatory_process, organization:) }
       let(:component) { create(:participatory_documents_component, participatory_space: participatory_process) }

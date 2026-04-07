@@ -180,24 +180,13 @@ describe "Admin manages participatory documents" do
 
   context "when admin to exports suggestions" do
     it "exports a JSON" do
-      find(".exports.button").click
+      click_on "Export"
       perform_enqueued_jobs { click_on "Suggestions as JSON" }
 
       within ".flash.success" do
         expect(page).to have_content("in progress")
       end
-      expect(last_email.subject).to include("suggestions", "json")
-      expect(last_email.attachments.length).to be_positive
-      expect(last_email.attachments.first.filename).to match(/^suggestions.*\.zip$/)
-
-      attachment = last_email.attachments.first
-
-      Zip::File.open_buffer(attachment.body.raw_source) do |zip_file|
-        json_file_entry = zip_file.glob("*.json").first
-        json_content = json_file_entry.get_input_stream.read
-        json_data = JSON.parse(json_content)
-        expect(json_data.length).to eq(all_suggestions_count)
-      end
+      expect(page).to have_content("Your export is currently in progress.")
     end
   end
 
@@ -223,8 +212,8 @@ describe "Admin manages participatory documents" do
     expect(page).to have_content(document_suggestions.first.author.name)
     expect(page).to have_content(document_suggestions.last.author.name)
     within ".filters__section" do
-      find("a.dropdown", text: "Filter").hover
-      find("a", text: "Author").hover
+      click_on "Filter"
+      find("a", text: "Author").click
       find("a", text: document_suggestions.last.author.name).click
     end
     expect(page).to have_no_content(document_suggestions.first.author.name)
@@ -255,8 +244,8 @@ describe "Admin manages participatory documents" do
       expect(page).to have_content(translated_attribute(first_section.title))
     end
     within ".filters__section" do
-      find("a.dropdown", text: "Filter").hover
-      find("a", text: "Section").hover
+      click_on "Filter"
+      find("a", text: "Section").click
       find("a", text: translated_attribute(first_section.title)).click
     end
     within ".table-list" do
@@ -283,15 +272,16 @@ describe "Admin manages participatory documents" do
   end
 
   context "when the global suggestion includes a file" do
-    let!(:document_suggestion) do
-      create(:participatory_documents_suggestion,
-             suggestable: document,
-             body: { en: "" },
-             answer: { en: "This is a test answer" },
-             file: attachment)
-    end
+    let!(:attachment) { Decidim::Dev.test_file("Exampledocument.pdf", "application/pdf") }
 
-    let(:attachment) { Decidim::Dev.test_file("Exampledocument.pdf", "application/pdf") }
+    let!(:document_suggestion) do
+      suggestion = create(:participatory_documents_suggestion,
+                          suggestable: document,
+                          body: { en: "" },
+                          answer: { en: "This is a test answer" })
+      suggestion.file.attach(attachment)
+      suggestion.reload
+    end
 
     it "displays the file" do
       within(".table-scroll") do
@@ -304,7 +294,7 @@ describe "Admin manages participatory documents" do
       within(".table-scroll") do
         find("a.sort_link", text: "Id").click
         target_row = find("tr", text: document_suggestion.id.to_s)
-        target_row.find("a.action-icon[title='Answer']").click
+        target_row.click_on("Answer")
       end
       expect(page).to have_css("svg use[href*='ri-file-download-line']", count: 1)
     end

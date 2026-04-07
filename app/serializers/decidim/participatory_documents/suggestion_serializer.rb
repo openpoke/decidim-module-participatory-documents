@@ -20,11 +20,11 @@ module Decidim
         {
           id: suggestion.id,
           body: suggestion_body(suggestion),
-          author: suggestion.try(:normalized_author).try(:name),
+          author: suggestion.author_name,
           state: humanize_suggestion_state(suggestion.state),
           answer: answer_text(suggestion),
           section: section(suggestion),
-          valuators: suggestion.valuation_assignments.map(&:valuator).map(&:name).join(", "),
+          evaluators: suggestion.evaluation_assignments.map(&:evaluator).map(&:name).join(", "),
           submitted_on: submitted_on(suggestion)
         }
       end

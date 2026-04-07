@@ -23,7 +23,7 @@ module Decidim
           return broadcast(:invalid) if form.invalid?
 
           create_suggestion_note
-          # notify_admins_and_valuators
+          # notify_admins_and_evaluators
 
           broadcast(:ok, suggestion_note)
         end

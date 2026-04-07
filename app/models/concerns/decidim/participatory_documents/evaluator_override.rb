@@ -2,7 +2,7 @@
 
 module Decidim
   module ParticipatoryDocuments
-    module ValuatorOverride
+    module EvaluatorOverride
       extend ActiveSupport::Concern
 
       included do

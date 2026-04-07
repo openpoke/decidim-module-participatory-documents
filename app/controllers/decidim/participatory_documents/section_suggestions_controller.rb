@@ -5,6 +5,7 @@ module Decidim
     class SectionSuggestionsController < Decidim::ParticipatoryDocuments::ApplicationController
       include FormFactory
       include Paginable
+      include Decidim::ComponentPathHelper
 
       helper_method :section, :suggestions
       layout false
@@ -22,7 +23,7 @@ module Decidim
 
         CreateSuggestion.call(@form, section) do
           on(:ok) do |_suggestion|
-            redirect_to(document_section_suggestions_path(document, section.id)) && return
+            redirect_to(EngineRouter.main_proxy(current_component).document_section_suggestions_path(document_id: document.id, section_id: section.id)) && return
           end
           on(:invalid) do
             render template: "decidim/participatory_documents/section_suggestions/index", format: [:html], status: :bad_request

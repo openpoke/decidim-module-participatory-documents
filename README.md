@@ -49,6 +49,8 @@ Depending on your Decidim version, you can choose the corresponding version to e
 | 0.2.x   | 0.27.x                      |
 | 0.3.x   | 0.28.x                      |
 | 0.4.x   | 0.29.x                      |
+|         | 0.30.x                      |
+| 0.6.x   | 0.31.x                      |
 
 
 ## Required MIME types

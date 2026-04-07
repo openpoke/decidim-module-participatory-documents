@@ -9,7 +9,7 @@ module Decidim
         end
 
         def btn_icon(icon, label)
-          icon(icon, class: "icon--document icon icon icon-document mr-xs", aria_label: label, role: "img")
+          icon(icon, class: "icon--document icon icon file-text-lines mr-xs", aria_label: label, role: "img")
         end
       end
     end

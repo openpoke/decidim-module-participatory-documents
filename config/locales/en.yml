@@ -8,6 +8,9 @@ en:
         description: Helper description
         file: PDF Document
         title: Helper title
+      evaluation_assignment:
+        admin_log:
+          evaluator_role_id: Evaluator name
       suggestion:
         body: Add your comment
     errors:
@@ -41,6 +44,8 @@ en:
             label: Author
           dummy_suggestable_id_has:
             label: Section
+          evaluator_role_ids_has:
+            label: Assigned to evaluator
           state_eq:
             label: State is
             values:
@@ -50,8 +55,6 @@ en:
               published: Published
               rejected: Rejected
               withdrawn: Withdrawn
-          valuator_role_ids_has:
-            label: Assigned to valuator
     admin_log:
       annotation:
         create: "%{user_name} created a new participatory area for %{document_name}"
@@ -133,6 +136,13 @@ en:
           update:
             error: There was a problem updating Document
             success: Document has been successfully updated
+        evaluation_assignments:
+          create:
+            invalid: There was an error assigning suggestions to an evaluator
+            success: Suggestions assigned to an evaluator successfully
+          delete:
+            invalid: There was an error unassigning suggestions from an evaluator
+            success: Evaluator unassigned from suggestions successfully
         exports:
           suggestions: Suggestions
         sections:
@@ -161,6 +171,12 @@ en:
           answer:
             invalid: There was an error adding the answer
             success: Successfully added the answer
+          evaluators:
+            assigned_evaluators: Assigned evaluators
+            evaluators: Evaluators
+            remove_assignment: Remove assignment
+            remove_assignment_confirmation: Are you sure you want to remove the evaluator
+              from this suggestion?
           form:
             answer: Answer
             answer_is_published: Published
@@ -168,15 +184,15 @@ en:
           index:
             actions:
               answer: Answer
-              assign_to_valuator: Assign to valuator
-              assign_to_valuator_button: Assign
+              assign_to_evaluator: Assign to evaluator
+              assign_to_evaluator_button: Assign
               cancel: Cancel
               download: download %{filename}
               publish: Publish
               publish_answers: Publish answers
               title: Actions
-              unassign_from_valuator: Unassign from valuator
-              unassign_from_valuator_button: Unassign
+              unassign_from_evaluator: Unassign from evaluator
+              unassign_from_evaluator_button: Unassign
             author: Author
             created_at: Submitted on
             id: Id
@@ -199,19 +215,11 @@ en:
             update: Update
           suggestion:
             global: Global
-          valuators:
-            assigned_valuators: Assigned valuators
-            remove_assignment: Remove assignment
-            remove_assignment_confirmation: Are you sure you want to remove the valuator
-              from this suggestion?
-            valuators: Valuators
-        valuation_assignments:
-          create:
-            invalid: There was an error assigning suggestions to a valuator
-            success: Suggestions assigned to a valuator successfully
-          delete:
-            invalid: There was an error unassigning suggestions from a valuator
-            success: Valuator unassigned from suggestions successfully
+      admin_log:
+        evaluation_assignment:
+          create: "%{user_name} assigned the %{resource_name} suggestion to an evaluator"
+          delete: "%{user_name} unassigned an evaluator from the %{suggestion_title}
+            suggestion"
       document:
         close: Close
         export_my_suggestions: Export my suggestions
@@ -252,7 +260,8 @@ en:
             artificial_tile: Section %{position}
         suggestion:
           fields:
-            valuators: Valuators
+            evaluator_ids: Evaluators
+            evaluators: Evaluators
       'no': 'No'
       suggestions:
         answers:
@@ -289,3 +298,7 @@ en:
           edit_attachments: Edit attachments
           title: Write your suggestion or upload a file with your suggestions
       'yes': 'Yes'
+  errors:
+    messages:
+      virus: The file you uploaded contains a virus and has been rejected. Please
+        upload a clean file.

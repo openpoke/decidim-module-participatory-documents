@@ -7,8 +7,8 @@ on:
   pull_request:
 
 env:
-  RUBY_VERSION: 3.2.6
-  NODE_VERSION: 18.17.1
+  RUBY_VERSION: 3.3.10
+  NODE_VERSION: 22.14.0
   DISABLE_SPRING: 1
   CI: "true"
 
@@ -38,8 +38,8 @@ jobs:
         with:
           fetch-depth: 1
 
-      - name: Install imagemagick and wkhtmltopdf
-        run: sudo apt install imagemagick wkhtmltopdf
+      - name: Install imagemagick
+        run: sudo apt install imagemagick
 
       - uses: ruby/setup-ruby@v1
         with:

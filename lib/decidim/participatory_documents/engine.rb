@@ -34,7 +34,7 @@ module Decidim
 
       initializer "decidim_participatory_documents.overrides", after: "decidim.action_controller" do
         config.to_prepare do
-          Decidim::ParticipatorySpaceRoleConfig::Valuator.include(Decidim::ParticipatoryDocuments::ValuatorOverride)
+          Decidim::ParticipatorySpaceRoleConfig::Evaluator.include(Decidim::ParticipatoryDocuments::EvaluatorOverride)
         end
       end
 

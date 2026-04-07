@@ -15,7 +15,9 @@ FactoryBot.define do
     box_opacity { 20 }
 
     trait :with_file do
-      file { Decidim::Dev.test_file("Exampledocument.pdf", "application/pdf") }
+      after :create do |document|
+        document.file.attach(Decidim::Dev.test_file("Exampledocument.pdf", "application/pdf"))
+      end
     end
 
     trait :with_sections do
@@ -87,7 +89,7 @@ FactoryBot.define do
 
   factory :participatory_documents_suggestion, class: "Decidim::ParticipatoryDocuments::Suggestion" do
     suggestable { association(:dummy_resource) }
-    author { association(:user, organization: suggestable.organization) }
+    author { build(:user, :confirmed, organization: suggestable.component.organization) }
     body { Decidim::Faker::Localized.localized { Faker::Lorem.paragraphs(number: 3).join(" ") } }
     state { Decidim::ParticipatoryDocuments::Suggestion::POSSIBLE_STATES.sample }
     answer { {} }
@@ -127,18 +129,18 @@ FactoryBot.define do
     end
   end
 
-  factory :suggestion_valuation_assignment, class: "Decidim::ParticipatoryDocuments::ValuationAssignment" do
+  factory :suggestion_evaluation_assignment, class: "Decidim::ParticipatoryDocuments::EvaluationAssignment" do
     suggestion { association(:participatory_documents_suggestion) }
-    valuator_role do
+    evaluator_role do
       space = suggestion.component.participatory_space
       organization = space.organization
-      build(:participatory_process_user_role, role: :valuator, user: build(:user, organization:))
+      build(:participatory_process_user_role, role: :evaluator, user: build(:user, organization:))
     end
   end
 
   factory :participatory_documents_suggestion_note, class: "Decidim::ParticipatoryDocuments::SuggestionNote" do
     body { Faker::Lorem.sentences(number: 3).join("\n") }
     suggestion { association(:participatory_documents_suggestion) }
-    author { association(:user, organization: suggestion.organization) }
+    author { build(:user, :confirmed, organization: suggestion.organization) }
   end
 end

@@ -245,12 +245,12 @@ module Decidim
           before do
             allow(ParticipatoryDocuments).to receive(:antivirus_enabled).and_return(false)
             Decidim::ParticipatoryDocuments.send(:remove_const, :Document)
-            load "decidim/participatory_documents/document.rb"
+            load File.expand_path("../../../../app/models/decidim/participatory_documents/document.rb", __dir__)
           end
 
           after do
             Decidim::ParticipatoryDocuments.send(:remove_const, :Document)
-            load "decidim/participatory_documents/document.rb"
+            load File.expand_path("../../../../app/models/decidim/participatory_documents/document.rb", __dir__)
           end
 
           it "has file validator only" do
@@ -264,7 +264,12 @@ module Decidim
           before do
             allow(ParticipatoryDocuments).to receive(:antivirus_enabled).and_return(true)
             Decidim::ParticipatoryDocuments.send(:remove_const, :Document)
-            load "decidim/participatory_documents/document.rb"
+            load File.expand_path("../../../../app/models/decidim/participatory_documents/document.rb", __dir__)
+          end
+
+          after do
+            Decidim::ParticipatoryDocuments.send(:remove_const, :Document)
+            load File.expand_path("../../../../app/models/decidim/participatory_documents/document.rb", __dir__)
           end
 
           it "has antivirus validator" do

@@ -3,7 +3,7 @@
 module Decidim
   module ParticipatoryDocuments
     module Admin
-      class UnassignSuggestionsFromValuator < Decidim::Command
+      class AssignSuggestionsToEvaluator < Decidim::Command
         # Public: Initializes the command.
         #
         # form - A form object with the params.
@@ -20,39 +20,40 @@ module Decidim
         def call
           return broadcast(:invalid) unless form.valid?
 
-          unassign_suggestions
+          assign_suggestions
           broadcast(:ok)
+        rescue ActiveRecord::RecordInvalid
+          broadcast(:invalid)
         end
 
         private
 
         attr_reader :form
 
-        def unassign_suggestions
+        def assign_suggestions
           transaction do
-            form.suggestions.flat_map do |suggestion|
-              assignment = find_assignment(suggestion)
-              unassign(assignment) if assignment
+            form.evaluator_roles.each do |evaluator_role|
+              form.suggestions.each do |suggestion|
+                find_assignment(suggestion, evaluator_role) || assign_suggestion(suggestion, evaluator_role)
+              end
             end
           end
         end
 
-        def find_assignment(suggestion)
-          Decidim::ParticipatoryDocuments::ValuationAssignment.find_by(
+        def find_assignment(suggestion, evaluator_role)
+          Decidim::ParticipatoryDocuments::EvaluationAssignment.find_by(
             suggestion:,
-            valuator_role: form.valuator_role
+            evaluator_role:
           )
         end
 
-        def unassign(assignment)
-          Decidim.traceability.perform_action!(
-            :delete,
-            assignment,
+        def assign_suggestion(suggestion, evaluator_role)
+          Decidim.traceability.create!(
+            Decidim::ParticipatoryDocuments::EvaluationAssignment,
             form.current_user,
-            suggestion: assignment.suggestion.id
-          ) do
-            assignment.destroy!
-          end
+            suggestion:,
+            evaluator_role:
+          )
         end
       end
     end
