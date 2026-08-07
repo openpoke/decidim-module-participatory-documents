@@ -9,6 +9,7 @@ on:
 env:
   RUBY_VERSION: 3.2.6
   NODE_VERSION: 18.17.1
+  NODE_OPTIONS: "--experimental-global-webcrypto"
   DISABLE_SPRING: 1
   CI: "true"
 
@@ -39,7 +40,7 @@ jobs:
           fetch-depth: 1
 
       - name: Install imagemagick and wkhtmltopdf
-        run: sudo apt install imagemagick wkhtmltopdf
+        run: sudo apt-get update && sudo apt-get install -y imagemagick wkhtmltopdf
 
       - uses: ruby/setup-ruby@v1
         with:

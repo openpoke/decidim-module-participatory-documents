@@ -40,6 +40,29 @@ module Decidim
           "hsla(#{h}, #{s}%, 90%, #{opacity})"
         end
 
+        # The PDF is fetched by pdf.js through an ActiveStorage redirect, so when
+        # the file lives in a remote storage service (S3 and compatible) the
+        # final blob host must be allowed by the connect-src CSP directive.
+        def append_storage_host_to_csp
+          origin = pdf_storage_origin
+          content_security_policy.append_csp_directive("connect-src", origin) if origin
+        end
+
+        def pdf_storage_origin
+          return if document.blank? || !document.file.attached?
+
+          ActiveStorage::Current.url_options ||= { host: request.base_url }
+          uri = URI.parse(document.file.blob.url)
+          return if uri.host.blank?
+          return if uri.host == request.host && uri.port == request.port
+
+          origin = "#{uri.scheme}://#{uri.host}"
+          origin += ":#{uri.port}" if uri.port != uri.default_port
+          origin
+        rescue StandardError
+          nil
+        end
+
         def pdf_custom_style
           return if document.blank?
 

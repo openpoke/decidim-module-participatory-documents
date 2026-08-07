@@ -15,6 +15,8 @@ module Decidim
           redirect_to(documents_path) if document.blank?
         end
 
+        before_action :append_storage_host_to_csp, only: [:pdf_viewer, :edit_pdf]
+
         def index
           redirect_to(document_suggestions_path(document)) && return if document.present? && document.file.attached?
         end
