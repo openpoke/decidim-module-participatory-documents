@@ -2,12 +2,19 @@
 ca:
   activemodel:
     attributes:
+      answer_suggestion:
+        answer: Resposta
       document:
         box_color: Color de les caixes
         box_opacity: Opacitat aplicada al color de les caixes (%)
         description: Descripció d'ajuda
         file: Document PDF
         title: Títol d'ajuda
+      evaluation_assignment:
+        admin_log:
+          evaluator_role_id: Nom de l'avaluadora
+      section:
+        title: Títol
       suggestion:
         body: Afegeix el teu suggeriment
     errors:
@@ -25,17 +32,10 @@ ca:
             too_short: és massa curt (menys de %{min_length} caràcters)
   decidim:
     admin:
-      actions:
-        export: Exporta
-        manage: Gestiona
-      exports:
-        export_as: "%{name} com a %{export_format}"
       filters:
         search_placeholder:
           body_cont: El cos conté
         suggestions:
-          body_cont:
-            label: El cos conté
           dummy_author_ids_has:
             label: Autor
           dummy_suggestable_id_has:
@@ -46,7 +46,6 @@ ca:
               accepted: Acceptada
               evaluating: En avaluació
               not_answered: No contestat
-              published: Publicat
               rejected: Rebutjat
               withdrawn: Retirada
           evaluator_role_ids_has:
@@ -58,7 +57,6 @@ ca:
         update: "%{user_name} ha actualitzat una nova àrea de participació per a %{document_name}"
       document:
         create: "%{user_name} ha creat un document anomenat %{resource_name} a %{space_name}"
-        delete: "%{user_name} ha suprimit un document anomenat %{resource_name} a %{space_name}"
         update: "%{user_name} ha actualitzat un document anomenat %{resource_name} a %{space_name}"
       section:
         create: "%{user_name} ha creat un Grup nou anomenat %{resource_name} per a %{document_name}"
@@ -74,6 +72,9 @@ ca:
             max_suggestion_length: Longitud màxima del suggeriment (caràcters)
             min_suggestion_length: Longitud mínima del suggeriment (caràcters)
             suggestion_answering_enabled: Habilitar la resposta de suggerències des de l'administrador
+    download_your_data:
+      show:
+        suggestions: Exportar els suggeriments
     events:
       participatory_documents:
         suggestion_answered:
@@ -96,7 +97,6 @@ ca:
         finish_publishing: Publica els grups de participació
         new: Puja un document PDF
         preview_publishing_sections: Previsualitza i publica els grups
-        title: Accions
       admin:
         documents:
           create:
@@ -106,7 +106,6 @@ ca:
             title: Edita el document participatiu
             update: Actualitza
           final_publish:
-            error: Hi ha hagut un error en publicar els grups de participació
             success: Els grups s'han publicat correctament
           form:
             alert_suggestions_html: "<strong>IMPORTANT:</strong> Aquest document no es pot canviar ni eliminar perquè ja té suggeriments"
@@ -116,9 +115,6 @@ ca:
             start: Pengeu un PDF per començar
           new:
             create: Crea un document participatiu
-            title: Nou document participatiu
-          sections:
-            empty: "(buit)"
           update:
             error: Hi ha hagut un problema en actualitzar el document
             success: El document s'ha actualitzat correctament
@@ -184,8 +180,7 @@ ca:
             authors: Autors
             body: Cos
             created_at: Data de creació
-            file: Arxiu
-            update: Actualitza
+            suggestion_for: Suggeriment per a %{title}
           suggestion:
             global: Global
           evaluators:
@@ -200,6 +195,10 @@ ca:
           delete:
             invalid: S'ha produït un error en desassignar suggeriments a una avaluadora
             success: Avaluadora desassignada correctament
+      admin_log:
+        evaluation_assignment:
+          create: "%{user_name} ha assignat el suggeriment %{resource_name} a una avaluadora"
+          delete: "%{user_name} ha desassignat una avaluadora del suggeriment %{suggestion_title}"
       document:
         close: Tancar
         export_my_suggestions: Exporta els meus suggeriments
@@ -207,7 +206,6 @@ ca:
         save_changes: Desa els canvis!
         send_suggestion: Enviar suggeriment
         suggestion_answer: Resposta oficial
-        upload_file: Adjunta un document
       document_suggestions:
         export:
           empty: No hi ha suggeriments per exportar.
@@ -223,26 +221,17 @@ ca:
         preview_title: Vista prèvia
         publish_description: 'Opcions de l''administrador: estàs previsualitzant els grups de participació del document'
       models:
-        document:
-          fields:
-            document_pages: Número de pàgina
-            id: Id
-            published: Publicat
-            state: Estat
-            title: Títol
         section:
           fields:
             artificial_tile: Grup de participació %{position}
         suggestion:
           fields:
             evaluators: Avaluadores
-      'no': 'No'
       suggestions:
         answers:
           accepted: Acceptada
           evaluating: En avaluació
           not_answered: No contestat
-          published: Publicat
           rejected: Rebutjat
           withdrawn: Retirada
         modal:
@@ -265,7 +254,5 @@ ca:
         suggestion_form:
           add_attachments: Afegeix fitxers adjunts
           attachment_legend: Afegeix un document o una imatge
-          blank: S'ha produït un error en crear el suggeriment. Pujar un fitxer vàlid o afegeix un missatge de text amb el suggeriment.
           edit_attachments: Edita els fitxers adjunts
           title: Escriu el teu suggeriment o puja un fitxer amb els teus suggeriments
-      'yes': 'Sí'

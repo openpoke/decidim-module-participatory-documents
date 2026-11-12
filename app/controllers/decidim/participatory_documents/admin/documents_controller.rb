@@ -9,7 +9,6 @@ module Decidim
         include Decidim::ComponentPathHelper
 
         helper Decidim::LayoutHelper
-        helper_method :sections
 
         before_action except: [:index, :new, :create] do
           redirect_to(documents_path) if document.blank?
@@ -92,18 +91,7 @@ module Decidim
               flash[:notice] = t("documents.final_publish.success", scope: "decidim.participatory_documents.admin")
               redirect_to document_suggestions_path(document)
             end
-
-            on(:invalid) do
-              flash.now[:alert] = t("documents.final_publish.error", scope: "decidim.participatory_documents.admin")
-              render :edit
-            end
           end
-        end
-
-        private
-
-        def sections
-          @sections ||= document.sections
         end
       end
     end

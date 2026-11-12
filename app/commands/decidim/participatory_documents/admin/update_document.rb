@@ -67,7 +67,7 @@ module Decidim
             Decidim.traceability.perform_action!(
               "delete",
               annotation,
-              current_user
+              form.current_user
             ) do
               annotation.destroy!
             end
@@ -77,7 +77,7 @@ module Decidim
             Decidim.traceability.perform_action!(
               "delete",
               section,
-              current_user
+              form.current_user
             ) do
               section.destroy!
             end

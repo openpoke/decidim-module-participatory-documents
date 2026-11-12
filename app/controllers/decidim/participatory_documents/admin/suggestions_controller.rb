@@ -134,7 +134,11 @@ module Decidim
         end
 
         def evaluator_role_names
-          @evaluator_role_names ||= current_participatory_space.user_roles(:evaluator).order_by_name.to_h { |role| [role.id, role.user&.name] }
+          @evaluator_role_names ||= begin
+            roles = current_participatory_space.user_roles(:evaluator)
+            roles = roles.order_by_name if roles.respond_to?(:order_by_name)
+            roles.to_h { |role| [role.id, role.user&.name] }
+          end
         end
 
         def suggestions
@@ -142,27 +146,11 @@ module Decidim
         end
 
         def base_query
-          @base_query ||= evaluator_roles_exist? ? suggestions_for_evaluator : all_document_suggestions
-        end
-
-        def all_document_suggestions
-          document.suggestions_including_sections
-        end
-
-        def suggestions_for_evaluator
-          # rubocop:disable Decidim/OrganizationScopedFinder
-          assigned_suggestion_ids = Decidim::ParticipatoryDocuments::EvaluationAssignment
-                                    .where(evaluator_role: evaluator_roles).select(:decidim_participatory_documents_suggestion_id)
-          # rubocop:enable Decidim/OrganizationScopedFinder
-          all_document_suggestions.where(id: assigned_suggestion_ids)
-        end
-
-        def evaluator_roles
-          @evaluator_roles ||= current_participatory_space.user_roles(:evaluator).where(user: current_user)
-        end
-
-        def evaluator_roles_exist?
-          evaluator_roles.exists?
+          @base_query ||= if current_user.admin? || evaluator_roles.empty?
+                            document.suggestions_including_sections
+                          else
+                            document.suggestions_including_sections.with_evaluation_assigned_to(current_user, current_participatory_space)
+                          end
         end
 
         def suggestion
@@ -179,6 +167,10 @@ module Decidim
           return @evaluator_assigned_to_suggestion if defined?(@evaluator_assigned_to_suggestion)
 
           @evaluator_assigned_to_suggestion = suggestion.present? && suggestion.evaluation_assignments.where(evaluator_role: evaluator_roles).any?
+        end
+
+        def skip_manage_component_permission
+          action_name == "answer" && evaluator_roles.exists?
         end
       end
     end

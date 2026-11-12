@@ -10,11 +10,18 @@ export default class PdfModalManager {
     this.modal = document.getElementById("editor-modal");
     this.modalContent = document.getElementById("editor-modal-content");
     this.modalWrapper = this.modal.querySelector(".form__wrapper");
+    this.box = null;
     // events
     this.onSave = () => {};
     this.onDestroy = () => {};
     this.onError = () => {};
     this.onCancel = () => {};
+    this.bindEvents();
+  }
+
+  bindEvents() {
+    document.getElementById("editor-modal-remove").addEventListener("click", this._removeHandler.bind(this));
+    document.getElementById("editor-modal-save").addEventListener("click", this._saveHandler.bind(this));
   }
 
   loadBoxModal(box) {
@@ -36,14 +43,11 @@ export default class PdfModalManager {
   }
 
   populateModal(data, box) {
+    this.box = box;
     this.modalWrapper.innerHTML = data;
-    const uiSave = document.getElementById("editor-modal-save");
     const uiTitle = document.getElementById("editor-modal-title");
-    const uiRemove = document.getElementById("editor-modal-remove");
     uiTitle.innerHTML = this.i18n.modalTitle.replace("%{box}", box.div.dataset.position).replace("%{section}", box.div.dataset.sectionNumber);
     // this.modal.addEventListener("click", (evt) => evt.stopPropagation(), { once: true });
-    uiRemove.addEventListener("click", (evt) => this._removeHandler(box, evt), { once: true });
-    uiSave.addEventListener("click", (evt) => this._saveHandler(box, evt), { once: true });
     this.openModal(box);
     // Admin in 0.28 still uses foundation to handle tabs
     $(this.modalWrapper).foundation();
@@ -92,8 +96,12 @@ export default class PdfModalManager {
       });
   }
 
-  _saveHandler(box, evt) {
+  _saveHandler(evt) {
     evt.stopPropagation();
+    const box = this.box;
+    if (!box || this.modalContent.classList.contains("loading")) {
+      return;
+    }
     this.modalContent.classList.add("loading");
     let form = this.modal.querySelector("form");
 
@@ -121,8 +129,12 @@ export default class PdfModalManager {
       });
   }
 
-  _removeHandler(box, evt) {
+  _removeHandler(evt) {
     evt.stopPropagation();
+    const box = this.box;
+    if (!box) {
+      return;
+    }
 
     if (confirm(this.i18n.removeBoxConfirm)) {
       // Do not call ajax if not persisted

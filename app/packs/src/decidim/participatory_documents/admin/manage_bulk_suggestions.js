@@ -33,6 +33,8 @@ const selectedSugestionsCountUpdate = function() {
   const selectedSuggestionsNotPublishedCount = selectedSuggestionsNotPublishedAnswerCount();
   if (selectedSuggestions === 0) {
     document.getElementById("js-selected-suggestions-count").innerHTML = "";
+    document.getElementById("js-assign-suggestions-to-evaluator-actions").classList.add("hide");
+    document.getElementById("js-unassign-suggestions-from-evaluator-actions").classList.add("hide");
   } else {
     document.getElementById("js-selected-suggestions-count").innerHTML = selectedSuggestions;
   }
@@ -50,6 +52,12 @@ const hideBulkActionForms = function() {
     form.classList.add("hide");
   });
 }
+
+const emptyCalloutWrapper = function() {
+  document.querySelectorAll(".layout-content > div[data-callout-wrapper]").forEach((wrapper) => {
+    wrapper.innerHTML = "";
+  });
+}
 window.showBulkActionsButton = showBulkActionsButton
 window.hideBulkActionsButton = hideBulkActionsButton
 window.selectedSuggestionsCount = selectedSuggestionsCount
@@ -64,16 +72,26 @@ window.addEventListener("load", () => {
     document.querySelectorAll("#js-bulk-actions-dropdown li button").forEach((button) => {
       button.addEventListener("click", (evt) => {
         evt.preventDefault();
+        document.getElementById("js-bulk-actions-dropdown").classList.remove("is-open");
         hideBulkActionForms();
-        
-        let action = evt.target.dataset.action;
 
-        if (action) {
-          document.getElementById(`js-${action}-actions`).classList.remove("hide");
+        let action = evt.target.dataset.action;
+        const panelActions = [
+          "assign-suggestions-to-evaluator",
+          "unassign-suggestions-from-evaluator"
+        ];
+
+        if (!action) {
+          return;
+        }
+
+        document.getElementById(`js-form-${action}`).addEventListener("submit", emptyCalloutWrapper);
+        document.getElementById(`js-${action}-actions`).classList.remove("hide");
+
+        if (!panelActions.includes(action)) {
           hideBulkActionsButton(true);
           // hideOtherActionsButtons();
         }
-
       })
     });
 
@@ -84,7 +102,7 @@ window.addEventListener("load", () => {
       });
       document.querySelectorAll(".table-list .js-check-all-suggestion").forEach((suggestion) => {
         suggestion.checked = checkAll.checked;
-        suggestion.closest("tr").classList.toggle("selected");
+        suggestion.closest("tr").classList.toggle("selected", checkAll.checked);
       });
 
       if (checkAll.checked) {

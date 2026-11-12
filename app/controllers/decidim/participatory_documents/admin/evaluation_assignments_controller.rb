@@ -12,7 +12,7 @@ module Decidim
           end
 
           Admin::AssignSuggestionsToEvaluator.call(@form) do
-            on(:ok) do |_proposal|
+            on(:ok) do
               flash[:notice] = I18n.t("evaluation_assignments.create.success", scope: "decidim.participatory_documents.admin")
               redirect_to EngineRouter.admin_proxy(current_component).root_path
             end
@@ -34,7 +34,7 @@ module Decidim
           end
 
           Admin::UnassignSuggestionsFromEvaluator.call(@form) do
-            on(:ok) do |_proposal|
+            on(:ok) do
               flash.keep[:notice] = I18n.t("evaluation_assignments.delete.success", scope: "decidim.participatory_documents.admin")
 
               if current_user_is_being_unassigned?

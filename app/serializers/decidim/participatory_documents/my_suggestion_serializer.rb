@@ -7,15 +7,7 @@ module Decidim
     class MySuggestionSerializer < SuggestionSerializer
       # Public: Exports a hash with the serialized data for this suggestion.
       def serialize
-        {
-          id: suggestion.id,
-          body: suggestion_body(suggestion),
-          author: suggestion.author_name,
-          state: humanize_suggestion_state(suggestion.state),
-          answer: answer_text(suggestion),
-          section: section(suggestion),
-          submitted_on: submitted_on(suggestion)
-        }
+        super.except(:state, :evaluators).merge(answer: (answer_text(suggestion) if suggestion.published_answer?))
       end
     end
   end

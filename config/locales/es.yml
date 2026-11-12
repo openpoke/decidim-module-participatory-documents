@@ -2,12 +2,19 @@
 es:
   activemodel:
     attributes:
+      answer_suggestion:
+        answer: Respuesta
       document:
         box_color: Color de las cajas
         box_opacity: Opacidad aplicada al color de las cajas (%)
         description: Descripción de ayuda
         file: Documento PDF
         title: Título de ayuda
+      evaluation_assignment:
+        admin_log:
+          evaluator_role_id: Nombre de la evaluadora
+      section:
+        title: Título
       suggestion:
         body: Añade tu sugerencia
     errors:
@@ -25,17 +32,10 @@ es:
             too_short: es demasiado corto (menos de %{min_length} caracteres)
   decidim:
     admin:
-      actions:
-        export: Exportar
-        manage: Gestionar
-      exports:
-        export_as: "%{name} como %{export_format}"
       filters:
         search_placeholder:
           body_cont: El cuerpo contiene
         suggestions:
-          body_cont:
-            label: El cuerpo contiene
           dummy_author_ids_has:
             label: Autor
           dummy_suggestable_id_has:
@@ -46,7 +46,6 @@ es:
               accepted: Aceptada
               evaluating: En evaluación
               not_answered: No contestada
-              published: Publicada
               rejected: Rechazada
               withdrawn: Retirada
           evaluator_role_ids_has:
@@ -58,7 +57,6 @@ es:
         update: "%{user_name} ha editado una nueva área participativa en %{document_name}"
       document:
         create: "%{user_name} creó el documento llamado %{resource_name} en %{space_name}"
-        delete: "%{user_name} borro el documento llamado %{resource_name} en %{space_name}"
         update: "%{user_name} actualizo el documento llamado %{resource_name} en %{space_name}"
       section:
         create: "%{user_name} ha creado una nueva sección participativa llamada %{resource_name} en %{document_name}"
@@ -74,6 +72,9 @@ es:
             max_suggestion_length: Longitud máxima de la sugerencia (caracteres)
             min_suggestion_length: Longitud mínima de la sugerencia (caracteres)
             suggestion_answering_enabled: Habilitar la respuesta de sugerencias des del administrador
+    download_your_data:
+      show:
+        suggestions: Exportar las sugerencias
     events:
       participatory_documents:
         suggestion_answered:
@@ -96,7 +97,6 @@ es:
         finish_publishing: Publicar secciones participativas
         new: Subir un documento PDF
         preview_publishing_sections: Previsualizar y publicar secciones de participación
-        title: Acciones
       admin:
         documents:
           create:
@@ -106,7 +106,6 @@ es:
             title: Edita el documento participativo
             update: Actualiza
           final_publish:
-            error: Hubo un error al publicar las secciones
             success: Las secciones han sido publicadas correctamente
           form:
             alert_suggestions_html: "<strong>IMPORTANTE:</strong> Este documento no puede ser cambiado o eliminado porque ya tiene sugerencias asociadas"
@@ -116,9 +115,6 @@ es:
             start: Por favor cargue un documento PDF para empezar
           new:
             create: Crear documento participativo
-            title: Nuevo documento participativo
-          sections:
-            empty: "(vacío)"
           update:
             error: Se ha producido un error al actualizar el documento
             success: El documento ha sido actualizado con éxito
@@ -184,8 +180,7 @@ es:
             authors: Autores
             body: Cuerpo
             created_at: Fecha de creación
-            file: Archivo
-            update: Actualizar
+            suggestion_for: Sugerencia para %{title}
           suggestion:
             global: Global
           evaluators:
@@ -200,6 +195,10 @@ es:
           delete:
             invalid: Se ha producido un error al desasignar sugerencias a una evaluadora
             success: Evaluadora desasignada correctamente
+      admin_log:
+        evaluation_assignment:
+          create: "%{user_name} asignó la sugerencia %{resource_name} a una evaluadora"
+          delete: "%{user_name} desasignó a una evaluadora de la sugerencia %{suggestion_title}"
       document:
         close: Cerrar
         export_my_suggestions: Exportar mis sugerencias
@@ -207,7 +206,6 @@ es:
         save_changes: '¡Guardar cambios!'
         send_suggestion: Enviar sugerencia
         suggestion_answer: Respuesta oficial
-        upload_file: Adjuntar documento
       document_suggestions:
         export:
           empty: No hay sugerencias para exportar.
@@ -223,26 +221,17 @@ es:
         preview_title: Previsualizar
         publish_description: 'Opciones de administración: está previsualizando las secciones participativas del documento'
       models:
-        document:
-          fields:
-            document_pages: Número de página
-            id: Id
-            published: Publicado
-            state: Estado
-            title: Título
         section:
           fields:
             artificial_tile: Sección %{position}
         suggestion:
           fields:
             evaluators: Evaluadoras
-      'no': 'No'
       suggestions:
         answers:
           accepted: Aceptada
           evaluating: En evaluación
           not_answered: No contestada
-          published: Publicada
           rejected: Rechazada
           withdrawn: Retirada
         modal:
@@ -265,7 +254,5 @@ es:
         suggestion_form:
           add_attachments: Agregar adjuntos
           attachment_legend: Añadir un documento o una imagen
-          blank: Se ha producido un error al crear la sugerencia. Sube un archivo válido o añade un mensaje de texto con la sugerencia.
           edit_attachments: Editar los archivos adjuntos
           title: Escribe tu sugerencia o sube un archivo con tus sugerencias
-      'yes': 'Sí'

@@ -24,8 +24,6 @@ module Decidim
       has_many :suggestions, class_name: "Decidim::ParticipatoryDocuments::Suggestion", dependent: :restrict_with_error, as: :suggestable
       has_many :annotations, through: :sections
 
-      attr_accessor :remove_file
-
       # the dynamic upload validator requires the organization,
       # if the object is not created yet is assigned from the context by the UploadValidationForm using this method
       attr_writer :organization

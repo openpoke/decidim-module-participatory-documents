@@ -7,20 +7,18 @@ module Decidim
         # Public: Initializes the command.
         #
         # suggestion - The suggestion to write the answer for.
-        # initial_state - The suggestion state before the current process.
-        def initialize(suggestion, initial_state)
+        def initialize(suggestion)
           @suggestion = suggestion
-          @initial_state = initial_state.to_s
         end
 
         # Executes the command. Broadcasts these events:
         #
-        # - :noop when the answer is not published or the state didn't changed.
+        # - :invalid when the answer is not published.
         # - :ok when everything is valid.
         #
         # Returns nothing.
         def call
-          broadcast(:invalid) unless suggestion.has_answer? && suggestion.answered? && suggestion.answer_is_published?
+          return broadcast(:invalid) unless suggestion.has_answer? && suggestion.published_answer?
 
           notify_followers
 
@@ -29,7 +27,7 @@ module Decidim
 
         private
 
-        attr_reader :suggestion, :initial_state
+        attr_reader :suggestion
 
         def notify_followers
           publish_event(

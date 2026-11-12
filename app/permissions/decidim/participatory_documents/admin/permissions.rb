@@ -18,7 +18,7 @@ module Decidim
         def handle_evaluator_permissions
           if evaluator_assigned_to_suggestion?
             can_create_suggestion_note?
-            can_create_suggestion_answer?
+            can_answer_suggestion?
             evaluator_can_assign_or_unassign_evaluator_from_suggestions?
             allow! if action_is_show_on_suggestion?
           elsif action_is_show_on_suggestion?
@@ -28,12 +28,10 @@ module Decidim
 
         def handle_general_permissions
           allow! if action_is_show_on_suggestion?
-          if create_permission_action?
-            can_create_suggestion_note?
-            can_create_suggestion_answer?
-          end
+          can_create_suggestion_note? if create_permission_action?
+          can_answer_suggestion?
           edit_suggestion_note?
-          can_edit_document_or_sections? if action_is_update_on_document?
+          can_edit_document_or_sections?
           allow_default_admin_actions
         end
 
@@ -46,10 +44,7 @@ module Decidim
         end
 
         def allow_default_admin_actions
-          allow! if permission_action.subject == :suggestion_note && permission_action.action == :create
-          allow! if permission_action.subject == :suggestion_answer
-          allow! if permission_action.subject == :document_section
-          allow! if permission_action.subject == :document_annotations
+          allow! if permission_action.subject == :suggestion_answer && permission_action.action == :publish_answers
           allow! if permission_action.subject == :participatory_document && permission_action.action == :create
           allow! if permission_action.subject == :suggestions
         end
@@ -62,7 +57,7 @@ module Decidim
           @document ||= context.fetch(:document, nil)
         end
 
-        # There's no special condition to create proposal notes, only
+        # There's no special condition to create suggestion notes, only
         # users with access to the admin section can do it.
         def can_create_suggestion_note?
           allow! if permission_action.subject == :suggestion_note
@@ -71,13 +66,17 @@ module Decidim
         # Documents can only be edited and sections added to them
         # if they are not finally published.
         def can_edit_document_or_sections?
-          toggle_allow(!document.published?)
+          toggle_allow(document.present? && !document.published?) if action_is_update_on_document? || action_is_on_sections_or_annotations?
         end
 
-        # Proposals can only be answered from the admin when the
+        def action_is_on_sections_or_annotations?
+          [:document_section, :document_annotations].include?(permission_action.subject)
+        end
+
+        # Suggestions can only be answered from the admin when the
         # corresponding setting is enabled.
-        def can_create_suggestion_answer?
-          toggle_allow(admin_suggestion_answering_is_enabled?) if permission_action.subject == :suggestion_answer
+        def can_answer_suggestion?
+          toggle_allow(admin_suggestion_answering_is_enabled?) if permission_action.subject == :suggestion_answer && permission_action.action == :update
         end
 
         def create_permission_action?
@@ -89,8 +88,7 @@ module Decidim
         end
 
         def admin_suggestion_answering_is_enabled?
-          current_settings.try(:suggestion_answering_enabled) &&
-            component_settings.try(:suggestion_answering_enabled)
+          component_settings.try(:suggestion_answering_enabled)
         end
 
         def user_is_evaluator?

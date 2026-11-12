@@ -2,11 +2,18 @@
 de:
   activemodel:
     attributes:
+      answer_suggestion:
+        answer: Antwort
       document:
         box_color: Farbe der Felder
         box_opacity: Deckkraft angewendet auf die Farbe der Boxen (%)
         description: Beschreibung
         file: PDF Dokument
+        title: Titel
+      evaluation_assignment:
+        admin_log:
+          evaluator_role_id: Name des Experten
+      section:
         title: Titel
       suggestion:
         body: Fügen Sie Ihren Kommentar hinzu
@@ -25,17 +32,10 @@ de:
             too_short: Ist zu kurz (min. %{min_length} Zeichen)
   decidim:
     admin:
-      actions:
-        export: Exportieren
-        manage: Verwalten
-      exports:
-        export_as: "%{name} als %{export_format}"
       filters:
         search_placeholder:
           body_cont: Beschreibung enthält
         suggestions:
-          body_cont:
-            label: Beschreibung enthält
           dummy_author_ids_has:
             label: Verfasser/in
           dummy_suggestable_id_has:
@@ -46,7 +46,6 @@ de:
               accepted: Angenommen
               evaluating: in Bewertung
               not_answered: Unbeantwortet
-              published: Erhalten
               rejected: Abgelehnt
               withdrawn: Zurückgezogen
           evaluator_role_ids_has:
@@ -58,7 +57,6 @@ de:
         update: "%{user_name} hat einen partizipativen Abschnitt für %{document_name} aktualisiert"
       document:
         create: "%{user_name} hat ein Dokument namens %{resource_name} in %{space_name} erstellt"
-        delete: "%{user_name} hat ein Dokument namens %{resource_name} in %{space_name} gelöscht"
         update: "%{user_name} hat ein Dokument namens %{resource_name} in %{space_name} aktualisiert"
       section:
         create: "%{user_name} hat einen neuen Abschnitt namens %{resource_name} für %{document_name} erstellt,"
@@ -74,6 +72,9 @@ de:
             max_suggestion_length: Maximale Länge der Bemerkungen (Zeichen)
             min_suggestion_length: Minimale Länge der Bemerkungen (Zeichen)
             suggestion_answering_enabled: Antworten zu Bemerkungen durch Admins ermöglichen
+    download_your_data:
+      show:
+        suggestions: Bemerkungen exportieren
     events:
       participatory_documents:
         suggestion_answered:
@@ -96,7 +97,6 @@ de:
         finish_publishing: PDF und Abschnitte definitiv publizieren
         new: PDF-Dokument hochladen
         preview_publishing_sections: Vorschau und Veröffentlichung
-        title: Aktivitäten
       admin:
         documents:
           create:
@@ -106,7 +106,6 @@ de:
             title: Dokument/Abschnitte bearbeiten
             update: Aktualisieren
           final_publish:
-            error: Beim Veröffentlichen der Abschnitte ist ein Fehler aufgetreten
             success: Das PDF mit den partizipativen Abschnitten wurden erfolgreich veröffentlicht
           form:
             alert_suggestions_html: "<strong>WICHTIG:</strong> Dieses Dokument kann nicht geändert oder entfernt werden, da es bereits Bemerkungen enthält"
@@ -116,9 +115,6 @@ de:
             start: Bitte lade ein PDF hoch, um zu beginnen
           new:
             create: Dokument aufbereiten
-            title: Neues Dokument
-          sections:
-            empty: "(leer)"
           update:
             error: Beim Hochladen des Dokuments ist ein Fehler aufgetreten
             success: Das Dokument wurde erfolgreich aktualisiert
@@ -184,8 +180,7 @@ de:
             authors: Verfasser/in
             body: Bemerkung
             created_at: Erstellungsdatum
-            file: Datei
-            update: Aktualisieren
+            suggestion_for: Bemerkung zu %{title}
           suggestion:
             global: Allgemeine Bemerkung
           evaluators:
@@ -200,6 +195,10 @@ de:
           delete:
             invalid: Beim Zurückziehen der Zuweisung von Bemerkungen an einen Experten ist ein Fehler aufgetreten
             success: Die Zuordnung eines Experten zu Bemerkungen wurde erfolgreich aufgehoben
+      admin_log:
+        evaluation_assignment:
+          create: "%{user_name} hat die Bemerkung %{resource_name} einem Experten zugewiesen"
+          delete: "%{user_name} hat die Zuweisung eines Experten für die Bemerkung %{suggestion_title} aufgehoben"
       document:
         close: Schliessen
         export_my_suggestions: Meine Bemerkungen herunterladen
@@ -207,7 +206,6 @@ de:
         save_changes: Änderungen speichern!
         send_suggestion: Bemerkung absenden
         suggestion_answer: Offizielle Antwort
-        upload_file: Ein Dokument anhängen
       document_suggestions:
         export:
           empty: Es gibt keine zu exportierenden Bemerkungen.
@@ -223,26 +221,17 @@ de:
         preview_title: Vorschau
         publish_description: 'Admin-Ansicht: Du siehst die partizipativen Abschnitte des Dokuments als Vorschau'
       models:
-        document:
-          fields:
-            document_pages: Seitennummern
-            id: ID
-            published: Veröffentlicht
-            state: Status
-            title: Titel
         section:
           fields:
             artificial_tile: Abschnitt %{position}
         suggestion:
           fields:
             evaluators: Expert/innen
-      'no': 'Keines'
       suggestions:
         answers:
           accepted: Angenommen
           evaluating: in Bewertung
           not_answered: Unbeantwortet
-          published: Veröffentlicht
           rejected: Abgelehnt
           withdrawn: Zurückgezogen
         modal:
@@ -265,7 +254,5 @@ de:
         suggestion_form:
           add_attachments: Anhang hinzufügen
           attachment_legend: Dokument oder Bild hinzufügen
-          blank: Beim Speichern der Bemerkung ist ein Fehler aufgetreten. Lade eine gültige Datei hoch oder schreibe eine Bemerkung.
           edit_attachments: Anhänge bearbeiten
           title: Schreib eine Bemerkung oder lade eine Datei hoch
-      'yes': 'Ja'

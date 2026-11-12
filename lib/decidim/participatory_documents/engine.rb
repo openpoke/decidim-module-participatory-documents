@@ -10,7 +10,7 @@ module Decidim
         scope path: "documents/:document_id/sections/:section_id" do
           resources :suggestions, only: [:index, :create], controller: :section_suggestions, as: :document_section_suggestions
         end
-        resources :documents do
+        resources :documents, only: [:index, :show] do
           collection do
             get :pdf_viewer
           end
@@ -42,7 +42,7 @@ module Decidim
         Cell::ViewModel.view_paths << File.expand_path("#{Decidim::ParticipatoryDocuments::Engine.root}/app/cells")
       end
 
-      initializer "decidim_participatory_documents.webpacker.assets_path" do
+      initializer "decidim_participatory_documents.shakapacker.assets_path" do
         Decidim.register_assets_path File.expand_path("app/packs", root)
       end
 
@@ -52,7 +52,7 @@ module Decidim
         end
       end
 
-      initializer "decidim_decidim_participatory_documents.register_icons" do
+      initializer "decidim_participatory_documents.register_icons" do
         Decidim.icons.register(name: "checkbox-multiple-line", icon: "checkbox-multiple-line", category: "system", description: "", engine: :decidim_participatory_documents)
         Decidim.icons.register(name: "file-download-line", icon: "file-download-line", category: "system", description: "", engine: :decidim_participatory_documents)
       end

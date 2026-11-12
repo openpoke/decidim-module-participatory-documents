@@ -8,11 +8,7 @@
       </div>
       <div class="flex items-center gap-x-4">
         <%= render "decidim/participatory_documents/admin/suggestions/bulk-actions" %>
-        <% if defined?(button) && button == :back %>
-          <%= back_btn %>
-        <% else %>
-          <%= pdf_manage_buttons(document) %>
-        <% end %>
+        <%= pdf_manage_buttons(document) %>
       </div>
     </h1>
     <%= render partial: "decidim/participatory_documents/admin/suggestions/bulk_actions/assign_to_evaluator" %>

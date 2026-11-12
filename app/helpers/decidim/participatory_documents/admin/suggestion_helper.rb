@@ -6,6 +6,7 @@ module Decidim
       module SuggestionHelper
         include ActionView::Helpers::TextHelper
         include Decidim::Admin::IconLinkHelper
+        include Decidim::TranslatableAttributes
 
         def humanize_suggestion_state(state)
           I18n.t(state, scope: "decidim.participatory_documents.suggestions.answers", default: :not_answered)
@@ -48,7 +49,7 @@ module Decidim
         end
 
         def suggestion_body(suggestion)
-          suggestion.body[I18n.locale.to_s].presence || content_with_class(t("decidim.participatory_documents.admin.suggestions.index.no_text"), "muted")
+          translated_attribute(suggestion.body).presence || content_with_class(t("decidim.participatory_documents.admin.suggestions.index.no_text"), "muted")
         end
       end
     end

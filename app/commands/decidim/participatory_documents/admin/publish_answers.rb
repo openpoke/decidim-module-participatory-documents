@@ -8,7 +8,7 @@ module Decidim
         #
         # component - The component that contains the answers.
         # user - the Decidim::User that is publishing the answers.
-        # proposal_ids - the identifiers of the suggestions with the answers to be published.
+        # suggestion_ids - the identifiers of the suggestions with the answers to be published.
         def initialize(component, user, suggestion_ids)
           @component = component
           @user = user
@@ -18,19 +18,17 @@ module Decidim
         # Executes the command. Broadcasts these events:
         #
         # - :ok when everything is valid.
-        # - :invalid if there are not proposals to publish.
+        # - :invalid if there are not suggestions to publish.
         #
         # Returns nothing.
         def call
-          return broadcast(:invalid) unless suggestions.any?
+          return broadcast(:invalid) if suggestions.empty?
 
           suggestions.each do |suggestion|
-            suggestion.assign_attributes(answered_at: Time.current, answer_is_published: true)
-
-            if suggestion.answer_is_published_changed?
-              Decidim.traceability.perform_action!("publish_answer", suggestion, user) { suggestion.save! }
-              notify_user(suggestion)
+            Decidim.traceability.perform_action!("publish_answer", suggestion, user) do
+              suggestion.update!(answered_at: Time.current, answer_is_published: true)
             end
+            NotifySuggestionAnswer.call(suggestion)
           end
 
           broadcast(:ok)
@@ -38,17 +36,10 @@ module Decidim
 
         private
 
-        def notify_user(suggestion)
-          suggestion.reload
-          return unless suggestion.has_answer?
-
-          NotifySuggestionAnswer.call(suggestion, nil)
-        end
-
         attr_reader :component, :user, :suggestion_ids
 
         def suggestions
-          @suggestions ||= document ? document.suggestions_including_sections.where(id: suggestion_ids).to_a : []
+          @suggestions ||= document ? document.suggestions_including_sections.where(id: suggestion_ids).select(&:publishable_answer?) : []
         end
 
         def document

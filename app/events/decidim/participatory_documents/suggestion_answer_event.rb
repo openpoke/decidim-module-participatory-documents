@@ -14,7 +14,7 @@ module Decidim
       end
 
       def resource_title
-        @resource_title ||= Decidim::ContentProcessor.render_without_format(translated_attribute(document.title), links: false).html_safe
+        @resource_title ||= Decidim::ContentProcessor.render_without_format(decidim_sanitize_translated(document.title), links: false).html_safe
       end
 
       def document

@@ -5,7 +5,7 @@
   <div class="card">
     <div class="component__show_header">
       <h2 class="component__show_header-title">
-        Suggestion for <%= translated_attribute(suggestion.suggestable.title) %>
+        <%= t(".suggestion_for", title: translated_attribute(suggestion.suggestable.title)) %>
       </h2>
     </div>
     <div class="mb-2">
@@ -47,6 +47,8 @@
       </div>
     <% end %>
 
-    <%= render "decidim/participatory_documents/admin/suggestions/form" %>
+    <% if allowed_to?(:update, :suggestion_answer, suggestion:) %>
+      <%= render "decidim/participatory_documents/admin/suggestions/form" %>
+    <% end %>
   </div>
 </div>

@@ -21,6 +21,7 @@ module Decidim
 
         validates :file, passthru: { to: Document }, if: ->(form) { form.file.present? }
         validates :file, file_content_type: { allow: ["application/pdf"] }
+        validates :box_color, format: { with: /\A#\h{6}\z/ }, allow_blank: true
 
         # ensure color and opacity are present
         def map_model(doc)

@@ -2,6 +2,8 @@
 en:
   activemodel:
     attributes:
+      answer_suggestion:
+        answer: Answer
       document:
         box_color: Color of the boxes
         box_opacity: Opacity applied at the color of the boxes (%)
@@ -11,6 +13,8 @@ en:
       evaluation_assignment:
         admin_log:
           evaluator_role_id: Evaluator name
+      section:
+        title: Title
       suggestion:
         body: Add your comment
     errors:
@@ -29,17 +33,10 @@ en:
             too_short: is too short (under %{min_length} characters)
   decidim:
     admin:
-      actions:
-        export: Export
-        manage: Manage
-      exports:
-        export_as: "%{name} as %{export_format}"
       filters:
         search_placeholder:
           body_cont: Body Contains
         suggestions:
-          body_cont:
-            label: Body contains
           dummy_author_ids_has:
             label: Author
           dummy_suggestable_id_has:
@@ -52,7 +49,6 @@ en:
               accepted: Accepted
               evaluating: Evaluating
               not_answered: Not Answered
-              published: Published
               rejected: Rejected
               withdrawn: Withdrawn
     admin_log:
@@ -62,7 +58,6 @@ en:
         update: "%{user_name} has updated a participatory area for %{document_name}"
       document:
         create: "%{user_name} created a document named %{resource_name} in %{space_name}"
-        delete: "%{user_name} deleted a document named %{resource_name} in %{space_name}"
         update: "%{user_name} updated a document named %{resource_name} in %{space_name}"
       section:
         create: "%{user_name} has created a new Section named %{resource_name} for
@@ -79,6 +74,9 @@ en:
             max_suggestion_length: Maximum suggestion length (characters)
             min_suggestion_length: Minimum suggestion length (characters)
             suggestion_answering_enabled: Enable suggestion answering from admin
+    download_your_data:
+      show:
+        suggestions: Suggestions export
     events:
       participatory_documents:
         suggestion_answered:
@@ -108,7 +106,6 @@ en:
         finish_publishing: Publish participatory sections
         new: Upload PDF document
         preview_publishing_sections: Preview and publish sections
-        title: Actions
       admin:
         documents:
           create:
@@ -118,7 +115,6 @@ en:
             title: Edit Participatory document
             update: Update
           final_publish:
-            error: There was an error publishing sections
             success: Sections have been successfully published
           form:
             alert_suggestions_html: "<strong>IMPORTANT:</strong> This document cannot
@@ -130,9 +126,6 @@ en:
             start: Please upload a PDF to start
           new:
             create: Create participatory document
-            title: New participatory document
-          sections:
-            empty: "(empty)"
           update:
             error: There was a problem updating Document
             success: Document has been successfully updated
@@ -211,8 +204,7 @@ en:
             authors: Authors
             body: Body
             created_at: Creation date
-            file: File
-            update: Update
+            suggestion_for: Suggestion for %{title}
           suggestion:
             global: Global
       admin_log:
@@ -227,7 +219,6 @@ en:
         save_changes: Save changes!
         send_suggestion: Send suggestion
         suggestion_answer: Official answer
-        upload_file: Attach a document
       document_suggestions:
         export:
           empty: There are no suggestions to export.
@@ -237,7 +228,7 @@ en:
         export_modal:
           close: Close
           description_html: You have %{count} suggestions on this document. If you
-            want to export them, you will receive a ZIP file with and Excel document
+            want to export them, you will receive a ZIP file with an Excel document
             in it with all your data and any possible answer the admins have given
             to you. <br><br>You will receive an email at <b>%{email}</b>.
           send: Send me my suggestions
@@ -248,27 +239,17 @@ en:
         publish_description: 'Admin options: you are previewing the participatory
           sections of the document'
       models:
-        document:
-          fields:
-            document_pages: Page numbers
-            id: Id
-            published: Published
-            state: State
-            title: Title
         section:
           fields:
             artificial_tile: Section %{position}
         suggestion:
           fields:
-            evaluator_ids: Evaluators
             evaluators: Evaluators
-      'no': 'No'
       suggestions:
         answers:
           accepted: Accepted
           evaluating: Evaluating
           not_answered: Not Answered
-          published: Published
           rejected: Rejected
           withdrawn: Withdrawn
         modal:
@@ -293,11 +274,8 @@ en:
         suggestion_form:
           add_attachments: Add attachments
           attachment_legend: Add a document or an image
-          blank: There was an error creating the suggestion. Upload the valid  file
-            or add a text message with the suggestion.
           edit_attachments: Edit attachments
           title: Write your suggestion or upload a file with your suggestions
-      'yes': 'Yes'
   errors:
     messages:
       virus: The file you uploaded contains a virus and has been rejected. Please

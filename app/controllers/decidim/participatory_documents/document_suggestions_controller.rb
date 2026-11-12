@@ -4,8 +4,6 @@ module Decidim
   module ParticipatoryDocuments
     class DocumentSuggestionsController < Decidim::ParticipatoryDocuments::ApplicationController
       include FormFactory
-      include Paginable
-      include Decidim::ComponentPathHelper
 
       helper_method :section, :suggestions
       layout false

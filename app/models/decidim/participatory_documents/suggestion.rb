@@ -25,11 +25,9 @@ module Decidim
                                         foreign_key: "decidim_participatory_documents_suggestion_id", dependent: :destroy
 
       delegate :participatory_space, :component, to: :suggestable, allow_nil: true
+      delegate :can_participate?, to: :component, allow_nil: true
 
       has_many :notes, class_name: "Decidim::ParticipatoryDocuments::SuggestionNote", dependent: :destroy, counter_cache: :suggestion_notes_count
-
-      scope :missing_answer, -> { where(answered_at: nil) }
-      scope :not_published, -> { where(answer_is_published: false) }
 
       validate :validate_file_type, if: :attached?
 
@@ -38,9 +36,6 @@ module Decidim
       POSSIBLE_STATES = %w(not_answered evaluating accepted rejected withdrawn).freeze
 
       POSSIBLE_STATES.each do |possible|
-        scope :"state_not_#{possible}", -> { where.not(state: possible) }
-        scope :"state_#{possible}", -> { where(state: possible) }
-
         define_method(:"#{possible}?") do
           state == possible.to_s
         end
@@ -49,17 +44,20 @@ module Decidim
         end
       end
 
-      scope :having_text_answer, lambda {
-        field = Arel::Nodes::InfixOperation.new("->>", arel_table[:answer], Arel::Nodes.build_quoted(I18n.locale))
-        where(Arel::Nodes::InfixOperation.new("", field, Arel.sql("!= ''")))
-      }
-
       def answered?
         answered_at.present?
       end
 
       def has_answer?
         translated_attribute(answer).present?
+      end
+
+      def publishable_answer?
+        has_answer? && not_not_answered? && !answer_is_published?
+      end
+
+      def published_answer?
+        answered? && answer_is_published? && %w(not_answered withdrawn).exclude?(state)
       end
 
       scope :sort_by_published_asc, lambda {
@@ -130,6 +128,12 @@ module Decidim
         end
       end
 
+      def self.with_evaluation_assigned_to(user, space)
+        evaluator_roles = space.user_roles(:evaluator).where(user:)
+
+        where(id: EvaluationAssignment.where(evaluator_role: evaluator_roles).select(:decidim_participatory_documents_suggestion_id))
+      end
+
       # method to filter by assigned evaluator role ID
       def self.evaluator_role_ids_has(value)
         query = <<-SQL.squish
@@ -163,10 +167,6 @@ module Decidim
         evaluator_role_ids = evaluation_assignments.where(suggestion: self).pluck(:evaluator_role_id)
         user_ids = participatory_space.user_roles(:evaluator).where(id: evaluator_role_ids).pluck(:decidim_user_id)
         participatory_space.organization.users.where(id: user_ids)
-      end
-
-      def self.export_serializer
-        Decidim::ParticipatoryDocuments::SuggestionSerializer
       end
 
       def validate_file_type

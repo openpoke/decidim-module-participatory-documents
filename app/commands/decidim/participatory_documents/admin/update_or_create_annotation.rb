@@ -4,6 +4,8 @@ module Decidim
   module ParticipatoryDocuments
     module Admin
       class UpdateOrCreateAnnotation < Decidim::Command
+        include AnnotationMethods
+
         # Public: Initializes the command.
         #
         # form - A form object with the params.
@@ -16,23 +18,19 @@ module Decidim
           return broadcast(:invalid) if form.invalid?
           return broadcast(:invalid) if document.nil?
 
-          begin
-            @old_section = annotation.present? ? annotation.section : nil
-
-            transaction do
-              create_section! if section.blank?
-              create_annotation! if annotation.blank?
-              annotation.assign_attributes(**attributes)
-              update_annotation! if annotation.changed?
-            end
-
-            destroy_old_section!
-            document.update_positions!
-
-            broadcast(:ok, annotation)
-          rescue ActiveRecord::RecordInvalid
-            broadcast(:invalid)
+          transaction do
+            old_section = annotation&.section
+            create_section! if section.blank?
+            create_annotation! if annotation.blank?
+            annotation.assign_attributes(**attributes)
+            update_annotation! if annotation.changed?
+            destroy_section_without_annotations!(old_section)
           end
+          document.update_positions!
+
+          broadcast(:ok, annotation)
+        rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotDestroyed
+          broadcast(:invalid)
         end
 
         private
@@ -61,20 +59,6 @@ module Decidim
             form.current_user,
             document:
           )
-        end
-
-        # Destroys the old section if has no more annotations
-        def destroy_old_section!
-          return unless @old_section
-          return if @old_section.annotations.reload.any?
-
-          Decidim.traceability.perform_action!(
-            :delete,
-            @old_section,
-            form.current_user
-          ) do
-            @old_section.destroy!
-          end
         end
 
         def attributes

@@ -40,14 +40,12 @@
 
     document.addEventListener("DOMContentLoaded", function() {
       var pages = {};
-      // console.log("CurrentBoxes", CurrentBoxes);
 
       PDFViewerApplication.initializedPromise.then(function() {
         var options = {
           i18n: I18n,
           editSectionPath: function(group) { return SectionPath + `/${group}/edit`; },
           sectionPath: function(group) { return SectionPath + `/${group}`; },
-          newSectionPath: SectionPath + "/new",
           annotationsPath: AnnotationsPath,
           pdfViewer: PDFViewerApplication.pdfViewer,
           saveButton: document.getElementById("DecidimPDSaveButton"),
@@ -62,7 +60,6 @@
           var page = PDFViewerApplication.pdfViewer._pages[doc.pageNumber - 1];
           var annotationsLayer = page.annotationEditorLayer && page.annotationEditorLayer.div;
           var savedPage = pages[doc.pageNumber];
-          // console.log("rendered", doc, "page", page, "annotationsLayer", annotationsLayer, "savedPage", savedPage);
           var boxChanged = function() {
             // reorder box numbers according to page, x position, and y position
             var boxes = Array.from(document.querySelectorAll(".polygon-ready .box"));

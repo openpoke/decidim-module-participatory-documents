@@ -31,10 +31,10 @@ module Decidim
       end
 
       def preview_mode?
-        return false if document.published?
-        return false if current_user.blank?
+        return false if document.published? || current_user.blank?
+        return false unless current_user.admin? || current_participatory_space.user_roles.exists?(user: current_user)
 
-        current_component.manifest.admin_engine && user_role_config.component_is_accessible?(current_component.manifest_name)
+        user_role_config.component_is_accessible?(current_component.manifest_name)
       end
     end
   end

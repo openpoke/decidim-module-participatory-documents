@@ -15,12 +15,10 @@ module Decidim
         def call
           return broadcast(:invalid) if form.invalid?
 
-          store_initial_suggestion_state
-
           suggestion.assign_attributes(attributes)
           if %w(state answer answer_is_published).intersect?(suggestion.changed)
             transaction { answer_suggestion }
-            notify_suggestion_answer
+            NotifySuggestionAnswer.call(suggestion)
           end
 
           broadcast(:ok)
@@ -28,7 +26,7 @@ module Decidim
 
         private
 
-        attr_reader :form, :suggestion, :initial_state
+        attr_reader :form, :suggestion
 
         def attributes
           {
@@ -44,17 +42,6 @@ module Decidim
             suggestion.save!
             suggestion
           end
-        end
-
-        def notify_suggestion_answer
-          suggestion.reload
-          return unless suggestion.has_answer? && suggestion.answered? && suggestion.answer_is_published?
-
-          NotifySuggestionAnswer.call(suggestion, initial_state)
-        end
-
-        def store_initial_suggestion_state
-          @initial_state = suggestion.state
         end
       end
     end

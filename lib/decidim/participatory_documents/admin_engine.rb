@@ -10,7 +10,7 @@ module Decidim
       paths["lib/tasks"] = nil
 
       routes do
-        resources :documents do
+        resources :documents, only: [:index, :new, :create, :edit, :update] do
           collection do
             get :pdf_viewer
             get :edit_pdf
@@ -18,8 +18,8 @@ module Decidim
           member do
             put :publish
           end
-          resources :annotations, except: [:show, :new, :edit]
-          resources :sections, except: [:show, :index]
+          resources :annotations, only: [:create, :destroy]
+          resources :sections, only: [:create, :edit, :update]
           resources :suggestions, only: [:index, :show] do
             resources :evaluation_assignments, only: [:destroy]
             collection do
@@ -30,14 +30,14 @@ module Decidim
             member do
               patch :answer
             end
-            resources :suggestion_notes, only: [:create, :edit, :update]
+            resources :suggestion_notes, only: [:create, :update]
           end
         end
 
         root to: "documents#index"
       end
 
-      initializer "decidim_decidim_participatory_documents.register_icons" do
+      initializer "decidim_participatory_documents_admin.register_icons" do
         Decidim.icons.register(name: "stack-line", icon: "stack-line", category: "system", description: "", engine: :decidim_participatory_documents)
         Decidim.icons.register(name: "mail-check-line", icon: "mail-check-line", category: "system", description: "", engine: :decidim_participatory_documents)
         Decidim.icons.register(name: "skip-back-line", icon: "skip-back-line", category: "system", description: "", engine: :decidim_participatory_documents)
