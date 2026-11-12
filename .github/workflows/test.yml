@@ -9,6 +9,7 @@ on:
 env:
   RUBY_VERSION: 3.3.10
   NODE_VERSION: 22.14.0
+  CHROME_VERSION: 151.0.7922.108
   DISABLE_SPRING: 1
   SIMPLECOV: 1
   CI: "true"
@@ -47,16 +48,16 @@ jobs:
           ruby-version: ${{ env.RUBY_VERSION }}
           bundler-cache: true
 
+      - name: Install Chrome
+        run: |
+          sudo apt-get install -y libu2f-udev
+          wget --no-verbose -O /tmp/chrome.deb https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_${{ env.CHROME_VERSION }}-1_amd64.deb
+          sudo dpkg -i /tmp/chrome.deb
+          rm /tmp/chrome.deb
+
       - uses: nanasess/setup-chromedriver@v2
         with:
-          chromedriver-version: 139.0.7258.66
-
-      - name: Remove Chrome
-        run: sudo apt remove google-chrome-stable
-
-      - uses: browser-actions/setup-chrome@v1
-        with:
-          chrome-version: 139.0.7258.66
+          chromedriver-version: ${{ env.CHROME_VERSION }}
 
       - uses: actions/setup-node@v3
         with:
