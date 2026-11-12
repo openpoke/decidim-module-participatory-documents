@@ -12,7 +12,7 @@ module Decidim
         let(:document) { annotation.section.document }
         let(:invalid) { false }
         let(:current_user) { document.author }
-        let(:rect) { [0, 50, 100, 100] }
+        let(:rect) { { "left" => 0, "top" => 50, "width" => 100, "height" => 100 } }
 
         let(:form) do
           double(

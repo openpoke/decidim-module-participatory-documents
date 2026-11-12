@@ -49,7 +49,7 @@ es:
               published: Publicada
               rejected: Rechazada
               withdrawn: Retirada
-          valuator_role_ids_has:
+          evaluator_role_ids_has:
             label: Asignada a evaluadora
     admin_log:
       annotation:
@@ -157,15 +157,15 @@ es:
           index:
             actions:
               answer: Respuesta
-              assign_to_valuator: Asignar a evaluadora
-              assign_to_valuator_button: Asignar
+              assign_to_evaluator: Asignar a evaluadora
+              assign_to_evaluator_button: Asignar
               cancel: Cancelar
               download: descargar %{filename}
               publish: Publicar
               publish_answers: Publicar respuestas
               title: Acciones
-              unassign_from_valuator: Desasignar la evaluadora
-              unassign_from_valuator_button: Desasignar
+              unassign_from_evaluator: Desasignar la evaluadora
+              unassign_from_evaluator_button: Desasignar
             author: Autor
             created_at: Envíado el
             id: Id
@@ -188,12 +188,12 @@ es:
             update: Actualizar
           suggestion:
             global: Global
-          valuators:
-            assigned_valuators: Evaluadoras asignadas
+          evaluators:
+            assigned_evaluators: Evaluadoras asignadas
             remove_assignment: Eliminar asignación
             remove_assignment_confirmation: '¿Confirmas que quieres desasignar la evaluadora de esta sugerencia?'
-            valuators: Evaluadoras
-        valuation_assignments:
+            evaluators: Evaluadoras
+        evaluation_assignments:
           create:
             invalid: Se ha producido un error al asignar sugerencias a una evaluadora
             success: Sugerencias asignadas a evaluadora con éxito
@@ -235,7 +235,7 @@ es:
             artificial_tile: Sección %{position}
         suggestion:
           fields:
-            valuators: Evaluadoras
+            evaluators: Evaluadoras
       'no': 'No'
       suggestions:
         answers:

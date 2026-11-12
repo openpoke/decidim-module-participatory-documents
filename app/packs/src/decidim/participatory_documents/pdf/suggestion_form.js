@@ -1,5 +1,3 @@
-import { initializeUploadFields } from "src/decidim/direct_uploads/upload_field";
-
 export default class SuggestionForm {
   constructor(div, path, group = null) {
     this.path = path;
@@ -13,18 +11,17 @@ export default class SuggestionForm {
     } else {
       // console.log("open!", "group:", this.group)
       this.div.classList.add("active");
-      if (this.group) {
-        this.div.classList.add("section");
-      } else {
-        this.div.classList.add("document");
-      }
+      this.div.classList.toggle("section", Boolean(this.group));
+      this.div.classList.toggle("document", !this.group);
     }
   }
 
   close(callback = () => {}) {
     this.div.classList.remove("active");
     this.div.addEventListener("transitionend", () => {
-      this.div.classList.remove("section", "document");
+      if (!this.div.classList.contains("active")) {
+        this.div.classList.remove("section", "document");
+      }
       // console.log("end transition", this.div.classList);
       if (callback) {
         setTimeout(() => callback());
@@ -63,10 +60,7 @@ export default class SuggestionForm {
 
   populateArea(data) {
     this.div.innerHTML = data;
-    const attachmentButtons = this.div.querySelectorAll("button[data-upload][data-dialog-open]");
-    if (attachmentButtons.length) {
-      initializeUploadFields(Array.from(attachmentButtons));
-    }
+    document.dispatchEvent(new CustomEvent("ajax:loaded", { detail: this.div }));
     this.addCloseHandler();
     this.addFormHandler();
     this.scrollToEnd();

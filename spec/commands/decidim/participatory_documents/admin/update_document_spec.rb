@@ -73,6 +73,16 @@ module Decidim
           end
         end
 
+        context "when the document has sections and the file is not changed" do
+          let(:document) { create(:participatory_documents_document, :with_file, :with_sections) }
+          let(:file) { document.file.blob }
+
+          it "keeps the sections" do
+            expect { subject.call }.not_to(change { document.sections.count })
+            expect(document.reload.title["en"]).to eq(title[:en])
+          end
+        end
+
         context "when the file is invalid" do
           let(:file) do
             Rack::Test::UploadedFile.new(

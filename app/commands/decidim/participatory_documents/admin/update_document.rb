@@ -52,8 +52,12 @@ module Decidim
           )
         end
 
+        def file_changed?
+          form.file.present? && form.file != document.file.blob
+        end
+
         def destroy_sections!
-          return if form.file.blank?
+          return unless file_changed?
 
           raise ActiveRecord::RecordNotDestroyed, I18n.t("activemodel.errors.models.document.has_suggestions") if document.has_suggestions?
 

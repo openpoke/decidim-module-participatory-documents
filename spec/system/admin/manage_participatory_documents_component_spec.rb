@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-describe "Managing reporting proposals component" do
+describe "Managing participatory documents component" do
   let(:organization) { create(:organization) }
   let(:participatory_process) { create(:participatory_process, organization:) }
   let!(:component) { create(:participatory_documents_component, participatory_space: participatory_process, name: component_name) }

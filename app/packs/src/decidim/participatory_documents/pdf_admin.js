@@ -26,7 +26,7 @@ window.InitDocumentManagers = (options) => {
     window.showInfo(options.i18n.created);
   };
   window.PdfModalManager.onDestroy = (box) => {
-    window.PdfDocStateManager.remove(box);
+    window.PdfDocStateManager.destroy(box);
     window.showInfo(options.i18n.removed);
   };
   window.PdfModalManager.onError = (box, error) => {
@@ -52,7 +52,7 @@ window.InitPolygonEditor = (layer, boxes, options, changeCallback = () => {}) =>
     changeCallback(box);
   };
   editor.onBoxDestroy = (box) => {
-    window.PdfDocStateManager.remove(box);
+    window.PdfDocStateManager.destroy(box);
     changeCallback(box);
   };
 

@@ -60,6 +60,15 @@ module Decidim
 
         private
 
+        # pdf.js fetches the file through an ActiveStorage redirect, so a remote
+        # storage service has to be allowed by the connect-src directive.
+        def append_storage_host_to_csp
+          return unless document&.file&.attached?
+
+          origin = URI.parse(document.file.blob.url).origin
+          content_security_policy.append_csp_directive("connect-src", origin) unless origin == request.base_url
+        end
+
         def hex_to_rgb(hex_string)
           hex_string = hex_string.delete("#")
           r = hex_string[0..1].to_i(16)

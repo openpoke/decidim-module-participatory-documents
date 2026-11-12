@@ -30,20 +30,14 @@ module Decidim
 
         def unassign_suggestions
           transaction do
-            form.evaluator_roles.each do |evaluator_role|
-              form.suggestions.each do |suggestion|
-                assignment = find_assignment(suggestion, evaluator_role)
-                unassign(assignment) if assignment
-              end
-            end
+            assignments.each { |assignment| unassign(assignment) }
           end
         end
 
-        def find_assignment(suggestion, evaluator_role)
-          Decidim::ParticipatoryDocuments::EvaluationAssignment.find_by(
-            suggestion:,
-            evaluator_role:
-          )
+        def assignments
+          Decidim::ParticipatoryDocuments::EvaluationAssignment
+            .where(suggestion: form.suggestions, evaluator_role: form.evaluator_roles)
+            .includes(:suggestion)
         end
 
         def unassign(assignment)
@@ -51,7 +45,7 @@ module Decidim
             :delete,
             assignment,
             form.current_user,
-            suggestion: assignment.suggestion.id
+            suggestion_title: assignment.suggestion.body
           ) do
             assignment.destroy!
           end

@@ -71,12 +71,12 @@ FactoryBot.define do
   factory :participatory_documents_annotation, class: "Decidim::ParticipatoryDocuments::Annotation" do
     section { association(:participatory_documents_section) }
     page_number { 1 }
-    rect do
+    sequence(:rect) do |n|
       {
-        top: rand(1.0..60.0),
-        left: rand(1.0..100.0),
-        width: rand(1.0..15.0),
-        height: rand(1.0..20.0)
+        top: 5 + (15 * ((n / 4) % 4)),
+        left: 5 + (22 * (n % 4)),
+        width: 15,
+        height: 10
       }
     end
 

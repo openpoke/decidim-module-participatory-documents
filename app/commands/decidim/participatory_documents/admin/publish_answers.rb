@@ -48,10 +48,11 @@ module Decidim
         attr_reader :component, :user, :suggestion_ids
 
         def suggestions
-          @suggestions || Decidim::ParticipatoryDocuments::Suggestion
-            # .not_published
-            # .having_text_answer
-            .where(id: suggestion_ids)
+          @suggestions ||= document ? document.suggestions_including_sections.where(id: suggestion_ids).to_a : []
+        end
+
+        def document
+          @document ||= Document.find_by(component:)
         end
       end
     end

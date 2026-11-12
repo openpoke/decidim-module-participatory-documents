@@ -50,8 +50,8 @@ module Decidim
             expect { subject.call }.to broadcast(:invalid)
           end
 
-          context "when valuator is missing" do
-            let(:valuator_role) { nil }
+          context "when evaluator is missing" do
+            let(:evaluator_role) { nil }
 
             it "is not valid" do
               expect { subject.call }.to broadcast(:invalid)

@@ -49,7 +49,7 @@ de:
               published: Erhalten
               rejected: Abgelehnt
               withdrawn: Zurückgezogen
-          valuator_role_ids_has:
+          evaluator_role_ids_has:
             label: Zugewiesene Experten
     admin_log:
       annotation:
@@ -157,15 +157,15 @@ de:
           index:
             actions:
               answer: Antworten
-              assign_to_valuator: Einem Experten zuweisen
-              assign_to_valuator_button: Zuweisen
+              assign_to_evaluator: Einem Experten zuweisen
+              assign_to_evaluator_button: Zuweisen
               cancel: Abbrechen
               download: lade %{filename} herunter
               publish: Veröffentlichen
               publish_answers: Antworten senden
               title: Aktivitäten
-              unassign_from_valuator: Zuweisung des Experten aufheben
-              unassign_from_valuator_button: Aufheben
+              unassign_from_evaluator: Zuweisung des Experten aufheben
+              unassign_from_evaluator_button: Aufheben
             author: Verfasser/in
             created_at: Eingereicht am
             id: ID
@@ -188,12 +188,12 @@ de:
             update: Aktualisieren
           suggestion:
             global: Allgemeine Bemerkung
-          valuators:
-            assigned_valuators: Zugewiesene Experten
+          evaluators:
+            assigned_evaluators: Zugewiesene Experten
             remove_assignment: Zuweisung entfernen
             remove_assignment_confirmation: Bist du sicher, dass du die Zuweisung dieses Experten entfernen möchtest?
-            valuators: Expert/innen
-        valuation_assignments:
+            evaluators: Expert/innen
+        evaluation_assignments:
           create:
             invalid: Bei der Zuordnung der Bemerkung zu einem Experten ist ein Fehler aufgetreten
             success: Die Bemerkungen wurden erfolgreich einem Experten zugeordnet
@@ -235,7 +235,7 @@ de:
             artificial_tile: Abschnitt %{position}
         suggestion:
           fields:
-            valuators: Expert/innen
+            evaluators: Expert/innen
       'no': 'Keines'
       suggestions:
         answers:

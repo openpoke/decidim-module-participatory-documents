@@ -33,9 +33,8 @@ Decidim.register_component(:participatory_documents) do |component|
   component.exports :suggestions do |exports|
     exports.collection do |component_instance, user, context|
       document = Decidim::ParticipatoryDocuments::Document.find_by(component: component_instance)
-      suggestions = Decidim::ParticipatoryDocuments::Suggestion
-                    .where(suggestable: document)
-                    .or(Decidim::ParticipatoryDocuments::Suggestion.where(suggestable: document.sections))
+      suggestions = document.suggestions_including_sections
+                            .preload(:author, :suggestable, evaluation_assignments: { evaluator_role: :user })
       suggestions = suggestions.where(author: user) if context == :my_suggestions && user
       suggestions.order(:id)
     end

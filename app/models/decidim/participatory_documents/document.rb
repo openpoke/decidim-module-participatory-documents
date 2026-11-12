@@ -40,35 +40,24 @@ module Decidim
       end
 
       def has_suggestions?
-        suggestions.any? || annotations.any? { |annotation| annotation.suggestions.any? }
+        suggestions_including_sections.or(Suggestion.where(suggestable: annotations)).exists?
+      end
+
+      def suggestions_including_sections
+        Suggestion.where(suggestable: self).or(Suggestion.where(suggestable: sections))
       end
 
       # rubocop:disable Rails/SkipsModelValidations
       def update_positions!
         transaction do
-          boxes = annotations.reload.sort do |a, b|
-            if a.page_number == b.page_number
-              if a.rect["top"].to_i == b.rect["top"].to_i
-                a.rect["left"].to_i <=> b.rect["left"].to_i
-              else
-                a.rect["top"].to_i <=> b.rect["top"].to_i
-              end
-            else
-              a.page_number.to_i <=> b.page_number.to_i
-            end
+          boxes = annotations.includes(:section).sort_by { |box| [box.page_number.to_i, box.rect["top"].to_i, box.rect["left"].to_i] }
+
+          boxes.each_with_index do |box, index|
+            box.update_column(:position, index + 1) if box.position != index + 1
           end
 
-          section_number = 0
-          all_sections = {}
-          boxes.each_with_index do |box, index|
-            box.update_column(:position, index + 1)
-            if all_sections[box.section_id]
-              box.section.update_column(:position, all_sections[box.section_id])
-            else
-              section_number += 1
-              box.section.update_column(:position, section_number)
-            end
-            all_sections[box.section_id] = section_number
+          boxes.map(&:section).uniq.each_with_index do |section, index|
+            section.update_column(:position, index + 1) if section.position != index + 1
           end
         end
       end

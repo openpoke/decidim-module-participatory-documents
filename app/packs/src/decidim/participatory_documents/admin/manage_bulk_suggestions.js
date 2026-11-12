@@ -96,8 +96,12 @@ window.addEventListener("load", () => {
       selectedSugestionsCountUpdate();
     });
 
-    document.querySelectorAll(".js-check-all-suggestion").forEach((checkbox) => {
-      checkbox.addEventListener("change", (evt) => {
+    document.querySelectorAll(".table-list").forEach((table) => {
+      table.addEventListener("change", (evt) => {
+        if (!evt.target.matches(".js-check-all-suggestion")) {
+          return;
+        }
+
         let suggestionId = evt.target.value;
         let checked = evt.target.checked;
 
@@ -117,7 +121,6 @@ window.addEventListener("load", () => {
           hideBulkActionsButton();
         }
 
-        console.log(`.js-bulk-action-form .js-suggestion-id-${suggestionId}`);
         document.querySelectorAll(`.js-bulk-action-form .js-suggestion-id-${suggestionId}`).forEach((element) => {
           element.checked = checked;
         })

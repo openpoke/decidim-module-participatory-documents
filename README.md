@@ -13,7 +13,7 @@ This module allows to upload PDF (and possibilty other formats) and define areas
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'decidim-participatory_documents
+gem 'decidim-participatory_documents'
 ```
 
 Or, if you want to stay up to date with the latest changes use this line instead:
@@ -29,6 +29,7 @@ And then execute:
 bundle
 bin/rails decidim:upgrade
 bundle exec rails db:migrate
+bundle exec rails data:migrate
 ```
 
 > **NOTE**
@@ -49,8 +50,28 @@ Depending on your Decidim version, you can choose the corresponding version to e
 | 0.2.x   | 0.27.x                      |
 | 0.3.x   | 0.28.x                      |
 | 0.4.x   | 0.29.x                      |
-|         | 0.30.x                      |
 | 0.6.x   | 0.31.x                      |
+
+There is no release for Decidim 0.30.x.
+
+## Upgrading from 0.4.x to 0.6.x
+
+Decidim 0.31 renames valuators to evaluators, and so does this module. After updating the gem, run:
+
+```
+bin/rails decidim:upgrade
+bundle exec rails db:migrate
+bundle exec rails data:migrate
+```
+
+- `db:migrate` renames the table that stores the evaluators assigned to each suggestion.
+- `data:migrate` updates the admin log entries of this module that point to the old class name, so the admin activity log can keep showing them.
+
+Run also the upgrade tasks listed in the Decidim 0.31 release notes. This module depends on one of them, which converts the existing valuator roles into evaluator roles:
+
+```
+bundle exec rails decidim:upgrade:decidim_update_valuators
+```
 
 
 ## Required MIME types
@@ -130,6 +151,10 @@ Decidim::ParticipatoryDocuments.configure do |config|
   config.max_suggestion_length = 1000
 end
 ```
+
+## Remote file storage
+
+If the files are stored in a remote service (S3 or compatible), the bucket must allow CORS `GET` requests from the site host. Otherwise the browser cannot load the PDF.
 
 ## Antivirus compatibility
 

@@ -44,7 +44,7 @@ module Decidim
       private
 
       def suggestions
-        @suggestions ||= section.suggestions.where(author: current_user).order(created_at: :asc)
+        @suggestions ||= section.suggestions.where(author: current_user).preload(:author, file_attachment: :blob).order(created_at: :asc)
       end
 
       def section

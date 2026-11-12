@@ -16,7 +16,7 @@ module Decidim
           double(
             invalid?: invalid,
             page_number: 1,
-            rect: [50, 50, 100, 100],
+            rect: { "left" => 50, "top" => 50, "width" => 100, "height" => 100 },
             id: "annotationid",
             group: "groupid",
             current_user:,

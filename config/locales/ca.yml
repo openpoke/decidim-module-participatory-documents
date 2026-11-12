@@ -49,7 +49,7 @@ ca:
               published: Publicat
               rejected: Rebutjat
               withdrawn: Retirada
-          valuator_role_ids_has:
+          evaluator_role_ids_has:
             label: Assignada a avaluadora
     admin_log:
       annotation:
@@ -157,15 +157,15 @@ ca:
           index:
             actions:
               answer: Resposta
-              assign_to_valuator: Assignar a avaluadora
-              assign_to_valuator_button: Assignar
+              assign_to_evaluator: Assignar a avaluadora
+              assign_to_evaluator_button: Assignar
               cancel: Cancel·lar
               download: descarrega %{filename}
               publish: Publicar
               publish_answers: Respostes publicades
               title: Accions
-              unassign_from_valuator: Desfer assignació a avaluadora
-              unassign_from_valuator_button: Desassigna
+              unassign_from_evaluator: Desfer assignació a avaluadora
+              unassign_from_evaluator_button: Desassigna
             author: Autor
             created_at: Enviat el
             id: Id
@@ -188,12 +188,12 @@ ca:
             update: Actualitza
           suggestion:
             global: Global
-          valuators:
-            assigned_valuators: Avaluadores assignades
+          evaluators:
+            assigned_evaluators: Avaluadores assignades
             remove_assignment: Desfer assignació
             remove_assignment_confirmation: Segur que vols desfer l'assignació a l'avaluadora d'aquest suggeriment?
-            valuators: Avaluadores
-        valuation_assignments:
+            evaluators: Avaluadores
+        evaluation_assignments:
           create:
             invalid: S'ha produït un error en assignar suggeriments a una avaluadora
             success: Suggeriments assignats a l'avaluadora correctament
@@ -235,7 +235,7 @@ ca:
             artificial_tile: Grup de participació %{position}
         suggestion:
           fields:
-            valuators: Avaluadores
+            evaluators: Avaluadores
       'no': 'No'
       suggestions:
         answers:

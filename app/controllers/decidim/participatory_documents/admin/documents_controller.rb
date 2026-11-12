@@ -15,9 +15,13 @@ module Decidim
           redirect_to(documents_path) if document.blank?
         end
 
+        before_action :append_storage_host_to_csp, only: :pdf_viewer
+
+        # rubocop:disable Decidim/EnforcePermissionTo
         def index
           redirect_to(document_suggestions_path(document)) && return if document.present? && document.file.attached?
         end
+        # rubocop:enable Decidim/EnforcePermissionTo
 
         def new
           enforce_permission_to :create, :participatory_document
@@ -69,10 +73,12 @@ module Decidim
           end
         end
 
+        # rubocop:disable Decidim/EnforcePermissionTo
         def pdf_viewer
           @form = form(SectionForm).instance
           render layout: false
         end
+        # rubocop:enable Decidim/EnforcePermissionTo
 
         def edit_pdf
           enforce_permission_to :update, :participatory_document, document:

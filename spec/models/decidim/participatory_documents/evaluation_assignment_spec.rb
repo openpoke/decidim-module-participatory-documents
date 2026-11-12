@@ -16,7 +16,7 @@ module Decidim
       let(:section1) { create(:participatory_documents_section, document:) }
       let(:suggestion) { create(:participatory_documents_suggestion, suggestable: section1) }
 
-      context "when participatory_process_user_role is a evaluator" do
+      context "when participatory_process_user_role is an evaluator" do
         let!(:assignment) { create(:suggestion_evaluation_assignment, suggestion:, evaluator_role:) }
 
         it "destroys evaluation assignments when participatory_process_user_role is destroyed" do

@@ -24,6 +24,11 @@ describe "User interaction with PDF viewer" do
 
       let(:attributes) { { suggestable: sugested, author: user, answer:, answered_at: Time.zone.now, answer_is_published: published } }
 
+      before do
+        page.refresh
+        find(drawer_trigger).click
+      end
+
       it "displays only my suggestion" do
         within "#participationModal" do
           expect(page).to have_content(my_suggestion.body["en"])
@@ -150,13 +155,13 @@ describe "User interaction with PDF viewer" do
 
   context "when providing feedback through boxes" do
     let(:sugested) { section }
+    let(:drawer_trigger) { "#box-#{section.annotations.last.id}" }
 
     before do
       login_as document.author, scope: :user
 
       page.visit Decidim::EngineRouter.main_proxy(component).pdf_viewer_documents_path(file: document.attached_uploader(:file).path)
-      annotation = section.annotations.last
-      find("#box-#{annotation.id}").click
+      find(drawer_trigger).click
     end
 
     it "displays boxes in page" do
@@ -170,12 +175,13 @@ describe "User interaction with PDF viewer" do
 
   context "when providing document feedback" do
     let(:sugested) { document }
+    let(:drawer_trigger) { "#globalSuggestionTrigger" }
 
     before do
       login_as document.author, scope: :user
 
       page.visit Decidim::EngineRouter.main_proxy(component).pdf_viewer_documents_path(file: document.attached_uploader(:file).path)
-      find_by_id("globalSuggestionTrigger").click
+      find(drawer_trigger).click
     end
 
     it_behaves_like "interacts with drawer"
@@ -229,6 +235,35 @@ describe "User interaction with PDF viewer" do
       expect(page).to have_content("Some random string longer than 15 chrs")
     end
 
+    it "attaches a file to consecutive global suggestions" do
+      click_on "Global suggestions"
+
+      2.times do |index|
+        dynamically_attach_file(:suggestion_file, Decidim::Dev.asset("Exampledocument.pdf"))
+        within "#messageForm" do
+          fill_in :suggestion_body, with: "Suggestion number #{index} with a file"
+        end
+        click_on("Send suggestion")
+        expect(page).to have_content("Suggestion number #{index} with a file")
+      end
+
+      expect(page).to have_css("#suggestions-list a[href*='Exampledocument.pdf']", count: 2)
+    end
+
+    it "switches from the global panel to a box panel" do
+      click_on "Global suggestions"
+      expect(page).to have_css("#participationModal.active.document")
+
+      find_by_id("close-suggestions").click
+      find("#box-#{section.annotations.first.id}").click
+      expect(page).to have_css("#participationModal.active.section")
+      expect(page).to have_no_css("#participationModal.document")
+
+      find_by_id("close-suggestions").click
+      expect(page).to have_no_css("#participationModal.active")
+      expect(page).to have_no_css("#participationModal.section")
+    end
+
     context "when the user exports own suggestions", :js do
       around do |example|
         original_setting = ActionController::Base.allow_forgery_protection
@@ -254,7 +289,7 @@ describe "User interaction with PDF viewer" do
 
   context "when the suggestion answer has a text with potential XSS" do
     let!(:document) { create(:participatory_documents_document, :with_file, component:) }
-    let!(:suggestion) { create(:participatory_documents_suggestion, :published, author: document.author, suggestable: document, answer: { en: answer }) }
+    let!(:suggestion) { create(:participatory_documents_suggestion, :accepted, :published, author: document.author, suggestable: document, answer: { en: answer }) }
     let!(:answer) { '<p>Safe answer text<img src="about:blank" onerror="alert(777)"></p>' }
 
     before do

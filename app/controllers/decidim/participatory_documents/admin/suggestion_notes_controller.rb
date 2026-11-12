@@ -47,11 +47,11 @@ module Decidim
         protected
 
         def suggestion
-          @suggestion ||= Decidim::ParticipatoryDocuments::Suggestion.find(params[:suggestion_id])
+          @suggestion ||= document.suggestions_including_sections.find(params[:suggestion_id])
         end
 
         def note
-          @note ||= Decidim::ParticipatoryDocuments::SuggestionNote.find(params[:id])
+          @note ||= suggestion.notes.find(params[:id])
         end
       end
     end

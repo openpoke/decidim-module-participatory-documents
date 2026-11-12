@@ -89,15 +89,15 @@ module Decidim
         end
 
         def suggestable_ids
-          ["d-#{document.id}"] + document.sections.map { |s| "s-#{s.id}" }
+          ["d-#{document.id}"] + sections_by_id.keys.map { |id| "s-#{id}" }
         end
 
         def author_ids
-          base_query.pluck(:decidim_author_id)
+          author_names.keys
         end
 
         def evaluator_role_ids
-          current_participatory_space.user_roles(:evaluator).order_by_name.pluck(:id)
+          evaluator_role_names.keys
         end
 
         # Can't user `super` here, because it does not belong to a superclass
@@ -107,9 +107,10 @@ module Decidim
         end
 
         def translated_dummy_suggestable_id_has(value)
-          return translated_attribute(document.title) if value.split("-").first == "d"
+          type, id = value.split("-")
+          return translated_attribute(document.title) if type == "d"
 
-          translated_attribute(document.sections.find_by(id: value.split("-").last).try(:title))
+          translated_attribute(sections_by_id[id.to_i].try(:title))
         end
 
         def suggestion_stats
@@ -117,34 +118,47 @@ module Decidim
         end
 
         def translated_dummy_author_ids_has(value)
-          Decidim::UserBaseEntity.find_by(id: value).try(:name)
+          author_names[value.to_i]
         end
 
         def translated_evaluator_role_ids_has(evaluator_role_id)
-          user_role = current_participatory_space.user_roles(:evaluator).find_by(id: evaluator_role_id)
-          user_role&.user&.name
+          evaluator_role_names[evaluator_role_id.to_i]
+        end
+
+        def sections_by_id
+          @sections_by_id ||= document.sections.index_by(&:id)
+        end
+
+        def author_names
+          @author_names ||= current_organization.users.where(id: base_query.select(:decidim_author_id)).order(:name).pluck(:id, :name).to_h
+        end
+
+        def evaluator_role_names
+          @evaluator_role_names ||= current_participatory_space.user_roles(:evaluator).order_by_name.to_h { |role| [role.id, role.user&.name] }
         end
 
         def suggestions
-          filtered_collection
+          @suggestions ||= filtered_collection.preload(:author, :suggestable, file_attachment: :blob, evaluation_assignments: { evaluator_role: :user })
         end
 
         def base_query
-          evaluator_roles_exist? ? suggestions_for_evaluator : all_document_suggestions
+          @base_query ||= evaluator_roles_exist? ? suggestions_for_evaluator : all_document_suggestions
         end
 
         def all_document_suggestions
-          Suggestion.where(suggestable: document).or(Suggestion.where(suggestable: document.sections))
+          document.suggestions_including_sections
         end
 
         def suggestions_for_evaluator
-          evaluator_suggestions_ids = Decidim::ParticipatoryDocuments::EvaluationAssignment
-                                      .where(evaluator_role: evaluator_roles).pluck(:decidim_participatory_documents_suggestion_id)
-          Suggestion.where(id: evaluator_suggestions_ids)
+          # rubocop:disable Decidim/OrganizationScopedFinder
+          assigned_suggestion_ids = Decidim::ParticipatoryDocuments::EvaluationAssignment
+                                    .where(evaluator_role: evaluator_roles).select(:decidim_participatory_documents_suggestion_id)
+          # rubocop:enable Decidim/OrganizationScopedFinder
+          all_document_suggestions.where(id: assigned_suggestion_ids)
         end
 
         def evaluator_roles
-          current_participatory_space.user_roles(:evaluator).where(user: current_user)
+          @evaluator_roles ||= current_participatory_space.user_roles(:evaluator).where(user: current_user)
         end
 
         def evaluator_roles_exist?
@@ -152,29 +166,19 @@ module Decidim
         end
 
         def suggestion
-          base_query.find_by(id: params[:id])
+          return @suggestion if defined?(@suggestion)
+
+          @suggestion = base_query.find_by(id: params[:id])
         end
 
-        # Internal: A method to cache to queries to find the evaluators for the
-        # current space.
-        def find_evaluators_for_select(participatory_space)
-          return @evaluators_for_select if @evaluators_for_select
-
-          evaluator_roles = participatory_space.user_roles(:evaluator)
-          evaluators = Decidim::User.where(id: evaluator_roles.pluck(:decidim_user_id)).to_a
-
-          @evaluators_for_select = evaluator_roles.map do |role|
-            evaluator = evaluators.find { |user| user.id == role.decidim_user_id }
-
-            [evaluator.name, role.id]
-          end
+        def find_evaluators_for_select(_participatory_space)
+          evaluator_role_names.map { |id, name| [name, id] }
         end
 
         def evaluator_assigned_to_suggestion?
-          @evaluator_assigned_to_suggestion ||=
-            Decidim::ParticipatoryDocuments::EvaluationAssignment
-            .where(suggestion:, evaluator_role: evaluator_roles)
-            .any?
+          return @evaluator_assigned_to_suggestion if defined?(@evaluator_assigned_to_suggestion)
+
+          @evaluator_assigned_to_suggestion = suggestion.present? && suggestion.evaluation_assignments.where(evaluator_role: evaluator_roles).any?
         end
       end
     end

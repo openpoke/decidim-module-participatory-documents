@@ -52,6 +52,15 @@ module Decidim
         end
       end
 
+      context "when a section has suggestions" do
+        let(:section) { create(:participatory_documents_section, document:) }
+        let!(:suggestion) { create(:participatory_documents_suggestion, suggestable: section) }
+
+        it "has suggestions" do
+          expect(document).to be_has_suggestions
+        end
+      end
+
       describe "with annotations" do
         let(:first_section) { create(:participatory_documents_section, document:) }
         let(:first_rect) do
@@ -227,7 +236,7 @@ module Decidim
           expect(document).not_to be_valid
           expect(document.errors.full_messages).to include("Component must exist")
           expect(document.errors.full_messages).to include("Author must exist")
-          expect(document.errors.full_messages).to include("File The file is not attached to any organization")
+          expect(document.errors.full_messages).to include(a_string_starting_with("File The file is not attached to any organization"))
         end
 
         context "when defined organization" do
@@ -242,13 +251,15 @@ module Decidim
         end
 
         context "when not AntivirusValidator defined" do
-          before do
-            allow(ParticipatoryDocuments).to receive(:antivirus_enabled).and_return(false)
+          around do |example|
+            original_class = Document
+            example.run
             Decidim::ParticipatoryDocuments.send(:remove_const, :Document)
-            load File.expand_path("../../../../app/models/decidim/participatory_documents/document.rb", __dir__)
+            Decidim::ParticipatoryDocuments.const_set(:Document, original_class)
           end
 
-          after do
+          before do
+            allow(ParticipatoryDocuments).to receive(:antivirus_enabled).and_return(false)
             Decidim::ParticipatoryDocuments.send(:remove_const, :Document)
             load File.expand_path("../../../../app/models/decidim/participatory_documents/document.rb", __dir__)
           end
@@ -261,13 +272,15 @@ module Decidim
         end
 
         context "when defined AntivirusValidator" do
-          before do
-            allow(ParticipatoryDocuments).to receive(:antivirus_enabled).and_return(true)
+          around do |example|
+            original_class = Document
+            example.run
             Decidim::ParticipatoryDocuments.send(:remove_const, :Document)
-            load File.expand_path("../../../../app/models/decidim/participatory_documents/document.rb", __dir__)
+            Decidim::ParticipatoryDocuments.const_set(:Document, original_class)
           end
 
-          after do
+          before do
+            allow(ParticipatoryDocuments).to receive(:antivirus_enabled).and_return(true)
             Decidim::ParticipatoryDocuments.send(:remove_const, :Document)
             load File.expand_path("../../../../app/models/decidim/participatory_documents/document.rb", __dir__)
           end

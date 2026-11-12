@@ -180,15 +180,11 @@ module Decidim
       end
 
       def self.ransackable_attributes(_auth_object = nil)
-        %w(id body state)
+        %w(id body state created_at)
       end
 
       def self.ransackable_associations(_auth_object = nil)
         []
-      end
-
-      def self.log_presenter_class_for(_log)
-        Decidim::ParticipatoryDocuments::AdminLog::EvaluationAssignmentPresenter
       end
 
       # Returns the presenter for this author, to be used in the views.

@@ -63,6 +63,10 @@ describe "Admin manages participatory documents" do
         click_on("Publish")
         expect(page).to have_content(I18n.t("suggestions.publish_answers.success", scope: "decidim.participatory_documents.admin"))
 
+        within ".table-scroll" do
+          expect(page).to have_content("Yes", count: 3)
+        end
+
         visit current_path
 
         within ".table-scroll" do

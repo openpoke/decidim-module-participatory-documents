@@ -9,11 +9,17 @@ module Decidim::ParticipatoryDocuments
     let!(:user) { create(:user, organization:) }
 
     it "sends an email with the result of the export" do
-      described_class.perform_now(user, document, "CSV")
+      expect { described_class.perform_now(user, document, "CSV") }.to change(user.private_exports, :count).by(1)
 
       email = last_email
       expect(email.subject).to include("suggestions")
       expect(email.to).to include(user.email)
+
+      private_export = user.private_exports.first
+      expect(private_export.export_type).to eq("suggestions")
+      expect(private_export.content_type).to eq("application/zip")
+      expect(private_export.file.blob.filename.to_s).to eq("suggestions.zip")
+      expect(private_export.file.blob.byte_size).to be_positive
     end
 
     describe "CSV" do

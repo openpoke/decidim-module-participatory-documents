@@ -48,7 +48,7 @@ describe "Admin manages suggestion evaluators" do
     end
   end
 
-  context "when assigning to a evaluator" do
+  context "when assigning to an evaluator" do
     it "shows the component select" do
       visit current_path
 
@@ -127,7 +127,7 @@ describe "Admin manages suggestion evaluators" do
     let(:assigned_suggestion) { suggestion }
     let!(:assignment) { create(:suggestion_evaluation_assignment, suggestion:, evaluator_role:) }
 
-    it "can unassign a evaluator" do
+    it "can unassign an evaluator" do
       visit current_path
       within "tr", text: assigned_suggestion.id do
         click_on "Answer"
@@ -196,7 +196,7 @@ describe "Admin manages suggestion evaluators" do
     end
   end
 
-  context "when a evaluator manages assignments" do
+  context "when an evaluator manages assignments" do
     let(:evaluator2) { create(:user, :confirmed, :admin_terms_accepted, organization:) }
     let!(:evaluator_role2) { create(:participatory_process_user_role, role: :evaluator, user: evaluator2, participatory_process:) }
     let!(:assignment) { create(:suggestion_evaluation_assignment, suggestion:, evaluator_role:) }

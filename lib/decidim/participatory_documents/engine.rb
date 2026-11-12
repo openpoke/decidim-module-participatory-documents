@@ -29,10 +29,10 @@ module Decidim
           manifest.model_class_name.constantize.new.user_roles.model.include(Decidim::ParticipatoryDocuments::ParticipatorySpaceUserRoleOverride)
         end
       rescue StandardError => e
-        Rails.logger.error("Error while trying to include Decidim::ReportingProposals::ParticipatorySpaceUserRoleOverride: #{e.message}")
+        Rails.logger.error("Error while trying to include Decidim::ParticipatoryDocuments::ParticipatorySpaceUserRoleOverride: #{e.message}")
       end
 
-      initializer "decidim_participatory_documents.overrides", after: "decidim.action_controller" do
+      initializer "decidim_participatory_documents.overrides", after: "decidim_core.action_controller" do
         config.to_prepare do
           Decidim::ParticipatorySpaceRoleConfig::Evaluator.include(Decidim::ParticipatoryDocuments::EvaluatorOverride)
         end
@@ -44,6 +44,12 @@ module Decidim
 
       initializer "decidim_participatory_documents.webpacker.assets_path" do
         Decidim.register_assets_path File.expand_path("app/packs", root)
+      end
+
+      initializer "decidim_participatory_documents.data_migrate", after: "decidim_core.data_migrate" do
+        DataMigrate.configure do |config|
+          config.data_migrations_path << root.join("db/data").to_s
+        end
       end
 
       initializer "decidim_decidim_participatory_documents.register_icons" do

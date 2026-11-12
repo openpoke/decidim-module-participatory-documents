@@ -44,7 +44,7 @@ describe "Admin filters suggestions" do
     STATES.each do |state|
       i18n_state = I18n.t(state, scope: "decidim.admin.filters.suggestions.state_eq.values")
 
-      context "when filtering proposals by state: #{i18n_state}" do
+      context "when filtering suggestions by state: #{i18n_state}" do
         it_behaves_like "a filtered collection", options: "State", filter: i18n_state do
           let!(:in_filter) { translated(suggestion_with_state(state).body).first(40) }
           let!(:not_in_filter) { translated(suggestion_without_state(state).body).first(40) }

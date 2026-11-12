@@ -6,7 +6,6 @@ module Decidim
       class EvaluationAssignmentForm < Decidim::Form
         mimic :evaluator_role
 
-        attribute :id, Integer
         attribute :evaluator_role_ids, Array
         attribute :suggestion_ids, Array
 
