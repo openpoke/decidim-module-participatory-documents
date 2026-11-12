@@ -43,7 +43,11 @@ module Decidim
         end
 
         def i18n_params
-          super.merge(suggestion_title: h.translated_attribute(action_log.extra["suggestion_title"]))
+          super.merge(suggestion_title: h.translated_attribute(suggestion_title))
+        end
+
+        def suggestion_title
+          action_log.extra["suggestion_title"] || Decidim::ParticipatoryDocuments::Suggestion.find_by(id: action_log.extra["suggestion"])&.body
         end
       end
     end

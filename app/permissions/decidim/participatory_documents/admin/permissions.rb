@@ -17,7 +17,8 @@ module Decidim
 
         def handle_evaluator_permissions
           if evaluator_assigned_to_suggestion?
-            can_create_suggestion_note?
+            can_create_suggestion_note? if create_permission_action?
+            edit_suggestion_note?
             can_answer_suggestion?
             evaluator_can_assign_or_unassign_evaluator_from_suggestions?
             allow! if action_is_show_on_suggestion?

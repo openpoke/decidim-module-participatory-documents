@@ -37,8 +37,6 @@ namespace :decidim_participatory_documents do
     public_dir = rails_app_path.join(destination_path, "pdfjs")
     temp_dir = Rails.root.join("tmp/pdfjs")
     FileUtils.mkdir_p(temp_dir)
-    FileUtils.rm_rf(public_dir)
-    FileUtils.mkdir_p(public_dir)
     filename = File.basename(URI.parse(pdfjs_url).path)
     tmp_file = temp_dir.join(filename)
 
@@ -52,6 +50,9 @@ namespace :decidim_participatory_documents do
 
     checksum = Decidim::ParticipatoryDocuments.pdfjs_checksum
     raise "The checksum of #{filename} does not match the expected one" if checksum.present? && Digest::SHA256.file(tmp_file).hexdigest != checksum
+
+    FileUtils.rm_rf(public_dir)
+    FileUtils.mkdir_p(public_dir)
 
     Zip::File.open(tmp_file) do |zip_file|
       zip_file.each do |entry|

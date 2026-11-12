@@ -22,7 +22,7 @@ module Decidim
         end
 
         def update
-          enforce_permission_to :edit_note, :suggestion_note, suggestion_note: note
+          enforce_permission_to(:edit_note, :suggestion_note, suggestion_note: note, suggestion:)
           @notes_form = form(Decidim::ParticipatoryDocuments::Admin::SuggestionNoteForm).from_params(params)
 
           Decidim::ParticipatoryDocuments::Admin::UpdateSuggestionNote.call(@notes_form, note) do
@@ -50,7 +50,7 @@ module Decidim
         private
 
         def skip_manage_component_permission
-          action_name == "create" && evaluator_roles.exists?
+          %w(create update).include?(action_name) && evaluator_roles.exists?
         end
       end
     end

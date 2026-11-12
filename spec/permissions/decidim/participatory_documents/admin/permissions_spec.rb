@@ -176,9 +176,33 @@ describe Decidim::ParticipatoryDocuments::Admin::Permissions do
           it { is_expected.to be false }
         end
       end
+
+      describe "suggestion note edition" do
+        let(:action) { { scope: :admin, action: :edit_note, subject: :suggestion_note } }
+        let(:suggestion_note) { create(:participatory_documents_suggestion_note, suggestion:, author:) }
+
+        context "when the evaluator is the author of the note" do
+          let(:author) { user }
+
+          it { is_expected.to be true }
+        end
+
+        context "when the author of the note is a different user" do
+          let(:author) { create(:user, :admin, :confirmed, organization:) }
+
+          it { is_expected.to be false }
+        end
+      end
     end
 
     context "and is not assigned to the suggestion" do
+      describe "suggestion note edition" do
+        let(:action) { { scope: :admin, action: :edit_note, subject: :suggestion_note } }
+        let(:suggestion_note) { create(:participatory_documents_suggestion_note, suggestion:, author: user) }
+
+        it_behaves_like "permission is not set"
+      end
+
       describe "suggestion note creation" do
         let(:action) { { scope: :admin, action: :create, subject: :suggestion_note } }
 

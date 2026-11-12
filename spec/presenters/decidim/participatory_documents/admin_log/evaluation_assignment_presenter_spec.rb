@@ -35,6 +35,15 @@ describe Decidim::ParticipatoryDocuments::AdminLog::EvaluationAssignmentPresente
         expect(subject).to include("unassigned an evaluator from the")
         expect(subject).to include("Please widen the bike lane")
       end
+
+      context "when the entry only stores the suggestion id" do
+        let(:admin_log_extra_data) { { suggestion: suggestion.id } }
+
+        it "explains which suggestion was unassigned" do
+          expect(subject).to include("unassigned an evaluator from the")
+          expect(subject).to include("Please widen the bike lane")
+        end
+      end
     end
   end
 end

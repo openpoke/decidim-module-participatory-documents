@@ -80,6 +80,39 @@ module Decidim
               expect(other_note.reload.body).not_to eq("An updated note")
             end
           end
+
+          context "when the user is an evaluator" do
+            let(:user) { create(:user, :confirmed, :admin_terms_accepted, organization:) }
+            let!(:evaluator_role) { create(:participatory_process_user_role, role: :evaluator, user:, participatory_process:) }
+
+            context "and is assigned to the suggestion" do
+              before { create(:suggestion_evaluation_assignment, suggestion:, evaluator_role:) }
+
+              it "updates their own note" do
+                patch(:update, params:)
+
+                expect(note.reload.body).to eq("An updated note")
+              end
+
+              context "and the note was written by another user" do
+                let(:note) { create(:participatory_documents_suggestion_note, suggestion:, author: create(:user, :admin, :confirmed, organization:)) }
+
+                it "does not update the note" do
+                  patch(:update, params:)
+
+                  expect(note.reload.body).not_to eq("An updated note")
+                end
+              end
+            end
+
+            context "and is not assigned to the suggestion" do
+              it "does not update the note" do
+                patch(:update, params:)
+
+                expect(note.reload.body).not_to eq("An updated note")
+              end
+            end
+          end
         end
       end
     end
