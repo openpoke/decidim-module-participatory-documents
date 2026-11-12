@@ -71,6 +71,15 @@ Run also the upgrade tasks listed in the Decidim 0.31 release notes. This module
 bundle exec rails decidim:upgrade:decidim_update_valuators
 ```
 
+The initializer created by `decidim_participatory_documents:install_mjs_initializer` has changed. If your application already has the file `config/initializers/rack_mjs_type.rb`, generate it again and restart the application:
+
+```
+rm config/initializers/rack_mjs_type.rb
+bin/rails decidim_participatory_documents:install_mjs_initializer
+```
+
+The new initializer only declares the mime type of the `.mjs` files. The previous one also registered a Rails format, which interfered with the JavaScript responses of Decidim (for example, when publishing a comment).
+
 
 ## Required MIME types
 
@@ -85,8 +94,6 @@ Execute the following command to create an initializer that does that:
 ```
 bin/rails decidim_participatory_documents:install_mjs_initializer
 ```
-
-If the file `config/initializers/rack_mjs_type.rb` was created by a previous version of this module, remove the line `Mime::Type.register "text/javascript", :mjs` from it. That line makes Rails answer the Decidim `.js.erb` requests with a 406 error (for instance, a new comment is not displayed until the page is reloaded).
 
 ### Usage with external static file servers
 
