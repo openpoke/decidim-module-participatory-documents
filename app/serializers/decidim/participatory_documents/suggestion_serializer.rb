@@ -24,7 +24,7 @@ module Decidim
           state: humanize_suggestion_state(suggestion.state),
           answer: answer_text(suggestion),
           section: section(suggestion),
-          evaluators: suggestion.evaluation_assignments.map(&:evaluator).map(&:name).join(", "),
+          evaluators: suggestion.evaluation_assignments.filter_map { |assignment| assignment.evaluator_role&.user&.name }.join(", "),
           submitted_on: submitted_on(suggestion)
         }
       end

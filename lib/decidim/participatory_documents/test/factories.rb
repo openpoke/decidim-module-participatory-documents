@@ -126,7 +126,7 @@ FactoryBot.define do
     evaluator_role do
       space = suggestion.component.participatory_space
       organization = space.organization
-      build(:participatory_process_user_role, role: :evaluator, user: build(:user, organization:))
+      build(:participatory_process_user_role, role: :evaluator, user: build(:user, organization:), participatory_process: space)
     end
   end
 

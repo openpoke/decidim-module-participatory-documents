@@ -23,6 +23,14 @@ module Decidim::ParticipatoryDocuments
         expect(serialized).to include(submitted_on: I18n.l(suggestion.created_at, format: :decidim_short))
       end
 
+      context "when the role of an evaluator does not exist anymore" do
+        before { evaluation_assignment.evaluator_role.delete }
+
+        it "skips the missing evaluator" do
+          expect(serialized).to include(evaluators: "")
+        end
+      end
+
       context "when :max_export_text_length > 0" do
         before do
           allow(Decidim::ParticipatoryDocuments).to receive(:max_export_text_length).and_return(10)

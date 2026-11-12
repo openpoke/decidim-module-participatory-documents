@@ -79,19 +79,6 @@ export default class SuggestionForm {
   addFormHandler() {
     let form = this.div.querySelector("form.send-suggestions-form") || document.getElementById("new_suggestion") || document.getElementById("new_suggestion_");
     if (form) {
-      let fileInput = document.getElementById("file-upload-field");
-      let fileNameContainer = document.getElementById("fileNameContainer");
-
-      if (fileInput) {
-        fileInput.addEventListener("change", () => {
-          if (fileInput.files.length > 0) {
-            fileNameContainer.textContent = fileInput.files[0].name;
-          } else {
-            fileNameContainer.textContent = "";
-          }
-        });
-      }
-
       form.addEventListener("submit", (event) => {
         event.preventDefault();
 
