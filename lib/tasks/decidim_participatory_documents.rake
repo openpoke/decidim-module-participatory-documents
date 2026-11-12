@@ -19,7 +19,6 @@ namespace :decidim_participatory_documents do
     end
 
     content = <<~RUBY
-      Mime::Type.register "text/javascript", :mjs
       Rack::Mime::MIME_TYPES[".mjs"] = "text/javascript"
     RUBY
 
@@ -29,17 +28,10 @@ namespace :decidim_participatory_documents do
 
   private
 
-  def decidim_participatory_documents_path
-    @decidim_participatory_documents_path ||= Pathname.new(decidim_participatory_documents_gemspec.full_gem_path) if Gem.loaded_specs.has_key?("decidim-participatory_documents")
-  end
-
-  def decidim_participatory_documents_gemspec
-    @decidim_participatory_documents_gemspec ||= Gem.loaded_specs["decidim-participatory_documents"]
-  end
-
   def download_pdfjs_to_application(destination_path)
     require "open-uri"
     require "zip"
+    require "digest"
 
     pdfjs_url = Decidim::ParticipatoryDocuments.pdfjs_url
     public_dir = rails_app_path.join(destination_path, "pdfjs")
@@ -57,6 +49,9 @@ namespace :decidim_participatory_documents do
     # rubocop:enable Security/Open
 
     raise "The downloaded file is not a zip file: #{filename}" unless filename.end_with?(".zip")
+
+    checksum = Decidim::ParticipatoryDocuments.pdfjs_checksum
+    raise "The checksum of #{filename} does not match the expected one" if checksum.present? && Digest::SHA256.file(tmp_file).hexdigest != checksum
 
     Zip::File.open(tmp_file) do |zip_file|
       zip_file.each do |entry|
@@ -83,7 +78,7 @@ end
 Rake::Task["decidim:upgrade:shakapacker"].enhance do
   Rake::Task["decidim_participatory_documents:install_pdf_js"].invoke
   puts "✅ PDF.js library installed"
-  puts "⚠️ Run the task `decidim_participatory_documents:install_mjs_initializer` to create the .mjs mime type initializer if your app is using an older version of Rack (< 2.2.3)."
+  puts "⚠️ If your app serves the static files itself, create the .mjs mime type initializer (Rack older than 3.1 does not know that mime type):"
   puts
   puts "bin/rails decidim_participatory_documents:install_mjs_initializer"
   puts

@@ -31,6 +31,11 @@ module Decidim
     config_accessor :pdfjs_url do
       "https://github.com/mozilla/pdf.js/releases/download/v5.2.133/pdfjs-5.2.133-dist.zip"
     end
+
+    # SHA256 checksum of the file downloaded from pdfjs_url. Set it to nil to skip the verification.
+    config_accessor :pdfjs_checksum do
+      "82c6de8955024d1733dfb74aa50bb6e2f210dbb479c90e2c29fe2bbd4ff446dc"
+    end
   end
 end
 

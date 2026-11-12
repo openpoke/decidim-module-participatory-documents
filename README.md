@@ -50,9 +50,7 @@ Depending on your Decidim version, you can choose the corresponding version to e
 | 0.2.x   | 0.27.x                      |
 | 0.3.x   | 0.28.x                      |
 | 0.4.x   | 0.29.x                      |
-| 0.6.x   | 0.31.x                      |
-
-There is no release for Decidim 0.30.x.
+| 0.6.x   | 0.31.x (from 0.31.8)        |
 
 ## Upgrading from 0.4.x to 0.6.x
 
@@ -80,13 +78,15 @@ Latests versions of PDFjs require that the web server to send the mime type `tex
 
 ### Usage with Puma + Rack
 
-If you are using Puma with Rack (< v3.1.0) you might have to add and initializer to ensure files with `.mjs` are served correctly. This is usually the most common approach when docker is used or when the ENV var `RAILS_SERVE_STATIC_FILES=true` is active.
+If Puma serves the static files, you have to add an initializer to ensure files with `.mjs` are served correctly: Decidim 0.31 runs on Rack 2.2, and Rack only knows the `.mjs` mime type since v3.1.0. This is usually the most common approach when docker is used or when the ENV var `RAILS_SERVE_STATIC_FILES=true` is active.
 
 Execute the following command to create an initializer that does that:
 
 ```
 bin/rails decidim_participatory_documents:install_mjs_initializer
 ```
+
+If the file `config/initializers/rack_mjs_type.rb` was created by a previous version of this module, remove the line `Mime::Type.register "text/javascript", :mjs` from it. That line makes Rails answer the Decidim `.js.erb` requests with a 406 error (for instance, a new comment is not displayed until the page is reloaded).
 
 ### Usage with external static file servers
 
@@ -151,6 +151,8 @@ Decidim::ParticipatoryDocuments.configure do |config|
   config.max_suggestion_length = 1000
 end
 ```
+
+The PDF.js release installed by the module can be changed with `config.pdfjs_url` and `config.pdfjs_checksum` (the SHA256 checksum of the zip file, `nil` skips the verification).
 
 ## Remote file storage
 
