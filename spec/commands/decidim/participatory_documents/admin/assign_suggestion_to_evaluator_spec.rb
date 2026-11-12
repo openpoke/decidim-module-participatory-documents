@@ -6,55 +6,79 @@ module Decidim
   module ParticipatoryDocuments
     module Admin
       describe AssignSuggestionsToEvaluator do
-        subject { described_class.new(form) }
+        describe "call" do
+          let(:component) { create(:participatory_documents_component) }
+          let(:organization) { component.organization }
+          let(:document) { create(:participatory_documents_document, component:) }
+          let(:section) { create(:participatory_documents_section, document:) }
+          let!(:suggestion) { create(:participatory_documents_suggestion, suggestable: section) }
+          let(:user) { create(:user, :admin, :confirmed, organization:) }
+          let(:evaluator) { create(:user, organization:) }
+          let(:evaluator_role) { create(:participatory_process_user_role, role: :evaluator, user: evaluator, participatory_process: component.participatory_space) }
+          let(:form) { instance_double(EvaluationAssignmentForm, current_user: user, evaluator_roles: [evaluator_role], suggestions: [suggestion], valid?: valid) }
+          let(:command) { described_class.new(form) }
 
-        let(:valid) { true }
-        let(:organization) { component.organization }
-        let!(:user) { create(:user, :admin, :confirmed, organization:) }
+          describe "when the form is not valid" do
+            let(:valid) { false }
 
-        let(:component) { create(:participatory_documents_component) }
-        let(:document) { create(:participatory_documents_document, component:) }
-        let(:section1) { create(:participatory_documents_section, document:) }
-        let!(:suggestion) { create(:participatory_documents_suggestion, suggestable: section1) }
-        let(:evaluator) { create(:user, organization:) }
+            it "broadcasts invalid" do
+              expect { command.call }.to broadcast(:invalid)
+            end
 
-        let(:evaluator_role) { create(:participatory_process_user_role, role: :evaluator, user: evaluator, participatory_process: component.participatory_space) }
-
-        let(:form) do
-          double(
-            current_organization: organization,
-            current_user: user,
-            valid?: valid,
-            evaluator_roles: [evaluator_role],
-            suggestions: [suggestion]
-          )
-        end
-
-        context "when the form is valid" do
-          it "successfuly ignore the existing records" do
-            create(:suggestion_evaluation_assignment, suggestion:, evaluator_role:)
-            expect { subject.call }.not_to change(Decidim::ParticipatoryDocuments::EvaluationAssignment, :count)
-            expect { subject.call }.to broadcast(:ok)
+            it "does not create the assignments" do
+              expect { command.call }.not_to change(EvaluationAssignment, :count)
+            end
           end
 
-          it "saves the data when inexistent" do
-            expect { subject.call }.to change(Decidim::ParticipatoryDocuments::EvaluationAssignment, :count).by(1)
-            expect { subject.call }.to broadcast(:ok)
-          end
-        end
+          describe "when the form is valid" do
+            let(:valid) { true }
 
-        context "when the form is not valid" do
-          let(:valid) { false }
+            it "broadcasts ok" do
+              expect { command.call }.to broadcast(:ok)
+            end
 
-          it "is not valid" do
-            expect { subject.call }.to broadcast(:invalid)
-          end
+            it "creates the evaluation assignment between the evaluator and the suggestion" do
+              expect { command.call }.to change { EvaluationAssignment.where(suggestion:, evaluator_role:).count }.by(1)
+            end
 
-          context "when evaluator is missing" do
-            let(:evaluator_role) { nil }
+            it "traces the action", versioning: true do
+              expect(Decidim.traceability)
+                .to receive(:create!)
+                .with(Decidim::ParticipatoryDocuments::EvaluationAssignment, user, suggestion:, evaluator_role:)
+                .and_call_original
 
-            it "is not valid" do
-              expect { subject.call }.to broadcast(:invalid)
+              expect { command.call }.to change(Decidim::ActionLog, :count)
+              action_log = Decidim::ActionLog.last
+              expect(action_log.version).to be_present
+              expect(action_log.version.event).to eq "create"
+            end
+
+            context "when the suggestion is already assigned to the evaluator" do
+              before do
+                create(:suggestion_evaluation_assignment, suggestion:, evaluator_role:)
+              end
+
+              it "broadcasts ok" do
+                expect { command.call }.to broadcast(:ok)
+              end
+
+              it "does not create another assignment" do
+                expect { command.call }.not_to change(EvaluationAssignment, :count)
+              end
+            end
+
+            context "when it raises an error while creating assignments" do
+              before do
+                allow(Decidim::ParticipatoryDocuments::EvaluationAssignment).to receive(:create!).and_raise(ActiveRecord::RecordInvalid)
+              end
+
+              it "broadcasts invalid" do
+                expect { command.call }.to broadcast(:invalid)
+              end
+
+              it "does not create any assignment" do
+                expect { command.call }.not_to change(EvaluationAssignment, :count)
+              end
             end
           end
         end

@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "spec_helper"
+
 describe Decidim::ParticipatoryDocuments::Admin::DocumentsHelper do
   let(:component) { create(:participatory_documents_component) }
   let(:document) { create(:participatory_documents_document, component:) }

@@ -4,8 +4,6 @@ require "spec_helper"
 
 describe "Admin manages participatory documents" do
   let(:manifest_name) { "participatory_documents" }
-  let(:organization) { participatory_process.organization }
-  let!(:user) { create(:user, :admin, :confirmed, organization:) }
   let(:default_color) { "rgb(30, 152, 215)" }
   let(:default_color_with_opacity) { "rgba(30, 152, 215, 0.12)" }
 
@@ -13,8 +11,6 @@ describe "Admin manages participatory documents" do
 
   context "when document is not created" do
     it "shows the upload button" do
-      visit_component_admin
-
       expect(page).to have_content("Please upload a PDF to start")
       expect(page).to have_no_link("Edit participatory areas")
       expect(page).to have_link("Upload PDF document")
@@ -25,8 +21,8 @@ describe "Admin manages participatory documents" do
     it "has the fields" do
       expect(page).to have_content("Add file") if create
       expect(page).to have_content("Replace") unless create
-      expect(page.execute_script("return window.getComputedStyle(document.querySelector('.box-preview .box')).backgroundColor")).to eq(default_color_with_opacity)
-      expect(page.execute_script("return window.getComputedStyle(document.querySelector('.box-preview .box')).borderColor")).to eq(default_color)
+      expect(page.evaluate_script("window.getComputedStyle(document.querySelector('.box-preview .box')).backgroundColor")).to eq(default_color_with_opacity)
+      expect(page.evaluate_script("window.getComputedStyle(document.querySelector('.box-preview .box')).borderColor")).to eq(default_color)
 
       within ".documents_form" do
         fill_in_i18n(
@@ -44,8 +40,8 @@ describe "Admin manages participatory documents" do
       end
       dynamically_attach_file :document_file, Decidim::Dev.asset("Exampledocument.pdf"), remove_before: create.blank?
 
-      expect(page.execute_script("return window.getComputedStyle(document.querySelector('.box-preview .box')).backgroundColor")).to eq("rgba(240, 15, 0, 0.498)")
-      expect(page.execute_script("return window.getComputedStyle(document.querySelector('.box-preview .box')).borderColor")).to eq("rgb(240, 15, 0)")
+      expect(page.evaluate_script("window.getComputedStyle(document.querySelector('.box-preview .box')).backgroundColor")).to eq("rgba(240, 15, 0, 0.498)")
+      expect(page.evaluate_script("window.getComputedStyle(document.querySelector('.box-preview .box')).borderColor")).to eq("rgb(240, 15, 0)")
 
       if create
         click_on "Create participatory document"
@@ -55,7 +51,6 @@ describe "Admin manages participatory documents" do
 
       if create
         expect(page).to have_content("Document has been successfully created")
-        # redirect to edit page
         expect(page).to have_content("Back")
         expect(page).to have_css(".pdf-viewer-container")
       else
@@ -113,7 +108,7 @@ describe "Admin manages participatory documents" do
   context "when document is updated" do
     let!(:document) { create(:participatory_documents_document, :with_file, component:) }
     let(:default_color) { "rgb(250, 170, 170)" }
-    let!(:default_color_with_opacity) { "rgba(250, 170, 170, 0.2)" }
+    let(:default_color_with_opacity) { "rgba(250, 170, 170, 0.2)" }
 
     before do
       visit_component_admin
@@ -132,7 +127,7 @@ describe "Admin manages participatory documents" do
         expect(document.sections.count).to eq(2)
         dynamically_attach_file :document_file, Decidim::Dev.asset("Exampledocument.pdf"), remove_before: true
         click_on "Update"
-        sleep 1
+        expect(page).to have_content("Document has been successfully updated")
         expect(document.sections.reload.count).to eq(0)
       end
     end
@@ -144,8 +139,8 @@ describe "Admin manages participatory documents" do
         expect(document.sections.count).to eq(2) if with_sections
         dynamically_attach_file :document_file, Decidim::Dev.asset("Exampledocument.pdf"), remove_before: true
         click_on "Update"
-        expect(document.sections.reload.count).to eq(2) if with_sections
         expect(page).to have_content("This document cannot be changed or removed because it has suggestions")
+        expect(document.sections.reload.count).to eq(2) if with_sections
       end
 
       it "updates other parts of the document" do
@@ -241,9 +236,9 @@ describe "Admin manages participatory documents" do
       end
 
       it "can publish sections" do
-        click_on "Publish participatory sections"
-        expect(page).to have_content("are you sure?")
-        click_on "OK"
+        message = accept_confirm { click_on "Publish participatory sections" }
+
+        expect(message).to include("are you sure?")
         expect(page).to have_content("Sections have been successfully published")
       end
     end
@@ -251,8 +246,8 @@ describe "Admin manages participatory documents" do
     context "when the document has been published" do
       before do
         click_on "Preview and publish sections"
-        click_on "Publish participatory sections"
-        click_on "OK"
+        accept_confirm { click_on "Publish participatory sections" }
+        expect(page).to have_content("Sections have been successfully published")
       end
 
       it "restricts editing sections" do

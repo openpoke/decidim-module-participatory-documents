@@ -4,34 +4,22 @@ require "spec_helper"
 
 describe "Index Suggestion Notes" do
   let(:router) { Decidim::EngineRouter.admin_proxy(component).decidim_admin_participatory_process_participatory_documents }
-
-  let(:component) { create(:participatory_documents_component) }
   let(:manifest_name) { "participatory_documents" }
   let!(:document) { create(:participatory_documents_document, component:) }
   let!(:suggestion) { create(:participatory_documents_suggestion, suggestable: document) }
   let(:body) { "New awesome body" }
   let(:suggestion_notes_count) { 5 }
-
-  let!(:suggestion_notes) do
-    create_list(
-      :participatory_documents_suggestion_note,
-      suggestion_notes_count,
-      suggestion:
-    )
-  end
+  let!(:suggestion_notes) { create_list(:participatory_documents_suggestion_note, suggestion_notes_count, suggestion:) }
 
   include_context "when managing a component as an admin"
 
   before do
-    switch_to_host(organization.host)
-    login_as user, scope: :user
-
     visit router.document_suggestion_path(document, suggestion)
 
     click_on("Private notes")
   end
 
-  it "shows suggestion notes for the current proposal" do
+  it "shows suggestion notes for the current suggestion" do
     suggestion_notes.each do |suggestion_note|
       expect(page).to have_content(suggestion_note.author.name)
       expect(page).to have_content(suggestion_note.body)

@@ -18,7 +18,7 @@ module Decidim
       it { is_expected.to be_valid }
       it { is_expected.to be_versioned }
 
-      describe ".title" do
+      describe "#title" do
         context "when is being provided" do
           it "returns input value" do
             expect(translated(subject.title)).not_to eq("Foo Bar")

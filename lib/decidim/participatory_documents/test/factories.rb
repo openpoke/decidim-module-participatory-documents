@@ -15,9 +15,7 @@ FactoryBot.define do
     box_opacity { 20 }
 
     trait :with_file do
-      after :create do |document|
-        document.file.attach(Decidim::Dev.test_file("Exampledocument.pdf", "application/pdf"))
-      end
+      file { Decidim::Dev.test_file("Exampledocument.pdf", "application/pdf") }
     end
 
     trait :with_sections do
@@ -48,12 +46,6 @@ FactoryBot.define do
   factory :participatory_documents_section, class: "Decidim::ParticipatoryDocuments::Section" do
     document { association(:participatory_documents_document) }
     title { generate_localized_title }
-
-    trait :with_annotation do
-      after :create do |section|
-        section.annotations = [create(:participatory_documents_annotation, section:)]
-      end
-    end
 
     trait :with_annotations do
       after :create do |section|
@@ -91,7 +83,7 @@ FactoryBot.define do
     suggestable { association(:dummy_resource) }
     author { build(:user, :confirmed, organization: suggestable.component.organization) }
     body { Decidim::Faker::Localized.localized { Faker::Lorem.paragraphs(number: 3).join(" ") } }
-    state { Decidim::ParticipatoryDocuments::Suggestion::POSSIBLE_STATES.sample }
+    state { :not_answered }
     answer { {} }
 
     trait :draft do

@@ -2,31 +2,23 @@
 
 require "spec_helper"
 
-describe "Admin manages participatory documents" do
+describe "Admin manages suggestions" do
   include Decidim::TranslationsHelper
+
   let(:manifest_name) { "participatory_documents" }
   let(:router) { Decidim::EngineRouter.admin_proxy(document.component).decidim_admin_participatory_process_participatory_documents }
-
-  let(:organization) { create(:organization) }
-  let(:participatory_process) { create(:participatory_process, organization:) }
-  let!(:component) { create(:participatory_documents_component, participatory_space: participatory_process) }
-  let(:user) { create(:user, :admin, :confirmed, organization:) }
   let!(:document) { create(:participatory_documents_document, component:) }
-
   let(:first_section) { create(:participatory_documents_section, document:) }
   let(:second_section) { create(:participatory_documents_section, document:) }
   let!(:single_document_suggestion) { create(:participatory_documents_suggestion, suggestable: document) }
   let!(:document_suggestions) { create_list(:participatory_documents_suggestion, 16, suggestable: document) }
   let!(:first_section_suggestions) { create_list(:participatory_documents_suggestion, 10, suggestable: first_section) }
   let!(:second_section_suggestions) { create_list(:participatory_documents_suggestion, 10, suggestable: second_section) }
-  let(:all_suggestions_count) { document.suggestions.count + first_section_suggestions.count + second_section_suggestions.count }
 
   include_context "when managing a component as an admin"
+  include_context "with filterable context"
 
   before do
-    switch_to_host(organization.host)
-    login_as user, scope: :user
-
     visit router.document_suggestions_path(document)
   end
 
@@ -35,10 +27,9 @@ describe "Admin manages participatory documents" do
       create_list(:participatory_documents_suggestion, 3, :accepted, :draft, body: { en: "Test suggestion" }, suggestable: document, answer: { en: "Foo bar" })
     end
     let!(:first_section_suggestions) do
-      create(:participatory_documents_suggestion, :accepted, :published,
-             body: { en: "Test suggestion" }, suggestable: first_section, answer: { en: "Foo bar" })
+      create(:participatory_documents_suggestion, :accepted, :published, body: { en: "Test suggestion" }, suggestable: first_section, answer: { en: "Foo bar" })
     end
-    let!(:second_section_suggestions) { nil }
+    let(:second_section_suggestions) { nil }
 
     context "when publishing answers at once" do
       before do
@@ -86,10 +77,7 @@ describe "Admin manages participatory documents" do
 
   context "when sorting answered questions" do
     context "when sorting ascending" do
-      let!(:document_suggestion) do
-        create(:participatory_documents_suggestion, :published,
-               state: :accepted, suggestable: document, answer: { en: "Foo bar" })
-      end
+      let!(:document_suggestion) { create(:participatory_documents_suggestion, :published, state: :accepted, suggestable: document, answer: { en: "Foo bar" }) }
 
       it "displays the right state" do
         visit router.document_suggestions_path(document)
@@ -103,10 +91,7 @@ describe "Admin manages participatory documents" do
     end
 
     context "when sorting descending" do
-      let!(:document_suggestion) do
-        create(:participatory_documents_suggestion, :published,
-               state: :accepted, suggestable: document, answer: { en: "Foo bar" })
-      end
+      let!(:document_suggestion) { create(:participatory_documents_suggestion, :published, state: :accepted, suggestable: document, answer: { en: "Foo bar" }) }
 
       it "displays the right state" do
         visit router.document_suggestions_path(document)
@@ -121,10 +106,10 @@ describe "Admin manages participatory documents" do
     end
   end
 
-  context "when asnwering suggestions" do
-    let!(:document_suggestions) { nil }
-    let!(:first_section_suggestions) { nil }
-    let!(:second_section_suggestions) { nil }
+  context "when answering suggestions" do
+    let(:document_suggestions) { nil }
+    let(:first_section_suggestions) { nil }
+    let(:second_section_suggestions) { nil }
 
     shared_examples "marks the answer by state" do |state:|
       context "when there is no answer" do
@@ -182,15 +167,19 @@ describe "Admin manages participatory documents" do
     end
   end
 
-  context "when admin to exports suggestions" do
+  context "when an admin exports suggestions" do
     it "exports a JSON" do
-      click_on "Export"
-      perform_enqueued_jobs { click_on "Suggestions as JSON" }
+      expect(Decidim::PrivateExport.count).to eq(0)
 
-      within ".flash.success" do
-        expect(page).to have_content("in progress")
+      click_on "Export"
+      perform_enqueued_jobs do
+        click_on "Suggestions as JSON"
+        expect(page).to have_admin_callout("Your export is currently in progress. You will receive an email when it is complete.")
       end
-      expect(page).to have_content("Your export is currently in progress.")
+
+      expect(last_email.subject).to eq(%(Your export "suggestions" is ready))
+      expect(Decidim::PrivateExport.count).to eq(1)
+      expect(Decidim::PrivateExport.last.export_type).to eq("suggestions")
     end
   end
 
@@ -215,11 +204,7 @@ describe "Admin manages participatory documents" do
   it "filters by author's name" do
     expect(page).to have_content(document_suggestions.first.author.name)
     expect(page).to have_content(document_suggestions.last.author.name)
-    within ".filters__section" do
-      click_on "Filter"
-      find("a", text: "Author").click
-      find("a", text: document_suggestions.last.author.name).click
-    end
+    apply_filter("Author", document_suggestions.last.author.name)
     expect(page).to have_no_content(document_suggestions.first.author.name)
     expect(page).to have_content(document_suggestions.last.author.name)
   end
@@ -228,7 +213,6 @@ describe "Admin manages participatory documents" do
     let(:first_section) { create(:participatory_documents_section, document:, title: { en: "zzzz-section" }) }
 
     it "sorts ascendent" do
-      puts "first_section suggestions: #{first_section_suggestions}"
       expect(page).to have_content(translated_attribute(first_section.title))
       click_on "Section"
       expect(page).to have_no_content(translated_attribute(first_section.title))
@@ -247,18 +231,14 @@ describe "Admin manages participatory documents" do
       expect(page).to have_content("Global")
       expect(page).to have_content(translated_attribute(first_section.title))
     end
-    within ".filters__section" do
-      click_on "Filter"
-      find("a", text: "Section").click
-      find("a", text: translated_attribute(first_section.title)).click
-    end
+    apply_filter("Section", translated_attribute(first_section.title))
     within ".table-list" do
       expect(page).to have_no_content("Global")
       expect(page).to have_content(translated_attribute(first_section.title))
     end
   end
 
-  it "does not raise an error" do
+  it "paginates the suggestions" do
     expect(page).to have_content("List Suggestions")
     within(".table-scroll") do
       expect(page).to have_content("Global")
@@ -276,16 +256,8 @@ describe "Admin manages participatory documents" do
   end
 
   context "when the global suggestion includes a file" do
-    let!(:attachment) { Decidim::Dev.test_file("Exampledocument.pdf", "application/pdf") }
-
-    let!(:document_suggestion) do
-      suggestion = create(:participatory_documents_suggestion,
-                          suggestable: document,
-                          body: { en: "" },
-                          answer: { en: "This is a test answer" })
-      suggestion.file.attach(attachment)
-      suggestion.reload
-    end
+    let(:attachment) { Decidim::Dev.test_file("Exampledocument.pdf", "application/pdf") }
+    let!(:document_suggestion) { create(:participatory_documents_suggestion, suggestable: document, body: { en: "" }, answer: { en: "This is a test answer" }, file: attachment) }
 
     it "displays the file" do
       within(".table-scroll") do
@@ -294,11 +266,12 @@ describe "Admin manages participatory documents" do
       end
     end
 
-    it "displays the file an the show page" do
+    it "displays the file on the show page" do
       within(".table-scroll") do
         find("a.sort_link", text: "Id").click
-        target_row = find("tr", text: document_suggestion.id.to_s)
-        target_row.click_on("Answer")
+        within "tr[data-id='#{document_suggestion.id}']" do
+          click_on "Answer"
+        end
       end
       expect(page).to have_css("svg use[href*='ri-file-download-line']", count: 1)
     end
@@ -351,8 +324,7 @@ describe "Admin manages participatory documents" do
     context "when Not Answering the suggestion" do
       it_behaves_like "publish suggestion answers", selection: "Not Answered"
       context "and being published" do
-        # it_behaves_like "publish suggestion answers", selection: "Not Answered", published: true
-        it "publishes some answers" do
+        it "does not publish the answer" do
           within(".table-scroll") do
             find(".action-icon--show-suggestion", match: :first).click
           end
@@ -366,8 +338,8 @@ describe "Admin manages participatory documents" do
           end
           check :answer_suggestion_answer_is_published
           click_on "Answer"
-          expect(page).to have_no_content("Successfully added the answer")
           expect(page).to have_content(%q(It's not possible to publish with status "not answered"))
+          expect(page).to have_no_content("Successfully added the answer")
         end
       end
     end

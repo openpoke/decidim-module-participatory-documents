@@ -63,6 +63,14 @@ module Decidim::ParticipatoryDocuments::Admin
         end
       end
 
+      context "when the box color is not a hexadecimal color" do
+        let(:box_color) { "#000;}</style><script>alert(1)</script>" }
+
+        it "is not valid" do
+          expect(subject).not_to be_valid
+        end
+      end
+
       context "when the document has no file" do
         let(:file) { nil }
 

@@ -13,12 +13,7 @@ describe "Admin sees the action logs on homepage" do
   end
 
   context "when sees document related logs" do
-    let(:file) do
-      Rack::Test::UploadedFile.new(
-        Decidim::Dev.test_file("Exampledocument.pdf", "application/pdf"),
-        "application/pdf"
-      )
-    end
+    let(:file) { Rack::Test::UploadedFile.new(Decidim::Dev.test_file("Exampledocument.pdf", "application/pdf"), "application/pdf") }
 
     let(:form) do
       double(
@@ -49,7 +44,7 @@ describe "Admin sees the action logs on homepage" do
 
       let(:command) { Decidim::ParticipatoryDocuments::Admin::UpdateDocument.new(form, document) }
 
-      it "saves the created log" do
+      it "saves the updated log" do
         expect { command.call }.to broadcast(:ok)
         visit decidim_admin.root_path
 

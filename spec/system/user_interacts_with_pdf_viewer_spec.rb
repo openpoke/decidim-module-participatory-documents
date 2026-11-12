@@ -19,10 +19,10 @@ describe "User interaction with PDF viewer" do
 
     context "when displaying the suggestions" do
       let(:other_user) { create(:user, :admin, :confirmed, organization: user.organization) }
-      let!(:my_suggestion) { create(:participatory_documents_suggestion, suggestable: sugested, author: user) }
-      let!(:other_suggestion) { create(:participatory_documents_suggestion, suggestable: sugested, author: other_user) }
+      let!(:my_suggestion) { create(:participatory_documents_suggestion, suggestable:, author: user) }
+      let!(:other_suggestion) { create(:participatory_documents_suggestion, suggestable:, author: other_user) }
 
-      let(:attributes) { { suggestable: sugested, author: user, answer:, answered_at: Time.zone.now, answer_is_published: published } }
+      let(:attributes) { { suggestable:, author: user, answer:, answered_at: Time.zone.now, answer_is_published: published } }
 
       before do
         page.refresh
@@ -98,7 +98,7 @@ describe "User interaction with PDF viewer" do
           context "when the answer is published" do
             let(:published) { true }
 
-            it "renders admin note" do
+            it "does not render admin note" do
               within "#participationModal" do
                 expect(page).to have_no_content(answer["en"])
               end
@@ -154,7 +154,7 @@ describe "User interaction with PDF viewer" do
   end
 
   context "when providing feedback through boxes" do
-    let(:sugested) { section }
+    let(:suggestable) { section }
     let(:drawer_trigger) { "#box-#{section.annotations.last.id}" }
 
     before do
@@ -174,7 +174,7 @@ describe "User interaction with PDF viewer" do
   end
 
   context "when providing document feedback" do
-    let(:sugested) { document }
+    let(:suggestable) { document }
     let(:drawer_trigger) { "#globalSuggestionTrigger" }
 
     before do
@@ -199,17 +199,15 @@ describe "User interaction with PDF viewer" do
 
     it "submits a box content" do
       find("#box-#{section.annotations.first.id}").click
-      sleep 1
       expect(page).to have_css("#participationModal.active")
-      expect(page).to have_no_content("upload a file")
       expect(page).to have_content(t("activemodel.attributes.suggestion.body"))
+      expect(page).to have_no_content("upload a file")
 
       within "#new_suggestion" do
         fill_in :suggestion_body, with: "Some random string longer than 15 chrs"
       end
       click_on("Send suggestion")
       expect(page).to have_content("Some random string longer than 15 chrs")
-      # hide the modal
       find_by_id("close-suggestions").click
       expect(page).to have_no_content("Some random string longer than 15 chrs")
       page.find("#box-#{section.annotations.first.id}").click
@@ -218,7 +216,6 @@ describe "User interaction with PDF viewer" do
 
     it "submits a global content" do
       click_on "Global suggestions"
-      sleep 1
       expect(page).to have_css("#participationModal.active")
       expect(page).to have_content("upload a file")
       expect(page).to have_content(t("activemodel.attributes.suggestion.body"))
@@ -228,7 +225,6 @@ describe "User interaction with PDF viewer" do
       end
       click_on("Send suggestion")
       expect(page).to have_content("Some random string longer than 15 chrs")
-      # hide the modal
       find_by_id("close-suggestions").click
       expect(page).to have_no_content("Some random string longer than 15 chrs")
       click_on "Global suggestions"
@@ -264,7 +260,7 @@ describe "User interaction with PDF viewer" do
       expect(page).to have_no_css("#participationModal.section")
     end
 
-    context "when the user exports own suggestions", :js do
+    context "when the user exports own suggestions" do
       around do |example|
         original_setting = ActionController::Base.allow_forgery_protection
         ActionController::Base.allow_forgery_protection = true
@@ -276,13 +272,24 @@ describe "User interaction with PDF viewer" do
         click_on "Export my suggestions"
         expect(page).to have_content("You have 2 suggestions on this document")
 
-        click_on "Send me my suggestions"
-        sleep 1
-        perform_enqueued_jobs
-
-        expect(page).to have_content("2 suggestions have been successfully exported")
+        perform_enqueued_jobs do
+          click_on "Send me my suggestions"
+          expect(page).to have_content("2 suggestions have been successfully exported")
+        end
 
         expect(last_email.subject).to include("Your export")
+      end
+
+      it "lists the export in the download your data page" do
+        click_on "Export my suggestions"
+
+        perform_enqueued_jobs do
+          click_on "Send me my suggestions"
+          expect(page).to have_content("2 suggestions have been successfully exported")
+        end
+
+        visit decidim.download_your_data_path
+        expect(page).to have_content("Suggestions export")
       end
     end
   end
@@ -290,7 +297,7 @@ describe "User interaction with PDF viewer" do
   context "when the suggestion answer has a text with potential XSS" do
     let!(:document) { create(:participatory_documents_document, :with_file, component:) }
     let!(:suggestion) { create(:participatory_documents_suggestion, :accepted, :published, author: document.author, suggestable: document, answer: { en: answer }) }
-    let!(:answer) { '<p>Safe answer text<img src="about:blank" onerror="alert(777)"></p>' }
+    let(:answer) { '<p>Safe answer text<img src="about:blank" onerror="alert(777)"></p>' }
 
     before do
       login_as document.author, scope: :user
@@ -298,9 +305,24 @@ describe "User interaction with PDF viewer" do
       find_by_id("globalSuggestionTrigger").click
     end
 
-    it "show sanitized answer" do
+    it "shows sanitized answer" do
       expect(page).to have_content("Safe answer text")
       expect { page.driver.browser.switch_to.alert }.to raise_error(Selenium::WebDriver::Error::NoSuchAlertError)
+    end
+  end
+
+  context "when the answer of a suggestion is published" do
+    let!(:suggestion) { create(:participatory_documents_suggestion, :accepted, :published, :with_answer, author: user, suggestable: document) }
+
+    before do
+      perform_enqueued_jobs { Decidim::ParticipatoryDocuments::Admin::NotifySuggestionAnswer.call(suggestion) }
+      login_as user, scope: :user
+      visit decidim.notifications_path
+    end
+
+    it "shows the notification to the author" do
+      expect(page).to have_content("A suggestion you submitted on")
+      expect(page).to have_content("document has been answered by an administrator")
     end
   end
 end

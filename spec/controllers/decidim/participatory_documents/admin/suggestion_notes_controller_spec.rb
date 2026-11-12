@@ -40,6 +40,25 @@ module Decidim
               expect(SuggestionNote.count).to eq(0)
             end
           end
+
+          context "when the user is an evaluator" do
+            let(:user) { create(:user, :confirmed, :admin_terms_accepted, organization:) }
+            let!(:evaluator_role) { create(:participatory_process_user_role, role: :evaluator, user:, participatory_process:) }
+
+            context "and is assigned to the suggestion" do
+              before { create(:suggestion_evaluation_assignment, suggestion:, evaluator_role:) }
+
+              it "creates the note" do
+                expect { post(:create, params:) }.to change(SuggestionNote, :count).by(1)
+              end
+            end
+
+            context "and is not assigned to the suggestion" do
+              it "does not create the note" do
+                expect { post(:create, params:) }.not_to change(SuggestionNote, :count)
+              end
+            end
+          end
         end
 
         describe "PATCH update" do

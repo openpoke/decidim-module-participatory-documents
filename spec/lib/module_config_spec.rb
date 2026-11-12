@@ -31,7 +31,8 @@ module Decidim
                                "min_suggestion_length" => 33,
                                "max_suggestion_length" => 77,
                                "antivirus_enabled" => false,
-                               "pdfjs_url" => "https://github.com/mozilla/pdf.js/releases/download/v5.2.133/pdfjs-5.2.133-dist.zip"
+                               "pdfjs_url" => "https://github.com/mozilla/pdf.js/releases/download/v5.2.133/pdfjs-5.2.133-dist.zip",
+                               "pdfjs_checksum" => "82c6de8955024d1733dfb74aa50bb6e2f210dbb479c90e2c29fe2bbd4ff446dc"
                              })
       end
     end

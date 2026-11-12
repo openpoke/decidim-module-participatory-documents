@@ -10,14 +10,7 @@ describe Decidim::ParticipatoryDocuments::CreateSuggestion do
   let(:document) { create(:participatory_documents_document, component:) }
   let(:user) { create(:user, :admin, :confirmed, organization:) }
   let(:section) { create(:participatory_documents_section, document:) }
-  let(:form) do
-    double(
-      invalid?: invalid,
-      current_user: user,
-      body:,
-      file: nil
-    )
-  end
+  let(:form) { double(invalid?: invalid, current_user: user, body:, file: nil) }
   let(:invalid) { false }
   let(:body) { "<img onerror=alert(document.domain) src=x>Text" }
 

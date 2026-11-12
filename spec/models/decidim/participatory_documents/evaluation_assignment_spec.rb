@@ -5,8 +5,6 @@ require "spec_helper"
 module Decidim
   module ParticipatoryDocuments
     describe EvaluationAssignment do
-      subject { assignment }
-
       let(:evaluator) { create(:user, organization: component.organization) }
       let(:evaluator_role) { create(:participatory_process_user_role, role: :evaluator, user: evaluator, participatory_process:) }
 
@@ -22,6 +20,12 @@ module Decidim
         it "destroys evaluation assignments when participatory_process_user_role is destroyed" do
           expect(Decidim::ParticipatoryDocuments::EvaluationAssignment.count).to eq(1)
           expect { evaluator_role.destroy }.to change(Decidim::ParticipatoryDocuments::EvaluationAssignment, :count).by(-1)
+        end
+
+        it "keeps evaluation assignments when a role of another space with the same id is destroyed" do
+          assembly_user_role = create(:assembly_user_role, id: evaluator_role.id, role: :evaluator)
+
+          expect { assembly_user_role.destroy }.not_to change(Decidim::ParticipatoryDocuments::EvaluationAssignment, :count)
         end
       end
     end

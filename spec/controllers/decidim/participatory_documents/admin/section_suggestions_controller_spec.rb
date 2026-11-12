@@ -11,7 +11,6 @@ module Decidim
         let(:component) { document.component }
         let(:document) { create(:participatory_documents_document) }
         let(:user) { create(:user, :admin, :confirmed, organization:) }
-        let(:model) { Decidim::ParticipatoryDocuments::Section }
 
         before do
           request.env["decidim.current_organization"] = organization
@@ -20,20 +19,13 @@ module Decidim
           sign_in user
         end
 
-        describe ".update" do
+        describe "PATCH update" do
           let!(:section) { create(:participatory_documents_section, document:, title: nil) }
+          let(:params) { { document_id: document.id, id: section.id, title_en: "Title" } }
 
-          let(:params) do
-            {
-              :document_id => document.id,
-              :id => section.id,
-              "title_en" => "Title"
-            }
-          end
-
-          it "Changes the database record" do
+          it "updates the section title" do
             expect(section.title["en"]).to eq("Section 0")
-            post(:update, params:)
+            patch(:update, params:)
             section.reload
             expect(section.title["en"]).to eq("Title")
           end

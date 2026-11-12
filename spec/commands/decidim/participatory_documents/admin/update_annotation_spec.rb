@@ -14,16 +14,7 @@ module Decidim
         let(:current_user) { document.author }
         let(:rect) { { "left" => 0, "top" => 50, "width" => 100, "height" => 100 } }
 
-        let(:form) do
-          double(
-            invalid?: invalid,
-            page_number: 1,
-            rect:,
-            id: annotation.id,
-            section: annotation.section.id,
-            current_user:
-          )
-        end
+        let(:form) { double(invalid?: invalid, page_number: 1, rect:, id: annotation.id, section: annotation.section.id, current_user:) }
 
         context "when the form is not valid" do
           let(:invalid) { true }
@@ -34,7 +25,7 @@ module Decidim
         end
 
         context "when everything is ok" do
-          it "creates a section" do
+          it "updates the annotation" do
             expect(annotation.rect).not_to eq(rect)
             subject.call
             annotation.reload

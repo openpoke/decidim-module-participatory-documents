@@ -31,7 +31,7 @@ module Decidim::ParticipatoryDocuments
           .and_return(double(export: export_data))
 
         expect(Decidim::ExportMailer)
-          .to(receive(:export).with(user, anything))
+          .to(receive(:export).with(user, kind_of(Decidim::PrivateExport)))
           .and_return(double(deliver_now: true))
 
         described_class.perform_now(user, document, "CSV")
@@ -47,7 +47,7 @@ module Decidim::ParticipatoryDocuments
           .and_return(double(export: export_data))
 
         expect(Decidim::ExportMailer)
-          .to(receive(:export).with(user, anything))
+          .to(receive(:export).with(user, kind_of(Decidim::PrivateExport)))
           .and_return(double(deliver_now: true))
 
         described_class.perform_now(user, document, "JSON")
@@ -63,7 +63,7 @@ module Decidim::ParticipatoryDocuments
           .and_return(double(export: export_data))
 
         expect(Decidim::ExportMailer)
-          .to(receive(:export).with(user, anything))
+          .to(receive(:export).with(user, kind_of(Decidim::PrivateExport)))
           .and_return(double(deliver_now: true))
 
         described_class.perform_now(user, document, "Excel")

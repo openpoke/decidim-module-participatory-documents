@@ -12,13 +12,7 @@ module Decidim
         let(:user) { annotation.section.document.author }
         let(:invalid) { false }
 
-        let(:form) do
-          double(
-            invalid?: invalid,
-            id: annotation.id,
-            current_user: user
-          )
-        end
+        let(:form) { double(invalid?: invalid, id: annotation.id, current_user: user) }
 
         context "when the form is not valid" do
           let(:invalid) { true }
@@ -28,15 +22,27 @@ module Decidim
           end
         end
 
+        context "when the section of the last annotation has suggestions" do
+          before { create(:participatory_documents_suggestion, suggestable: annotation.section) }
+
+          it "is not valid" do
+            expect { subject.call }.to broadcast(:invalid)
+          end
+
+          it "does not remove the annotation" do
+            expect { subject.call }.not_to change(Decidim::ParticipatoryDocuments::Annotation, :count)
+          end
+        end
+
         context "when everything is ok" do
           let!(:another_annotation) { create(:participatory_documents_annotation, section: another_section) }
           let(:another_section) { create(:participatory_documents_section, document: annotation.section.document) }
 
-          it "Removes a annotation" do
+          it "removes the annotation" do
             expect { subject.call }.to change(Decidim::ParticipatoryDocuments::Annotation, :count).by(-1)
           end
 
-          it "Removes a section" do
+          it "removes the section" do
             expect { subject.call }.to change(Decidim::ParticipatoryDocuments::Section, :count).by(-1)
           end
 

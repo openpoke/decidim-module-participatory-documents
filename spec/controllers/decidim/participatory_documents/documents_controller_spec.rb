@@ -9,7 +9,6 @@ module Decidim
       let(:participatory_process) { component.participatory_space }
       let(:component) { document.component }
       let(:document) { create(:participatory_documents_document, :with_file) }
-      let(:connect_src) { response.headers["Content-Security-Policy"][/connect-src [^;]*/] }
 
       before do
         request.env["decidim.current_organization"] = organization
@@ -24,46 +23,16 @@ module Decidim
           expect(response).to render_template("pdf_viewer")
         end
 
-        context "when the file is stored in a remote service" do
-          before do
-            allow(ActiveStorage::Blob.service).to receive(:url).and_return("https://storage.example.org/bucket/file.pdf?X-Amz-Signature=abc")
-          end
+        it_behaves_like "a pdf viewer allowing the storage host"
 
-          it "allows the storage host in the connect-src directive" do
+        context "when the stored box color is not a hexadecimal color" do
+          let(:document) { create(:participatory_documents_document, :with_file, box_color: "#000;}</style><script>alert(1)</script>") }
+
+          it "falls back to the default color" do
             get :pdf_viewer
 
-            expect(connect_src.split).to include("https://storage.example.org")
-          end
-        end
-
-        context "when the remote service uses a custom port" do
-          before do
-            allow(ActiveStorage::Blob.service).to receive(:url).and_return("http://storage.example.org:9000/bucket/file.pdf")
-          end
-
-          it "keeps the port in the connect-src directive" do
-            get :pdf_viewer
-
-            expect(connect_src.split).to include("http://storage.example.org:9000")
-          end
-        end
-
-        context "when the file is stored in the local service" do
-          it "does not add the application host to the connect-src directive" do
-            get :pdf_viewer
-
-            expect(connect_src).to include("'self'")
-            expect(connect_src).not_to include("test.host")
-          end
-        end
-
-        context "when the document has no file attached" do
-          let(:document) { create(:participatory_documents_document) }
-
-          it "does not change the connect-src directive" do
-            get :pdf_viewer
-
-            expect(connect_src).not_to include("test.host")
+            expect(controller.helpers.pdf_custom_style).to include("--box-color: #1E98D7;")
+            expect(controller.helpers.pdf_custom_style).not_to include("script")
           end
         end
 

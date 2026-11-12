@@ -25,7 +25,7 @@ module Decidim::ParticipatoryDocuments
 
       context "when :max_export_text_length > 0" do
         before do
-          Decidim::ParticipatoryDocuments.max_export_text_length = 10
+          allow(Decidim::ParticipatoryDocuments).to receive(:max_export_text_length).and_return(10)
         end
 
         it "returns an answer that is 10 characters long" do
@@ -36,7 +36,7 @@ module Decidim::ParticipatoryDocuments
 
       context "when :max_export_text_length = 0" do
         before do
-          Decidim::ParticipatoryDocuments.max_export_text_length = 0
+          allow(Decidim::ParticipatoryDocuments).to receive(:max_export_text_length).and_return(0)
         end
 
         it "returns the full answer" do

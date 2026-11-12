@@ -1,10 +1,8 @@
 # frozen_string_literal: true
 
-describe Decidim::ParticipatoryDocuments::Admin::ButtonHelper do
-  let(:component) { create(:participatory_documents_component) }
-  let(:document) { create(:participatory_documents_document, component:) }
-  let(:icon) { "file-text-line" }
+require "spec_helper"
 
+describe Decidim::ParticipatoryDocuments::Admin::ButtonHelper do
   describe "#button_builder" do
     it "returns a button with the given title and icon" do
       expect(helper.button_builder("Title", icon: "file-text-line")).to include("Title")
