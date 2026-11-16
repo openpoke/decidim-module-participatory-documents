@@ -8,7 +8,6 @@ module Decidim
       subject { suggestion_note }
 
       let!(:organization) { component.organization }
-      let!(:participatory_process) { component.participatory_space }
       let(:component) { create(:participatory_documents_component) }
 
       let!(:author) { create(:user, :admin, organization:) }
@@ -23,7 +22,7 @@ module Decidim
         expect(suggestion_note.author).to be_a(Decidim::User)
       end
 
-      it "has an associated proposal" do
+      it "has an associated suggestion" do
         expect(suggestion_note.suggestion).to be_a(Decidim::ParticipatoryDocuments::Suggestion)
       end
     end

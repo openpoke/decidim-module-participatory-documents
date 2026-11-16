@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "spec_helper"
+
 describe Decidim::ParticipatoryDocuments::Admin::SuggestionHelper do
   let(:component) { create(:participatory_documents_component) }
   let(:document) { create(:participatory_documents_document, component:) }
@@ -12,6 +14,12 @@ describe Decidim::ParticipatoryDocuments::Admin::SuggestionHelper do
 
       expect(helper.suggestion_content(suggestion)[:text]).to include(suggestion.body["en"])
       expect(helper.suggestion_content(suggestion)[:file_link]).to be_falsey
+    end
+
+    it "returns the suggestion body written in another locale" do
+      allow(suggestion).to receive(:body).and_return({ "ca" => "Un suggeriment" })
+
+      expect(helper.suggestion_content(suggestion)[:text]).to eq("Un suggeriment")
     end
 
     it "returns '(no text)' and file link if suggestion body is blank and file attached" do

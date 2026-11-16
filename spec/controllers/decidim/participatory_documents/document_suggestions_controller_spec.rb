@@ -5,8 +5,6 @@ require "spec_helper"
 module Decidim
   module ParticipatoryDocuments
     describe DocumentSuggestionsController do
-      routes { Decidim::ParticipatoryDocuments::Engine.routes }
-
       let(:organization) { create(:organization) }
       let(:participatory_process) { create(:participatory_process, organization:) }
       let(:component) { create(:participatory_documents_component, participatory_space: participatory_process) }
@@ -22,7 +20,7 @@ module Decidim
         sign_in user if user
       end
 
-      describe ".index" do
+      describe "GET index" do
         it "renders the index template" do
           get :index, params: { document_id: document.id }
           expect(response).to render_template("index")
@@ -38,18 +36,11 @@ module Decidim
         end
       end
 
-      describe ".create" do
-        let(:params) do
-          {
-            "document_id" => document.id,
-            "body" => "A nice suggestion"
-          }
-        end
+      describe "POST create" do
+        let(:params) { { document_id: document.id, body: "A nice suggestion" } }
 
-        it "Creates a new annotation and section" do
-          expect do
-            post(:create, params:)
-          end.to change(model, :count).by(1)
+        it "creates a new suggestion" do
+          expect { post(:create, params:) }.to change(model, :count).by(1)
         end
 
         context "when non logged" do
@@ -62,12 +53,8 @@ module Decidim
         end
       end
 
-      describe ".export" do
-        let(:params) do
-          {
-            "document_id" => document.id
-          }
-        end
+      describe "POST export" do
+        let(:params) { { document_id: document.id } }
 
         it "returns unprocessable entity" do
           post(:export, params:)
@@ -79,7 +66,7 @@ module Decidim
             create(:participatory_documents_suggestion, suggestable: document, author:)
           end
 
-          it "exports and retrun success" do
+          it "exports and returns success" do
             expect(Decidim::ExportJob).to receive(:perform_later)
             post(:export, params:)
             expect(response).to have_http_status(:success)

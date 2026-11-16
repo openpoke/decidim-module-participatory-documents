@@ -10,7 +10,6 @@ module Decidim
       let(:component) { build(:participatory_documents_component) }
       let(:organization) { component.participatory_space.organization }
       let(:document) { create(:participatory_documents_document, component:) }
-      let!(:author) { create(:user, organization:) }
 
       describe "associations" do
         it { expect(described_class.reflect_on_association(:suggestions).macro).to eq(:has_many) }
@@ -26,12 +25,6 @@ module Decidim
       include_examples "authorable" do
         subject { document }
       end
-      # include_examples "endorsable"
-      # include_examples "has scope"
-      # include_examples "has category"
-      # include_examples "has reference"
-      # include_examples "reportable"
-      # include_examples "resourceable"
 
       it { is_expected.to be_valid }
       it { is_expected.to be_versioned }
@@ -52,26 +45,20 @@ module Decidim
         end
       end
 
+      context "when a section has suggestions" do
+        let(:section) { create(:participatory_documents_section, document:) }
+        let!(:suggestion) { create(:participatory_documents_suggestion, suggestable: section) }
+
+        it "has suggestions" do
+          expect(document).to be_has_suggestions
+        end
+      end
+
       describe "with annotations" do
         let(:first_section) { create(:participatory_documents_section, document:) }
-        let(:first_rect) do
-          {
-            "top" => 20.0,
-            "left" => 0.0
-          }
-        end
-        let(:second_rect) do
-          {
-            "top" => 10.0,
-            "left" => 20.0
-          }
-        end
-        let(:third_rect) do
-          {
-            "top" => 10.0,
-            "left" => 10.0
-          }
-        end
+        let(:first_rect) { { "top" => 20.0, "left" => 0.0 } }
+        let(:second_rect) { { "top" => 10.0, "left" => 20.0 } }
+        let(:third_rect) { { "top" => 10.0, "left" => 10.0 } }
         let(:first_page) { 1 }
         let(:second_page) { 1 }
         let(:third_page) { 1 }
@@ -227,7 +214,7 @@ module Decidim
           expect(document).not_to be_valid
           expect(document.errors.full_messages).to include("Component must exist")
           expect(document.errors.full_messages).to include("Author must exist")
-          expect(document.errors.full_messages).to include("File The file is not attached to any organization")
+          expect(document.errors.full_messages).to include(a_string_starting_with("File The file is not attached to any organization"))
         end
 
         context "when defined organization" do
@@ -242,15 +229,17 @@ module Decidim
         end
 
         context "when not AntivirusValidator defined" do
+          around do |example|
+            original_class = Document
+            example.run
+            Decidim::ParticipatoryDocuments.send(:remove_const, :Document)
+            Decidim::ParticipatoryDocuments.const_set(:Document, original_class)
+          end
+
           before do
             allow(ParticipatoryDocuments).to receive(:antivirus_enabled).and_return(false)
             Decidim::ParticipatoryDocuments.send(:remove_const, :Document)
-            load "decidim/participatory_documents/document.rb"
-          end
-
-          after do
-            Decidim::ParticipatoryDocuments.send(:remove_const, :Document)
-            load "decidim/participatory_documents/document.rb"
+            load File.expand_path("../../../../app/models/decidim/participatory_documents/document.rb", __dir__)
           end
 
           it "has file validator only" do
@@ -261,10 +250,17 @@ module Decidim
         end
 
         context "when defined AntivirusValidator" do
+          around do |example|
+            original_class = Document
+            example.run
+            Decidim::ParticipatoryDocuments.send(:remove_const, :Document)
+            Decidim::ParticipatoryDocuments.const_set(:Document, original_class)
+          end
+
           before do
             allow(ParticipatoryDocuments).to receive(:antivirus_enabled).and_return(true)
             Decidim::ParticipatoryDocuments.send(:remove_const, :Document)
-            load "decidim/participatory_documents/document.rb"
+            load File.expand_path("../../../../app/models/decidim/participatory_documents/document.rb", __dir__)
           end
 
           it "has antivirus validator" do

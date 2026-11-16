@@ -12,6 +12,12 @@ module Decidim
         include NeedsPdfDocument
         helper Decidim::ApplicationHelper
         helper Decidim::ParticipatoryDocuments::Admin::DocumentsHelper
+
+        private
+
+        def evaluator_roles
+          @evaluator_roles ||= current_participatory_space.user_roles(:evaluator).where(user: current_user)
+        end
       end
     end
   end

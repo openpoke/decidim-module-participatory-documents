@@ -4,13 +4,6 @@ module Decidim
   module ParticipatoryDocuments
     module Admin
       class SuggestionNotesController < Admin::ApplicationController
-        helper_method :note
-
-        def edit
-          enforce_permission_to :edit_note, :suggestion_note, suggestion_note: note
-          @notes_form = form(Decidim::ParticipatoryDocuments::Admin::SuggestionNoteForm).from_model(note)
-        end
-
         def create
           enforce_permission_to(:create, :suggestion_note, suggestion:)
           @form = form(Decidim::ParticipatoryDocuments::Admin::SuggestionNoteForm).from_params(params)
@@ -29,7 +22,7 @@ module Decidim
         end
 
         def update
-          enforce_permission_to :edit_note, :suggestion_note, suggestion_note: note
+          enforce_permission_to(:edit_note, :suggestion_note, suggestion_note: note, suggestion:)
           @notes_form = form(Decidim::ParticipatoryDocuments::Admin::SuggestionNoteForm).from_params(params)
 
           Decidim::ParticipatoryDocuments::Admin::UpdateSuggestionNote.call(@notes_form, note) do
@@ -47,11 +40,17 @@ module Decidim
         protected
 
         def suggestion
-          @suggestion ||= Decidim::ParticipatoryDocuments::Suggestion.find(params[:suggestion_id])
+          @suggestion ||= document.suggestions_including_sections.find(params[:suggestion_id])
         end
 
         def note
-          @note ||= Decidim::ParticipatoryDocuments::SuggestionNote.find(params[:id])
+          @note ||= suggestion.notes.find(params[:id])
+        end
+
+        private
+
+        def skip_manage_component_permission
+          %w(create update).include?(action_name) && evaluator_roles.exists?
         end
       end
     end

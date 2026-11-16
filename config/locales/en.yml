@@ -2,12 +2,19 @@
 en:
   activemodel:
     attributes:
+      answer_suggestion:
+        answer: Answer
       document:
         box_color: Color of the boxes
         box_opacity: Opacity applied at the color of the boxes (%)
         description: Helper description
         file: PDF Document
         title: Helper title
+      evaluation_assignment:
+        admin_log:
+          evaluator_role_id: Evaluator name
+      section:
+        title: Title
       suggestion:
         body: Add your comment
     errors:
@@ -26,32 +33,24 @@ en:
             too_short: is too short (under %{min_length} characters)
   decidim:
     admin:
-      actions:
-        export: Export
-        manage: Manage
-      exports:
-        export_as: "%{name} as %{export_format}"
       filters:
         search_placeholder:
           body_cont: Body Contains
         suggestions:
-          body_cont:
-            label: Body contains
           dummy_author_ids_has:
             label: Author
           dummy_suggestable_id_has:
             label: Section
+          evaluator_role_ids_has:
+            label: Assigned to evaluator
           state_eq:
             label: State is
             values:
               accepted: Accepted
               evaluating: Evaluating
               not_answered: Not Answered
-              published: Published
               rejected: Rejected
               withdrawn: Withdrawn
-          valuator_role_ids_has:
-            label: Assigned to valuator
     admin_log:
       annotation:
         create: "%{user_name} created a new participatory area for %{document_name}"
@@ -59,7 +58,6 @@ en:
         update: "%{user_name} has updated a participatory area for %{document_name}"
       document:
         create: "%{user_name} created a document named %{resource_name} in %{space_name}"
-        delete: "%{user_name} deleted a document named %{resource_name} in %{space_name}"
         update: "%{user_name} updated a document named %{resource_name} in %{space_name}"
       section:
         create: "%{user_name} has created a new Section named %{resource_name} for
@@ -76,6 +74,9 @@ en:
             max_suggestion_length: Maximum suggestion length (characters)
             min_suggestion_length: Minimum suggestion length (characters)
             suggestion_answering_enabled: Enable suggestion answering from admin
+    download_your_data:
+      show:
+        suggestions: Suggestions export
     events:
       participatory_documents:
         suggestion_answered:
@@ -105,7 +106,6 @@ en:
         finish_publishing: Publish participatory sections
         new: Upload PDF document
         preview_publishing_sections: Preview and publish sections
-        title: Actions
       admin:
         documents:
           create:
@@ -115,7 +115,6 @@ en:
             title: Edit Participatory document
             update: Update
           final_publish:
-            error: There was an error publishing sections
             success: Sections have been successfully published
           form:
             alert_suggestions_html: "<strong>IMPORTANT:</strong> This document cannot
@@ -127,12 +126,16 @@ en:
             start: Please upload a PDF to start
           new:
             create: Create participatory document
-            title: New participatory document
-          sections:
-            empty: "(empty)"
           update:
             error: There was a problem updating Document
             success: Document has been successfully updated
+        evaluation_assignments:
+          create:
+            invalid: There was an error assigning suggestions to an evaluator
+            success: Suggestions assigned to an evaluator successfully
+          delete:
+            invalid: There was an error unassigning suggestions from an evaluator
+            success: Evaluator unassigned from suggestions successfully
         exports:
           suggestions: Suggestions
         sections:
@@ -161,6 +164,12 @@ en:
           answer:
             invalid: There was an error adding the answer
             success: Successfully added the answer
+          evaluators:
+            assigned_evaluators: Assigned evaluators
+            evaluators: Evaluators
+            remove_assignment: Remove assignment
+            remove_assignment_confirmation: Are you sure you want to remove the evaluator
+              from this suggestion?
           form:
             answer: Answer
             answer_is_published: Published
@@ -168,15 +177,15 @@ en:
           index:
             actions:
               answer: Answer
-              assign_to_valuator: Assign to valuator
-              assign_to_valuator_button: Assign
+              assign_to_evaluator: Assign to evaluator
+              assign_to_evaluator_button: Assign
               cancel: Cancel
               download: download %{filename}
               publish: Publish
               publish_answers: Publish answers
               title: Actions
-              unassign_from_valuator: Unassign from valuator
-              unassign_from_valuator_button: Unassign
+              unassign_from_evaluator: Unassign from evaluator
+              unassign_from_evaluator_button: Unassign
             author: Author
             created_at: Submitted on
             id: Id
@@ -195,23 +204,14 @@ en:
             authors: Authors
             body: Body
             created_at: Creation date
-            file: File
-            update: Update
+            suggestion_for: Suggestion for %{title}
           suggestion:
             global: Global
-          valuators:
-            assigned_valuators: Assigned valuators
-            remove_assignment: Remove assignment
-            remove_assignment_confirmation: Are you sure you want to remove the valuator
-              from this suggestion?
-            valuators: Valuators
-        valuation_assignments:
-          create:
-            invalid: There was an error assigning suggestions to a valuator
-            success: Suggestions assigned to a valuator successfully
-          delete:
-            invalid: There was an error unassigning suggestions from a valuator
-            success: Valuator unassigned from suggestions successfully
+      admin_log:
+        evaluation_assignment:
+          create: "%{user_name} assigned the %{resource_name} suggestion to an evaluator"
+          delete: "%{user_name} unassigned an evaluator from the %{suggestion_title}
+            suggestion"
       document:
         close: Close
         export_my_suggestions: Export my suggestions
@@ -219,7 +219,6 @@ en:
         save_changes: Save changes!
         send_suggestion: Send suggestion
         suggestion_answer: Official answer
-        upload_file: Attach a document
       document_suggestions:
         export:
           empty: There are no suggestions to export.
@@ -229,7 +228,7 @@ en:
         export_modal:
           close: Close
           description_html: You have %{count} suggestions on this document. If you
-            want to export them, you will receive a ZIP file with and Excel document
+            want to export them, you will receive a ZIP file with an Excel document
             in it with all your data and any possible answer the admins have given
             to you. <br><br>You will receive an email at <b>%{email}</b>.
           send: Send me my suggestions
@@ -240,26 +239,17 @@ en:
         publish_description: 'Admin options: you are previewing the participatory
           sections of the document'
       models:
-        document:
-          fields:
-            document_pages: Page numbers
-            id: Id
-            published: Published
-            state: State
-            title: Title
         section:
           fields:
             artificial_tile: Section %{position}
         suggestion:
           fields:
-            valuators: Valuators
-      'no': 'No'
+            evaluators: Evaluators
       suggestions:
         answers:
           accepted: Accepted
           evaluating: Evaluating
           not_answered: Not Answered
-          published: Published
           rejected: Rejected
           withdrawn: Withdrawn
         modal:
@@ -284,8 +274,9 @@ en:
         suggestion_form:
           add_attachments: Add attachments
           attachment_legend: Add a document or an image
-          blank: There was an error creating the suggestion. Upload the valid  file
-            or add a text message with the suggestion.
           edit_attachments: Edit attachments
           title: Write your suggestion or upload a file with your suggestions
-      'yes': 'Yes'
+  errors:
+    messages:
+      virus: The file you uploaded contains a virus and has been rejected. Please
+        upload a clean file.

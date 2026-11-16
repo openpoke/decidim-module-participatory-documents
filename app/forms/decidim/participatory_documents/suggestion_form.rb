@@ -3,9 +3,7 @@
 module Decidim
   module ParticipatoryDocuments
     class SuggestionForm < Decidim::Form
-      include Decidim::AttachmentAttributes
       include Decidim::HasUploadValidations
-      include Decidim::ProcessesFileLocally
 
       attribute :body, String
       attribute :file, Decidim::Attributes::Blob

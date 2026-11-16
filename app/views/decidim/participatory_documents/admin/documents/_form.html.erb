@@ -4,12 +4,12 @@
 <div class="form__wrapper">
   <div class="card pt-4">
     <div class="card-section">
-      <div class="row column hashtags__container">
-        <%= form.translated :text_field, :title, autofocus: true, class: "js-hashtags", hashtaggable: true, aria: { label: :title } %>
+      <div class="row column">
+        <%= form.translated :text_field, :title, autofocus: true, aria: { label: :title } %>
       </div>
 
-      <div class="row column hashtags__container">
-        <%= form.translated :editor, :description, hashtaggable: true, aria: { label: :description } %>
+      <div class="row column">
+        <%= form.translated :editor, :description, aria: { label: :description } %>
       </div>
 
       <div class="row column">

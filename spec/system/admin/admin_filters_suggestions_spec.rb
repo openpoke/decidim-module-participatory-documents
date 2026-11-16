@@ -35,34 +35,34 @@ describe "Admin filters suggestions" do
   end
 
   context "when filtering by state" do
-    let!(:proposals) do
-      STATES.map { |state| create_suggestion_with_trait(state) }
-    end
+    let!(:suggestions) { STATES.map { |state| create_suggestion_with_trait(state) } }
 
     before { visit router.document_suggestions_path(document) }
 
     STATES.each do |state|
       i18n_state = I18n.t(state, scope: "decidim.admin.filters.suggestions.state_eq.values")
 
-      context "when filtering proposals by state: #{i18n_state}" do
+      context "when filtering suggestions by state: #{i18n_state}" do
         it_behaves_like "a filtered collection", options: "State", filter: i18n_state do
-          let!(:in_filter) { translated(suggestion_with_state(state).body).first(40) }
-          let!(:not_in_filter) { translated(suggestion_without_state(state).body).first(40) }
+          let(:in_filter) { translated(suggestion_with_state(state).body).first(40) }
+          let(:not_in_filter) { translated(suggestion_without_state(state).body).first(40) }
         end
       end
     end
   end
 
-  context "when searching by ID or title" do
+  context "when searching by body" do
     let!(:suggestion2) { create(:participatory_documents_suggestion, suggestable: document) }
-    let!(:suggestion2_body) { translated(suggestion2.body) }
+    let(:suggestion2_body) { translated(suggestion2.body) }
 
     before { visit router.document_suggestions_path(document) }
 
-    it "can be searched by title" do
+    it "can be searched by body" do
       search_by_text(suggestion2_body.split.first(2).join(" "))
 
-      expect(page).to have_content(suggestion2.id)
+      within ".table-list" do
+        expect(page).to have_content(suggestion2_body.first(40))
+      end
     end
   end
 end

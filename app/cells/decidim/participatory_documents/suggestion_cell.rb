@@ -21,10 +21,6 @@ module Decidim
         l(model.answered_at, format: :decidim_short)
       end
 
-      def humanize_suggestion_state
-        I18n.t(model.state, scope: "decidim.participatory_documents.suggestions.answers")
-      end
-
       def author_cell
         cell("decidim/participatory_documents/suggestion_author", model)
       end
@@ -32,9 +28,7 @@ module Decidim
       protected
 
       def has_answer?
-        return false if %w(not_answered withdrawn).include?(model.state)
-
-        model.answered? && model.answer_is_published?
+        model.published_answer?
       end
     end
   end

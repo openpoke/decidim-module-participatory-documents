@@ -3,7 +3,7 @@
 module Decidim
   module ParticipatoryDocuments
     module Admin
-      class UnassignSuggestionsFromValuator < Decidim::Command
+      class UnassignSuggestionsFromEvaluator < Decidim::Command
         # Public: Initializes the command.
         #
         # form - A form object with the params.
@@ -30,18 +30,14 @@ module Decidim
 
         def unassign_suggestions
           transaction do
-            form.suggestions.flat_map do |suggestion|
-              assignment = find_assignment(suggestion)
-              unassign(assignment) if assignment
-            end
+            assignments.each { |assignment| unassign(assignment) }
           end
         end
 
-        def find_assignment(suggestion)
-          Decidim::ParticipatoryDocuments::ValuationAssignment.find_by(
-            suggestion:,
-            valuator_role: form.valuator_role
-          )
+        def assignments
+          Decidim::ParticipatoryDocuments::EvaluationAssignment
+            .where(suggestion: form.suggestions, evaluator_role: form.evaluator_roles)
+            .includes(:suggestion)
         end
 
         def unassign(assignment)
@@ -49,7 +45,7 @@ module Decidim
             :delete,
             assignment,
             form.current_user,
-            suggestion: assignment.suggestion.id
+            suggestion_title: assignment.suggestion.body
           ) do
             assignment.destroy!
           end

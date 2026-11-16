@@ -6,74 +6,122 @@ module Decidim
   module ParticipatoryDocuments
     module Admin
       describe PublishAnswers do
-        subject { described_class }
+        subject { command.call }
 
-        # document.author
-        let!(:suggestion) { create(:participatory_documents_suggestion, suggestable: document) }
+        let(:command) { described_class.new(component, user, suggestion_ids) }
         let(:document) { create(:participatory_documents_document) }
+        let(:component) { document.component }
+        let(:user) { document.author }
+        let(:suggestion_ids) { suggestions.map(&:id) }
+        let(:suggestions) { [:accepted, :evaluating, :rejected].map { |state| create(:participatory_documents_suggestion, state, :draft, :with_answer, suggestable: document) } }
 
-        let(:suggestion_ids) { [accepted_suggestion.id, evaluating_suggestion.id, accepted_suggestion.id] }
+        it "broadcasts ok" do
+          expect { subject }.to broadcast(:ok)
+        end
 
-        context "when suggestions are not publihed" do
-          let!(:accepted_suggestion) { create(:participatory_documents_suggestion, :accepted, :draft, :with_answer, suggestable: document) }
-          let!(:evaluating_suggestion) { create(:participatory_documents_suggestion, :evaluating, :with_answer, suggestable: document) }
-          let!(:rejected_suggestion) { create(:participatory_documents_suggestion, :rejected, :with_answer, suggestable: document) }
+        it "publishes the answers" do
+          expect { subject }.to change { suggestions.map { |suggestion| suggestion.reload.answer_is_published }.uniq }.from([false]).to([true])
+        end
 
-          it "sends the accepted notifications" do
-            expect(NotifySuggestionAnswer).to receive(:call).with(accepted_suggestion, nil)
-            expect { subject.call(document.component, document.author, [accepted_suggestion.id]) }.not_to broadcast(:invalid)
+        it "traces the action", versioning: true do
+          suggestions.each do |suggestion|
+            expect(Decidim.traceability)
+              .to receive(:perform_action!)
+              .with("publish_answer", suggestion, user)
+              .and_call_original
           end
 
-          it "sends the rejected notifications" do
-            expect(NotifySuggestionAnswer).to receive(:call).with(rejected_suggestion, nil)
-            expect { subject.call(document.component, document.author, [rejected_suggestion.id]) }.not_to broadcast(:invalid)
+          expect { subject }.to change(Decidim::ActionLog, :count)
+          action_log = Decidim::ActionLog.last
+          expect(action_log.version).to be_present
+          expect(action_log.version.event).to eq "update"
+        end
+
+        it "notifies the answers" do
+          suggestions.each do |suggestion|
+            expect(NotifySuggestionAnswer)
+              .to receive(:call)
+              .with(suggestion)
           end
 
-          it "sends the evaluating notifications" do
-            expect(NotifySuggestionAnswer).to receive(:call).with(evaluating_suggestion, nil)
-            expect { subject.call(document.component, document.author, [evaluating_suggestion.id]) }.not_to broadcast(:invalid)
+          subject
+        end
+
+        context "when the answers are already published" do
+          let(:suggestions) { [:accepted, :evaluating, :rejected].map { |state| create(:participatory_documents_suggestion, state, :published, :with_answer, suggestable: document) } }
+
+          it "broadcasts invalid" do
+            expect { subject }.to broadcast(:invalid)
+          end
+
+          it "does not trace the action" do
+            expect(Decidim.traceability)
+              .not_to receive(:perform_action!)
+
+            subject
+          end
+
+          it "does not notify the answers" do
+            expect(NotifySuggestionAnswer).not_to receive(:call)
+
+            subject
           end
         end
 
-        context "when suggestions are published" do
-          let(:accepted_suggestion) { create(:participatory_documents_suggestion, :accepted, :with_answer, :published, suggestable: document) }
-          let(:evaluating_suggestion) { create(:participatory_documents_suggestion, :evaluating, :with_answer, :published, suggestable: document) }
-          let(:rejected_suggestion) { create(:participatory_documents_suggestion, :rejected, :with_answer, :published, suggestable: document) }
+        context "when the suggestions do not have answers" do
+          let(:suggestions) { [:accepted, :evaluating, :rejected].map { |state| create(:participatory_documents_suggestion, state, :draft, suggestable: document) } }
 
-          it "sends the accepted notifications" do
-            expect(NotifySuggestionAnswer).not_to receive(:call).with(accepted_suggestion, nil)
-            expect { subject.call(document.component, document.author, [accepted_suggestion.id]) }.not_to broadcast(:invalid)
+          it "broadcasts invalid" do
+            expect { subject }.to broadcast(:invalid)
           end
 
-          it "sends the rejected notifications" do
-            expect(NotifySuggestionAnswer).not_to receive(:call).with(rejected_suggestion, nil)
-            expect { subject.call(document.component, document.author, [rejected_suggestion.id]) }.not_to broadcast(:invalid)
+          it "does not publish the answers" do
+            expect { subject }.not_to(change { suggestions.map { |suggestion| suggestion.reload.answer_is_published }.uniq })
           end
 
-          it "sends the evaluating notifications" do
-            expect(NotifySuggestionAnswer).not_to receive(:call).with(evaluating_suggestion, nil)
-            expect { subject.call(document.component, document.author, [evaluating_suggestion.id]) }.not_to broadcast(:invalid)
+          it "does not notify the answers" do
+            expect(NotifySuggestionAnswer).not_to receive(:call)
+
+            subject
           end
         end
 
-        context "when suggestions do not have answers" do
-          let(:accepted_suggestion) { create(:participatory_documents_suggestion, :accepted, :draft, suggestable: document) }
-          let(:evaluating_suggestion) { create(:participatory_documents_suggestion, :evaluating, :draft, suggestable: document) }
-          let(:rejected_suggestion) { create(:participatory_documents_suggestion, :rejected, :draft, suggestable: document) }
+        context "when only some of the suggestions have answers" do
+          let(:answered) { create(:participatory_documents_suggestion, :accepted, :draft, :with_answer, suggestable: document) }
+          let(:not_answered) { create(:participatory_documents_suggestion, :not_answered, :draft, suggestable: document) }
+          let(:suggestions) { [answered, not_answered] }
 
-          it "sends the accepted notifications" do
-            expect(NotifySuggestionAnswer).not_to receive(:call).with(accepted_suggestion, nil)
-            expect { subject.call(document.component, document.author, [accepted_suggestion.id]) }.not_to broadcast(:invalid)
+          it "publishes only the answered ones" do
+            subject
+
+            expect(answered.reload.answer_is_published).to be true
+            expect(not_answered.reload.answer_is_published).to be false
+          end
+        end
+
+        context "when suggestion ids belong to other component" do
+          let(:other_document) { create(:participatory_documents_document) }
+          let(:suggestions) { create_list(:participatory_documents_suggestion, 3, :accepted, :draft, :with_answer, suggestable: other_document) }
+
+          it "broadcasts invalid" do
+            expect { subject }.to broadcast(:invalid)
           end
 
-          it "sends the rejected notifications" do
-            expect(NotifySuggestionAnswer).not_to receive(:call).with(rejected_suggestion, nil)
-            expect { subject.call(document.component, document.author, [rejected_suggestion.id]) }.not_to broadcast(:invalid)
+          it "does not publish the answers" do
+            expect { subject }.not_to(change { suggestions.map { |suggestion| suggestion.reload.answer_is_published }.uniq })
           end
 
-          it "sends the evaluating notifications" do
-            expect(NotifySuggestionAnswer).not_to receive(:call).with(evaluating_suggestion, nil)
-            expect { subject.call(document.component, document.author, [evaluating_suggestion.id]) }.not_to broadcast(:invalid)
+          it "does not trace the action" do
+            expect(Decidim.traceability)
+              .not_to receive(:perform_action!)
+
+            subject
+          end
+
+          it "does not notify the answers" do
+            expect(NotifySuggestionAnswer).not_to receive(:call)
+
+            subject
           end
         end
       end

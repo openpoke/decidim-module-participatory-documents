@@ -35,19 +35,17 @@
   <script type="text/javascript">
     var AnnotationsPath = '<%= document_annotations_path(document).split("?")[0] %>';
     var SectionPath = '<%= document_sections_path(document).split("?")[0] %>';
-    var CurrentBoxes = <%= document.annotations.collect(&:serialize).to_json.html_safe %>;
+    var CurrentBoxes = <%= document.annotations.includes(:section).collect(&:serialize).to_json.html_safe %>;
     var I18n = <%= I18n.t("decidim.participatory_documents.ui_messages").to_json.html_safe %>;
 
     document.addEventListener("DOMContentLoaded", function() {
       var pages = {};
-      // console.log("CurrentBoxes", CurrentBoxes);
 
       PDFViewerApplication.initializedPromise.then(function() {
         var options = {
           i18n: I18n,
           editSectionPath: function(group) { return SectionPath + `/${group}/edit`; },
           sectionPath: function(group) { return SectionPath + `/${group}`; },
-          newSectionPath: SectionPath + "/new",
           annotationsPath: AnnotationsPath,
           pdfViewer: PDFViewerApplication.pdfViewer,
           saveButton: document.getElementById("DecidimPDSaveButton"),
@@ -62,7 +60,6 @@
           var page = PDFViewerApplication.pdfViewer._pages[doc.pageNumber - 1];
           var annotationsLayer = page.annotationEditorLayer && page.annotationEditorLayer.div;
           var savedPage = pages[doc.pageNumber];
-          // console.log("rendered", doc, "page", page, "annotationsLayer", annotationsLayer, "savedPage", savedPage);
           var boxChanged = function() {
             // reorder box numbers according to page, x position, and y position
             var boxes = Array.from(document.querySelectorAll(".polygon-ready .box"));
@@ -100,11 +97,13 @@
             });
           };
 
+          // ensure the annotationsLayer as by default and on every redraw is hidden in more recent versions of pdf.js
+          if(annotationsLayer) {
+            annotationsLayer.hidden = false;
+          }
           // Let's render the object only if not already existing.
           // Note that the PDF library might redraw the annotation layer, if this happens we need to re-render the areas.
           if(annotationsLayer && (!savedPage || savedPage.boxEditor.div !== annotationsLayer)) {
-            // ensure the annotationsLayer as by default is hidden in more recent versions of pdf.js
-            annotationsLayer.hidden = false;
             page.annotationEditorLayer.show();
 
             annotationsLayer.dataset.pageNumber = doc.pageNumber;

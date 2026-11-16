@@ -10,7 +10,7 @@ module Decidim
         scope path: "documents/:document_id/sections/:section_id" do
           resources :suggestions, only: [:index, :create], controller: :section_suggestions, as: :document_section_suggestions
         end
-        resources :documents do
+        resources :documents, only: [:index, :show] do
           collection do
             get :pdf_viewer
           end
@@ -29,12 +29,12 @@ module Decidim
           manifest.model_class_name.constantize.new.user_roles.model.include(Decidim::ParticipatoryDocuments::ParticipatorySpaceUserRoleOverride)
         end
       rescue StandardError => e
-        Rails.logger.error("Error while trying to include Decidim::ReportingProposals::ParticipatorySpaceUserRoleOverride: #{e.message}")
+        Rails.logger.error("Error while trying to include Decidim::ParticipatoryDocuments::ParticipatorySpaceUserRoleOverride: #{e.message}")
       end
 
-      initializer "decidim_participatory_documents.overrides", after: "decidim.action_controller" do
+      initializer "decidim_participatory_documents.overrides", after: "decidim_core.action_controller" do
         config.to_prepare do
-          Decidim::ParticipatorySpaceRoleConfig::Valuator.include(Decidim::ParticipatoryDocuments::ValuatorOverride)
+          Decidim::ParticipatorySpaceRoleConfig::Evaluator.include(Decidim::ParticipatoryDocuments::EvaluatorOverride)
         end
       end
 
@@ -42,11 +42,17 @@ module Decidim
         Cell::ViewModel.view_paths << File.expand_path("#{Decidim::ParticipatoryDocuments::Engine.root}/app/cells")
       end
 
-      initializer "decidim_participatory_documents.webpacker.assets_path" do
+      initializer "decidim_participatory_documents.shakapacker.assets_path" do
         Decidim.register_assets_path File.expand_path("app/packs", root)
       end
 
-      initializer "decidim_decidim_participatory_documents.register_icons" do
+      initializer "decidim_participatory_documents.data_migrate", after: "decidim_core.data_migrate" do
+        DataMigrate.configure do |config|
+          config.data_migrations_path << root.join("db/data").to_s
+        end
+      end
+
+      initializer "decidim_participatory_documents.register_icons" do
         Decidim.icons.register(name: "checkbox-multiple-line", icon: "checkbox-multiple-line", category: "system", description: "", engine: :decidim_participatory_documents)
         Decidim.icons.register(name: "file-download-line", icon: "file-download-line", category: "system", description: "", engine: :decidim_participatory_documents)
       end

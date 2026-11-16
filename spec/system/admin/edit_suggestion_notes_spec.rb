@@ -4,26 +4,12 @@ require "spec_helper"
 
 describe "Edit Suggestion Notes" do
   let(:router) { Decidim::EngineRouter.admin_proxy(component).decidim_admin_participatory_process_participatory_documents }
-
-  let(:component) { create(:participatory_documents_component) }
-  let(:organization) { component.organization }
   let(:manifest_name) { "participatory_documents" }
   let!(:document) { create(:participatory_documents_document, :with_file, component:) }
   let!(:suggestion) { create(:participatory_documents_suggestion, suggestable: document) }
-  let(:participatory_space) { component.participatory_space }
-
   let(:body) { "Test body" }
   let(:suggestion_notes_count) { 5 }
-
-  let!(:suggestion_notes) do
-    create_list(
-      :participatory_documents_suggestion_note,
-      suggestion_notes_count,
-      suggestion:,
-      author:,
-      body:
-    )
-  end
+  let!(:suggestion_notes) { create_list(:participatory_documents_suggestion_note, suggestion_notes_count, suggestion:, author:, body:) }
 
   include_context "when managing a component as an admin"
 

@@ -6,8 +6,6 @@ module Decidim
   module ParticipatoryDocuments
     module Admin
       describe AnnotationsController do
-        routes { Decidim::ParticipatoryDocuments::AdminEngine.routes }
-
         let(:organization) { component.organization }
         let(:participatory_process) { component.participatory_space }
         let(:component) { document.component }
@@ -23,23 +21,23 @@ module Decidim
           sign_in user
         end
 
-        describe ".create" do
-          let(:params) do
-            {
-              "document_id" => document.id,
-              "page_number" => 1,
-              "rect" => { left: 50, top: 50, width: 100, height: 100 }
-            }
+        describe "POST create" do
+          let(:params) { { document_id: document.id, page_number: 1, rect: { left: 50, top: 50, width: 100, height: 100 } } }
+
+          it "creates a new annotation and section" do
+            expect { post(:create, params:) }.to change(model, :count).by(1).and change(sections, :count).by(1)
           end
 
-          it "Creates a new annotation and section" do
-            expect do
-              post(:create, params:)
-            end.to change(model, :count).by(1).and change(sections, :count).by(1)
+          context "when the document is published" do
+            let(:document) { create(:participatory_documents_document, published_at: Time.current) }
+
+            it "does not create the annotation" do
+              expect { post(:create, params:) }.not_to change(model, :count)
+            end
           end
         end
 
-        describe ".destroy" do
+        describe "DELETE destroy" do
           let!(:annotation) { create(:participatory_documents_annotation) }
           let!(:section) { create(:participatory_documents_section, document:, annotations: [annotation]) }
 

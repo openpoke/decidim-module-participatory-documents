@@ -11,14 +11,6 @@ Decidim.register_component(:participatory_documents) do |component|
     raise "Can't destroy this component when there are ParticipatoryDocuments" if Decidim::ParticipatoryDocuments::Document.where(component: instance).any?
   end
 
-  # component.data_portable_entities = ["Decidim::ParticipatoryDocuments::Document"]
-
-  # component.newsletter_participant_entities = ["Decidim::ParticipatoryDocuments::Document"]
-
-  # component.actions = %w(endorse vote create withdraw amend comment vote_comment)
-
-  # component.query_type = "Decidim::ParticipatoryDocuments::ParticipatoryDocumentsType"
-
   component.permissions_class_name = "Decidim::ParticipatoryDocuments::Permissions"
 
   component.settings(:global) do |settings|
@@ -27,34 +19,26 @@ Decidim.register_component(:participatory_documents) do |component|
     settings.attribute :min_suggestion_length, type: :integer, default: Decidim::ParticipatoryDocuments.min_suggestion_length
   end
 
-  # component.settings(:step) do |settings|
-  # end
-
   component.exports :suggestions do |exports|
     exports.collection do |component_instance, user, context|
       document = Decidim::ParticipatoryDocuments::Document.find_by(component: component_instance)
-      suggestions = Decidim::ParticipatoryDocuments::Suggestion
-                    .where(suggestable: document)
-                    .or(Decidim::ParticipatoryDocuments::Suggestion.where(suggestable: document.sections))
-      suggestions = suggestions.where(author: user) if context == :my_suggestions && user
+      next Decidim::ParticipatoryDocuments::Suggestion.none if document.blank?
+
+      space = component_instance.participatory_space
+      suggestions = document.suggestions_including_sections.preload(:author, :suggestable, evaluation_assignments: { evaluator_role: :user })
+
+      if context == :my_suggestions
+        suggestions = suggestions.where(author: user)
+      elsif user && !user.admin? && space.user_roles(:evaluator).exists?(user:)
+        suggestions = suggestions.with_evaluation_assigned_to(user, space)
+      end
+
       suggestions.order(:id)
     end
 
     exports.include_in_open_data = false
     exports.serializer Decidim::ParticipatoryDocuments::SuggestionSerializer
   end
-
-  # component.register_resource(:participatory_document) do |resource|
-  #   resource.model_class_name = "Decidim::ParticipatoryDocuments::Document"
-  #   resource.template = "decidim/participatory_documents/documents/linked_participatory_documents"
-  #   resource.card = "decidim/participatory_documents/participatory_document"
-  #   resource.reported_content_cell = "decidim/participatory_documents/reported_content"
-  #   resource.actions = %w(endorse vote amend comment vote_comment)
-  #   resource.searchable = true
-  # end
-
-  # component.register_stat :participatory_documents_count, primary: true, priority: Decidim::StatsRegistry::HIGH_PRIORITY do |components, start_at, end_at|
-  # end
 
   component.seeds do |participatory_space|
     admin_user = Decidim::User.find_by(
@@ -88,7 +72,7 @@ Decidim.register_component(:participatory_documents) do |component|
         filename: "Exampledocument.pdf",
         content_type: "application/pdf",
         metadata: nil
-      ) # Keep after attached_to
+      )
     }
 
     document = Decidim.traceability.create!(

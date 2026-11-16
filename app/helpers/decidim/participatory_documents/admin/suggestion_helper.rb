@@ -6,6 +6,7 @@ module Decidim
       module SuggestionHelper
         include ActionView::Helpers::TextHelper
         include Decidim::Admin::IconLinkHelper
+        include Decidim::TranslatableAttributes
 
         def humanize_suggestion_state(state)
           I18n.t(state, scope: "decidim.participatory_documents.suggestions.answers", default: :not_answered)
@@ -20,9 +21,9 @@ module Decidim
                        class: "icon--small action-icon--show-suggestion")
         end
 
-        def bulk_valuators_select(participatory_space, prompt)
-          options_for_select = find_valuators_for_select(participatory_space)
-          select(:valuator_role, :id, options_for_select, prompt:)
+        def bulk_evaluators_select(participatory_space, _prompt, select_id: "evaluator_role_ids")
+          render partial: "decidim/participatory_documents/admin/suggestions/bulk_actions/evaluators_picker",
+                 locals: { participatory_space:, select_id: }
         end
 
         def suggestion_content(suggestion)
@@ -36,11 +37,11 @@ module Decidim
 
         def file_link(suggestion)
           icon_link_to("file-download-line",
-                       Rails.application.routes.url_helpers.rails_blob_url(suggestion.file.blob, only_path: true, target: "_blank", rel: "noopener"),
+                       Rails.application.routes.url_helpers.rails_blob_url(suggestion.file.blob, only_path: true),
                        t("decidim.participatory_documents.admin.suggestions.index.actions.download", filename: suggestion.file.filename.to_s),
                        class: "icon--small ml-xs",
                        target: "_blank",
-                       data: { externalLink: false })
+                       data: { external_link: false })
         end
 
         def content_with_class(content, css_class)
@@ -48,7 +49,7 @@ module Decidim
         end
 
         def suggestion_body(suggestion)
-          suggestion.body[I18n.locale.to_s].presence || content_with_class(t("decidim.participatory_documents.admin.suggestions.index.no_text"), "muted")
+          translated_attribute(suggestion.body).presence || content_with_class(t("decidim.participatory_documents.admin.suggestions.index.no_text"), "muted")
         end
       end
     end

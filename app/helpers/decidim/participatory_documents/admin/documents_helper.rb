@@ -26,12 +26,6 @@ module Decidim
           end
         end
 
-        def boolean_label(active)
-          content_tag(:span, class: "label #{active ? "success" : "alert"}") do
-            t(active ? "yes" : "no", scope: "decidim.participatory_documents")
-          end
-        end
-
         private
 
         def preview_sections_btn

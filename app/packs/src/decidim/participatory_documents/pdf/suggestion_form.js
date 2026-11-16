@@ -11,18 +11,17 @@ export default class SuggestionForm {
     } else {
       // console.log("open!", "group:", this.group)
       this.div.classList.add("active");
-      if (this.group) {
-        this.div.classList.add("section");
-      } else {
-        this.div.classList.add("document");
-      }
+      this.div.classList.toggle("section", Boolean(this.group));
+      this.div.classList.toggle("document", !this.group);
     }
   }
 
   close(callback = () => {}) {
     this.div.classList.remove("active");
     this.div.addEventListener("transitionend", () => {
-      this.div.classList.remove("section", "document");
+      if (!this.div.classList.contains("active")) {
+        this.div.classList.remove("section", "document");
+      }
       // console.log("end transition", this.div.classList);
       if (callback) {
         setTimeout(() => callback());
@@ -61,6 +60,7 @@ export default class SuggestionForm {
 
   populateArea(data) {
     this.div.innerHTML = data;
+    document.dispatchEvent(new CustomEvent("ajax:loaded", { detail: this.div }));
     this.addCloseHandler();
     this.addFormHandler();
     this.scrollToEnd();
@@ -77,21 +77,8 @@ export default class SuggestionForm {
   }
 
   addFormHandler() {
-    let form = document.getElementById("new_suggestion_");
+    let form = this.div.querySelector("form.send-suggestions-form") || document.getElementById("new_suggestion") || document.getElementById("new_suggestion_");
     if (form) {
-      let fileInput = document.getElementById("file-upload-field");
-      let fileNameContainer = document.getElementById("fileNameContainer");
-
-      if (fileInput) {
-        fileInput.addEventListener("change", () => {
-          if (fileInput.files.length > 0) {
-            fileNameContainer.textContent = fileInput.files[0].name;
-          } else {
-            fileNameContainer.textContent = "";
-          }
-        });
-      }
-
       form.addEventListener("submit", (event) => {
         event.preventDefault();
 
@@ -101,15 +88,15 @@ export default class SuggestionForm {
           method: event.target.method,
           body: formData,
           headers: {
-            "X-CSRF-Token": this.getCSRFToken()
+            "X-CSRF-Token": this.getCSRFToken(),
+            "X-Requested-With": "XMLHttpRequest",
+            "Accept": "text/html"
           },
           credentials: "include"
         }).then((response) => {
           return response.text();
         }).then((data) => {
-          this.div.innerHTML = data;
-          this.addFormHandler();
-          this.addCloseHandler();
+          this.populateArea(data);
         }).catch((error) => {
           console.error(error);
         });

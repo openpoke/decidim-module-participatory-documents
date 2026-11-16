@@ -47,12 +47,6 @@ FactoryBot.define do
     document { association(:participatory_documents_document) }
     title { generate_localized_title }
 
-    trait :with_annotation do
-      after :create do |section|
-        section.annotations = [create(:participatory_documents_annotation, section:)]
-      end
-    end
-
     trait :with_annotations do
       after :create do |section|
         section.annotations = create_list(:participatory_documents_annotation, 2, section:)
@@ -69,12 +63,12 @@ FactoryBot.define do
   factory :participatory_documents_annotation, class: "Decidim::ParticipatoryDocuments::Annotation" do
     section { association(:participatory_documents_section) }
     page_number { 1 }
-    rect do
+    sequence(:rect) do |n|
       {
-        top: rand(1.0..60.0),
-        left: rand(1.0..100.0),
-        width: rand(1.0..15.0),
-        height: rand(1.0..20.0)
+        top: 5 + (15 * ((n / 4) % 4)),
+        left: 5 + (22 * (n % 4)),
+        width: 15,
+        height: 10
       }
     end
 
@@ -87,9 +81,9 @@ FactoryBot.define do
 
   factory :participatory_documents_suggestion, class: "Decidim::ParticipatoryDocuments::Suggestion" do
     suggestable { association(:dummy_resource) }
-    author { association(:user, organization: suggestable.organization) }
+    author { build(:user, :confirmed, organization: suggestable.component.organization) }
     body { Decidim::Faker::Localized.localized { Faker::Lorem.paragraphs(number: 3).join(" ") } }
-    state { Decidim::ParticipatoryDocuments::Suggestion::POSSIBLE_STATES.sample }
+    state { :not_answered }
     answer { {} }
 
     trait :draft do
@@ -127,18 +121,18 @@ FactoryBot.define do
     end
   end
 
-  factory :suggestion_valuation_assignment, class: "Decidim::ParticipatoryDocuments::ValuationAssignment" do
+  factory :suggestion_evaluation_assignment, class: "Decidim::ParticipatoryDocuments::EvaluationAssignment" do
     suggestion { association(:participatory_documents_suggestion) }
-    valuator_role do
+    evaluator_role do
       space = suggestion.component.participatory_space
       organization = space.organization
-      build(:participatory_process_user_role, role: :valuator, user: build(:user, organization:))
+      build(:participatory_process_user_role, role: :evaluator, user: build(:user, organization:), participatory_process: space)
     end
   end
 
   factory :participatory_documents_suggestion_note, class: "Decidim::ParticipatoryDocuments::SuggestionNote" do
     body { Faker::Lorem.sentences(number: 3).join("\n") }
     suggestion { association(:participatory_documents_suggestion) }
-    author { association(:user, organization: suggestion.organization) }
+    author { build(:user, :confirmed, organization: suggestion.organization) }
   end
 end

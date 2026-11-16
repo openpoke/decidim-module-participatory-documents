@@ -15,7 +15,7 @@ module Decidim
 
         # Executes the command. Broadcasts these events:
         #
-        # - :ok when everything is valid, together with the note proposal.
+        # - :ok when everything is valid, together with the suggestion note.
         # - :invalid if the form wasn't valid and we couldn't proceed.
         #
         # Returns nothing.
@@ -23,7 +23,6 @@ module Decidim
           return broadcast(:invalid) if form.invalid?
 
           create_suggestion_note
-          # notify_admins_and_valuators
 
           broadcast(:ok, suggestion_note)
         end

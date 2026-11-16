@@ -14,14 +14,7 @@ module Decidim
         let(:title) { { en: "Title test Section" } }
         let(:current_user) { section.document.author }
 
-        let(:form) do
-          double(
-            invalid?: invalid,
-            title:,
-            id:,
-            current_user:
-          )
-        end
+        let(:form) { double(invalid?: invalid, title:, id:, current_user:) }
 
         context "when the form is not valid" do
           let(:invalid) { true }
@@ -32,7 +25,7 @@ module Decidim
         end
 
         context "when everything is ok" do
-          it "creates a section" do
+          it "updates the section" do
             subject.call
             section.reload
 

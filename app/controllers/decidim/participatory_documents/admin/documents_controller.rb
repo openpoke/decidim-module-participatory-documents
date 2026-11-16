@@ -9,15 +9,18 @@ module Decidim
         include Decidim::ComponentPathHelper
 
         helper Decidim::LayoutHelper
-        helper_method :sections
 
         before_action except: [:index, :new, :create] do
           redirect_to(documents_path) if document.blank?
         end
 
+        before_action :append_storage_host_to_csp, only: :pdf_viewer
+
+        # rubocop:disable Decidim/EnforcePermissionTo
         def index
           redirect_to(document_suggestions_path(document)) && return if document.present? && document.file.attached?
         end
+        # rubocop:enable Decidim/EnforcePermissionTo
 
         def new
           enforce_permission_to :create, :participatory_document
@@ -69,10 +72,12 @@ module Decidim
           end
         end
 
+        # rubocop:disable Decidim/EnforcePermissionTo
         def pdf_viewer
           @form = form(SectionForm).instance
           render layout: false
         end
+        # rubocop:enable Decidim/EnforcePermissionTo
 
         def edit_pdf
           enforce_permission_to :update, :participatory_document, document:
@@ -86,18 +91,7 @@ module Decidim
               flash[:notice] = t("documents.final_publish.success", scope: "decidim.participatory_documents.admin")
               redirect_to document_suggestions_path(document)
             end
-
-            on(:invalid) do
-              flash.now[:alert] = t("documents.final_publish.error", scope: "decidim.participatory_documents.admin")
-              render :edit
-            end
           end
-        end
-
-        private
-
-        def sections
-          @sections ||= document.sections
         end
       end
     end

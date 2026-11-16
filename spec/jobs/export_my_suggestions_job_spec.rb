@@ -9,27 +9,29 @@ module Decidim::ParticipatoryDocuments
     let!(:user) { create(:user, organization:) }
 
     it "sends an email with the result of the export" do
-      described_class.perform_now(user, document, "CSV")
+      expect { described_class.perform_now(user, document, "CSV") }.to change(user.private_exports, :count).by(1)
 
       email = last_email
       expect(email.subject).to include("suggestions")
-      attachment = email.attachments.first
+      expect(email.to).to include(user.email)
 
-      expect(attachment.read.length).to be_positive
-      expect(attachment.mime_type).to eq("application/zip")
-      expect(attachment.filename).to match(/^suggestions-[0-9]+-[0-9]+-[0-9]+-[0-9]+\.zip$/)
+      private_export = user.private_exports.first
+      expect(private_export.export_type).to eq("suggestions")
+      expect(private_export.content_type).to eq("application/zip")
+      expect(private_export.file.blob.filename.to_s).to eq("suggestions.zip")
+      expect(private_export.file.blob.byte_size).to be_positive
     end
 
     describe "CSV" do
       it "uses the CSV exporter" do
-        export_data = double
+        export_data = double(filename: proc { "test" }, read: "test data")
 
         expect(Decidim::Exporters::CSV)
           .to(receive(:new).with(anything, MySuggestionSerializer))
           .and_return(double(export: export_data))
 
         expect(Decidim::ExportMailer)
-          .to(receive(:export).with(user, anything, export_data))
+          .to(receive(:export).with(user, kind_of(Decidim::PrivateExport)))
           .and_return(double(deliver_now: true))
 
         described_class.perform_now(user, document, "CSV")
@@ -38,14 +40,14 @@ module Decidim::ParticipatoryDocuments
 
     describe "JSON" do
       it "uses the JSON exporter" do
-        export_data = double
+        export_data = double(filename: proc { "test" }, read: "test data")
 
         expect(Decidim::Exporters::JSON)
           .to(receive(:new).with(anything, MySuggestionSerializer))
           .and_return(double(export: export_data))
 
         expect(Decidim::ExportMailer)
-          .to(receive(:export).with(user, anything, export_data))
+          .to(receive(:export).with(user, kind_of(Decidim::PrivateExport)))
           .and_return(double(deliver_now: true))
 
         described_class.perform_now(user, document, "JSON")
@@ -54,14 +56,14 @@ module Decidim::ParticipatoryDocuments
 
     describe "XLSX" do
       it "uses the XLSX exporter" do
-        export_data = double
+        export_data = double(filename: proc { "test" }, read: "test data")
 
         expect(Decidim::Exporters::Excel)
           .to(receive(:new).with(anything, MySuggestionSerializer))
           .and_return(double(export: export_data))
 
         expect(Decidim::ExportMailer)
-          .to(receive(:export).with(user, anything, export_data))
+          .to(receive(:export).with(user, kind_of(Decidim::PrivateExport)))
           .and_return(double(deliver_now: true))
 
         described_class.perform_now(user, document, "Excel")

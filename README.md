@@ -13,7 +13,7 @@ This module allows to upload PDF (and possibilty other formats) and define areas
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'decidim-participatory_documents
+gem 'decidim-participatory_documents'
 ```
 
 Or, if you want to stay up to date with the latest changes use this line instead:
@@ -29,6 +29,7 @@ And then execute:
 bundle
 bin/rails decidim:upgrade
 bundle exec rails db:migrate
+bundle exec rails data:migrate
 ```
 
 > **NOTE**
@@ -49,6 +50,35 @@ Depending on your Decidim version, you can choose the corresponding version to e
 | 0.2.x   | 0.27.x                      |
 | 0.3.x   | 0.28.x                      |
 | 0.4.x   | 0.29.x                      |
+| 0.6.x   | 0.31.x (from 0.31.8)        |
+
+## Upgrading from 0.4.x to 0.6.x
+
+Decidim 0.31 renames valuators to evaluators, and so does this module. After updating the gem, run:
+
+```
+bin/rails decidim:upgrade
+bundle exec rails db:migrate
+bundle exec rails data:migrate
+```
+
+- `db:migrate` renames the table that stores the evaluators assigned to each suggestion.
+- `data:migrate` updates the admin log entries of this module that point to the old class name, so the admin activity log can keep showing them.
+
+Run also the upgrade tasks listed in the Decidim 0.31 release notes. This module depends on one of them, which converts the existing valuator roles into evaluator roles:
+
+```
+bundle exec rails decidim:upgrade:decidim_update_valuators
+```
+
+The initializer created by `decidim_participatory_documents:install_mjs_initializer` has changed. If your application already has the file `config/initializers/rack_mjs_type.rb`, generate it again and restart the application:
+
+```
+rm config/initializers/rack_mjs_type.rb
+bin/rails decidim_participatory_documents:install_mjs_initializer
+```
+
+The new initializer only declares the mime type of the `.mjs` files. The previous one also registered a Rails format, which interfered with the JavaScript responses of Decidim (for example, when publishing a comment).
 
 
 ## Required MIME types
@@ -57,7 +87,7 @@ Latests versions of PDFjs require that the web server to send the mime type `tex
 
 ### Usage with Puma + Rack
 
-If you are using Puma with Rack (< v3.1.0) you might have to add and initializer to ensure files with `.mjs` are served correctly. This is usually the most common approach when docker is used or when the ENV var `RAILS_SERVE_STATIC_FILES=true` is active.
+If Puma serves the static files, you have to add an initializer to ensure files with `.mjs` are served correctly: Decidim 0.31 runs on Rack 2.2, and Rack only knows the `.mjs` mime type since v3.1.0. This is usually the most common approach when docker is used or when the ENV var `RAILS_SERVE_STATIC_FILES=true` is active.
 
 Execute the following command to create an initializer that does that:
 
@@ -128,6 +158,12 @@ Decidim::ParticipatoryDocuments.configure do |config|
   config.max_suggestion_length = 1000
 end
 ```
+
+The PDF.js release installed by the module can be changed with `config.pdfjs_url` and `config.pdfjs_checksum` (the SHA256 checksum of the zip file, `nil` skips the verification).
+
+## Remote file storage
+
+If the files are stored in a remote service (S3 or compatible), the bucket must allow CORS `GET` requests from the site host. Otherwise the browser cannot load the PDF.
 
 ## Antivirus compatibility
 

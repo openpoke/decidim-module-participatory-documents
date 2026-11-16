@@ -9,7 +9,9 @@ module Decidim
 
         export_data = Decidim::Exporters.find_exporter(format).new(collection, MySuggestionSerializer).export
 
-        ExportMailer.export(user, :suggestions, export_data).deliver_now
+        private_export = attach_archive(export_data, "suggestions", user)
+
+        ExportMailer.export(user, private_export).deliver_now
       end
     end
   end
