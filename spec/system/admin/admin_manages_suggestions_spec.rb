@@ -295,7 +295,7 @@ describe "Admin manages suggestions" do
         check :answer_suggestion_answer_is_published if published
       end
       click_on "Answer"
-      expect(page).to have_content("Successfully")
+      expect(page).to have_content("Successfully added the answer")
     end
   end
 

@@ -35,7 +35,7 @@ describe "Index Suggestion Notes" do
         find("*[type=submit]").click
       end
 
-      expect(page).to have_admin_callout("successfully")
+      expect(page).to have_admin_callout("Suggestion note successfully created")
 
       click_on("Private notes")
 

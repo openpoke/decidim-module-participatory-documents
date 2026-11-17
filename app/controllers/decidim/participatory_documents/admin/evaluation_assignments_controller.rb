@@ -40,13 +40,13 @@ module Decidim
               if current_user_is_being_unassigned?
                 redirect_to EngineRouter.admin_proxy(current_component).root_path
               else
-                redirect_back fallback_location: EngineRouter.admin_proxy(current_component).root_path
+                redirect_back_or_to(EngineRouter.admin_proxy(current_component).root_path)
               end
             end
 
             on(:invalid) do
               flash.keep[:alert] = I18n.t("evaluation_assignments.delete.invalid", scope: "decidim.participatory_documents.admin")
-              redirect_back fallback_location: EngineRouter.admin_proxy(current_component).root_path
+              redirect_back_or_to(EngineRouter.admin_proxy(current_component).root_path)
             end
           end
         end

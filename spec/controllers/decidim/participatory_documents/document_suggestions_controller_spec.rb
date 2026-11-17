@@ -5,6 +5,8 @@ require "spec_helper"
 module Decidim
   module ParticipatoryDocuments
     describe DocumentSuggestionsController do
+      include Decidim::Core::Engine.routes.url_helpers
+
       let(:organization) { create(:organization) }
       let(:participatory_process) { create(:participatory_process, organization:) }
       let(:component) { create(:participatory_documents_component, participatory_space: participatory_process) }
@@ -31,7 +33,7 @@ module Decidim
 
           it "redirects to the login page" do
             get :index, params: { document_id: document.id }
-            expect(response).to redirect_to("/users/sign_in")
+            expect(response).to redirect_to(new_user_session_path)
           end
         end
       end
@@ -48,7 +50,7 @@ module Decidim
 
           it "redirects to the login page" do
             post(:create, params:)
-            expect(response).to redirect_to("/users/sign_in")
+            expect(response).to redirect_to(new_user_session_path)
           end
         end
       end
@@ -58,7 +60,7 @@ module Decidim
 
         it "returns unprocessable entity" do
           post(:export, params:)
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
         end
 
         context "when there are suggestions" do
@@ -77,7 +79,7 @@ module Decidim
 
             it "returns unprocessable_entity" do
               post(:export, params:)
-              expect(response).to have_http_status(:unprocessable_entity)
+              expect(response).to have_http_status(:unprocessable_content)
             end
           end
         end
@@ -87,7 +89,7 @@ module Decidim
 
           it "redirects to the login page" do
             post(:export, params:)
-            expect(response).to redirect_to("/users/sign_in")
+            expect(response).to redirect_to(new_user_session_path)
           end
         end
       end

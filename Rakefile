@@ -4,12 +4,10 @@ require "decidim/dev/common_rake"
 require "fileutils"
 
 def install_module(path)
-  # maintain until https://github.com/decidim/decidim/commit/51b81b37004708ab72e70993fef4634eef18ee6c is in the decidim version used
   Dir.chdir(path) do
     system("bundle exec rake decidim_participatory_documents:install:migrations")
     system("bundle exec rake db:migrate")
     system("bundle exec rake decidim_participatory_documents:install_pdf_js")
-    system("bundle exec rake decidim_participatory_documents:install_mjs_initializer")
   end
 end
 

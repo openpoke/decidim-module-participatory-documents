@@ -254,6 +254,9 @@ describe "User interaction with PDF viewer" do
       find("#box-#{section.annotations.first.id}").click
       expect(page).to have_css("#participationModal.active.section")
       expect(page).to have_no_css("#participationModal.document")
+      within "#participationModal" do
+        expect(page).to have_content(translated(section.title))
+      end
 
       find_by_id("close-suggestions").click
       expect(page).to have_no_css("#participationModal.active")

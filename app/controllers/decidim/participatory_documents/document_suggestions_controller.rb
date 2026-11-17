@@ -32,7 +32,7 @@ module Decidim
       def export
         enforce_permission_to :create, :suggestion
 
-        return render json: { message: t(".empty") }, status: :unprocessable_entity unless all_suggestions.any?
+        return render json: { message: t(".empty") }, status: :unprocessable_content unless all_suggestions.any?
 
         ExportMySuggestionsJob.perform_later(current_user, document, "Excel")
 

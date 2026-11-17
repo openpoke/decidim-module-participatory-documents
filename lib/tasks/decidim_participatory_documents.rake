@@ -8,24 +8,6 @@ namespace :decidim_participatory_documents do
     apply_path_corrections_to_pdfjs "public"
   end
 
-  # Since older versions of Rack does not support the .mjs extension, so we register it here."
-  desc "Create rack mime type initializer for .mjs files"
-  task :install_mjs_initializer do
-    initializer_path = Rails.root.join("config/initializers/rack_mjs_type.rb")
-
-    if File.exist?(initializer_path)
-      puts "⚠️ Initializer already exists at #{initializer_path}, skipping creation."
-      next
-    end
-
-    content = <<~RUBY
-      Rack::Mime::MIME_TYPES[".mjs"] = "text/javascript"
-    RUBY
-
-    File.write(initializer_path, content)
-    puts "Created initializer at #{initializer_path}"
-  end
-
   private
 
   def download_pdfjs_to_application(destination_path)
@@ -79,10 +61,6 @@ end
 Rake::Task["decidim:upgrade:shakapacker"].enhance do
   Rake::Task["decidim_participatory_documents:install_pdf_js"].invoke
   puts "✅ PDF.js library installed"
-  puts "⚠️ If your app serves the static files itself, create the .mjs mime type initializer (Rack older than 3.1 does not know that mime type):"
-  puts
-  puts "bin/rails decidim_participatory_documents:install_mjs_initializer"
-  puts
 end
 
 Rake::Task["decidim:choose_target_plugins"].enhance do

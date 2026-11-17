@@ -51,6 +51,25 @@ Depending on your Decidim version, you can choose the corresponding version to e
 | 0.3.x   | 0.28.x                      |
 | 0.4.x   | 0.29.x                      |
 | 0.6.x   | 0.31.x (from 0.31.8)        |
+| 0.7.x   | 0.32.x (from 0.32.2)        |
+
+## Upgrading from 0.6.x to 0.7.x
+
+Decidim 0.32 requires Ruby 3.4 and runs on Rails 8.1. Follow the Decidim 0.32 release notes, update the gem and run:
+
+```
+bin/rails decidim:upgrade
+bundle exec rails db:migrate
+bundle exec rails data:migrate
+```
+
+- `db:migrate` removes the user group columns of this module, which were never used. Decidim 0.32 removes the user groups as well.
+
+The task `decidim_participatory_documents:install_mjs_initializer` has been removed. Decidim 0.32 runs on Rack 3.2, which already serves the `.mjs` files with the right mime type. If your application has the file `config/initializers/rack_mjs_type.rb`, delete it and restart the application:
+
+```
+rm config/initializers/rack_mjs_type.rb
+```
 
 ## Upgrading from 0.4.x to 0.6.x
 
@@ -71,29 +90,13 @@ Run also the upgrade tasks listed in the Decidim 0.31 release notes. This module
 bundle exec rails decidim:upgrade:decidim_update_valuators
 ```
 
-The initializer created by `decidim_participatory_documents:install_mjs_initializer` has changed. If your application already has the file `config/initializers/rack_mjs_type.rb`, generate it again and restart the application:
-
-```
-rm config/initializers/rack_mjs_type.rb
-bin/rails decidim_participatory_documents:install_mjs_initializer
-```
-
-The new initializer only declares the mime type of the `.mjs` files. The previous one also registered a Rails format, which interfered with the JavaScript responses of Decidim (for example, when publishing a comment).
-
-
 ## Required MIME types
 
 Latests versions of PDFjs require that the web server to send the mime type `text/javascript` for files ending in `.mjs`
 
 ### Usage with Puma + Rack
 
-If Puma serves the static files, you have to add an initializer to ensure files with `.mjs` are served correctly: Decidim 0.31 runs on Rack 2.2, and Rack only knows the `.mjs` mime type since v3.1.0. This is usually the most common approach when docker is used or when the ENV var `RAILS_SERVE_STATIC_FILES=true` is active.
-
-Execute the following command to create an initializer that does that:
-
-```
-bin/rails decidim_participatory_documents:install_mjs_initializer
-```
+If Puma serves the static files, nothing has to be done: Rack already serves the files ending in `.mjs` with the right mime type. This is usually the most common approach when docker is used or when the ENV var `RAILS_SERVE_STATIC_FILES=true` is active.
 
 ### Usage with external static file servers
 

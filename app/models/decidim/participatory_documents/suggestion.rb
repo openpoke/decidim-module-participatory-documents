@@ -136,26 +136,26 @@ module Decidim
 
       # method to filter by assigned evaluator role ID
       def self.evaluator_role_ids_has(value)
-        query = <<-SQL.squish
-        :value = any(
-          (SELECT decidim_participatory_documents_evaluation_assignments.evaluator_role_id
-          FROM decidim_participatory_documents_evaluation_assignments
-          WHERE decidim_participatory_documents_evaluation_assignments.decidim_participatory_documents_suggestion_id = decidim_participatory_documents_suggestions.id
+        query = <<~SQL.squish
+          :value = any(
+            (SELECT decidim_participatory_documents_evaluation_assignments.evaluator_role_id
+            FROM decidim_participatory_documents_evaluation_assignments
+            WHERE decidim_participatory_documents_evaluation_assignments.decidim_participatory_documents_suggestion_id = decidim_participatory_documents_suggestions.id
+            )
           )
-        )
         SQL
         where(query, value:)
       end
 
       # Defines the base query so that ransack can actually sort by this value
       def self.sort_by_evaluation_assignments_count_nulls_last_query
-        <<-SQL.squish
-        (
-          SELECT COUNT(decidim_participatory_documents_evaluation_assignments.id)
-          FROM decidim_participatory_documents_evaluation_assignments
-          WHERE decidim_participatory_documents_evaluation_assignments.decidim_participatory_documents_suggestion_id = decidim_participatory_documents_suggestions.id
-          GROUP BY decidim_participatory_documents_evaluation_assignments.decidim_participatory_documents_suggestion_id
-        )
+        <<~SQL.squish
+          (
+            SELECT COUNT(decidim_participatory_documents_evaluation_assignments.id)
+            FROM decidim_participatory_documents_evaluation_assignments
+            WHERE decidim_participatory_documents_evaluation_assignments.decidim_participatory_documents_suggestion_id = decidim_participatory_documents_suggestions.id
+            GROUP BY decidim_participatory_documents_evaluation_assignments.decidim_participatory_documents_suggestion_id
+          )
         SQL
       end
 

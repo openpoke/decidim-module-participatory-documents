@@ -42,7 +42,7 @@ module Decidim
               expect { post(:create, params:) }.not_to change(Decidim::ParticipatoryDocuments::EvaluationAssignment, :count)
 
               expect(flash[:alert]).to eq("You are not authorized to perform this action.")
-              expect(response).to redirect_to("/admin/")
+              expect(response).to redirect_to(controller.decidim_admin.root_path)
             end
           end
         end
@@ -68,7 +68,7 @@ module Decidim
               expect { delete(:destroy, params:) }.not_to change(Decidim::ParticipatoryDocuments::EvaluationAssignment, :count)
 
               expect(flash[:alert]).to eq("You are not authorized to perform this action.")
-              expect(response).to redirect_to("/admin/")
+              expect(response).to redirect_to(controller.decidim_admin.root_path)
             end
           end
         end
