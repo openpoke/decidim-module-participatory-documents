@@ -71,7 +71,7 @@ module Decidim
         end
 
         def skip_manage_component_permission
-          true
+          evaluator_roles.exists?
         end
       end
     end

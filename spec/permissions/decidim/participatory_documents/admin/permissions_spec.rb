@@ -163,8 +163,19 @@ describe Decidim::ParticipatoryDocuments::Admin::Permissions do
 
       describe "unassign suggestions from an evaluator" do
         let(:action) { { scope: :admin, action: :unassign_from_evaluator, subject: :suggestions } }
+        let(:context) { super().merge(evaluator:) }
 
-        it { is_expected.to be true }
+        context "when the evaluator unassigns themself" do
+          let(:evaluator) { user }
+
+          it { is_expected.to be true }
+        end
+
+        context "when the evaluator unassigns another evaluator" do
+          let(:evaluator) { create(:user, organization:) }
+
+          it_behaves_like "permission is not set"
+        end
       end
 
       context "and suggestion answering is disabled in the component" do

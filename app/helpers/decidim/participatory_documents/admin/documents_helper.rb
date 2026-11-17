@@ -8,8 +8,8 @@ module Decidim
 
         def pdf_manage_buttons(document)
           content_tag(:div, class: "") do
-            if document.blank? && allowed_to?(:create, :participatory_document)
-              new_pdf_btn
+            if document.blank?
+              new_pdf_btn if allowed_to?(:create, :participatory_document)
             elsif document.file.attached? && allowed_to?(:update, :participatory_document, document:)
               edit_document_btn + edit_boxes_btn + preview_sections_btn
             elsif allowed_to?(:update, :participatory_document, document:)

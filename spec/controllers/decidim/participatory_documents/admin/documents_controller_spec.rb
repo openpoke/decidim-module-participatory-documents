@@ -22,6 +22,22 @@ module Decidim
         describe "GET pdf_viewer" do
           it_behaves_like "a pdf viewer allowing the storage host"
         end
+
+        describe "GET index" do
+          render_views
+
+          context "when the component has no document and the user is an evaluator" do
+            let(:component) { create(:participatory_documents_component) }
+            let(:user) { create(:user, :confirmed, :admin_terms_accepted, organization:) }
+            let!(:evaluator_role) { create(:participatory_process_user_role, role: :evaluator, user:, participatory_process:) }
+
+            it "renders the page" do
+              get :index
+
+              expect(response).to have_http_status(:ok)
+            end
+          end
+        end
       end
     end
   end

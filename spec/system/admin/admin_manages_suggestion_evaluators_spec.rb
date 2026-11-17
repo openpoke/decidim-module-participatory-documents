@@ -218,6 +218,19 @@ describe "Admin manages suggestion evaluators" do
       end
     end
 
+    it "can only remove their own assignment" do
+      click_on "Assign"
+      expect(page).to have_content("Suggestions assigned to an evaluator successfully")
+
+      visit suggestion_path
+      within "#evaluators li", text: evaluator.name do
+        expect(page).to have_link("Remove assignment")
+      end
+      within "#evaluators li", text: evaluator2.name do
+        expect(page).to have_no_link("Remove assignment")
+      end
+    end
+
     context "when the evaluator is removed" do
       it "shows the evaluator is unassigned successfully" do
         click_on "Assign"

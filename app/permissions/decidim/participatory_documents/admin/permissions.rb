@@ -85,7 +85,8 @@ module Decidim
         end
 
         def evaluator_can_assign_or_unassign_evaluator_from_suggestions?
-          allow! if permission_action.action == :unassign_from_evaluator || permission_action.action == :assign_to_evaluator
+          allow! if permission_action.action == :assign_to_evaluator
+          allow! if permission_action.action == :unassign_from_evaluator && context[:evaluator] == user
         end
 
         def admin_suggestion_answering_is_enabled?
