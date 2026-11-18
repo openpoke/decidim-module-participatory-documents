@@ -107,7 +107,10 @@
             page.annotationEditorLayer.show();
 
             annotationsLayer.dataset.pageNumber = doc.pageNumber;
-            page.boxEditor = window.InitPolygonEditor(annotationsLayer, CurrentBoxes.filter(function(box) { return box.page_number === doc.pageNumber; }), options, boxChanged);
+            var pageBoxes = savedPage
+              ? savedPage.boxEditor.getBoxes().map(function(box) { return box.serialize(); })
+              : CurrentBoxes.filter(function(box) { return box.page_number === doc.pageNumber; });
+            page.boxEditor = window.InitPolygonEditor(annotationsLayer, pageBoxes, options, boxChanged);
             pages[doc.pageNumber] = page;
           }
         });
