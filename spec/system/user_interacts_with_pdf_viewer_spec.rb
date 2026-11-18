@@ -84,28 +84,6 @@ describe "User interaction with PDF viewer" do
           end
         end
 
-        context "when admin saves a response with :withdrawn state" do
-          let!(:my_suggestion) { create(:participatory_documents_suggestion, :withdrawn, **attributes) }
-
-          context "when the answer is draft" do
-            it "does not render admin note" do
-              within "#participationModal" do
-                expect(page).to have_no_content(answer["en"])
-              end
-            end
-          end
-
-          context "when the answer is published" do
-            let(:published) { true }
-
-            it "does not render admin note" do
-              within "#participationModal" do
-                expect(page).to have_no_content(answer["en"])
-              end
-            end
-          end
-        end
-
         context "when admin saves a response with :rejected state" do
           let!(:my_suggestion) { create(:participatory_documents_suggestion, :rejected, **attributes) }
 

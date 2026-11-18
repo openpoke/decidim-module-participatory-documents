@@ -98,6 +98,12 @@ describe Decidim::ParticipatoryDocuments::Admin::Permissions do
     it { is_expected.to be true }
   end
 
+  describe "suggestions list" do
+    let(:action) { { scope: :admin, action: :read, subject: :suggestions } }
+
+    it { is_expected.to be true }
+  end
+
   context "when suggestion answering is disabled in the component" do
     let(:component) { create(:participatory_documents_component, settings: { suggestion_answering_enabled: false }) }
 
@@ -147,6 +153,13 @@ describe Decidim::ParticipatoryDocuments::Admin::Permissions do
     let!(:evaluator_role) { create(:participatory_process_user_role, role: :evaluator, user:, participatory_process: component.participatory_space) }
     let(:section) { create(:participatory_documents_section, document:) }
     let(:suggestion) { create(:participatory_documents_suggestion, suggestable: section) }
+
+    describe "suggestions list" do
+      let(:action) { { scope: :admin, action: :read, subject: :suggestions } }
+      let(:suggestion) { nil }
+
+      it { is_expected.to be true }
+    end
 
     context "and is assigned to the suggestion" do
       let!(:assignment) { create(:suggestion_evaluation_assignment, suggestion:, evaluator_role:) }

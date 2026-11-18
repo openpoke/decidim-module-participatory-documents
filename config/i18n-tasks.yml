@@ -25,7 +25,6 @@ ignore_unused:
   - decidim.participatory_documents.admin.exports.*
   - decidim.participatory_documents.admin_log.evaluation_assignment.*
   - decidim.participatory_documents.models.section.fields.artificial_tile
-  - decidim.participatory_documents.suggestions.answers.withdrawn
   - decidim.participatory_documents.ui_messages.*
   - errors.messages.virus
 

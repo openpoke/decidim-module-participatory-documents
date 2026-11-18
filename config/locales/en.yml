@@ -50,7 +50,6 @@ en:
               evaluating: Evaluating
               not_answered: Not Answered
               rejected: Rejected
-              withdrawn: Withdrawn
     admin_log:
       annotation:
         create: "%{user_name} created a new participatory area for %{document_name}"
@@ -253,7 +252,6 @@ en:
           evaluating: Evaluating
           not_answered: Not Answered
           rejected: Rejected
-          withdrawn: Withdrawn
         modal:
           exit_full_screen: Exit fullscreen
           full_screen: Fullscreen

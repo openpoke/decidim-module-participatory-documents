@@ -25,6 +25,7 @@ module Decidim
           elsif action_is_show_on_suggestion?
             disallow!
           end
+          allow! if action_is_read_on_suggestions?
         end
 
         def handle_general_permissions
@@ -38,6 +39,10 @@ module Decidim
 
         def action_is_show_on_suggestion?
           permission_action.subject == :suggestion && permission_action.action == :show
+        end
+
+        def action_is_read_on_suggestions?
+          permission_action.subject == :suggestions && permission_action.action == :read
         end
 
         def action_is_update_on_document?

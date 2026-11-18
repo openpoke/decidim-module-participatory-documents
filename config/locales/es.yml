@@ -47,7 +47,6 @@ es:
               evaluating: En evaluación
               not_answered: No contestada
               rejected: Rechazada
-              withdrawn: Retirada
           evaluator_role_ids_has:
             label: Asignada a evaluadora
     admin_log:
@@ -235,7 +234,6 @@ es:
           evaluating: En evaluación
           not_answered: No contestada
           rejected: Rechazada
-          withdrawn: Retirada
         modal:
           exit_full_screen: Salir pantalla completa
           full_screen: Pantalla Completa

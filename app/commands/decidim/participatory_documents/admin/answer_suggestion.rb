@@ -33,7 +33,7 @@ module Decidim
             state: form.state,
             answer: form.answer,
             answer_is_published: form.answer_is_published,
-            answered_at: %w(not_answered withdrawn).include?(form.state) ? nil : Time.current
+            answered_at: form.state == "not_answered" ? nil : Time.current
           }
         end
 

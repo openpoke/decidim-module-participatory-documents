@@ -13,6 +13,12 @@ module Decidim
         helper_method :suggestions, :suggestion, :notes_form, :find_evaluators_for_select, :suggestion_ids,
                       :suggestion_find, :evaluator_assigned_to_suggestion?
 
+        before_action :check_admin_session_filters, only: [:index]
+
+        def index
+          enforce_permission_to :read, :suggestions
+        end
+
         def show
           enforce_permission_to(:show, :suggestion, suggestion:)
 

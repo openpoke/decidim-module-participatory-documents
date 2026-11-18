@@ -53,6 +53,18 @@ module Decidim
               expect(controller.helpers.suggestions).to contain_exactly(suggestion)
             end
           end
+
+          context "when the user is a collaborator of the space" do
+            let(:user) { create(:user, :confirmed, :admin_terms_accepted, organization:) }
+
+            before { create(:participatory_process_user_role, role: :collaborator, user:, participatory_process:) }
+
+            it "lists every suggestion of the document" do
+              get(:index, params:)
+
+              expect(controller.helpers.suggestions).to contain_exactly(suggestion, other_suggestion)
+            end
+          end
         end
 
         describe "PATCH answer" do

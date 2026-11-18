@@ -47,7 +47,6 @@ ca:
               evaluating: En avaluació
               not_answered: No contestat
               rejected: Rebutjat
-              withdrawn: Retirada
           evaluator_role_ids_has:
             label: Assignada a avaluadora
     admin_log:
@@ -235,7 +234,6 @@ ca:
           evaluating: En avaluació
           not_answered: No contestat
           rejected: Rebutjat
-          withdrawn: Retirada
         modal:
           exit_full_screen: Surt de pantalla completa
           full_screen: Pantalla completa

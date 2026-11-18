@@ -49,6 +49,36 @@ describe "Admin filters suggestions" do
     end
   end
 
+  context "when suggestions are assigned to an evaluator with a filter applied" do
+    let!(:document) { create(:participatory_documents_document, :with_file, author: user, component:) }
+    let(:evaluator) { create(:user, :confirmed, :admin_terms_accepted, organization:) }
+    let!(:evaluator_role) { create(:participatory_process_user_role, role: :evaluator, user: evaluator, participatory_process:) }
+    let!(:evaluating_suggestion) { create(:participatory_documents_suggestion, :evaluating, suggestable: document, body: { en: "Evaluating suggestion" }) }
+    let!(:accepted_suggestion) { create(:participatory_documents_suggestion, :accepted, suggestable: document, body: { en: "Accepted suggestion" }) }
+
+    before { visit router.document_suggestions_path(document) }
+
+    it "keeps the filter after the assignment" do
+      apply_filter("State", "Evaluating")
+
+      within "tr[data-id='#{evaluating_suggestion.id}']" do
+        page.first(".js-suggestion-list-check").set(true)
+      end
+      click_on "Actions"
+      click_on "Assign to evaluator"
+      within "#js-form-assign-suggestions-to-evaluator" do
+        tom_select("#assign_evaluator_role_ids", option_id: [evaluator_role.id])
+        click_on("Assign")
+      end
+
+      expect(page).to have_content("Suggestions assigned to an evaluator successfully")
+      within ".table-list" do
+        expect(page).to have_content("Evaluating suggestion")
+        expect(page).to have_no_content("Accepted suggestion")
+      end
+    end
+  end
+
   context "when filtering by section" do
     let(:section) { create(:participatory_documents_section, document:) }
     let!(:global_suggestion) { create(:participatory_documents_suggestion, suggestable: document) }

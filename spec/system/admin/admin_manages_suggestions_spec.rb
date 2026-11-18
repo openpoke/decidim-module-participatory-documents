@@ -162,7 +162,6 @@ describe "Admin manages suggestions" do
 
     context "when suggestion has an answer not published" do
       it_behaves_like "marks the answer by state", state: :not_answered
-      it_behaves_like "marks the answer by state", state: :withdrawn
       it_behaves_like "marks the answer by state", state: :rejected
       it_behaves_like "marks the answer by state", state: :accepted
     end

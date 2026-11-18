@@ -47,7 +47,6 @@ de:
               evaluating: in Bewertung
               not_answered: Unbeantwortet
               rejected: Abgelehnt
-              withdrawn: Zurückgezogen
           evaluator_role_ids_has:
             label: Zugewiesene Experten
     admin_log:
@@ -235,7 +234,6 @@ de:
           evaluating: in Bewertung
           not_answered: Unbeantwortet
           rejected: Abgelehnt
-          withdrawn: Zurückgezogen
         modal:
           exit_full_screen: Vollbildmodus verlassen
           full_screen: Vollbildmodus

@@ -33,7 +33,7 @@ module Decidim
 
       validates_upload :file, uploader: Decidim::AttachmentUploader
 
-      POSSIBLE_STATES = %w(not_answered evaluating accepted rejected withdrawn).freeze
+      POSSIBLE_STATES = %w(not_answered evaluating accepted rejected).freeze
 
       POSSIBLE_STATES.each do |possible|
         define_method(:"#{possible}?") do
@@ -57,7 +57,7 @@ module Decidim
       end
 
       def published_answer?
-        answered? && answer_is_published? && %w(not_answered withdrawn).exclude?(state)
+        answered? && answer_is_published? && not_not_answered?
       end
 
       scope :sort_by_published_asc, lambda {
