@@ -13,7 +13,7 @@ Gem::Specification.new do |spec|
   spec.summary = "A module for Decidim to collect suggestions on areas defined on top of a PDF document."
   spec.description = "This module allows to upload a PDF and define areas on top of it that will become spaces for suggestions, improvements and other participative activities."
   spec.license = "AGPL-3.0"
-  spec.homepage = "https://github.com/openpoke/decidim-module-participatory_documents"
+  spec.homepage = "https://github.com/openpoke/decidim-module-participatory-documents"
   spec.required_ruby_version = ">= 3.4"
 
   spec.files = `git ls-files -z`.split("\x0").reject do |f|

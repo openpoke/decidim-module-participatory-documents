@@ -2,8 +2,8 @@ PATH
   remote: .
   specs:
     decidim-participatory_documents (0.7.0)
-      decidim-admin (>= 0.32.2, < 0.33)
-      decidim-core (>= 0.32.2, < 0.33)
+      decidim-admin (>= 0.32, < 0.33)
+      decidim-core (>= 0.32, < 0.33)
 
 GEM
   remote: https://rubygems.org/

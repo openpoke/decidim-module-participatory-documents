@@ -1,7 +1,7 @@
 {
   "name": "decidim_module_participatory_documents",
   "version": "0.7.0",
-  "description": "A 3 steps proposals for Decidim",
+  "description": "A module for Decidim to collect suggestions on areas defined on top of a PDF document.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -18,7 +18,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Openpoke/decidim-module-participatory_documents.git"
+    "url": "git+https://github.com/openpoke/decidim-module-participatory-documents.git"
   },
   "keywords": [
     "decidim"
@@ -26,9 +26,9 @@
   "author": "ivan@pokecode.net",
   "license": "AGPL-3.0-or-later",
   "bugs": {
-    "url": "https://github.com/Openpoke/decidim-module-participatory_documents/issues"
+    "url": "https://github.com/openpoke/decidim-module-participatory-documents/issues"
   },
-  "homepage": "https://github.com/Openpoke/decidim-module-participatory_documents#readme",
+  "homepage": "https://github.com/openpoke/decidim-module-participatory-documents#readme",
   "stylelint": {
     "extends": "@decidim/stylelint-config"
   },
