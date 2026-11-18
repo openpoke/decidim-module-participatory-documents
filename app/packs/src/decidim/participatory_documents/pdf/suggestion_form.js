@@ -58,21 +58,45 @@ export default class SuggestionForm {
     this.div.scrollTop = this.div.scrollHeight;
   }
 
+  clearArea() {
+    this.div.querySelectorAll("[data-dialog-open]").forEach((button) => {
+      const dialog = document.querySelector(`[data-dialog="${button.dataset.dialogOpen}"]`);
+
+      if (dialog) {
+        dialog.remove();
+      }
+      Reflect.deleteProperty(window.Decidim.currentDialogs, button.dataset.dialogOpen);
+    });
+    this.div.innerHTML = "";
+  }
+
   populateArea(data) {
+    this.clearArea();
     this.div.innerHTML = data;
     document.dispatchEvent(new CustomEvent("ajax:loaded", { detail: this.div }));
+    this.updateExportCount();
     this.addCloseHandler();
     this.addFormHandler();
     this.scrollToEnd();
+  }
+
+  updateExportCount() {
+    const list = this.div.querySelector("[data-suggestions-count]");
+    const count = document.getElementById("exportSuggestionsCount");
+
+    if (list && count) {
+      count.textContent = list.dataset.suggestionsCount;
+    }
   }
 
   addCloseHandler() {
     let close = document.getElementById("close-suggestions");
 
     if (close) {
-      close.addEventListener("click", () => {
+      close.addEventListener("click", (event) => {
+        event.preventDefault();
         this.close();
-      }, { once: true });
+      });
     }
   }
 
@@ -106,6 +130,7 @@ export default class SuggestionForm {
   }
 
   fetchGroup() {
+    this.clearArea();
     fetch(this.getGroupUrl(), {
       headers: {
         "Content-Type": "text/html; charset=utf-8",

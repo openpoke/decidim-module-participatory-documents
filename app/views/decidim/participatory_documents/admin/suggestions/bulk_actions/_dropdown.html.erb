@@ -25,10 +25,12 @@
         <%= t("decidim.participatory_documents.admin.suggestions.index.actions.unassign_from_evaluator") %>
       </button>
     </li>
-    <li class="dropdown__item">
-      <button type="button" class="dropdown__button" data-action="publish-answers">
-        <%= t("decidim.participatory_documents.admin.suggestions.index.actions.publish_answers") %>
-      </button>
-    </li>
+    <% if allowed_to?(:publish_answers, :suggestion_answer) %>
+      <li class="dropdown__item">
+        <button type="button" class="dropdown__button" data-action="publish-answers">
+          <%= t("decidim.participatory_documents.admin.suggestions.index.actions.publish_answers") %>
+        </button>
+      </li>
+    <% end %>
   </ul>
 </div>

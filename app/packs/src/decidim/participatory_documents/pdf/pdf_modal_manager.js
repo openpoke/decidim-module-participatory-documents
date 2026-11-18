@@ -120,7 +120,7 @@ export default class PdfModalManager {
         throw new Error(response.statusText);
       }).
       then(() => {
-        this.createBox(box, this.pdfViewer.currentPageNumber);
+        this.createBox(box, parseInt(box.layer.div.dataset.pageNumber, 10));
       }).
       catch((error) => {
         console.error("Error saving box", error);

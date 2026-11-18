@@ -173,7 +173,9 @@ ca:
             suggestion: <strong>Atenció:</strong> Si carregues un nou document, totes les àrees (caixes) de participació seran eliminades!
             title: Llista Suggeriments
           publish_answers:
-            number_of_suggestions: Es publicaran les respostes per a %{number} suggeriments.
+            number_of_suggestions:
+              one: Es publicarà la resposta per a %{count} suggeriment.
+              other: Es publicaran les respostes per a %{count} suggeriments.
             select_a_suggestion: Si us plau, selecciona un suggeriment
             success: Respostes als suggeriments publicats amb èxit.
           show:

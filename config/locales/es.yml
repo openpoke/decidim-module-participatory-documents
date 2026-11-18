@@ -173,7 +173,9 @@ es:
             suggestion: Sugerencia
             title: Lista de Sugerencias
           publish_answers:
-            number_of_suggestions: Se publicarán las respuestas para %{number} sugerencias.
+            number_of_suggestions:
+              one: Se publicará la respuesta para %{count} sugerencia.
+              other: Se publicarán las respuestas para %{count} sugerencias.
             select_a_suggestion: Por favor, elige una sugerencia
             success: Las respuestas en las sugerencias han sido publicadas correctamente.
           show:

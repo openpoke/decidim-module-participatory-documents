@@ -8,5 +8,25 @@ data:
     - "<%= %x[bundle info decidim-core --path].chomp %>/config/locales/%{locale}.yml"
 
 ignore_unused:
+  - activemodel.attributes.answer_suggestion.*
+  - activemodel.attributes.document.*
+  - activemodel.attributes.evaluation_assignment.admin_log.*
+  - activemodel.attributes.section.*
+  - activemodel.attributes.suggestion.*
+  - activemodel.errors.models.answer_suggestion.attributes.state.inclusion
+  - decidim.admin.filters.search_placeholder.body_cont
+  - decidim.admin.filters.suggestions.*
+  - decidim.admin_log.{annotation,document,section,suggestion_note}.*
+  - decidim.components.participatory_documents.*
+  - decidim.download_your_data.show.suggestions
+  - decidim.events.participatory_documents.*
+  - decidim.forms.file_help.file.pdf_message
+  - decidim.participatory_documents.admin.documents.form.{alert_suggestions_html,warning_sections_html}
+  - decidim.participatory_documents.admin.exports.*
+  - decidim.participatory_documents.admin_log.evaluation_assignment.*
+  - decidim.participatory_documents.models.section.fields.artificial_tile
+  - decidim.participatory_documents.suggestions.answers.withdrawn
+  - decidim.participatory_documents.ui_messages.*
+  - errors.messages.virus
 
 ignore_missing:

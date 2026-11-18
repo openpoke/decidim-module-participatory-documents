@@ -108,7 +108,7 @@ module Decidim
 
         def translated_dummy_suggestable_id_has(value)
           type, id = value.split("-")
-          return translated_attribute(document.title) if type == "d"
+          return t("decidim.participatory_documents.admin.suggestions.suggestion.global") if type == "d"
 
           translated_attribute(sections_by_id[id.to_i].try(:title))
         end

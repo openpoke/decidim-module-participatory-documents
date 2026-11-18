@@ -92,7 +92,9 @@ window.InitPolygonViewer = (layer, boxes, options) => {
 
   viewer.onBoxBlur = (box, evt) => {
     console.log("click outside box", box, evt);
-    window.currentSuggestionForm.close();
+    if (window.currentSuggestionForm.group === box.section) {
+      window.currentSuggestionForm.close();
+    }
   };
 
   return viewer;

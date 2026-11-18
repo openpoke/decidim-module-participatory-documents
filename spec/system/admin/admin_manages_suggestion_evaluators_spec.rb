@@ -191,6 +191,26 @@ describe "Admin manages suggestion evaluators" do
     end
   end
 
+  context "when an evaluator selects a suggestion with an unpublished answer" do
+    let!(:suggestion) { create(:participatory_documents_suggestion, :accepted, :draft, suggestable: section1, answer: { en: "Foo bar" }) }
+    let!(:assignment) { create(:suggestion_evaluation_assignment, suggestion:, evaluator_role:) }
+
+    before do
+      relogin_as evaluator, scope: :user
+      visit current_path
+    end
+
+    it "does not offer to publish the answers" do
+      within "tr[data-id='#{suggestion.id}']" do
+        page.first(".js-suggestion-list-check").set(true)
+      end
+      click_on "Actions"
+
+      expect(page).to have_button("Assign to evaluator")
+      expect(page).to have_no_button("Publish answers")
+    end
+  end
+
   context "when an evaluator manages assignments" do
     let(:evaluator2) { create(:user, :confirmed, :admin_terms_accepted, organization:) }
     let!(:evaluator_role2) { create(:participatory_process_user_role, role: :evaluator, user: evaluator2, participatory_process:) }

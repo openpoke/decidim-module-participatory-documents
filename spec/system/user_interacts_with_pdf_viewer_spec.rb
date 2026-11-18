@@ -246,6 +246,78 @@ describe "User interaction with PDF viewer" do
       expect(page).to have_css("#suggestions-list a[href*='Exampledocument.pdf']", count: 2)
     end
 
+    it "attaches a file to a global suggestion after visiting a box panel" do
+      find("#box-#{section.annotations.first.id}").click
+      within "#participationModal" do
+        expect(page).to have_content(translated(section.title))
+      end
+
+      click_on "Global suggestions"
+      expect(page).to have_content("upload a file")
+      dynamically_attach_file(:suggestion_file, Decidim::Dev.asset("Exampledocument.pdf"))
+      within "#messageForm" do
+        fill_in :suggestion_body, with: "Suggestion with a file after a box"
+      end
+      click_on("Send suggestion")
+
+      within "#suggestions-list" do
+        expect(page).to have_content("Suggestion with a file after a box")
+        expect(page).to have_link(href: /Exampledocument\.pdf/)
+      end
+    end
+
+    it "attaches a file of a type allowed by the organization" do
+      click_on "Global suggestions"
+      dynamically_attach_file(:suggestion_file, File.expand_path("../fixtures/files/suggestions.txt", __dir__))
+      within "#messageForm" do
+        fill_in :suggestion_body, with: "Suggestion with a text file"
+      end
+      click_on("Send suggestion")
+
+      within "#suggestions-list" do
+        expect(page).to have_content("Suggestion with a text file")
+        expect(page).to have_link(href: /suggestions\.txt/)
+      end
+    end
+
+    it "keeps a single upload dialog after sending several global suggestions" do
+      click_on "Global suggestions"
+
+      2.times do |index|
+        within "#messageForm" do
+          fill_in :suggestion_body, with: "Global suggestion number #{index}"
+        end
+        click_on("Send suggestion")
+        expect(page).to have_content("Global suggestion number #{index}")
+      end
+
+      expect(page.evaluate_script("document.querySelectorAll('[data-dialog^=\"upload_\"]').length")).to eq(1)
+    end
+
+    context "when switching between areas" do
+      let!(:other_section) { create(:participatory_documents_section, :with_annotations, document:) }
+      let!(:section_suggestion) { create(:participatory_documents_suggestion, suggestable: section, author: user, body: { en: "Suggestion of the first area" }) }
+
+      before do
+        page.refresh
+      end
+
+      it "does not show the suggestions of the previous area while the new one is loading" do
+        find("#box-#{section.annotations.first.id}").click
+        expect(page).to have_content("Suggestion of the first area")
+        find_by_id("close-suggestions").click
+        expect(page).to have_no_content("Suggestion of the first area")
+
+        page.execute_script("window.originalFetch = window.fetch; window.fetch = (...args) => new Promise((resolve) => setTimeout(() => resolve(window.originalFetch(...args)), 4000));")
+        find("#box-#{other_section.annotations.first.id}").click
+
+        within "#participationModal" do
+          expect(page).to have_no_content("Suggestion of the first area", wait: 1)
+          expect(page).to have_content(translated(other_section.title))
+        end
+      end
+    end
+
     it "switches from the global panel to a box panel" do
       click_on "Global suggestions"
       expect(page).to have_css("#participationModal.active.document")
@@ -281,6 +353,20 @@ describe "User interaction with PDF viewer" do
         end
 
         expect(last_email.subject).to include("Your export")
+      end
+
+      it "counts the suggestions created without reloading the page" do
+        click_on "Global suggestions"
+        within "#messageForm" do
+          fill_in :suggestion_body, with: "Some random string longer than 15 chrs"
+        end
+        click_on("Send suggestion")
+        expect(page).to have_content("Some random string longer than 15 chrs")
+        find_by_id("close-suggestions").click
+        expect(page).to have_no_content("Some random string longer than 15 chrs")
+
+        click_on "Export my suggestions"
+        expect(page).to have_content("You have 3 suggestions on this document")
       end
 
       it "lists the export in the download your data page" do

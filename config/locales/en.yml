@@ -197,7 +197,9 @@ en:
             suggestion: Suggestion
             title: List Suggestions
           publish_answers:
-            number_of_suggestions: Answers for %{number} suggestions will be published.
+            number_of_suggestions:
+              one: The answer for %{count} suggestion will be published.
+              other: Answers for %{count} suggestions will be published.
             select_a_suggestion: Please select a suggestion
             success: Suggestion answers successfully published.
           show:

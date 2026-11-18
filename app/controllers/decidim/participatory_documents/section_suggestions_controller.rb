@@ -38,6 +38,10 @@ module Decidim
       def section
         @section ||= document.sections.find(params[:section_id])
       end
+
+      def skip_store_location?
+        true
+      end
     end
   end
 end

@@ -92,6 +92,10 @@ export default class PdfStateManager {
       filter((page) => page.boxEditor).
       filter((page) => Object.keys(page.boxEditor.boxes).length > 0).
       forEach((page) => Object.values(page.boxEditor.boxes).map((box) => this._updateOrCreateBox(box, page.id)));
+
+    if (this.totalBoxes === 0) {
+      this.reset();
+    }
   }
 
   _updateOrCreateBox(box, page) {

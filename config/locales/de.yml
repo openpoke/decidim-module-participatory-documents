@@ -173,7 +173,9 @@ de:
             suggestion: Bemerkung
             title: Titel
           publish_answers:
-            number_of_suggestions: Die Antworten zu %{number} Bemerkungen werden veröffentlicht.
+            number_of_suggestions:
+              one: Die Antwort zu %{count} Bemerkung wird veröffentlicht.
+              other: Die Antworten zu %{count} Bemerkungen werden veröffentlicht.
             select_a_suggestion: Bitte wähle eine Bemerkung aus
             success: Die Antworten zu den Bemerkungen wurden erfolgreich versendet.
           show:

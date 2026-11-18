@@ -14,6 +14,12 @@ module Decidim
         render layout: false
       end
       # rubocop:enable Decidim/EnforcePermissionTo
+
+      private
+
+      def skip_store_location?
+        action_name == "pdf_viewer" || super
+      end
     end
   end
 end

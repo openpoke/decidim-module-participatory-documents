@@ -49,6 +49,19 @@ describe "Admin filters suggestions" do
     end
   end
 
+  context "when filtering by section" do
+    let(:section) { create(:participatory_documents_section, document:) }
+    let!(:global_suggestion) { create(:participatory_documents_suggestion, suggestable: document) }
+    let!(:section_suggestion) { create(:participatory_documents_suggestion, suggestable: section) }
+
+    before { visit router.document_suggestions_path(document) }
+
+    it_behaves_like "a filtered collection", options: "Section", filter: "Global" do
+      let(:in_filter) { translated(global_suggestion.body).first(40) }
+      let(:not_in_filter) { translated(section_suggestion.body).first(40) }
+    end
+  end
+
   context "when searching by body" do
     let!(:suggestion2) { create(:participatory_documents_suggestion, suggestable: document) }
     let(:suggestion2_body) { translated(suggestion2.body) }

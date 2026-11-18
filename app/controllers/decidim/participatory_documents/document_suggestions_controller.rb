@@ -48,6 +48,10 @@ module Decidim
       def section
         document
       end
+
+      def skip_store_location?
+        true
+      end
     end
   end
 end
