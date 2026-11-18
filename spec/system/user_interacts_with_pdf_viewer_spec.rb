@@ -258,6 +258,26 @@ describe "User interaction with PDF viewer" do
       end
     end
 
+    context "when the attached file has a virus" do
+      before { AntivirusValidator.fake_virus = true }
+
+      after { AntivirusValidator.fake_virus = false }
+
+      it "rejects the suggestion" do
+        click_on "Global suggestions"
+        dynamically_attach_file(:suggestion_file, Decidim::Dev.asset("Exampledocument.pdf"))
+        within "#messageForm" do
+          fill_in :suggestion_body, with: "Suggestion with an infected file"
+        end
+        click_on("Send suggestion")
+
+        within "#participation-modal-form" do
+          expect(page).to have_content("The file you uploaded contains a virus")
+        end
+        expect(Decidim::ParticipatoryDocuments::Suggestion.where(author: user).count).to eq(2)
+      end
+    end
+
     it "keeps a single upload dialog after sending several global suggestions" do
       click_on "Global suggestions"
 
@@ -357,6 +377,34 @@ describe "User interaction with PDF viewer" do
 
         visit decidim.download_your_data_path
         expect(page).to have_content("Suggestions export")
+      end
+
+      context "when the user has a single suggestion" do
+        let!(:own_suggestions) { create_list(:participatory_documents_suggestion, 1, suggestable: document, author: user) }
+
+        it "uses the singular" do
+          click_on "Export my suggestions"
+          expect(page).to have_content("You have 1 suggestion on this document")
+
+          perform_enqueued_jobs do
+            click_on "Send me my suggestions"
+            expect(page).to have_content("1 suggestion has been successfully exported")
+          end
+        end
+      end
+
+      context "when the user has no suggestions" do
+        let!(:own_suggestions) { [] }
+
+        it "explains that there is nothing to export" do
+          click_on "Export my suggestions"
+          click_on "Send me my suggestions"
+
+          within "#exportSuggestionsModal" do
+            expect(page).to have_content("There are no suggestions to export.")
+            expect(page).to have_no_content("Error:")
+          end
+        end
       end
     end
   end

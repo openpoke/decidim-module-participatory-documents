@@ -1,4 +1,4 @@
-<% if evaluator_assigned_to_suggestion? || current_user.admin? %>
+<% if allowed_to?(:assign_to_evaluator, :suggestions, suggestion:) %>
   <div id="js-assign-suggestion-to-evaluator-actions" class="form-single-suggestion my-4" style="max-width:400px">
     <%= form_tag(document_evaluation_assignment_path(document), method: :post, id: "js-form-assign-suggestion-to-evaluator",
                  class: "form form-defaults") do %>

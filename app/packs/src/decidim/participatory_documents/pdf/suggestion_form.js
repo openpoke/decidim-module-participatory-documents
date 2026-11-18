@@ -81,11 +81,11 @@ export default class SuggestionForm {
   }
 
   updateExportCount() {
-    const list = this.div.querySelector("[data-suggestions-count]");
+    const list = this.div.querySelector("[data-export-count]");
     const count = document.getElementById("exportSuggestionsCount");
 
     if (list && count) {
-      count.textContent = list.dataset.suggestionsCount;
+      count.textContent = list.dataset.exportCount;
     }
   }
 

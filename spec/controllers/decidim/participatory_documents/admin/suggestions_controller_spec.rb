@@ -67,6 +67,41 @@ module Decidim
           end
         end
 
+        describe "GET show" do
+          let(:other_component) { create(:participatory_documents_component, participatory_space: participatory_process) }
+          let(:other_document) { create(:participatory_documents_document, component: other_component) }
+          let(:foreign_suggestion) { create(:participatory_documents_suggestion, suggestable: other_document) }
+
+          it "does not find a suggestion of another document" do
+            expect { get :show, params: { document_id: document.id, id: foreign_suggestion.id } }.to raise_error(ActiveRecord::RecordNotFound)
+          end
+
+          context "when the user is an evaluator not assigned to the suggestion" do
+            let(:user) { evaluator }
+
+            before { evaluator_role }
+
+            it "does not authorize the evaluator" do
+              get :show, params: { document_id: document.id, id: suggestion.id }
+
+              expect(flash[:alert]).to eq("You are not authorized to perform this action.")
+            end
+          end
+        end
+
+        describe "POST publish_answers" do
+          render_views
+
+          let(:params) { { document_id: document.id } }
+
+          it "asks to select a suggestion when none is selected" do
+            post(:publish_answers, params:, xhr: true)
+
+            expect(response).to have_http_status(:ok)
+            expect(response.body).to include("Please select a suggestion")
+          end
+        end
+
         describe "PATCH answer" do
           let(:params) { { document_id: document.id, id: suggestion.id, answer_suggestion: { state: "accepted", answer: { en: "An answer" } } } }
 

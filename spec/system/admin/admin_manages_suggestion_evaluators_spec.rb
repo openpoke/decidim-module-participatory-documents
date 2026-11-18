@@ -191,6 +191,33 @@ describe "Admin manages suggestion evaluators" do
     end
   end
 
+  context "when an administrator of the space assigns an evaluator" do
+    let(:space_admin) { create(:user, :confirmed, :admin_terms_accepted, organization:) }
+    let!(:space_admin_role) { create(:participatory_process_user_role, role: :admin, user: space_admin, participatory_process:) }
+
+    before do
+      relogin_as space_admin, scope: :user
+      visit current_path
+    end
+
+    it "assigns the suggestion to the evaluator from the page of the suggestion" do
+      within "tr[data-id='#{suggestion.id}']" do
+        click_on "Answer"
+      end
+
+      within "#js-form-assign-suggestion-to-evaluator" do
+        tom_select("#evaluator_role_ids", option_id: evaluator_role.id)
+      end
+
+      click_on "Assign"
+      expect(page).to have_content("Suggestions assigned to an evaluator successfully")
+
+      within "tr[data-id='#{suggestion.id}']" do
+        expect(page).to have_css("td.evaluators-count", text: evaluator.name)
+      end
+    end
+  end
+
   context "when an evaluator selects a suggestion with an unpublished answer" do
     let!(:suggestion) { create(:participatory_documents_suggestion, :accepted, :draft, suggestable: section1, answer: { en: "Foo bar" }) }
     let!(:assignment) { create(:suggestion_evaluation_assignment, suggestion:, evaluator_role:) }

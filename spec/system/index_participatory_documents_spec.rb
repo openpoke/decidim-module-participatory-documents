@@ -43,6 +43,75 @@ describe "Index participatory_documents" do
     expect(page).to have_no_content("You need to enable all cookies in order to see this content")
   end
 
+  context "when the sections are not published" do
+    let(:role_user) { create(:user, :confirmed, :admin_terms_accepted, organization:) }
+
+    it "shows the preview options to an administrator" do
+      expect(page).to have_content("Go back to edit participatory sections")
+      expect(page).to have_content("Publish participatory sections")
+    end
+
+    context "when the user is an administrator of the space" do
+      let(:current_user) { role_user }
+
+      before do
+        create(:participatory_process_user_role, role: :admin, user: role_user, participatory_process:)
+        visit_component
+      end
+
+      it "shows the preview options" do
+        expect(page).to have_content("Go back to edit participatory sections")
+        expect(page).to have_content("Publish participatory sections")
+      end
+    end
+
+    context "when the user is an evaluator of the space" do
+      let(:current_user) { role_user }
+
+      before do
+        create(:participatory_process_user_role, role: :evaluator, user: role_user, participatory_process:)
+        visit_component
+      end
+
+      it "does not show the preview options" do
+        expect(page).to have_content("Test description")
+        expect(page).to have_no_content("Publish participatory sections")
+      end
+    end
+
+    context "when the user is a collaborator of the space" do
+      let(:current_user) { role_user }
+
+      before do
+        create(:participatory_process_user_role, role: :collaborator, user: role_user, participatory_process:)
+        visit_component
+      end
+
+      it "does not show the preview options" do
+        expect(page).to have_content("Test description")
+        expect(page).to have_no_content("Publish participatory sections")
+      end
+    end
+
+    context "when the user is a participant" do
+      let(:current_user) { role_user }
+
+      it "does not show the preview options" do
+        expect(page).to have_content("Test description")
+        expect(page).to have_no_content("Publish participatory sections")
+      end
+    end
+  end
+
+  context "when the sections are published" do
+    let!(:document) { create(:participatory_documents_document, :with_file, title: { en: title }, description: { en: description }, component:, published_at: Time.current) }
+
+    it "does not show the preview options to an administrator" do
+      expect(page).to have_content("Test description")
+      expect(page).to have_no_content("Publish participatory sections")
+    end
+  end
+
   context "when the document has no title or description" do
     let(:title) { nil }
     let(:description) { nil }

@@ -10,8 +10,7 @@ module Decidim
         helper Decidim::ParticipatoryDocuments::Admin::SuggestionHelper
         helper Decidim::Messaging::ConversationHelper
 
-        helper_method :suggestions, :suggestion, :notes_form, :find_evaluators_for_select, :suggestion_ids,
-                      :suggestion_find, :evaluator_assigned_to_suggestion?
+        helper_method :suggestions, :suggestion, :notes_form, :find_evaluators_for_select, :suggestion_ids, :suggestion_find
 
         before_action :check_admin_session_filters, only: [:index]
 
@@ -65,7 +64,7 @@ module Decidim
         end
 
         def suggestion_ids
-          @suggestion_ids ||= params[:suggestion_ids]
+          @suggestion_ids ||= Array(params[:suggestion_ids])
         end
 
         def notes_form
@@ -74,6 +73,10 @@ module Decidim
 
         def search_field_predicate
           :body_cont
+        end
+
+        def filter_prefix_key
+          @filter_prefix_key ||= :"suggestions_#{document.id}"
         end
 
         def filters
@@ -160,19 +163,11 @@ module Decidim
         end
 
         def suggestion
-          return @suggestion if defined?(@suggestion)
-
-          @suggestion = base_query.find_by(id: params[:id])
+          @suggestion ||= document.suggestions_including_sections.find(params[:id])
         end
 
         def find_evaluators_for_select(_participatory_space)
           evaluator_role_names.map { |id, name| [name, id] }
-        end
-
-        def evaluator_assigned_to_suggestion?
-          return @evaluator_assigned_to_suggestion if defined?(@evaluator_assigned_to_suggestion)
-
-          @evaluator_assigned_to_suggestion = suggestion.present? && suggestion.evaluation_assignments.where(evaluator_role: evaluator_roles).any?
         end
 
         def skip_manage_component_permission

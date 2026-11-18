@@ -32,6 +32,7 @@ module Decidim
       validate :validate_file_type, if: :attached?
 
       validates_upload :file, uploader: Decidim::AttachmentUploader
+      validates :file, antivirus: true if ParticipatoryDocuments.antivirus_enabled
 
       POSSIBLE_STATES = %w(not_answered evaluating accepted rejected).freeze
 
@@ -170,13 +171,14 @@ module Decidim
       end
 
       def validate_file_type
-        allowed_extensions = organization.file_upload_settings["allowed_file_extensions"]["default"]
-        allowed_content_types = organization.file_upload_settings["allowed_content_types"]["default"]
+        settings = Decidim.organization_settings(organization)
+        allowed_extensions = settings.upload_allowed_file_extensions
+        allowed_content_types = settings.upload_allowed_content_types
 
         file_extension = File.extname(file.blob.filename.to_s).delete(".")
         file_content_type = file.blob.content_type
 
-        errors.add(:file, :invalid) unless allowed_extensions.include?(file_extension) && allowed_content_types.any? { |type| File.fnmatch(type, file_content_type) }
+        errors.add(:file, :invalid) unless allowed_extensions.include?(file_extension) && allowed_content_types.any? { |type| type.match?(file_content_type) }
       end
 
       def self.ransackable_attributes(_auth_object = nil)

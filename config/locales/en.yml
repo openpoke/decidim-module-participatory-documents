@@ -223,15 +223,20 @@ en:
       document_suggestions:
         export:
           empty: There are no suggestions to export.
-          success: "%{count} suggestions have been successfully exported. Please check
-            your email inbox at %{email}."
+          success:
+            one: "%{count} suggestion has been successfully exported. Please check
+              your email inbox at %{email}."
+            other: "%{count} suggestions have been successfully exported. Please check
+              your email inbox at %{email}."
       documents:
         export_modal:
           close: Close
-          description_html: You have %{count} suggestions on this document. If you
-            want to export them, you will receive a ZIP file with an Excel document
-            in it with all your data and any possible answer the admins have given
-            to you. <br><br>You will receive an email at <b>%{email}</b>.
+          count:
+            one: You have %{count} suggestion on this document.
+            other: You have %{count} suggestions on this document.
+          description_html: If you want to export them, you will receive a ZIP file
+            with an Excel document in it with all your data and any possible answer
+            the admins have given to you. <br><br>You will receive an email at <b>%{email}</b>.
           send: Send me my suggestions
           title: Export my suggestions
         missing: There is no document uploaded yet

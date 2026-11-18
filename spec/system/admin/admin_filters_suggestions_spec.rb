@@ -92,6 +92,33 @@ describe "Admin filters suggestions" do
     end
   end
 
+  context "when another document of the space has been filtered by section" do
+    let(:section) { create(:participatory_documents_section, document:) }
+    let!(:section_suggestion) { create(:participatory_documents_suggestion, suggestable: section) }
+    let(:other_component) { create(:participatory_documents_component, participatory_space: participatory_process) }
+    let(:other_document) { create(:participatory_documents_document, author: user, component: other_component) }
+    let!(:other_suggestion) { create(:participatory_documents_suggestion, suggestable: other_document) }
+
+    before { visit router.document_suggestions_path(document) }
+
+    it "keeps the filter of each document apart" do
+      apply_filter("Section", translated(section.title))
+      within ".table-list" do
+        expect(page).to have_content(translated(section_suggestion.body).first(40))
+      end
+
+      visit Decidim::EngineRouter.admin_proxy(other_component).document_suggestions_path(other_document)
+      within ".table-list" do
+        expect(page).to have_content(translated(other_suggestion.body).first(40))
+      end
+
+      visit router.document_suggestions_path(document)
+      within "[data-applied-filters-tags]" do
+        expect(page).to have_content("Section: #{translated(section.title)}")
+      end
+    end
+  end
+
   context "when searching by body" do
     let!(:suggestion2) { create(:participatory_documents_suggestion, suggestable: document) }
     let(:suggestion2_body) { translated(suggestion2.body) }

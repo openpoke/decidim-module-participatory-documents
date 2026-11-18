@@ -210,11 +210,16 @@ de:
       document_suggestions:
         export:
           empty: Es gibt keine zu exportierenden Bemerkungen.
-          success: "Deine %{count} Bemerkungen wurden erfolgreich exportiert. Bitte überprüfe deinen E-Mail-Posteingang unter %{email}."
+          success:
+            one: "Deine %{count} Bemerkung wurde erfolgreich exportiert. Bitte überprüfe deinen E-Mail-Posteingang unter %{email}."
+            other: "Deine %{count} Bemerkungen wurden erfolgreich exportiert. Bitte überprüfe deinen E-Mail-Posteingang unter %{email}."
       documents:
         export_modal:
           close: Schliessen
-          description_html: 'Du hast in diesem Dokument %{count} Bemerkungen eingebracht. Um diese übersichtlich für dich ablegen zu können, schicken wir dir ein E-Mail mit einem Anhang in Form einer ZIP-Datei mit darin enthaltenem Excel-Dokument. <br><br>Du erhälst die ZIP-Datei auf die folgende E-Mail Adresse: <b>%{email}</b>.'
+          count:
+            one: Du hast in diesem Dokument %{count} Bemerkung eingebracht.
+            other: Du hast in diesem Dokument %{count} Bemerkungen eingebracht.
+          description_html: 'Um diese übersichtlich für dich ablegen zu können, schicken wir dir ein E-Mail mit einem Anhang in Form einer ZIP-Datei mit darin enthaltenem Excel-Dokument. <br><br>Du erhälst die ZIP-Datei auf die folgende E-Mail Adresse: <b>%{email}</b>.'
           send: Meine Bemerkungen als Excel-Export erhalten
           title: Meine Bemerkungen herunterladen
         missing: Es gibt noch kein hochgeladenes Dokument

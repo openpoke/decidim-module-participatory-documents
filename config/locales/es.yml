@@ -210,11 +210,16 @@ es:
       document_suggestions:
         export:
           empty: No hay sugerencias para exportar.
-          success: "Se han exportado correctamente %{count} sugerencias. Revisa tu bandeja de entrada de correo en %{email}."
+          success:
+            one: "Se ha exportado correctamente %{count} sugerencia. Revisa tu bandeja de entrada de correo en %{email}."
+            other: "Se han exportado correctamente %{count} sugerencias. Revisa tu bandeja de entrada de correo en %{email}."
       documents:
         export_modal:
           close: Cerrar
-          description_html: Tiene %{count} sugerencias en este documento. Si quiere exportarlo, recibirá un fichero ZIP que contiene un documento Excel con todos sus datos y cualquier posible respuesta que los administradores le hayan dado. <br><br>Recibirá un correo electrónico en <b>%{email}</b>.
+          count:
+            one: Tiene %{count} sugerencia en este documento.
+            other: Tiene %{count} sugerencias en este documento.
+          description_html: Si quiere exportarlo, recibirá un fichero ZIP que contiene un documento Excel con todos sus datos y cualquier posible respuesta que los administradores le hayan dado. <br><br>Recibirá un correo electrónico en <b>%{email}</b>.
           send: Envíame mis sugerencias
           title: Exportar mis sugerencias
         missing: No hay ningún documento subido aún
