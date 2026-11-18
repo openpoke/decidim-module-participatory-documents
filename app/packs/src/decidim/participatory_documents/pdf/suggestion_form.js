@@ -120,7 +120,9 @@ export default class SuggestionForm {
         }).then((response) => {
           return response.text();
         }).then((data) => {
-          this.populateArea(data);
+          if (window.currentSuggestionForm === this) {
+            this.populateArea(data);
+          }
         }).catch((error) => {
           console.error(error);
         });
