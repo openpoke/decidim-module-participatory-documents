@@ -145,7 +145,9 @@ export default class SuggestionForm {
       throw new Error(response);
     }).
       then((data) => {
-        this.populateArea(data);
+        if (window.currentSuggestionForm === this) {
+          this.populateArea(data);
+        }
       }).
       catch((error) => {
         console.error(error);

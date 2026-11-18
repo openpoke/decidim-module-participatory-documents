@@ -9,6 +9,14 @@ module Decidim
       def configure
         yield self
       end
+
+      attr_writer :antivirus_enabled
+
+      def antivirus_enabled
+        return @antivirus_enabled unless @antivirus_enabled.nil?
+
+        defined?(AntivirusValidator) ? true : false
+      end
     end
 
     # Public: The maximum length of any text field (body, answers, etc) to export.
@@ -22,8 +30,6 @@ module Decidim
     # Public: The maximum length of a suggestion to be considered valid.
     # This setting is configurable per-component by admins
     mattr_accessor :max_suggestion_length, default: ENV.fetch("MAX_SUGGESTION_LENGTH", 1000).to_i
-
-    mattr_accessor :antivirus_enabled, default: defined?(AntivirusValidator) ? true : false
 
     # PDF.js URL to download the prebuilt version of PDF.js
     mattr_accessor :pdfjs_url, default: "https://github.com/mozilla/pdf.js/releases/download/v5.2.133/pdfjs-5.2.133-dist.zip"

@@ -68,7 +68,7 @@ window.InitDocumentManagers = (options) => {
         exportContent.classList.add("hidden");
         exportCallout.classList.remove("hidden");
         exportCallout.classList.add("alert");
-        exportCallout.innerHTML = error.message;
+        exportCallout.textContent = error.message;
         console.error("Error exporting", error);
       });
   });
