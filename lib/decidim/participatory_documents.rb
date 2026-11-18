@@ -12,7 +12,7 @@ module Decidim
     end
 
     # Public: The maximum length of any text field (body, answers, etc) to export.
-    # Defaults to 50. Set to 0 to export the full text.
+    # Defaults to 0, which exports the full text.
     mattr_accessor :max_export_text_length, default: ENV.fetch("MAX_EXPORT_TEXT_LENGTH", 0).to_i
 
     # Public: The minimum length of a suggestion to be considered valid.

@@ -32,6 +32,14 @@ module Decidim
             expect(controller.helpers.suggestions).to contain_exactly(suggestion, other_suggestion)
           end
 
+          it "keeps the suggestions ordered by id after one of them is answered" do
+            suggestion.update!(state: "accepted")
+
+            get(:index, params:)
+
+            expect(controller.helpers.suggestions.to_a).to eq([suggestion, other_suggestion])
+          end
+
           context "when the administrator also has an evaluator role" do
             before { create(:participatory_process_user_role, role: :evaluator, user:, participatory_process:) }
 

@@ -5,15 +5,7 @@
 @import "stylesheets/decidim/participatory_documents/pdf/admin_polygons";
 @import "stylesheets/decidim/participatory_documents/pdf/admin_modals";
 
-.process-content {
-  @apply flex flex-col flex-grow;
-}
-
 .layout-content > .container {
-  @apply h-full;
-}
-
-.container .full-height {
   @apply h-full;
 }
 

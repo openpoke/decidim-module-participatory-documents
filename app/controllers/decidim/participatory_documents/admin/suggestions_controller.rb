@@ -79,6 +79,10 @@ module Decidim
           @filter_prefix_key ||= :"suggestions_#{document.id}"
         end
 
+        def filtered_collection
+          paginate(query.result.order(:id))
+        end
+
         def filters
           [
             :state_eq,
