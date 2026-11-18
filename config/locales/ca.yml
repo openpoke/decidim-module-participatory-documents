@@ -219,7 +219,7 @@ ca:
           count:
             one: Tens %{count} suggeriment en aquest document.
             other: Tens %{count} suggeriments en aquest document.
-          description_html: Si vols exportar-los, rebràs un fitxer ZIP amb un document Excel que conté totes les teves dades i les possibles respostes que els administradors t'hagin donat. <br><br>Rebràs un correu electrònic a <b>%{email}</b>.
+          description_html: Si exportes els teus suggeriments, rebràs un fitxer ZIP amb un document Excel que conté totes les teves dades i les possibles respostes que els administradors t'hagin donat. <br><br>Rebràs un correu electrònic a <b>%{email}</b>.
           send: Envia'm els meus suggeriments
           title: Exporta els meus suggeriments
         missing: No hi ha cap document pujat encara

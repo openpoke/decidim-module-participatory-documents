@@ -234,9 +234,10 @@ en:
           count:
             one: You have %{count} suggestion on this document.
             other: You have %{count} suggestions on this document.
-          description_html: If you want to export them, you will receive a ZIP file
-            with an Excel document in it with all your data and any possible answer
-            the admins have given to you. <br><br>You will receive an email at <b>%{email}</b>.
+          description_html: If you export your suggestions, you will receive a ZIP
+            file with an Excel document in it with all your data and any possible
+            answer the admins have given to you. <br><br>You will receive an email
+            at <b>%{email}</b>.
           send: Send me my suggestions
           title: Export my suggestions
         missing: There is no document uploaded yet

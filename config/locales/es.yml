@@ -217,9 +217,9 @@ es:
         export_modal:
           close: Cerrar
           count:
-            one: Tiene %{count} sugerencia en este documento.
-            other: Tiene %{count} sugerencias en este documento.
-          description_html: Si quiere exportarlo, recibirá un fichero ZIP que contiene un documento Excel con todos sus datos y cualquier posible respuesta que los administradores le hayan dado. <br><br>Recibirá un correo electrónico en <b>%{email}</b>.
+            one: Tienes %{count} sugerencia en este documento.
+            other: Tienes %{count} sugerencias en este documento.
+          description_html: Si exportas tus sugerencias, recibirás un fichero ZIP que contiene un documento Excel con todos tus datos y cualquier posible respuesta que los administradores te hayan dado. <br><br>Recibirás un correo electrónico en <b>%{email}</b>.
           send: Envíame mis sugerencias
           title: Exportar mis sugerencias
         missing: No hay ningún documento subido aún
