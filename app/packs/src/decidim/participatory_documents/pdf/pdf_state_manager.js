@@ -121,12 +121,19 @@ export default class PdfStateManager {
         throw new Error(" ");
       }).
       then((resp) => {
-        box.setInfo(resp.data);
+        this._currentBox(box, page).setInfo(resp.data);
         this._setProcessed(box, resp.data);
       }).
       catch((error) => {
         this._setProcessed(box, null, error);
       });
+  }
+
+  // The page layer can be rebuilt while the request is pending, the box shown is then a new object
+  _currentBox(box, page) {
+    const pageView = this.pdfViewer._pages[page - 1];
+
+    return (pageView && pageView.boxEditor && pageView.boxEditor.boxes[box.id]) || box;
   }
 
   _setProcessed(box, data, error) {
