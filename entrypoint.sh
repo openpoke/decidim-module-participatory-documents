@@ -14,6 +14,10 @@ bundle exec rake development_app
 
 cd development_app
 
+echo "Installing pdf-js dependency"
+bin/rails decidim_participatory_documents:install_pdf_js
+
+echo "Compiling assets"
 bin/rails assets:precompile
 
 echo "🚀 $@"
