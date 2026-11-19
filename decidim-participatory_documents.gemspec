@@ -10,11 +10,11 @@ Gem::Specification.new do |spec|
   spec.authors = ["Ivan Vergés"]
   spec.email = ["ivan@pokecode.net"]
 
-  spec.summary = "A module for Decidim that facilitates the creation of proposals related to geolocated issues in a city."
-  spec.description = "A module for Decidim that facilitates the creation of proposals related to geolocated issues in a city"
+  spec.summary = "A module for Decidim to collect suggestions on areas defined on top of a PDF document."
+  spec.description = "This module allows to upload a PDF and define areas on top of it that will become spaces for suggestions, improvements and other participative activities."
   spec.license = "AGPL-3.0"
-  spec.homepage = "https://github.com/openpoke/decidim-module-participatory_documents"
-  spec.required_ruby_version = ">= 3.3"
+  spec.homepage = "https://github.com/openpoke/decidim-module-participatory-documents"
+  spec.required_ruby_version = ">= 3.4"
 
   spec.files = `git ls-files -z`.split("\x0").reject do |f|
     f.match(%r{^(test|spec|features)/})

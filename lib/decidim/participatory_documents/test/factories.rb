@@ -104,10 +104,6 @@ FactoryBot.define do
       state { :evaluating }
     end
 
-    trait :withdrawn do
-      state { :withdrawn }
-    end
-
     trait :rejected do
       state { :rejected }
     end

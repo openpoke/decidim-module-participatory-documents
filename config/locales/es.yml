@@ -47,7 +47,6 @@ es:
               evaluating: En evaluación
               not_answered: No contestada
               rejected: Rechazada
-              withdrawn: Retirada
           evaluator_role_ids_has:
             label: Asignada a evaluadora
     admin_log:
@@ -173,7 +172,9 @@ es:
             suggestion: Sugerencia
             title: Lista de Sugerencias
           publish_answers:
-            number_of_suggestions: Se publicarán las respuestas para %{number} sugerencias.
+            number_of_suggestions:
+              one: Se publicará la respuesta para %{count} sugerencia.
+              other: Se publicarán las respuestas para %{count} sugerencias.
             select_a_suggestion: Por favor, elige una sugerencia
             success: Las respuestas en las sugerencias han sido publicadas correctamente.
           show:
@@ -209,11 +210,16 @@ es:
       document_suggestions:
         export:
           empty: No hay sugerencias para exportar.
-          success: "Se han exportado correctamente %{count} sugerencias. Revisa tu bandeja de entrada de correo en %{email}."
+          success:
+            one: "Se ha exportado correctamente %{count} sugerencia. Revisa tu bandeja de entrada de correo en %{email}."
+            other: "Se han exportado correctamente %{count} sugerencias. Revisa tu bandeja de entrada de correo en %{email}."
       documents:
         export_modal:
           close: Cerrar
-          description_html: Tiene %{count} sugerencias en este documento. Si quiere exportarlo, recibirá un fichero ZIP que contiene un documento Excel con todos sus datos y cualquier posible respuesta que los administradores le hayan dado. <br><br>Recibirá un correo electrónico en <b>%{email}</b>.
+          count:
+            one: Tienes %{count} sugerencia en este documento.
+            other: Tienes %{count} sugerencias en este documento.
+          description_html: Si exportas tus sugerencias, recibirás un fichero ZIP que contiene un documento Excel con todos tus datos y cualquier posible respuesta que los administradores te hayan dado. <br><br>Recibirás un correo electrónico en <b>%{email}</b>.
           send: Envíame mis sugerencias
           title: Exportar mis sugerencias
         missing: No hay ningún documento subido aún
@@ -233,7 +239,6 @@ es:
           evaluating: En evaluación
           not_answered: No contestada
           rejected: Rechazada
-          withdrawn: Retirada
         modal:
           exit_full_screen: Salir pantalla completa
           full_screen: Pantalla Completa

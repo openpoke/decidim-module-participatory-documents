@@ -88,10 +88,12 @@ export default class PdfModalManager {
         this.onSave(box, resp.data);
       }).
       catch((error) => {
-        console.error("Error creating box, destroy it", error);
+        console.error("Error creating box", error);
         this.modalContent.classList.remove("loading");
         this.closeModal();
-        box.destroy();
+        if (!box.isPersisted()) {
+          box.destroy();
+        }
         this.onError(box, error);
       });
   }
@@ -120,7 +122,7 @@ export default class PdfModalManager {
         throw new Error(response.statusText);
       }).
       then(() => {
-        this.createBox(box, this.pdfViewer.currentPageNumber);
+        this.createBox(box, parseInt(box.layer.div.dataset.pageNumber, 10));
       }).
       catch((error) => {
         console.error("Error saving box", error);
@@ -132,7 +134,7 @@ export default class PdfModalManager {
   _removeHandler(evt) {
     evt.stopPropagation();
     const box = this.box;
-    if (!box) {
+    if (!box || this.modalContent.classList.contains("loading")) {
       return;
     }
 

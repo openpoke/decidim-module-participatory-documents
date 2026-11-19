@@ -9,7 +9,6 @@ module Decidim
         def initialize(form, document)
           @form = form
           @document = document
-          @attached_to = document
         end
 
         def call

@@ -19,7 +19,7 @@
                         target: :blank,
                         class: "mr-2"
                       ) %>
-                  <% if evaluator_assigned_to_suggestion? || current_user.admin? %>
+                  <% if allowed_to?(:unassign_from_evaluator, :suggestions, suggestion:, evaluator: assignment.evaluator) %>
                     <%= icon_link_to(
                           "close-circle-line",
                           document_suggestion_evaluation_assignment_path(document, suggestion, assignment.evaluator_role),

@@ -33,6 +33,12 @@ module Decidim
         it { is_expected.to be_valid }
       end
 
+      context "when the file has a type allowed by the organization" do
+        let(:example_file) { ActiveStorage::Blob.create_and_upload!(io: StringIO.new("My suggestions"), filename: "suggestions.txt", content_type: "text/plain") }
+
+        it { is_expected.to be_valid }
+      end
+
       context "when no body, no file" do
         let(:body) { nil }
         let(:example_file) { nil }

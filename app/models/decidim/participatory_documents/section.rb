@@ -27,8 +27,6 @@ module Decidim
         artificial_title.merge(super.compact_blank)
       end
 
-      private
-
       def artificial_title
         artificial = {}
         i18n_scope = "decidim.participatory_documents.models.section.fields"

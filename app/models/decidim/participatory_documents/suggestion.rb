@@ -32,8 +32,9 @@ module Decidim
       validate :validate_file_type, if: :attached?
 
       validates_upload :file, uploader: Decidim::AttachmentUploader
+      validates :file, antivirus: true if ParticipatoryDocuments.antivirus_enabled
 
-      POSSIBLE_STATES = %w(not_answered evaluating accepted rejected withdrawn).freeze
+      POSSIBLE_STATES = %w(not_answered evaluating accepted rejected).freeze
 
       POSSIBLE_STATES.each do |possible|
         define_method(:"#{possible}?") do
@@ -57,7 +58,7 @@ module Decidim
       end
 
       def published_answer?
-        answered? && answer_is_published? && %w(not_answered withdrawn).exclude?(state)
+        answered? && answer_is_published? && not_not_answered?
       end
 
       scope :sort_by_published_asc, lambda {
@@ -136,26 +137,26 @@ module Decidim
 
       # method to filter by assigned evaluator role ID
       def self.evaluator_role_ids_has(value)
-        query = <<-SQL.squish
-        :value = any(
-          (SELECT decidim_participatory_documents_evaluation_assignments.evaluator_role_id
-          FROM decidim_participatory_documents_evaluation_assignments
-          WHERE decidim_participatory_documents_evaluation_assignments.decidim_participatory_documents_suggestion_id = decidim_participatory_documents_suggestions.id
+        query = <<~SQL.squish
+          :value = any(
+            (SELECT decidim_participatory_documents_evaluation_assignments.evaluator_role_id
+            FROM decidim_participatory_documents_evaluation_assignments
+            WHERE decidim_participatory_documents_evaluation_assignments.decidim_participatory_documents_suggestion_id = decidim_participatory_documents_suggestions.id
+            )
           )
-        )
         SQL
         where(query, value:)
       end
 
       # Defines the base query so that ransack can actually sort by this value
       def self.sort_by_evaluation_assignments_count_nulls_last_query
-        <<-SQL.squish
-        (
-          SELECT COUNT(decidim_participatory_documents_evaluation_assignments.id)
-          FROM decidim_participatory_documents_evaluation_assignments
-          WHERE decidim_participatory_documents_evaluation_assignments.decidim_participatory_documents_suggestion_id = decidim_participatory_documents_suggestions.id
-          GROUP BY decidim_participatory_documents_evaluation_assignments.decidim_participatory_documents_suggestion_id
-        )
+        <<~SQL.squish
+          (
+            SELECT COUNT(decidim_participatory_documents_evaluation_assignments.id)
+            FROM decidim_participatory_documents_evaluation_assignments
+            WHERE decidim_participatory_documents_evaluation_assignments.decidim_participatory_documents_suggestion_id = decidim_participatory_documents_suggestions.id
+            GROUP BY decidim_participatory_documents_evaluation_assignments.decidim_participatory_documents_suggestion_id
+          )
         SQL
       end
 
@@ -170,13 +171,14 @@ module Decidim
       end
 
       def validate_file_type
-        allowed_extensions = organization.file_upload_settings["allowed_file_extensions"]["default"]
-        allowed_content_types = organization.file_upload_settings["allowed_content_types"]["default"]
+        settings = Decidim.organization_settings(organization)
+        allowed_extensions = settings.upload_allowed_file_extensions
+        allowed_content_types = settings.upload_allowed_content_types
 
         file_extension = File.extname(file.blob.filename.to_s).delete(".")
         file_content_type = file.blob.content_type
 
-        errors.add(:file, :invalid) unless allowed_extensions.include?(file_extension) && allowed_content_types.any? { |type| File.fnmatch(type, file_content_type) }
+        errors.add(:file, :invalid) unless allowed_extensions.include?(file_extension) && allowed_content_types.any? { |type| type.match?(file_content_type) }
       end
 
       def self.ransackable_attributes(_auth_object = nil)

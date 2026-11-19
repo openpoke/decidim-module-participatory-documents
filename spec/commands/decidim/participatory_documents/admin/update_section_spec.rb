@@ -32,6 +32,17 @@ module Decidim
             expect(section.title["en"]).to eq(title[:en])
           end
         end
+
+        context "when the section has no title and only one language is changed" do
+          let(:section) { create(:participatory_documents_section, title: nil, position: 3) }
+          let(:title) { section.title.merge("en" => "Title test Section") }
+
+          it "stores only the changed language" do
+            subject.call
+
+            expect(section.reload[:title]).to eq("en" => "Title test Section")
+          end
+        end
       end
     end
   end

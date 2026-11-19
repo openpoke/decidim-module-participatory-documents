@@ -65,6 +65,17 @@ describe "Admin manages suggestions" do
         end
       end
 
+      it "uses the singular when one answer is going to be published" do
+        page.first("[data-published-state=false] .js-suggestion-list-check").click
+
+        click_on "Actions"
+        click_on "Publish answers"
+
+        within "#js-publish-answers-actions" do
+          expect(page).to have_content("The answer for 1 suggestion will be published.")
+        end
+      end
+
       it "can't publish answers for non answered suggestions" do
         page.find_by_id("suggestions_bulk", class: "js-check-all").click
         page.all("[data-published-state=false] .js-suggestion-list-check").map(&:click)
@@ -151,7 +162,6 @@ describe "Admin manages suggestions" do
 
     context "when suggestion has an answer not published" do
       it_behaves_like "marks the answer by state", state: :not_answered
-      it_behaves_like "marks the answer by state", state: :withdrawn
       it_behaves_like "marks the answer by state", state: :rejected
       it_behaves_like "marks the answer by state", state: :accepted
     end
@@ -295,7 +305,7 @@ describe "Admin manages suggestions" do
         check :answer_suggestion_answer_is_published if published
       end
       click_on "Answer"
-      expect(page).to have_content("Successfully")
+      expect(page).to have_content("Successfully added the answer")
     end
   end
 

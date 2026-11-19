@@ -2,46 +2,50 @@
 
 [![[CI] Lint](https://github.com/openpoke/decidim-module-participatory-documents/actions/workflows/lint.yml/badge.svg)](https://github.com/openpoke/decidim-module-participatory-documents/actions/workflows/lint.yml)
 [![[CI] Test](https://github.com/openpoke/decidim-module-participatory-documents/actions/workflows/test.yml/badge.svg)](https://github.com/openpoke/decidim-module-participatory-documents/actions/workflows/test.yml)
-[![Maintainability](https://api.codeclimate.com/v1/badges/b55516d46671ac78a43f/maintainability)](https://codeclimate.com/github/openpoke/decidim-module-participatory-documents/maintainability)
+[![Maintainability](https://qlty.sh/gh/openpoke/projects/decidim-module-participatory-documents/maintainability.svg)](https://qlty.sh/gh/openpoke/projects/decidim-module-participatory-documents)
 [![codecov](https://codecov.io/gh/openpoke/decidim-module-participatory-documents/branch/main/graph/badge.svg?token=TMZHD2XO6U)](https://codecov.io/gh/openpoke/decidim-module-participatory-documents)
 [![Gem Version](https://badge.fury.io/rb/decidim-participatory_documents.svg)](https://badge.fury.io/rb/decidim-participatory_documents)
 
-This module allows to upload PDF (and possibilty other formats) and define areas on top of it that will become spaces for suggestions, improvements and other participative activities.
+This module allows admins to upload a PDF and define areas on top of it that will become spaces for suggestions, improvements and other participative activities.
+
+## Usage
+
+This module adds a new component to Decidim called `Participatory Documents`.
+
+The administrator must upload a PDF file and then define areas on top of it by drawing rectangles. The areas are grouped into sections.
+Each section will become a new zone that will allow users to create suggestions. Users can also make global suggestions on the whole document, with an optional file.
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'decidim-participatory_documents'
+gem "decidim-participatory_documents"
 ```
 
 Or, if you want to stay up to date with the latest changes use this line instead:
 
-
 ```ruby
-gem 'decidim-participatory_documents', git: "https://github.com/openpoke/decidim-module-participatory-documents"
+gem "decidim-participatory_documents", git: "https://github.com/openpoke/decidim-module-participatory-documents"
 ```
 
 And then execute:
 
-```
+```bash
 bundle
 bin/rails decidim:upgrade
-bundle exec rails db:migrate
-bundle exec rails data:migrate
+bin/rails db:migrate
 ```
 
 > **NOTE**
-> Under the hood, these operation are run to install the needed database migrations and the PDF.js library:
+> Under the hood, these operations are run to install the needed database migrations and the PDF.js library:
 >
-> ```
-> bundle
-> bundle exec rails decidim_participatory_documents:install:migrations
-> bundle exec rails decidim_participatory_documents:install_pdf_js
+> ```bash
+> bin/rails decidim_participatory_documents:install:migrations
+> bin/rails decidim_participatory_documents:install_pdf_js
 > ```
 >
-> Note that the PDF.js library is installed in the `public/pdfjs` (this might change in the future). Take it into account when deploying the application.
+> Note that the PDF.js library is installed in the `public/pdfjs` folder. Take it into account when deploying the application.
 
 Depending on your Decidim version, you can choose the corresponding version to ensure compatibility:
 
@@ -51,15 +55,33 @@ Depending on your Decidim version, you can choose the corresponding version to e
 | 0.3.x   | 0.28.x                      |
 | 0.4.x   | 0.29.x                      |
 | 0.6.x   | 0.31.x (from 0.31.8)        |
+| 0.7.x   | 0.32.x                      |
 
-## Upgrading from 0.4.x to 0.6.x
+## Upgrading from 0.6.x to 0.7.x (Decidim 0.31 to 0.32)
+
+Decidim 0.32 requires Ruby 3.4 and runs on Rails 8.1. Follow the Decidim 0.32 release notes, update the gem and run:
+
+```bash
+bin/rails decidim:upgrade
+bin/rails db:migrate
+```
+
+- `db:migrate` removes the user group columns of this module, which were never used. Decidim 0.32 removes the user groups as well.
+
+The task `decidim_participatory_documents:install_mjs_initializer` has been removed. Decidim 0.32 runs on Rack 3.2, which already serves the `.mjs` files with the right mime type. If your application has the file `config/initializers/rack_mjs_type.rb`, delete it and restart the application:
+
+```bash
+rm config/initializers/rack_mjs_type.rb
+```
+
+## Upgrading from 0.4.x to 0.6.x (Decidim 0.29 to 0.31)
 
 Decidim 0.31 renames valuators to evaluators, and so does this module. After updating the gem, run:
 
-```
+```bash
 bin/rails decidim:upgrade
-bundle exec rails db:migrate
-bundle exec rails data:migrate
+bin/rails db:migrate
+bin/rails data:migrate
 ```
 
 - `db:migrate` renames the table that stores the evaluators assigned to each suggestion.
@@ -67,37 +89,21 @@ bundle exec rails data:migrate
 
 Run also the upgrade tasks listed in the Decidim 0.31 release notes. This module depends on one of them, which converts the existing valuator roles into evaluator roles:
 
+```bash
+bin/rails decidim:upgrade:decidim_update_valuators
 ```
-bundle exec rails decidim:upgrade:decidim_update_valuators
-```
-
-The initializer created by `decidim_participatory_documents:install_mjs_initializer` has changed. If your application already has the file `config/initializers/rack_mjs_type.rb`, generate it again and restart the application:
-
-```
-rm config/initializers/rack_mjs_type.rb
-bin/rails decidim_participatory_documents:install_mjs_initializer
-```
-
-The new initializer only declares the mime type of the `.mjs` files. The previous one also registered a Rails format, which interfered with the JavaScript responses of Decidim (for example, when publishing a comment).
-
 
 ## Required MIME types
 
-Latests versions of PDFjs require that the web server to send the mime type `text/javascript` for files ending in `.mjs`
+Latest versions of PDF.js require the web server to send the mime type `text/javascript` for files ending in `.mjs`.
 
 ### Usage with Puma + Rack
 
-If Puma serves the static files, you have to add an initializer to ensure files with `.mjs` are served correctly: Decidim 0.31 runs on Rack 2.2, and Rack only knows the `.mjs` mime type since v3.1.0. This is usually the most common approach when docker is used or when the ENV var `RAILS_SERVE_STATIC_FILES=true` is active.
-
-Execute the following command to create an initializer that does that:
-
-```
-bin/rails decidim_participatory_documents:install_mjs_initializer
-```
+If Puma serves the static files, nothing has to be done: Rack already serves the files ending in `.mjs` with the right mime type. This is the default in Rails 8 and the most common approach when Docker is used.
 
 ### Usage with external static file servers
 
-A common setup is to use standalone web server (such as Nginx or Apache) to serve the static files present in the `public` folder.
+A common setup is to use a standalone web server (such as Nginx or Apache) to serve the static files present in the `public` folder.
 If that is your case, you need to ensure that the files ending with the extension `.mjs` are served with the mime type `text/javascript`.
 
 #### For Apache webserver
@@ -130,13 +136,6 @@ types {
 }
 ```
 
-## Usage
-
-This module adds a new component to Decidim called `Participatory Documents` that allows to upload PDFs and define areas on top of it that will become spaces for suggestions or comments.
-
-The administrator must upload a PDF file and then define areas on top of it by drawing polygons. 
-Each area will become a new zone that will allow users to create suggestions.
-
 ## Configuration
 
 By default, the module is configured to read the configuration from ENV variables.
@@ -145,11 +144,11 @@ Currently, the following ENV variables are supported:
 
 | ENV variable | Description | Default value |
 | ------------ | ----------- |-------|
-| MAX_EXPORT_TEXT_LENGTH | If a positive number, it will truncate the exported suggestions before sending them by email | `0` |
+| MAX_EXPORT_TEXT_LENGTH | If a positive number, it will truncate the texts of the exported suggestions before sending them by email | `0` |
 | MIN_SUGGESTION_LENGTH | Minimum characters in a suggestion to be valid (this setting can be configured in each component as well by the admins) | `5` |
 | MAX_SUGGESTION_LENGTH | Maximum characters in a suggestion to be valid (this setting can be configured in each component as well by the admins) | `1000` |
 
-It is also possible to configure the module using the `decidim-participatory_documents` initializer:
+It is also possible to configure the module in an initializer:
 
 ```ruby
 Decidim::ParticipatoryDocuments.configure do |config|
@@ -167,9 +166,9 @@ If the files are stored in a remote service (S3 or compatible), the bucket must 
 
 ## Antivirus compatibility
 
-This module has a builtin compatibility with https://github.com/mainio/decidim-module-antivirus to scan the uploaded documents (it is also possible to directly use the gem https://github.com/mainio/ratonvirus if configuring it in a initializer).
+This module has a built-in compatibility with https://github.com/mainio/decidim-module-antivirus to scan the uploaded documents and the files attached to the suggestions (it is also possible to directly use the gem https://github.com/mainio/ratonvirus if configuring it in an initializer).
 
-If the antivirus is not installed, the module will still work but the documents will not be scanned.
+If the antivirus is not installed, the module will still work but the files will not be scanned.
 
 > Note: this module only checks for the existence of the class `AntivirusValidator` so it is possible to use any other antivirus validator as well (a custom one for instance).
 
@@ -181,7 +180,7 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/openpo
 
 To start contributing to this project, first:
 
-- Install the basic dependencies (such as Ruby and PostgreSQL)
+- Install the basic dependencies (such as Ruby, Node.js and PostgreSQL)
 - Clone this repository
 
 Decidim's main repository also provides a Docker configuration file if you
@@ -192,18 +191,18 @@ You can create the development app by running the following commands after
 cloning this project:
 
 ```bash
-$ bundle
-$ DATABASE_USERNAME=<username> DATABASE_PASSWORD=<password> bundle exec rake development_app
+bundle
+DATABASE_USERNAME=<username> DATABASE_PASSWORD=<password> bundle exec rake development_app
 ```
 
 Note that the database user has to have rights to create and drop a database in
-order to create the dummy test app database.
+order to create the development app database.
 
-Then to test how the module works in Decidim, start the development server:
+Then to test how the module works in Decidim, start the development server from
+the root of the module:
 
 ```bash
-$ cd development_app
-$ DATABASE_USERNAME=<username> DATABASE_PASSWORD=<password> bundle exec rails s
+DATABASE_USERNAME=<username> DATABASE_PASSWORD=<password> bin/dev
 ```
 
 In case you are using [rbenv](https://github.com/rbenv/rbenv) and have the
@@ -218,30 +217,35 @@ Please follow the code styling defined by the different linters that ensure we
 are all talking with the same language collaborating on the same project. This
 project is set to follow the same rules that Decidim itself follows.
 
-[Rubocop](https://rubocop.readthedocs.io/) linter is used for the Ruby language.
+[Rubocop](https://rubocop.readthedocs.io/) linter is used for the Ruby language,
+[ERB Lint](https://github.com/Shopify/erb_lint) for the views, and
+[ESLint](https://eslint.org/) and [Stylelint](https://stylelint.io/) for the
+JavaScript and the stylesheets.
 
 You can run the code styling checks by running the following commands from the
 console:
 
-```
-$ bundle exec rubocop
+```bash
+bundle exec rubocop
+bundle exec erb_lint --lint-all
+npm run lint
+npm run stylelint
 ```
 
 To ease up following the style guide, you should install the plugin to your
 favorite editor, such as:
 
-- Atom - [linter-rubocop](https://atom.io/packages/linter-rubocop)
 - Sublime Text - [Sublime RuboCop](https://github.com/pderichs/sublime_rubocop)
 - Visual Studio Code - [Rubocop for Visual Studio Code](https://github.com/misogi/vscode-ruby-rubocop)
 
 ### Testing
 
-To run the tests run the following in the gem development path:
+To run the tests, run the following in the gem development path:
 
 ```bash
-$ bundle
-$ DATABASE_USERNAME=<username> DATABASE_PASSWORD=<password> bundle exec rake test_app
-$ DATABASE_USERNAME=<username> DATABASE_PASSWORD=<password> bundle exec rspec
+bundle
+DATABASE_USERNAME=<username> DATABASE_PASSWORD=<password> bundle exec rake test_app
+DATABASE_USERNAME=<username> DATABASE_PASSWORD=<password> bundle exec rspec
 ```
 
 Note that the database user has to have rights to create and drop a database in
@@ -259,7 +263,7 @@ If you want to generate the code coverage report for the tests, you can use
 the `SIMPLECOV=1` environment variable in the rspec command as follows:
 
 ```bash
-$ SIMPLECOV=1 bundle exec rspec
+SIMPLECOV=1 bundle exec rspec
 ```
 
 This will generate a folder named `coverage` in the project root which contains

@@ -47,7 +47,6 @@ ca:
               evaluating: En avaluació
               not_answered: No contestat
               rejected: Rebutjat
-              withdrawn: Retirada
           evaluator_role_ids_has:
             label: Assignada a avaluadora
     admin_log:
@@ -173,7 +172,9 @@ ca:
             suggestion: <strong>Atenció:</strong> Si carregues un nou document, totes les àrees (caixes) de participació seran eliminades!
             title: Llista Suggeriments
           publish_answers:
-            number_of_suggestions: Es publicaran les respostes per a %{number} suggeriments.
+            number_of_suggestions:
+              one: Es publicarà la resposta per a %{count} suggeriment.
+              other: Es publicaran les respostes per a %{count} suggeriments.
             select_a_suggestion: Si us plau, selecciona un suggeriment
             success: Respostes als suggeriments publicats amb èxit.
           show:
@@ -209,11 +210,16 @@ ca:
       document_suggestions:
         export:
           empty: No hi ha suggeriments per exportar.
-          success: "%{count} suggeriments han estat exportats amb èxit. Si us plau, revisa el teu email a %{email}."
+          success:
+            one: "%{count} suggeriment ha estat exportat amb èxit. Si us plau, revisa el teu email a %{email}."
+            other: "%{count} suggeriments han estat exportats amb èxit. Si us plau, revisa el teu email a %{email}."
       documents:
         export_modal:
           close: Tanca
-          description_html: Tens %{count} suggeriments en aquest document. Si vols exportar-los, rebràs un fitxer ZIP amb un document Excel que conté totes les teves dades i les possibles respostes que els administradors t'hagin donat. <br><br>Rebràs un correu electrònic a <b>%{email}</b>.
+          count:
+            one: Tens %{count} suggeriment en aquest document.
+            other: Tens %{count} suggeriments en aquest document.
+          description_html: Si exportes els teus suggeriments, rebràs un fitxer ZIP amb un document Excel que conté totes les teves dades i les possibles respostes que els administradors t'hagin donat. <br><br>Rebràs un correu electrònic a <b>%{email}</b>.
           send: Envia'm els meus suggeriments
           title: Exporta els meus suggeriments
         missing: No hi ha cap document pujat encara
@@ -233,7 +239,6 @@ ca:
           evaluating: En avaluació
           not_answered: No contestat
           rejected: Rebutjat
-          withdrawn: Retirada
         modal:
           exit_full_screen: Surt de pantalla completa
           full_screen: Pantalla completa

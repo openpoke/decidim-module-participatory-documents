@@ -28,6 +28,14 @@ const selectedSuggestionsNotPublishedAnswerCount = function() {
   return document.querySelectorAll(".table-list [data-published-state=false] .js-check-all-suggestion:checked").length;
 }
 
+const publishAnswersMessageUpdate = function(count) {
+  const message = document.getElementById("js-publish-answers-message");
+  const messages = JSON.parse(message.dataset.messages);
+  const form = new Intl.PluralRules(document.documentElement.lang).select(count);
+
+  message.innerText = (messages[form] || messages.other).replace("%{count}", count);
+}
+
 const selectedSugestionsCountUpdate = function() {
   const selectedSuggestions = selectedSuggestionsCount();
   const selectedSuggestionsNotPublishedCount = selectedSuggestionsNotPublishedAnswerCount();
@@ -39,11 +47,17 @@ const selectedSugestionsCountUpdate = function() {
     document.getElementById("js-selected-suggestions-count").innerHTML = selectedSuggestions;
   }
 
+  const publishAnswersButton = document.querySelector("button[data-action=\"publish-answers\"]");
+
+  if (!publishAnswersButton) {
+    return;
+  }
+
   if (selectedSuggestionsNotPublishedCount > 0) {
-    document.querySelector("button[data-action=\"publish-answers\"]").parentElement.classList.remove("hide");
-    document.getElementById("js-form-publish-answers-number").innerText = selectedSuggestionsNotPublishedCount;
+    publishAnswersButton.parentElement.classList.remove("hide");
+    publishAnswersMessageUpdate(selectedSuggestionsNotPublishedCount);
   } else {
-    document.querySelector("button[data-action=\"publish-answers\"]").parentElement.classList.add("hide");
+    publishAnswersButton.parentElement.classList.add("hide");
   }
 }
 

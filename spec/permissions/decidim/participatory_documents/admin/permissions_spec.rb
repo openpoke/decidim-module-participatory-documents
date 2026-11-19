@@ -98,6 +98,12 @@ describe Decidim::ParticipatoryDocuments::Admin::Permissions do
     it { is_expected.to be true }
   end
 
+  describe "suggestions list" do
+    let(:action) { { scope: :admin, action: :read, subject: :suggestions } }
+
+    it { is_expected.to be true }
+  end
+
   context "when suggestion answering is disabled in the component" do
     let(:component) { create(:participatory_documents_component, settings: { suggestion_answering_enabled: false }) }
 
@@ -148,6 +154,13 @@ describe Decidim::ParticipatoryDocuments::Admin::Permissions do
     let(:section) { create(:participatory_documents_section, document:) }
     let(:suggestion) { create(:participatory_documents_suggestion, suggestable: section) }
 
+    describe "suggestions list" do
+      let(:action) { { scope: :admin, action: :read, subject: :suggestions } }
+      let(:suggestion) { nil }
+
+      it { is_expected.to be true }
+    end
+
     context "and is assigned to the suggestion" do
       let!(:assignment) { create(:suggestion_evaluation_assignment, suggestion:, evaluator_role:) }
 
@@ -163,8 +176,19 @@ describe Decidim::ParticipatoryDocuments::Admin::Permissions do
 
       describe "unassign suggestions from an evaluator" do
         let(:action) { { scope: :admin, action: :unassign_from_evaluator, subject: :suggestions } }
+        let(:context) { super().merge(evaluator:) }
 
-        it { is_expected.to be true }
+        context "when the evaluator unassigns themself" do
+          let(:evaluator) { user }
+
+          it { is_expected.to be true }
+        end
+
+        context "when the evaluator unassigns another evaluator" do
+          let(:evaluator) { create(:user, organization:) }
+
+          it_behaves_like "permission is not set"
+        end
       end
 
       context "and suggestion answering is disabled in the component" do

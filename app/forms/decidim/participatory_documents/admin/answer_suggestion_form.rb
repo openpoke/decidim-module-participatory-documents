@@ -5,6 +5,7 @@ module Decidim
     module Admin
       class AnswerSuggestionForm < Decidim::Form
         include TranslatableAttributes
+
         translatable_attribute :answer, String
         attribute :state, String, default: "not_answered"
         attribute :answer_is_published, Boolean, default: false

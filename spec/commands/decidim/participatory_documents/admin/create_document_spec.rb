@@ -51,6 +51,26 @@ module Decidim
           end
         end
 
+        context "when the file is larger than the maximum size" do
+          let(:organization) { component.organization }
+          let(:file) { upload_test_file(Decidim::Dev.test_file("Exampledocument.pdf", "application/pdf")) }
+          let(:form) { DocumentForm.from_params(title:, description:, file:).with_context(current_organization: organization, current_component: component, current_user:) }
+
+          before do
+            organization.update!(file_upload_settings: Decidim::OrganizationSettings.default(:upload).deep_merge("maximum_file_size" => { "default" => 0.00001 }))
+            Decidim::OrganizationSettings.reload(organization)
+          end
+
+          it "broadcasts invalid with an error on the file" do
+            expect { subject.call }.to broadcast(:invalid)
+            expect(form.errors[:file]).to be_present
+          end
+
+          it "does not create a document" do
+            expect { subject.call }.not_to change(Decidim::ParticipatoryDocuments::Document, :count)
+          end
+        end
+
         context "when everything is ok" do
           let(:document) { Decidim::ParticipatoryDocuments::Document.last }
 

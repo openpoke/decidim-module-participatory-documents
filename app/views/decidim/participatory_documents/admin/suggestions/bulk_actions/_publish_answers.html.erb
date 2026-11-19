@@ -5,7 +5,7 @@
         <%= check_box_tag "suggestion_ids[]", suggestion.id, false, class: "js-check-all-suggestion js-suggestion-id-#{suggestion.id}" %>
       <% end %>
     </div>
-    <p><%= t("decidim.participatory_documents.admin.suggestions.publish_answers.number_of_suggestions", number: '<span id="js-form-publish-answers-number"></span>').html_safe %></p>
+    <p id="js-publish-answers-message" data-messages="<%= t("decidim.participatory_documents.admin.suggestions.publish_answers.number_of_suggestions").to_json %>"></p>
 
     <%= submit_tag(t("decidim.participatory_documents.admin.suggestions.index.actions.publish"), id: "js-submit-publish-answers", class: "button button__sm button__secondary small button--simple float-left") %>
 

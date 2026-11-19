@@ -50,7 +50,6 @@ en:
               evaluating: Evaluating
               not_answered: Not Answered
               rejected: Rejected
-              withdrawn: Withdrawn
     admin_log:
       annotation:
         create: "%{user_name} created a new participatory area for %{document_name}"
@@ -197,7 +196,9 @@ en:
             suggestion: Suggestion
             title: List Suggestions
           publish_answers:
-            number_of_suggestions: Answers for %{number} suggestions will be published.
+            number_of_suggestions:
+              one: The answer for %{count} suggestion will be published.
+              other: Answers for %{count} suggestions will be published.
             select_a_suggestion: Please select a suggestion
             success: Suggestion answers successfully published.
           show:
@@ -222,15 +223,21 @@ en:
       document_suggestions:
         export:
           empty: There are no suggestions to export.
-          success: "%{count} suggestions have been successfully exported. Please check
-            your email inbox at %{email}."
+          success:
+            one: "%{count} suggestion has been successfully exported. Please check
+              your email inbox at %{email}."
+            other: "%{count} suggestions have been successfully exported. Please check
+              your email inbox at %{email}."
       documents:
         export_modal:
           close: Close
-          description_html: You have %{count} suggestions on this document. If you
-            want to export them, you will receive a ZIP file with an Excel document
-            in it with all your data and any possible answer the admins have given
-            to you. <br><br>You will receive an email at <b>%{email}</b>.
+          count:
+            one: You have %{count} suggestion on this document.
+            other: You have %{count} suggestions on this document.
+          description_html: If you export your suggestions, you will receive a ZIP
+            file with an Excel document in it with all your data and any possible
+            answer the admins have given to you. <br><br>You will receive an email
+            at <b>%{email}</b>.
           send: Send me my suggestions
           title: Export my suggestions
         missing: There is no document uploaded yet
@@ -251,7 +258,6 @@ en:
           evaluating: Evaluating
           not_answered: Not Answered
           rejected: Rejected
-          withdrawn: Withdrawn
         modal:
           exit_full_screen: Exit fullscreen
           full_screen: Fullscreen

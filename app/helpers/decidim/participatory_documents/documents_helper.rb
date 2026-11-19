@@ -4,7 +4,6 @@ module Decidim
   module ParticipatoryDocuments
     module DocumentsHelper
       include Decidim::ParticipatoryDocuments::Admin::ButtonHelper
-      include Decidim::Admin::UserRolesHelper
 
       def back_edit_pdf_btn
         btn_title = t("actions.back_edit", scope: "decidim.participatory_documents")
@@ -31,10 +30,10 @@ module Decidim
       end
 
       def preview_mode?
-        return false if document.published? || current_user.blank?
-        return false unless current_user.admin? || current_participatory_space.user_roles.exists?(user: current_user)
+        return false if current_user.blank?
 
-        user_role_config.component_is_accessible?(current_component.manifest_name)
+        admin_allowed_to?(:manage, :component, component: current_component, current_participatory_space:) &&
+          admin_allowed_to?(:update, :participatory_document, document:)
       end
     end
   end
