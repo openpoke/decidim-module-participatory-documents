@@ -16,6 +16,7 @@ cd development_app
 
 echo "Installing pdf-js dependency"
 bin/rails decidim_participatory_documents:install_pdf_js
+bin/rails decidim_participatory_documents:install_mjs_initializer
 
 echo "Compiling assets"
 bin/rails assets:precompile
