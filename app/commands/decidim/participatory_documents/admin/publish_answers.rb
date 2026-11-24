@@ -43,7 +43,7 @@ module Decidim
         end
 
         def document
-          @document ||= Document.find_by(component:)
+          @document ||= Document.find_by(component:) # rubocop:disable Decidim/OrganizationScopedFinder
         end
       end
     end
