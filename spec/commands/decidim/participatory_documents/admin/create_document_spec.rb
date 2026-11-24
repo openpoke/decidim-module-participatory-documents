@@ -15,26 +15,8 @@ module Decidim
         let(:invalid) { false }
         let(:component) { create(:participatory_documents_component) }
         let(:current_user) { create(:user, :admin, :confirmed, organization: component.organization) }
-        let(:errors) { double.as_null_object }
-        let(:form) do
-          double(
-            invalid?: invalid,
-            title:,
-            description:,
-            box_color:,
-            box_opacity:,
-            current_user:,
-            file:,
-            current_component: component,
-            errors:
-          )
-        end
-        let(:file) do
-          Rack::Test::UploadedFile.new(
-            Decidim::Dev.test_file("Exampledocument.pdf", "application/pdf"),
-            "application/pdf"
-          )
-        end
+        let(:file) { Decidim::Dev.test_file("Exampledocument.pdf", "application/pdf") }
+        let(:form) { double(invalid?: invalid, title:, description:, box_color:, box_opacity:, current_user:, file:, current_component: component) }
 
         context "when the form is not valid" do
           let(:invalid) { true }
@@ -61,12 +43,7 @@ module Decidim
           end
 
           context "when is not the right file" do
-            let(:file) do
-              Rack::Test::UploadedFile.new(
-                Decidim::Dev.test_file("city.jpeg", "image/jpeg"),
-                "image/jpeg"
-              )
-            end
+            let(:file) { Decidim::Dev.test_file("city.jpeg", "image/jpeg") }
 
             it "is not valid" do
               expect { subject.call }.to broadcast(:invalid)
@@ -77,9 +54,12 @@ module Decidim
         context "when everything is ok" do
           let(:document) { Decidim::ParticipatoryDocuments::Document.last }
 
+          it "broadcasts ok" do
+            expect { subject.call }.to broadcast(:ok)
+          end
+
           it "creates a document" do
             expect { subject.call }.to change(Decidim::ParticipatoryDocuments::Document, :count).by(1)
-            expect { subject.call }.to broadcast(:ok)
           end
 
           it "creates the attributes" do

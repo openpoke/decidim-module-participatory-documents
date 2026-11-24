@@ -24,7 +24,7 @@ module Decidim
 
         private
 
-        attr_reader :notes_form, :note, :suggestion
+        attr_reader :notes_form, :note
 
         def update_suggestion_note
           note.body = notes_form.body

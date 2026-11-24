@@ -1,5 +1,4 @@
 import "../src/decidim/participatory_documents/pdf.js"
-import "../src/decidim/participatory_documents/upload_modal_initializer";
 
 // Images
 require.context("../images", true)

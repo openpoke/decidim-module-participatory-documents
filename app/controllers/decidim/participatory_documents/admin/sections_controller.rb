@@ -4,17 +4,17 @@ module Decidim
   module ParticipatoryDocuments
     module Admin
       class SectionsController < Admin::ApplicationController
-        layout false, only: [:new, :edit]
+        layout false, only: :edit
 
         def edit
-          enforce_permission_to :update, :document_section
+          enforce_permission_to(:update, :document_section, document:)
           @form = form(Decidim::ParticipatoryDocuments::Admin::SectionForm).from_model(section)
 
           render partial: "form"
         end
 
         def update
-          enforce_permission_to :update, :document_section
+          enforce_permission_to(:update, :document_section, document:)
           @form = form(Decidim::ParticipatoryDocuments::Admin::SectionForm).from_params(params)
 
           Admin::UpdateSection.call(@form, document) do

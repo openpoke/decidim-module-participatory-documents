@@ -3,158 +3,219 @@
 require "spec_helper"
 
 describe Decidim::ParticipatoryDocuments::Admin::Permissions do
-  subject { described_class.new(user, permission_action, context).permissions }
+  subject { described_class.new(user, permission_action, context).permissions.allowed? }
 
-  let(:component) { build(:participatory_documents_component) }
-  let(:organization) { component.participatory_space.organization }
+  let(:component) { create(:participatory_documents_component) }
+  let(:organization) { component.organization }
   let(:document) { create(:participatory_documents_document, component:) }
-  let(:user) { create(:user, :admin, :confirmed, organization: component.organization) }
-  let(:permission_action) { Decidim::PermissionAction.new(scope: :admin, action: action_name, subject: action_subject) }
+  let(:user) { create(:user, :admin, :confirmed, organization:) }
   let(:suggestion) { nil }
-  let(:suggestion_note) { create(:participatory_documents_suggestion_note) }
+  let(:suggestion_note) { nil }
   let(:context) do
     {
       current_component: component,
-      current_settings: double(suggestion_answering_enabled: true),
-      component_settings: double(suggestion_answering_enabled: true),
+      current_settings: component.current_settings,
+      component_settings: component.settings,
+      document:,
       suggestion:,
       suggestion_note:
     }
   end
-  let(:action_name) { :create }
+  let(:permission_action) { Decidim::PermissionAction.new(**action) }
 
-  shared_examples "Allows the permission" do |scope:, allowed:|
-    context "when subject is #{scope}" do
-      let(:action_subject) { scope }
+  shared_examples "can create suggestion notes" do
+    describe "suggestion note creation" do
+      let(:action) { { scope: :admin, action: :create, subject: :suggestion_note } }
 
-      it do
-        if allowed == true
-          expect(subject.allowed?).to be allowed
-        else
-          expect { subject.allowed? }.to raise_error(Decidim::PermissionAction::PermissionNotSetError)
+      it { is_expected.to be true }
+    end
+  end
+
+  shared_examples "can answer suggestions" do
+    describe "suggestion answering" do
+      let(:action) { { scope: :admin, action: :update, subject: :suggestion_answer } }
+
+      it { is_expected.to be true }
+    end
+  end
+
+  shared_examples "cannot manage the document" do
+    describe "section creation" do
+      let(:action) { { scope: :admin, action: :create, subject: :document_section } }
+
+      it_behaves_like "permission is not set"
+    end
+
+    describe "annotation creation" do
+      let(:action) { { scope: :admin, action: :create, subject: :document_annotations } }
+
+      it_behaves_like "permission is not set"
+    end
+
+    describe "document creation" do
+      let(:action) { { scope: :admin, action: :create, subject: :participatory_document } }
+
+      it_behaves_like "permission is not set"
+    end
+
+    describe "suggestions creation" do
+      let(:action) { { scope: :admin, action: :create, subject: :suggestions } }
+
+      it_behaves_like "permission is not set"
+    end
+  end
+
+  it_behaves_like "can create suggestion notes"
+  it_behaves_like "can answer suggestions"
+
+  describe "section creation" do
+    let(:action) { { scope: :admin, action: :create, subject: :document_section } }
+
+    it { is_expected.to be true }
+  end
+
+  describe "annotation creation" do
+    let(:action) { { scope: :admin, action: :create, subject: :document_annotations } }
+
+    it { is_expected.to be true }
+  end
+
+  describe "document creation" do
+    let(:action) { { scope: :admin, action: :create, subject: :participatory_document } }
+
+    it { is_expected.to be true }
+  end
+
+  describe "suggestions creation" do
+    let(:action) { { scope: :admin, action: :create, subject: :suggestions } }
+
+    it { is_expected.to be true }
+  end
+
+  describe "answers publication" do
+    let(:action) { { scope: :admin, action: :publish_answers, subject: :suggestion_answer } }
+
+    it { is_expected.to be true }
+  end
+
+  context "when suggestion answering is disabled in the component" do
+    let(:component) { create(:participatory_documents_component, settings: { suggestion_answering_enabled: false }) }
+
+    describe "suggestion answering" do
+      let(:action) { { scope: :admin, action: :update, subject: :suggestion_answer } }
+
+      it { is_expected.to be false }
+    end
+  end
+
+  context "when the document is published" do
+    let(:document) { create(:participatory_documents_document, component:, published_at: Time.current) }
+
+    describe "section edition" do
+      let(:action) { { scope: :admin, action: :update, subject: :document_section } }
+
+      it { is_expected.to be false }
+    end
+
+    describe "annotation creation" do
+      let(:action) { { scope: :admin, action: :create, subject: :document_annotations } }
+
+      it { is_expected.to be false }
+    end
+  end
+
+  describe "suggestion note edition" do
+    let(:action) { { scope: :admin, action: :edit_note, subject: :suggestion_note } }
+    let(:suggestion) { create(:participatory_documents_suggestion, suggestable: document) }
+    let(:suggestion_note) { create(:participatory_documents_suggestion_note, suggestion:, author:) }
+
+    context "when the user is the author of the note" do
+      let(:author) { user }
+
+      it { is_expected.to be true }
+    end
+
+    context "when the author of the note is a different user" do
+      let(:author) { create(:user, :admin, :confirmed, organization:) }
+
+      it { is_expected.to be false }
+    end
+  end
+
+  context "when user is an evaluator" do
+    let(:user) { create(:user, organization:) }
+    let!(:evaluator_role) { create(:participatory_process_user_role, role: :evaluator, user:, participatory_process: component.participatory_space) }
+    let(:section) { create(:participatory_documents_section, document:) }
+    let(:suggestion) { create(:participatory_documents_suggestion, suggestable: section) }
+
+    context "and is assigned to the suggestion" do
+      let!(:assignment) { create(:suggestion_evaluation_assignment, suggestion:, evaluator_role:) }
+
+      it_behaves_like "can create suggestion notes"
+      it_behaves_like "can answer suggestions"
+      it_behaves_like "cannot manage the document"
+
+      describe "assign suggestions to an evaluator" do
+        let(:action) { { scope: :admin, action: :assign_to_evaluator, subject: :suggestions } }
+
+        it { is_expected.to be true }
+      end
+
+      describe "unassign suggestions from an evaluator" do
+        let(:action) { { scope: :admin, action: :unassign_from_evaluator, subject: :suggestions } }
+
+        it { is_expected.to be true }
+      end
+
+      context "and suggestion answering is disabled in the component" do
+        let(:component) { create(:participatory_documents_component, settings: { suggestion_answering_enabled: false }) }
+
+        describe "suggestion answering" do
+          let(:action) { { scope: :admin, action: :update, subject: :suggestion_answer } }
+
+          it { is_expected.to be false }
+        end
+      end
+
+      describe "suggestion note edition" do
+        let(:action) { { scope: :admin, action: :edit_note, subject: :suggestion_note } }
+        let(:suggestion_note) { create(:participatory_documents_suggestion_note, suggestion:, author:) }
+
+        context "when the evaluator is the author of the note" do
+          let(:author) { user }
+
+          it { is_expected.to be true }
+        end
+
+        context "when the author of the note is a different user" do
+          let(:author) { create(:user, :admin, :confirmed, organization:) }
+
+          it { is_expected.to be false }
         end
       end
     end
-  end
 
-  shared_examples "can add valuators to the suggestion" do
-    describe "add other valuators" do
-      let(:action_subject) { :suggestions }
-      let(:action_name) { :assign_to_valuator }
+    context "and is not assigned to the suggestion" do
+      describe "suggestion note edition" do
+        let(:action) { { scope: :admin, action: :edit_note, subject: :suggestion_note } }
+        let(:suggestion_note) { create(:participatory_documents_suggestion_note, suggestion:, author: user) }
 
-      it { expect(subject.allowed?).to be true }
-    end
-  end
-
-  shared_examples "can delete valuators from the suggestion" do
-    describe "delete other valuators" do
-      let(:action_subject) { :suggestions }
-      let(:action_name) { :unassign_from_valuator }
-
-      it { expect(subject.allowed?).to be true }
-    end
-  end
-
-  # shared_examples "cannot add valuators to the suggestion" do
-  #   describe "add other valuators" do
-  #     let(:action_subject) { :suggestions }
-  #     let(:action_name) { :assign_to_valuator }
-  #
-  #     # it { expect { subject.allowed? }.to raise_error(Decidim::PermissionAction::PermissionNotSetError) }
-  #     it { expect(subject.allowed?).to be true }
-  #   end
-  # end
-
-  shared_examples "edit suggestion note" do
-    describe "edit suggestion note" do
-      let(:action_subject) { :suggestion_note }
-      let(:action_name) { :edit_note }
-      let(:suggestion) { create(:participatory_documents_suggestion, suggestable: document) }
-      let(:another_user) { create(:user, :admin, :confirmed, organization:) }
-
-      context "when author edits his own note" do
-        let!(:suggestion_note) { create(:participatory_documents_suggestion_note, suggestion:, author: user) }
-
-        it { expect(subject.allowed?).to be true }
+        it_behaves_like "permission is not set"
       end
 
-      context "when the author of the note is a different user" do
-        let!(:suggestion_note) { create(:participatory_documents_suggestion_note, suggestion:, author: another_user) }
+      describe "suggestion note creation" do
+        let(:action) { { scope: :admin, action: :create, subject: :suggestion_note } }
 
-        it { expect(subject.allowed?).to be false }
+        it_behaves_like "permission is not set"
       end
-    end
-  end
 
-  shared_examples "can create a suggestion note" do |allowed|
-    let(:action_subject) { :suggestion_note }
-    let(:action_name) { :create }
+      describe "suggestion answering" do
+        let(:action) { { scope: :admin, action: :update, subject: :suggestion_answer } }
 
-    it do
-      if allowed
-        expect(subject.allowed?).to be true
-      else
-        expect { subject.allowed? }.to raise_error(Decidim::PermissionAction::PermissionNotSetError)
+        it_behaves_like "permission is not set"
       end
-    end
-  end
 
-  shared_examples "can create a suggestion answer" do |allowed|
-    let(:action_subject) { :suggestion_answer }
-    let(:action_name) { :create }
-
-    it do
-      if allowed
-        expect(subject.allowed?).to be true
-      else
-        expect { subject.allowed? }.to raise_error(Decidim::PermissionAction::PermissionNotSetError)
-      end
-    end
-  end
-
-  it_behaves_like "edit suggestion note"
-
-  it_behaves_like "Allows the permission", scope: :suggestion_note, allowed: true
-  it_behaves_like "Allows the permission", scope: :suggestion_answer, allowed: true
-  it_behaves_like "Allows the permission", scope: :document_section, allowed: true
-  it_behaves_like "Allows the permission", scope: :document_annotations, allowed: true
-  it_behaves_like "Allows the permission", scope: :participatory_document, allowed: true
-  it_behaves_like "Allows the permission", scope: :suggestions, allowed: true
-
-  context "when user is valuator" do
-    let(:valuator) { create(:user, organization:) }
-    let!(:valuator_role) { create(:participatory_process_user_role, role: :valuator, user: valuator, participatory_process: component.participatory_space) }
-    let(:section1) { create(:participatory_documents_section, document:) }
-    let!(:suggestion) { create(:participatory_documents_suggestion, suggestable: section1) }
-
-    let(:user) { valuator }
-
-    context "when is assigned" do
-      let!(:assigned) { create(:suggestion_valuation_assignment, suggestion:, valuator_role:) }
-
-      it_behaves_like "Allows the permission", scope: :suggestion_note, allowed: true
-      it_behaves_like "Allows the permission", scope: :suggestion_answer, allowed: true
-      it_behaves_like "Allows the permission", scope: :document_section, allowed: false
-      it_behaves_like "Allows the permission", scope: :document_annotations, allowed: false
-      it_behaves_like "Allows the permission", scope: :participatory_document, allowed: false
-      it_behaves_like "Allows the permission", scope: :suggestions, allowed: false
-
-      it_behaves_like "can create a suggestion note", true
-      it_behaves_like "can create a suggestion answer", true
-      it_behaves_like "can add valuators to the suggestion", true
-      it_behaves_like "can delete valuators from the suggestion", true
-    end
-
-    context "when is not assigned" do
-      it_behaves_like "Allows the permission", scope: :suggestion_note, allowed: false
-      it_behaves_like "Allows the permission", scope: :suggestion_answer, allowed: false
-      it_behaves_like "Allows the permission", scope: :document_section, allowed: false
-      it_behaves_like "Allows the permission", scope: :document_annotations, allowed: false
-      it_behaves_like "Allows the permission", scope: :participatory_document, allowed: false
-      it_behaves_like "Allows the permission", scope: :suggestions, allowed: false
-
-      it_behaves_like "can create a suggestion note", false
-      it_behaves_like "can create a suggestion answer", false
+      it_behaves_like "cannot manage the document"
     end
   end
 end

@@ -3,8 +3,6 @@
 module Decidim
   module ParticipatoryDocuments
     class CreateSuggestion < Decidim::Command
-      include ::Decidim::AttachmentAttributesMethods
-      include ::Decidim::AttachmentMethods
       def initialize(form, suggestable)
         @form = form
         @suggestable = suggestable

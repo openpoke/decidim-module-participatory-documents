@@ -6,7 +6,6 @@ module Decidim
       include Decidim::SanitizeHelper
 
       def show
-        @suggestion = options[:suggestion]
         render
       end
 
@@ -18,10 +17,6 @@ module Decidim
         model.author.name
       end
 
-      def avatar
-        model.author.avatar.attached? ? model.author.avatar : nil
-      end
-
       def author_profile_path
         decidim.profile_path(model.author.nickname)
       end
@@ -30,10 +25,6 @@ module Decidim
         date_at = model.try(:created_at)
 
         l date_at, format: :decidim_short
-      end
-
-      def suggestion
-        model
       end
 
       private

@@ -7,16 +7,16 @@ on:
   pull_request:
 
 env:
-  RUBY_VERSION: 3.2.6
-  NODE_VERSION: 18.17.1
-  NODE_OPTIONS: "--experimental-global-webcrypto"
+  RUBY_VERSION: 3.3.10
+  NODE_VERSION: 22.14.0
   DISABLE_SPRING: 1
+  SIMPLECOV: 1
   CI: "true"
 
 jobs:
   test-report:
     name: Tests
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     services:
       postgres:
@@ -39,24 +39,13 @@ jobs:
         with:
           fetch-depth: 1
 
-      - name: Install imagemagick and wkhtmltopdf
-        run: sudo apt-get update && sudo apt-get install -y imagemagick wkhtmltopdf
+      - name: Install imagemagick
+        run: sudo apt-get update && sudo apt-get install -y imagemagick
 
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ env.RUBY_VERSION }}
           bundler-cache: true
-
-      - uses: nanasess/setup-chromedriver@v2
-        with:
-          chromedriver-version: 126.0.6478.182
-
-      - name: Remove Chrome
-        run: sudo apt remove google-chrome-stable
-
-      - uses: browser-actions/setup-chrome@v1
-        with:
-          chrome-version: 126.0.6478.182
 
       - uses: actions/setup-node@v3
         with:

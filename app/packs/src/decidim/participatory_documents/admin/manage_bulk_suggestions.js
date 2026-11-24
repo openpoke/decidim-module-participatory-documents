@@ -1,3 +1,5 @@
+import TomSelect from "tom-select/dist/cjs/tom-select.popular";
+
 const selectedSuggestionsCount = function() {
   return document.querySelectorAll(".table-list .js-check-all-suggestion:checked").length
 }
@@ -31,6 +33,8 @@ const selectedSugestionsCountUpdate = function() {
   const selectedSuggestionsNotPublishedCount = selectedSuggestionsNotPublishedAnswerCount();
   if (selectedSuggestions === 0) {
     document.getElementById("js-selected-suggestions-count").innerHTML = "";
+    document.getElementById("js-assign-suggestions-to-evaluator-actions").classList.add("hide");
+    document.getElementById("js-unassign-suggestions-from-evaluator-actions").classList.add("hide");
   } else {
     document.getElementById("js-selected-suggestions-count").innerHTML = selectedSuggestions;
   }
@@ -48,6 +52,12 @@ const hideBulkActionForms = function() {
     form.classList.add("hide");
   });
 }
+
+const emptyCalloutWrapper = function() {
+  document.querySelectorAll(".layout-content > div[data-callout-wrapper]").forEach((wrapper) => {
+    wrapper.innerHTML = "";
+  });
+}
 window.showBulkActionsButton = showBulkActionsButton
 window.hideBulkActionsButton = hideBulkActionsButton
 window.selectedSuggestionsCount = selectedSuggestionsCount
@@ -59,17 +69,29 @@ window.addEventListener("load", () => {
   if (document.querySelectorAll(".js-bulk-action-form").length) {
     hideBulkActionForms();
     document.getElementById("js-bulk-actions-button").classList.add("hide");
-    document.querySelectorAll("#js-bulk-actions-dropdown ul li button").forEach((button) => {
+    document.querySelectorAll("#js-bulk-actions-dropdown li button").forEach((button) => {
       button.addEventListener("click", (evt) => {
         evt.preventDefault();
-        let action = evt.target.dataset.action;
+        document.getElementById("js-bulk-actions-dropdown").classList.remove("is-open");
+        hideBulkActionForms();
 
-        if (action) {
-          document.getElementById(`js-${action}-actions`).classList.remove("hide");
+        let action = evt.target.dataset.action;
+        const panelActions = [
+          "assign-suggestions-to-evaluator",
+          "unassign-suggestions-from-evaluator"
+        ];
+
+        if (!action) {
+          return;
+        }
+
+        document.getElementById(`js-form-${action}`).addEventListener("submit", emptyCalloutWrapper);
+        document.getElementById(`js-${action}-actions`).classList.remove("hide");
+
+        if (!panelActions.includes(action)) {
           hideBulkActionsButton(true);
           // hideOtherActionsButtons();
         }
-
       })
     });
 
@@ -80,7 +102,7 @@ window.addEventListener("load", () => {
       });
       document.querySelectorAll(".table-list .js-check-all-suggestion").forEach((suggestion) => {
         suggestion.checked = checkAll.checked;
-        suggestion.closest("tr").classList.toggle("selected");
+        suggestion.closest("tr").classList.toggle("selected", checkAll.checked);
       });
 
       if (checkAll.checked) {
@@ -92,8 +114,12 @@ window.addEventListener("load", () => {
       selectedSugestionsCountUpdate();
     });
 
-    document.querySelectorAll(".js-check-all-suggestion").forEach((checkbox) => {
-      checkbox.addEventListener("change", (evt) => {
+    document.querySelectorAll(".table-list").forEach((table) => {
+      table.addEventListener("change", (evt) => {
+        if (!evt.target.matches(".js-check-all-suggestion")) {
+          return;
+        }
+
         let suggestionId = evt.target.value;
         let checked = evt.target.checked;
 
@@ -113,7 +139,6 @@ window.addEventListener("load", () => {
           hideBulkActionsButton();
         }
 
-        console.log(`.js-bulk-action-form .js-suggestion-id-${suggestionId}`);
         document.querySelectorAll(`.js-bulk-action-form .js-suggestion-id-${suggestionId}`).forEach((element) => {
           element.checked = checked;
         })
@@ -130,4 +155,19 @@ window.addEventListener("load", () => {
       })
     })
   }
+});
+
+document.addEventListener("turbo:load", () => {
+  const evaluatorMultiselectContainers = document.querySelectorAll(
+    ".js-evaluator-multiselect"
+  );
+
+  evaluatorMultiselectContainers.forEach((container) => {
+    const config = {
+      plugins: ["remove_button", "dropdown_input"],
+      allowEmptyOption: true
+    };
+
+    return new TomSelect(container, config);
+  });
 });

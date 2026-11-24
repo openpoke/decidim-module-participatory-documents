@@ -4,7 +4,6 @@ module Decidim
   module ParticipatoryDocuments
     class DocumentSuggestionsController < Decidim::ParticipatoryDocuments::ApplicationController
       include FormFactory
-      include Paginable
 
       helper_method :section, :suggestions
       layout false
@@ -22,7 +21,7 @@ module Decidim
 
         CreateSuggestion.call(@form, section) do
           on(:ok) do |_suggestion|
-            redirect_to(document_suggestions_path(document)) && return
+            redirect_to(EngineRouter.main_proxy(current_component).document_suggestions_path(document_id: document.id)) && return
           end
           on(:invalid) do |error|
             render template: "decidim/participatory_documents/document_suggestions/index", locals: { error_message: error }, format: [:html], status: :bad_request
@@ -43,7 +42,7 @@ module Decidim
       private
 
       def suggestions
-        @suggestions ||= section.suggestions.where(author: current_user).order(created_at: :asc)
+        @suggestions ||= section.suggestions.where(author: current_user).preload(:author, file_attachment: :blob).order(created_at: :asc)
       end
 
       def section

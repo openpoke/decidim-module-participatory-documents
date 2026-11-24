@@ -30,7 +30,7 @@ module Decidim
         attr_reader :form, :document
 
         def update_section
-          @zone = Decidim.traceability.update!(
+          Decidim.traceability.update!(
             section,
             form.current_user,
             **attributes
@@ -40,7 +40,7 @@ module Decidim
         def attributes
           {
             title: form.title
-          }.merge(document:)
+          }
         end
 
         def section

@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "spec_helper"
+
 describe Decidim::ParticipatoryDocuments::DocumentsHelper do
   let(:component) { create(:participatory_documents_component) }
   let(:document) { create(:participatory_documents_document, component:) }
@@ -30,6 +32,34 @@ describe Decidim::ParticipatoryDocuments::DocumentsHelper do
       expect(result).to include("href=\"#{Decidim::EngineRouter.admin_proxy(document.component).publish_document_path(document)}\"")
       expect(result).to include("data-confirm=\"#{t("actions.confirm", scope: "decidim.participatory_documents")}\"")
       expect(result).to include("class=\"button button__sm button__success\"")
+    end
+  end
+
+  describe "#preview_mode?" do
+    let(:user) { create(:user, :confirmed, organization: component.organization) }
+
+    before do
+      allow(helper).to receive_messages(document:, current_user: user, current_component: component, current_participatory_space: component.participatory_space)
+    end
+
+    it "is false for a participant without a role in the space" do
+      expect(helper.preview_mode?).to be false
+    end
+
+    context "when the user is an administrator" do
+      let(:user) { create(:user, :admin, :confirmed, organization: component.organization) }
+
+      it "is true" do
+        expect(helper.preview_mode?).to be true
+      end
+
+      context "and the document is published" do
+        let(:document) { create(:participatory_documents_document, component:, published_at: Time.current) }
+
+        it "is false" do
+          expect(helper.preview_mode?).to be false
+        end
+      end
     end
   end
 end

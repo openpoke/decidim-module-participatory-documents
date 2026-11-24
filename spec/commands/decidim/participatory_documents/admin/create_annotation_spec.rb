@@ -16,7 +16,7 @@ module Decidim
           double(
             invalid?: invalid,
             page_number: 1,
-            rect: [50, 50, 100, 100],
+            rect: { "left" => 50, "top" => 50, "width" => 100, "height" => 100 },
             id: "annotationid",
             group: "groupid",
             current_user:,
@@ -31,15 +31,6 @@ module Decidim
             expect { subject.call }.to broadcast(:invalid)
           end
 
-          context "when there is no document" do
-            let(:document) { nil }
-            let(:current_user) { create(:user, :admin, :confirmed) }
-
-            it "is not valid" do
-              expect { subject.call }.to broadcast(:invalid)
-            end
-          end
-
           context "when there is no current user" do
             let(:current_user) { nil }
 
@@ -49,8 +40,17 @@ module Decidim
           end
         end
 
+        context "when there is no document" do
+          let(:document) { nil }
+          let(:current_user) { create(:user, :admin, :confirmed) }
+
+          it "is not valid" do
+            expect { subject.call }.to broadcast(:invalid)
+          end
+        end
+
         context "when everything is ok" do
-          it "creates a section" do
+          it "creates an annotation and a section" do
             expect { subject.call }.to change(Decidim::ParticipatoryDocuments::Annotation, :count).by(1)
             expect(Decidim::ParticipatoryDocuments::Section.count).to eq(1)
           end

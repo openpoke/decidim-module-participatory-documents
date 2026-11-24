@@ -7,22 +7,12 @@ module Decidim::ParticipatoryDocuments::Admin
     let(:command) { described_class.new(form, note) }
 
     let!(:document) { create(:participatory_documents_document, :with_file) }
-    let(:component) { document.component }
-    let(:organization) { component.organization }
-    let(:user) { create(:user, :admin, :confirmed, organization:) }
     let!(:note) { create(:participatory_documents_suggestion_note, suggestion:) }
     let!(:suggestion) { create(:participatory_documents_suggestion, suggestable: document) }
-
-    let(:form) do
-      Decidim::ParticipatoryDocuments::Admin::SuggestionNoteForm.from_params(
-        form_params
-      )
-    end
+    let(:form) { Decidim::ParticipatoryDocuments::Admin::SuggestionNoteForm.from_params(form_params) }
 
     describe "call" do
-      let(:form_params) do
-        { body: }
-      end
+      let(:form_params) { { body: } }
 
       context "when the form is valid" do
         let(:body) { "Test body" }
@@ -32,13 +22,11 @@ module Decidim::ParticipatoryDocuments::Admin
         end
 
         it "updates the note" do
-          expect do
-            command.call
-          end.to change(note, :body)
+          expect { command.call }.to change(note, :body).to("Test body")
         end
       end
 
-      context "when file_field :body is left blank" do
+      context "when the body is left blank" do
         let(:body) { "" }
 
         it "broadcasts invalid" do

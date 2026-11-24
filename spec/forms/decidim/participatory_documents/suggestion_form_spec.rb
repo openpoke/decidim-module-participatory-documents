@@ -7,21 +7,8 @@ module Decidim
     describe SuggestionForm do
       subject { form }
 
-      let(:context) { double(current_component: component) }
       let(:component) { create(:participatory_documents_component) }
-      let(:document) { create(:participatory_documents_document, component:) }
-
-      let(:form) do
-        described_class.from_params(
-          {
-            body:,
-            file: example_file
-          }
-        ).with_context(
-          current_component: component
-        )
-      end
-
+      let(:form) { described_class.from_params({ body:, file: example_file }).with_context(current_component: component) }
       let(:body) { "This is a suggestion body" }
       let(:example_file) { Decidim::Dev.test_file("Exampledocument.pdf", "application/pdf") }
 

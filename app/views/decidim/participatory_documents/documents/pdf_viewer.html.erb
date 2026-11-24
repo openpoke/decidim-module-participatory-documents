@@ -36,7 +36,7 @@
 
     var I18n = <%= I18n.t("decidim.participatory_documents.ui_messages").to_json.html_safe %>;
     var DocumentPath = '<%= document_path(document).split("?")[0] %>';
-    var CurrentBoxes = <%= document.annotations.collect(&:serialize).to_json.html_safe %>;
+    var CurrentBoxes = <%= document.annotations.includes(:section).collect(&:serialize).to_json.html_safe %>;
     var pages = {};
 
     document.addEventListener("DOMContentLoaded", function() {
@@ -57,11 +57,13 @@
           var page = PDFViewerApplication.pdfViewer._pages[doc.pageNumber - 1];
           var annotationsLayer = page.annotationEditorLayer && page.annotationEditorLayer.div;
           var savedPage = pages[doc.pageNumber];
+          // ensure the annotations layer is visible as in recent versions of PDF.js it is hidden by default and on every redraw
+          if(annotationsLayer) {
+            annotationsLayer.hidden = false;
+          }
           // Let's render the object only if not already existing.
           // Note that the PDF library might redraw the annotation layer, if this happens we need to re-render the areas.
           if(annotationsLayer && (!savedPage || savedPage.boxEditor.div !== annotationsLayer)) {
-            // ensure the annotations layer is visible as in recent versions of PDF.js it is hidden by default
-            annotationsLayer.hidden = false;
             page.annotationEditorLayer.show();
 
             page.boxEditor = window.InitPolygonViewer(annotationsLayer, CurrentBoxes.filter(box => box.page_number === doc.pageNumber), options);
