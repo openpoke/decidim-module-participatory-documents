@@ -41,8 +41,10 @@
     "@decidim/stylelint-config": "^0.32.3",
     "@decidim/webpacker": "^0.32.3",
     "postcss-scss": "^4.0.9",
-    "sass-embedded": "~1.63.6"
+    "sass-embedded": "~1.63.6",
+    "tom-select": "^2.7.0"
   },
-  "dependencies": {},
-  "browserslist": ["extends @decidim/browserslist-config"]
+  "browserslist": [
+    "extends @decidim/browserslist-config"
+  ]
 }
