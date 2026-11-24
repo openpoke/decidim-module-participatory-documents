@@ -40,13 +40,81 @@ describe "Admin filters suggestions" do
     before { visit router.document_suggestions_path(document) }
 
     STATES.each do |state|
-      i18n_state = I18n.t(state, scope: "decidim.admin.filters.suggestions.state_eq.values")
-
-      context "when filtering suggestions by state: #{i18n_state}" do
-        it_behaves_like "a filtered collection", options: "State", filter: i18n_state do
+      context "when filtering suggestions by state: #{state}" do
+        it_behaves_like "a filtered collection", options: "State", filter: I18n.t(state, scope: "decidim.admin.filters.suggestions.state_eq.values") do
           let(:in_filter) { translated(suggestion_with_state(state).body).first(40) }
           let(:not_in_filter) { translated(suggestion_without_state(state).body).first(40) }
         end
+      end
+    end
+  end
+
+  context "when suggestions are assigned to an evaluator with a filter applied" do
+    let!(:document) { create(:participatory_documents_document, :with_file, author: user, component:) }
+    let(:evaluator) { create(:user, :confirmed, :admin_terms_accepted, organization:) }
+    let!(:evaluator_role) { create(:participatory_process_user_role, role: :evaluator, user: evaluator, participatory_process:) }
+    let!(:evaluating_suggestion) { create(:participatory_documents_suggestion, :evaluating, suggestable: document, body: { en: "Evaluating suggestion" }) }
+    let!(:accepted_suggestion) { create(:participatory_documents_suggestion, :accepted, suggestable: document, body: { en: "Accepted suggestion" }) }
+
+    before { visit router.document_suggestions_path(document) }
+
+    it "keeps the filter after the assignment" do
+      apply_filter("State", "Evaluating")
+
+      within "tr[data-id='#{evaluating_suggestion.id}']" do
+        page.first(".js-suggestion-list-check").set(true)
+      end
+      click_on "Actions"
+      click_on "Assign to evaluator"
+      within "#js-form-assign-suggestions-to-evaluator" do
+        tom_select("#assign_evaluator_role_ids", option_id: [evaluator_role.id])
+        click_on("Assign")
+      end
+
+      expect(page).to have_content("Suggestions assigned to an evaluator successfully")
+      within ".table-list" do
+        expect(page).to have_content("Evaluating suggestion")
+        expect(page).to have_no_content("Accepted suggestion")
+      end
+    end
+  end
+
+  context "when filtering by section" do
+    let(:section) { create(:participatory_documents_section, document:) }
+    let!(:global_suggestion) { create(:participatory_documents_suggestion, suggestable: document) }
+    let!(:section_suggestion) { create(:participatory_documents_suggestion, suggestable: section) }
+
+    before { visit router.document_suggestions_path(document) }
+
+    it_behaves_like "a filtered collection", options: "Section", filter: "Global" do
+      let(:in_filter) { translated(global_suggestion.body).first(40) }
+      let(:not_in_filter) { translated(section_suggestion.body).first(40) }
+    end
+  end
+
+  context "when another document of the space has been filtered by section" do
+    let(:section) { create(:participatory_documents_section, document:) }
+    let!(:section_suggestion) { create(:participatory_documents_suggestion, suggestable: section) }
+    let(:other_component) { create(:participatory_documents_component, participatory_space: participatory_process) }
+    let(:other_document) { create(:participatory_documents_document, author: user, component: other_component) }
+    let!(:other_suggestion) { create(:participatory_documents_suggestion, suggestable: other_document) }
+
+    before { visit router.document_suggestions_path(document) }
+
+    it "keeps the filter of each document apart" do
+      apply_filter("Section", translated(section.title))
+      within ".table-list" do
+        expect(page).to have_content(translated(section_suggestion.body).first(40))
+      end
+
+      visit Decidim::EngineRouter.admin_proxy(other_component).document_suggestions_path(other_document)
+      within ".table-list" do
+        expect(page).to have_content(translated(other_suggestion.body).first(40))
+      end
+
+      visit router.document_suggestions_path(document)
+      within "[data-applied-filters-tags]" do
+        expect(page).to have_content("Section: #{translated(section.title)}")
       end
     end
   end

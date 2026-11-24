@@ -43,7 +43,7 @@ module Decidim
         end
 
         def i18n_params
-          super.merge(suggestion_title: h.translated_attribute(suggestion_title))
+          super.merge(suggestion_title: ERB::Util.html_escape(h.translated_attribute(suggestion_title)))
         end
 
         def suggestion_title

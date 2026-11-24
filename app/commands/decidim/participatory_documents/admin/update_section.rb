@@ -39,7 +39,7 @@ module Decidim
 
         def attributes
           {
-            title: form.title
+            title: form.title.reject { |locale, name| name == section.artificial_title[locale.to_s] }
           }
         end
 

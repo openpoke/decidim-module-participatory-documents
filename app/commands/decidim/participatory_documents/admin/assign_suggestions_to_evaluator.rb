@@ -41,7 +41,7 @@ module Decidim
         end
 
         def find_assignment(suggestion, evaluator_role)
-          Decidim::ParticipatoryDocuments::EvaluationAssignment.find_by(
+          Decidim::ParticipatoryDocuments::EvaluationAssignment.find_by( # rubocop:disable Decidim/OrganizationScopedFinder
             suggestion:,
             evaluator_role:
           )

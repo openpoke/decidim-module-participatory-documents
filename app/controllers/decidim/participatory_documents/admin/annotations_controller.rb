@@ -20,7 +20,7 @@ module Decidim
             end
 
             on(:invalid) do
-              render(json: @form.errors, status: :unprocessable_entity) && return
+              render(json: @form.errors, status: :unprocessable_content) && return
             end
           end
         end
@@ -35,7 +35,7 @@ module Decidim
             end
 
             on(:invalid) do
-              render(json: {}, status: :unprocessable_entity) && return
+              render(json: {}, status: :unprocessable_content) && return
             end
           end
         end

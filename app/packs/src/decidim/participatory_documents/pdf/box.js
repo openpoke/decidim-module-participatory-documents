@@ -79,6 +79,17 @@ export default class Box {
     }
   }
 
+  // Current state of the box in the format used to build it
+  serialize() {
+    return {
+      id: this.id,
+      position: this.div.dataset.position,
+      rect: this.getRect(),
+      section: parseInt(this.div.dataset.section, 10) || 0,
+      section_number: parseInt(this.div.dataset.sectionNumber, 10) || 0 // eslint-disable-line camelcase
+    }
+  }
+
   setInfo(data) {
     if (data) {
       if (data.id) {

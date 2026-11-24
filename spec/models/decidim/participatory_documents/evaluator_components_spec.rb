@@ -14,6 +14,7 @@ module Decidim::ParticipatorySpaceRoleConfig
 
     module TestEvaluatorOverride
       extend ActiveSupport::Concern
+
       included do
         alias_method :test_original_accepted_components, :accepted_components
 

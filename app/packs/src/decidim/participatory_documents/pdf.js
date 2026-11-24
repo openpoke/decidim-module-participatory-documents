@@ -63,13 +63,13 @@ window.InitDocumentManagers = (options) => {
         exportCallout.classList.add("success");
         exportCallout.innerHTML = resp.message;
       }).
-      catch((message) => {
+      catch((error) => {
         exportButton.classList.add("hidden");
         exportContent.classList.add("hidden");
         exportCallout.classList.remove("hidden");
         exportCallout.classList.add("alert");
-        exportCallout.innerHTML = message;
-        console.error("Error exporting", message);
+        exportCallout.textContent = error.message;
+        console.error("Error exporting", error);
       });
   });
 };
@@ -92,7 +92,9 @@ window.InitPolygonViewer = (layer, boxes, options) => {
 
   viewer.onBoxBlur = (box, evt) => {
     console.log("click outside box", box, evt);
-    window.currentSuggestionForm.close();
+    if (window.currentSuggestionForm.group === box.section) {
+      window.currentSuggestionForm.close();
+    }
   };
 
   return viewer;

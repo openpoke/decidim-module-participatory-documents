@@ -35,7 +35,7 @@ module Decidim
         end
 
         def assignments
-          Decidim::ParticipatoryDocuments::EvaluationAssignment
+          Decidim::ParticipatoryDocuments::EvaluationAssignment # rubocop:disable Decidim/OrganizationScopedFinder
             .where(suggestion: form.suggestions, evaluator_role: form.evaluator_roles)
             .includes(:suggestion)
         end

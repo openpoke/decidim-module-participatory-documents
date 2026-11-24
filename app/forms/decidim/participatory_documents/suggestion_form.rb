@@ -10,7 +10,6 @@ module Decidim
 
       validate :validate_single_field_presence
       validate :validate_body_length
-      validates :file, file_content_type: { allow: %w(application/pdf image/png image/jpeg) }, allow_nil: true
 
       private
 

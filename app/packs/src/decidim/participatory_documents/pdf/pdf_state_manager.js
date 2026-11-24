@@ -88,10 +88,15 @@ export default class PdfStateManager {
     this.processed = {};
     this.errors = {};
     this.totalBoxes = 0;
+    this.finishedBoxes = 0;
     this.pdfViewer._pages.
       filter((page) => page.boxEditor).
       filter((page) => Object.keys(page.boxEditor.boxes).length > 0).
       forEach((page) => Object.values(page.boxEditor.boxes).map((box) => this._updateOrCreateBox(box, page.id)));
+
+    if (this.totalBoxes === 0) {
+      this.reset();
+    }
   }
 
   _updateOrCreateBox(box, page) {
@@ -117,12 +122,21 @@ export default class PdfStateManager {
         throw new Error(" ");
       }).
       then((resp) => {
-        box.setInfo(resp.data);
-        this._setProcessed(box, resp.data);
+        const current = this._currentBox(box, page);
+
+        current.setInfo(resp.data);
+        this._setProcessed(current, resp.data);
       }).
       catch((error) => {
         this._setProcessed(box, null, error);
       });
+  }
+
+  // The page layer can be rebuilt while the request is pending, the box shown is then a new object
+  _currentBox(box, page) {
+    const pageView = this.pdfViewer._pages[page - 1];
+
+    return (pageView && pageView.boxEditor && pageView.boxEditor.boxes[box.id]) || box;
   }
 
   _setProcessed(box, data, error) {
@@ -132,11 +146,15 @@ export default class PdfStateManager {
       this.errors[box.id] = error;
     }
 
-    if (Object.keys(this.processed).length + Object.keys(this.errors).length === this.totalBoxes) {
-      this.reset();
+    this.finishedBoxes += 1;
+
+    if (this.finishedBoxes === this.totalBoxes) {
       if (Object.keys(this.errors).length > 0) {
+        // Some boxes are not saved, keep the unsaved changes warning
+        this.element.classList.remove("loading");
         this.onError(this.errors);
       } else {
+        this.reset();
         this.onSave(this.processed);
       }
     }

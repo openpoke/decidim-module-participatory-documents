@@ -7,10 +7,6 @@ Decidim.register_component(:participatory_documents) do |component|
   component.admin_engine = Decidim::ParticipatoryDocuments::AdminEngine
   component.icon = "media/images/participatory_documents.svg"
 
-  component.on(:before_destroy) do |instance|
-    raise "Can't destroy this component when there are ParticipatoryDocuments" if Decidim::ParticipatoryDocuments::Document.where(component: instance).any?
-  end
-
   component.permissions_class_name = "Decidim::ParticipatoryDocuments::Permissions"
 
   component.settings(:global) do |settings|
