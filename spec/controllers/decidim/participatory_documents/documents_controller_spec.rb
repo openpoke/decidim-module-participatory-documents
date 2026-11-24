@@ -5,7 +5,7 @@ require "spec_helper"
 module Decidim
   module ParticipatoryDocuments
     describe DocumentsController do
-      routes { Decidim::ParticipatoryDocuments::Engine.routes }
+      include Decidim::ParticipatoryDocuments::Engine.routes.url_helpers
 
       let(:organization) { component.organization }
       let(:participatory_process) { component.participatory_space }
