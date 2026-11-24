@@ -6,7 +6,7 @@ module Decidim
   module ParticipatoryDocuments
     module Admin
       describe DocumentsController do
-        routes { Decidim::ParticipatoryDocuments::AdminEngine.routes }
+        include Decidim::ParticipatoryDocuments::AdminEngine.routes.url_helpers
 
         let(:organization) { component.organization }
         let(:participatory_process) { component.participatory_space }
