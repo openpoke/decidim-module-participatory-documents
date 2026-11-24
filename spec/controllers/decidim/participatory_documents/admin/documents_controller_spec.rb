@@ -6,6 +6,8 @@ module Decidim
   module ParticipatoryDocuments
     module Admin
       describe DocumentsController do
+        include Decidim::ParticipatoryDocuments::AdminEngine.routes.url_helpers
+
         let(:organization) { component.organization }
         let(:participatory_process) { component.participatory_space }
         let(:component) { document.component }
@@ -20,7 +22,33 @@ module Decidim
         end
 
         describe "GET pdf_viewer" do
-          it_behaves_like "a pdf viewer allowing the storage host"
+          context "when the file is stored in a remote service" do
+            let(:remote_url) { "https://eu2.contabostorage.com/bucket/file.pdf?X-Amz-Signature=abc" }
+
+            before do
+              allow(ActiveStorage::Blob.service).to receive(:url).and_return(remote_url)
+            end
+
+            it "appends the storage host to the connect-src CSP directive" do
+              get :pdf_viewer
+              expect(response.headers["Content-Security-Policy"]).to match(%r{connect-src [^;]*https://eu2\.contabostorage\.com})
+            end
+          end
+        end
+
+        describe "GET edit_pdf" do
+          context "when the file is stored in a remote service" do
+            let(:remote_url) { "https://eu2.contabostorage.com/bucket/file.pdf?X-Amz-Signature=abc" }
+
+            before do
+              allow(ActiveStorage::Blob.service).to receive(:url).and_return(remote_url)
+            end
+
+            it "appends the storage host to the connect-src CSP directive" do
+              get :edit_pdf
+              expect(response.headers["Content-Security-Policy"]).to match(%r{connect-src [^;]*https://eu2\.contabostorage\.com})
+            end
+          end
         end
       end
     end

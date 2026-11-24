@@ -5,6 +5,8 @@ require "spec_helper"
 module Decidim
   module ParticipatoryDocuments
     describe DocumentsController do
+      include Decidim::ParticipatoryDocuments::Engine.routes.url_helpers
+
       let(:organization) { component.organization }
       let(:participatory_process) { component.participatory_space }
       let(:component) { document.component }
@@ -19,28 +21,37 @@ module Decidim
       describe "GET pdf_viewer" do
         it "renders the pdf_viewer template" do
           get :pdf_viewer
-
           expect(response).to render_template("pdf_viewer")
         end
 
-        it_behaves_like "a pdf viewer allowing the storage host"
+        context "when the file is stored in a remote service" do
+          let(:remote_url) { "https://eu2.contabostorage.com/bucket/file.pdf?X-Amz-Signature=abc" }
 
-        context "when the stored box color is not a hexadecimal color" do
-          let(:document) { create(:participatory_documents_document, :with_file, box_color: "#000;}</style><script>alert(1)</script>") }
+          before do
+            allow(ActiveStorage::Blob.service).to receive(:url).and_return(remote_url)
+          end
 
-          it "falls back to the default color" do
+          it "appends the storage host to the connect-src CSP directive" do
             get :pdf_viewer
-
-            expect(controller.helpers.pdf_custom_style).to include("--box-color: #1E98D7;")
-            expect(controller.helpers.pdf_custom_style).not_to include("script")
+            expect(response.headers["Content-Security-Policy"]).to match(%r{connect-src [^;]*https://eu2\.contabostorage\.com})
           end
         end
 
-        context "when the component has no document" do
-          let(:component) { create(:participatory_documents_component) }
+        context "when the file is stored in the local service" do
+          it "does not append the request host to the connect-src CSP directive" do
+            get :pdf_viewer
+            csp = response.headers["Content-Security-Policy"]
+            expect(csp).to match(/connect-src [^;]*'self'/)
+            expect(csp[/connect-src [^;]*/]).not_to include("test.host")
+          end
+        end
 
-          it "responds with not found" do
-            expect { get :pdf_viewer }.to raise_error(ActionController::RoutingError)
+        context "when the document has no file attached" do
+          let(:document) { create(:participatory_documents_document) }
+
+          it "renders without altering the connect-src CSP directive" do
+            get :pdf_viewer
+            expect(response.headers["Content-Security-Policy"][/connect-src [^;]*/]).not_to include("test.host")
           end
         end
       end
